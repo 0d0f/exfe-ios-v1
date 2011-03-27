@@ -1,0 +1,458 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		788C420C133FA3D000AAA425 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 788C420B133FA3D000AAA425 /* UIKit.framework */; };
+		788C420E133FA3D000AAA425 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 788C420D133FA3D000AAA425 /* Foundation.framework */; };
+		788C4210133FA3D000AAA425 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 788C420F133FA3D000AAA425 /* CoreGraphics.framework */; };
+		788C4216133FA3D000AAA425 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 788C4214133FA3D000AAA425 /* InfoPlist.strings */; };
+		788C4219133FA3D000AAA425 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 788C4218133FA3D000AAA425 /* main.m */; };
+		788C421C133FA3D000AAA425 /* exfeAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 788C421B133FA3D000AAA425 /* exfeAppDelegate.m */; };
+		788C421F133FA3D000AAA425 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 788C421D133FA3D000AAA425 /* MainWindow.xib */; };
+		788C4222133FA3D000AAA425 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 788C4221133FA3D000AAA425 /* RootViewController.m */; };
+		788C4225133FA3D000AAA425 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 788C4223133FA3D000AAA425 /* RootViewController.xib */; };
+		788C422C133FA3D100AAA425 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 788C420B133FA3D000AAA425 /* UIKit.framework */; };
+		788C422D133FA3D100AAA425 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 788C420D133FA3D000AAA425 /* Foundation.framework */; };
+		788C422E133FA3D100AAA425 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 788C420F133FA3D000AAA425 /* CoreGraphics.framework */; };
+		788C4236133FA3D100AAA425 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 788C4234133FA3D100AAA425 /* InfoPlist.strings */; };
+		788C4239133FA3D100AAA425 /* exfeTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 788C4238133FA3D100AAA425 /* exfeTests.h */; };
+		788C423B133FA3D100AAA425 /* exfeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 788C423A133FA3D100AAA425 /* exfeTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		788C422F133FA3D100AAA425 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 788C41FE133FA3D000AAA425 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 788C4206133FA3D000AAA425;
+			remoteInfo = exfe;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		788C4207133FA3D000AAA425 /* exfe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = exfe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		788C420B133FA3D000AAA425 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		788C420D133FA3D000AAA425 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		788C420F133FA3D000AAA425 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		788C4213133FA3D000AAA425 /* exfe-Info.plist */ = {isa = PBXFileReference; path = "exfe-Info.plist"; sourceTree = "<group>"; };
+		788C4215133FA3D000AAA425 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		788C4217133FA3D000AAA425 /* exfe-Prefix.pch */ = {isa = PBXFileReference; path = "exfe-Prefix.pch"; sourceTree = "<group>"; };
+		788C4218133FA3D000AAA425 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		788C421A133FA3D000AAA425 /* exfeAppDelegate.h */ = {isa = PBXFileReference; path = exfeAppDelegate.h; sourceTree = "<group>"; };
+		788C421B133FA3D000AAA425 /* exfeAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = exfeAppDelegate.m; sourceTree = "<group>"; };
+		788C421E133FA3D000AAA425 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		788C4220133FA3D000AAA425 /* RootViewController.h */ = {isa = PBXFileReference; path = RootViewController.h; sourceTree = "<group>"; };
+		788C4221133FA3D000AAA425 /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
+		788C4224133FA3D000AAA425 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
+		788C422B133FA3D100AAA425 /* exfeTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = exfeTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		788C4233133FA3D100AAA425 /* exfeTests-Info.plist */ = {isa = PBXFileReference; path = "exfeTests-Info.plist"; sourceTree = "<group>"; };
+		788C4235133FA3D100AAA425 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		788C4237133FA3D100AAA425 /* exfeTests-Prefix.pch */ = {isa = PBXFileReference; path = "exfeTests-Prefix.pch"; sourceTree = "<group>"; };
+		788C4238133FA3D100AAA425 /* exfeTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = exfeTests.h; sourceTree = "<group>"; };
+		788C423A133FA3D100AAA425 /* exfeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = exfeTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		788C4204133FA3D000AAA425 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				788C420C133FA3D000AAA425 /* UIKit.framework in Frameworks */,
+				788C420E133FA3D000AAA425 /* Foundation.framework in Frameworks */,
+				788C4210133FA3D000AAA425 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		788C4227133FA3D100AAA425 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				788C422C133FA3D100AAA425 /* UIKit.framework in Frameworks */,
+				788C422D133FA3D100AAA425 /* Foundation.framework in Frameworks */,
+				788C422E133FA3D100AAA425 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		788C41FC133FA3D000AAA425 = {
+			isa = PBXGroup;
+			children = (
+				788C4211133FA3D000AAA425 /* exfe */,
+				788C4231133FA3D100AAA425 /* exfeTests */,
+				788C420A133FA3D000AAA425 /* Frameworks */,
+				788C4208133FA3D000AAA425 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		788C4208133FA3D000AAA425 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				788C4207133FA3D000AAA425 /* exfe.app */,
+				788C422B133FA3D100AAA425 /* exfeTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		788C420A133FA3D000AAA425 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				788C420B133FA3D000AAA425 /* UIKit.framework */,
+				788C420D133FA3D000AAA425 /* Foundation.framework */,
+				788C420F133FA3D000AAA425 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		788C4211133FA3D000AAA425 /* exfe */ = {
+			isa = PBXGroup;
+			children = (
+				788C421A133FA3D000AAA425 /* exfeAppDelegate.h */,
+				788C421B133FA3D000AAA425 /* exfeAppDelegate.m */,
+				788C421D133FA3D000AAA425 /* MainWindow.xib */,
+				788C4220133FA3D000AAA425 /* RootViewController.h */,
+				788C4221133FA3D000AAA425 /* RootViewController.m */,
+				788C4223133FA3D000AAA425 /* RootViewController.xib */,
+				788C4212133FA3D000AAA425 /* Supporting Files */,
+			);
+			path = exfe;
+			sourceTree = "<group>";
+		};
+		788C4212133FA3D000AAA425 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				788C4213133FA3D000AAA425 /* exfe-Info.plist */,
+				788C4214133FA3D000AAA425 /* InfoPlist.strings */,
+				788C4217133FA3D000AAA425 /* exfe-Prefix.pch */,
+				788C4218133FA3D000AAA425 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		788C4231133FA3D100AAA425 /* exfeTests */ = {
+			isa = PBXGroup;
+			children = (
+				788C4238133FA3D100AAA425 /* exfeTests.h */,
+				788C423A133FA3D100AAA425 /* exfeTests.m */,
+				788C4232133FA3D100AAA425 /* Supporting Files */,
+			);
+			path = exfeTests;
+			sourceTree = "<group>";
+		};
+		788C4232133FA3D100AAA425 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				788C4233133FA3D100AAA425 /* exfeTests-Info.plist */,
+				788C4234133FA3D100AAA425 /* InfoPlist.strings */,
+				788C4237133FA3D100AAA425 /* exfeTests-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		788C4206133FA3D000AAA425 /* exfe */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 788C423E133FA3D100AAA425 /* Build configuration list for PBXNativeTarget "exfe" */;
+			buildPhases = (
+				788C4203133FA3D000AAA425 /* Sources */,
+				788C4204133FA3D000AAA425 /* Frameworks */,
+				788C4205133FA3D000AAA425 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = exfe;
+			productName = exfe;
+			productReference = 788C4207133FA3D000AAA425 /* exfe.app */;
+			productType = "com.apple.product-type.application";
+		};
+		788C422A133FA3D100AAA425 /* exfeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 788C4241133FA3D100AAA425 /* Build configuration list for PBXNativeTarget "exfeTests" */;
+			buildPhases = (
+				788C4226133FA3D100AAA425 /* Sources */,
+				788C4227133FA3D100AAA425 /* Frameworks */,
+				788C4228133FA3D100AAA425 /* Resources */,
+				788C4229133FA3D100AAA425 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				788C4230133FA3D100AAA425 /* PBXTargetDependency */,
+			);
+			name = exfeTests;
+			productName = exfeTests;
+			productReference = 788C422B133FA3D100AAA425 /* exfeTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		788C41FE133FA3D000AAA425 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 788C4201133FA3D000AAA425 /* Build configuration list for PBXProject "exfe" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 788C41FC133FA3D000AAA425;
+			productRefGroup = 788C4208133FA3D000AAA425 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				788C4206133FA3D000AAA425 /* exfe */,
+				788C422A133FA3D100AAA425 /* exfeTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		788C4205133FA3D000AAA425 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				788C4216133FA3D000AAA425 /* InfoPlist.strings in Resources */,
+				788C421F133FA3D000AAA425 /* MainWindow.xib in Resources */,
+				788C4225133FA3D000AAA425 /* RootViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		788C4228133FA3D100AAA425 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				788C4236133FA3D100AAA425 /* InfoPlist.strings in Resources */,
+				788C4239133FA3D100AAA425 /* exfeTests.h in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		788C4229133FA3D100AAA425 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		788C4203133FA3D000AAA425 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				788C4219133FA3D000AAA425 /* main.m in Sources */,
+				788C421C133FA3D000AAA425 /* exfeAppDelegate.m in Sources */,
+				788C4222133FA3D000AAA425 /* RootViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		788C4226133FA3D100AAA425 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				788C423B133FA3D100AAA425 /* exfeTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		788C4230133FA3D100AAA425 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 788C4206133FA3D000AAA425 /* exfe */;
+			targetProxy = 788C422F133FA3D100AAA425 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		788C4214133FA3D000AAA425 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				788C4215133FA3D000AAA425 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		788C421D133FA3D000AAA425 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				788C421E133FA3D000AAA425 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		788C4223133FA3D000AAA425 /* RootViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				788C4224133FA3D000AAA425 /* en */,
+			);
+			name = RootViewController.xib;
+			sourceTree = "<group>";
+		};
+		788C4234133FA3D100AAA425 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				788C4235133FA3D100AAA425 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		788C423C133FA3D100AAA425 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		788C423D133FA3D100AAA425 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		788C423F133FA3D100AAA425 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "exfe/exfe-Prefix.pch";
+				INFOPLIST_FILE = "exfe/exfe-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		788C4240133FA3D100AAA425 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "exfe/exfe-Prefix.pch";
+				INFOPLIST_FILE = "exfe/exfe-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		788C4242133FA3D100AAA425 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/exfe.app/exfe";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "exfeTests/exfeTests-Prefix.pch";
+				INFOPLIST_FILE = "exfeTests/exfeTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		788C4243133FA3D100AAA425 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/exfe.app/exfe";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "exfeTests/exfeTests-Prefix.pch";
+				INFOPLIST_FILE = "exfeTests/exfeTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		788C4201133FA3D000AAA425 /* Build configuration list for PBXProject "exfe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				788C423C133FA3D100AAA425 /* Debug */,
+				788C423D133FA3D100AAA425 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		788C423E133FA3D100AAA425 /* Build configuration list for PBXNativeTarget "exfe" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				788C423F133FA3D100AAA425 /* Debug */,
+				788C4240133FA3D100AAA425 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		788C4241133FA3D100AAA425 /* Build configuration list for PBXNativeTarget "exfeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				788C4242133FA3D100AAA425 /* Debug */,
+				788C4243133FA3D100AAA425 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 788C41FE133FA3D000AAA425 /* Project object */;
+}
