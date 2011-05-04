@@ -8,9 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RootViewController : UITableViewController {
+@interface RootViewController : UIViewController {
+	IBOutlet UIWebView *webview;
+    BOOL interceptLinks;
+    NSMutableData *responseData;
+    NSMutableDictionary *eventData;
 
+    //BOOL reload;
+    NSTimer *timer;
 }
 
+@property BOOL interceptLinks;
+@property BOOL reload;
 
+- (void)LoadUserEvents;
+- (BOOL)LoadUserEventsFromDB;
+- (void)RenderEvents:(NSArray*)events tosave:(BOOL)save;
+- (void) setReload;
 @end
