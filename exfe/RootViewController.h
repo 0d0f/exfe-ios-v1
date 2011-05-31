@@ -13,8 +13,9 @@
     BOOL interceptLinks;
     NSMutableData *responseData;
     NSMutableDictionary *eventData;
+    UIBarButtonItem *barButtonItem;
 
-    //BOOL reload;
+    BOOL reload;
     NSTimer *timer;
 }
 
@@ -25,4 +26,5 @@
 - (BOOL)LoadUserEventsFromDB;
 - (void)RenderEvents:(NSArray*)events tosave:(BOOL)save;
 - (void) setReload;
+- (void)refresh;
 @end

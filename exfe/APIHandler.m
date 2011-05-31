@@ -45,7 +45,6 @@
 - (NSString*)checkUserLoginByUsername:(NSString*)email withPassword:(NSString*)passwd
 {
 
-    NSLog(@"check user login by username:%@",email);
     NSString *post =[[NSString alloc] initWithFormat:@"login=%@&password=%@",email,passwd];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
@@ -83,11 +82,17 @@
 {
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     
-    NSLog(@"get User EventInfo:%@",app.username);
+//    NSLog(@"get User EventInfo:%@",app.username);
+//    NSLog(@"url:%@",[NSString stringWithFormat:@"%@/users/%i/events.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key]);
+    NSError        *error = nil;
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/users/%i/events.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key]]];
     [request setHTTPShouldHandleCookies:NO];
 
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
+    if (error)
+    {
+        NSLog(@"%@",error);
+    }
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
     return responseString;    
 }
@@ -126,7 +131,6 @@
     
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@",responseString);
     id jsonobj=[responseString JSONValue];
     if([jsonobj isKindOfClass:[NSDictionary class]]   )
     {
@@ -137,6 +141,38 @@
     }
     return NO;
 
+}
+- (NSString*)getEventById:(int)eventid
+{
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/events/%i.json?api_key=%@",[APIHandler URL_API_ROOT],eventid,api_key]]];
+    NSLog(@"url:%@",[NSURL URLWithString:[NSString stringWithFormat:@"%@/events/%i.json?api_key=%@",[APIHandler URL_API_ROOT],eventid,api_key]]);
+    [request setHTTPShouldHandleCookies:NO];
+    
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    return responseString;    
+}
+- (NSString*)AddCommentById:(int)eventid comment:(NSString*)commenttext
+{
+    NSString *post =[[NSString alloc] initWithFormat:@"comment=%@",commenttext];
+    
+    NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    
+    NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/events/%i/comments.json?api_key=%@",[APIHandler URL_API_ROOT],eventid,api_key]]];
+    
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded;charset=utf-8" forHTTPHeaderField:@"Content-Type"];
+    [request setHTTPBody:postData];
+    
+    [request setHTTPShouldHandleCookies:NO];
+    
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    return responseString;    
+//    curl -d "comment=bbbb" http://api.exfe.com/v1/events/18/comments.json?api_key=kUWeTGQwBKpTyuCERkHd
+//    return @"";
 }
 - (void)dealloc
 {

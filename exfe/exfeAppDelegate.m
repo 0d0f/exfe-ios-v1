@@ -10,6 +10,8 @@
 #import "NewsViewController.h"
 #import "RootViewController.h"
 #import "APIHandler.h"
+#import "DBUtil.h"
+#import "EventViewController.h"
 
 @implementation exfeAppDelegate
 
@@ -25,7 +27,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    
+
     meViewReload=NO;
     
     // Override point for customization after application launch.
@@ -50,8 +52,6 @@
     self.navigationController.title=@"Home";
     self.navigationController.tabBarItem.image= [UIImage imageNamed: @"sheet.png"];
     
-//    id a=self.window.rootViewController;
-    
     
 	tabBarController.viewControllers = [NSArray arrayWithObjects:self.navigationController , newsview,meview, nil];
 
@@ -59,8 +59,6 @@
 	[tabBarController setTabBarItem:customItem2];
 	[tabBarController setTabBarItem:customItem3];
 
-    //	tabBarController.tabBarItem = customItem1;
-    //	tabBarController.tabBarItem = customItem2;
 	[customItem1 release];
 	[customItem2 release];
 	[customItem3 release];	
@@ -71,14 +69,26 @@
     
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     NSString *apikey=[[NSUserDefaults standardUserDefaults] stringForKey:@"api_key"]; 
+    NSLog(@"api_key:%@",apikey);
     NSString *uidstr=[[NSUserDefaults standardUserDefaults] stringForKey:@"userid"]; 
     
+    [DBUtil sharedManager];
     //check user login
     if(uname!=nil && [apikey length]>2 && [uidstr intValue]>0)
     {
         self.username=uname;
         self.api_key=apikey;
         self.userid=[uidstr intValue];
+        NSString *devicetokenreg=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetokenreg"]; 
+        
+        if(uname!=nil&& (devicetokenreg==nil || [devicetokenreg isEqualToString:@"YES"]==NO))
+        {
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
+        }
+        [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+        NSArray *viewControllers = self.navigationController.viewControllers;
+        RootViewController *rootViewController = [viewControllers objectAtIndex:0];
+        [NSThread detachNewThreadSelector:@selector(setReload) toTarget:rootViewController withObject:nil];
     }
     else
     {
@@ -87,23 +97,16 @@
         loginview.delegate=self;
         [tabBarController presentModalViewController:loginview animated:NO];
     }
-    
-    NSString *devicetokenreg=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetokenreg"]; 
-
-    if(uname!=nil&& (devicetokenreg==nil || [devicetokenreg isEqualToString:@"YES"]==NO))
-    {
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound];
-    }
     [self.window makeKeyAndVisible];
     return YES;
 }
 
 - (IBAction) RefreshRootview:(id) sender
 {
-    NSArray *viewControllers = self.navigationController.viewControllers;
     
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    NSArray *viewControllers = self.navigationController.viewControllers;
     RootViewController *rootViewController = [viewControllers objectAtIndex:0];
-
     [NSThread detachNewThreadSelector:@selector(LoadUserEvents) toTarget:rootViewController withObject:nil];
 }
 // Delegation methods
@@ -130,16 +133,25 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     
-    NSLog(@"收到推送消息 ：%@",[[userInfo objectForKey:@"aps"] objectForKey:@"alert"]);
-    if ([[userInfo objectForKey:@"aps"] objectForKey:@"alert"]!=NULL) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"推送通知"
-                                                        message:[[userInfo objectForKey:@"aps"] objectForKey:@"alert"]
-                                                       delegate:self
-                                              cancelButtonTitle:@"关闭"
-                                              otherButtonTitles:@"更新状态",nil];
-        [alert show];
-        [alert release];
+    NSLog(@"收到推送消息 ：%@",userInfo);
+    if([[userInfo objectForKey:@"c"] objectForKey:@"eid"] !=NULL && [[userInfo objectForKey:@"c"] objectForKey:@"t"]!=NULL)
+    {
+        NSLog(@"get event id:%@ , type:%@",[[userInfo objectForKey:@"c"] objectForKey:@"eid"],[[userInfo objectForKey:@"c"] objectForKey:@"t"]);
+
+        if( [[[userInfo objectForKey:@"c"] objectForKey:@"t"] isEqualToString:@"i"])
+        {
+//            NSArray *viewControllers = self.navigationController.viewControllers;
+//            RootViewController *rootViewController = [viewControllers objectAtIndex:0];
+            EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil];
+
+            detailViewController.eventid=[[[userInfo objectForKey:@"c"] objectForKey:@"eid"] intValue];
+
+            [self.navigationController pushViewController:detailViewController animated:YES];
+            [detailViewController release]; 	
+        }
     }
+       
+       
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -182,11 +194,15 @@
 }
 
 -(void)loginViewControllerDidFinish:(LoginViewController *)loginViewController {
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound];
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    RootViewController *rootViewController = [viewControllers objectAtIndex:0];
+    [NSThread detachNewThreadSelector:@selector(LoadUserEvents) toTarget:rootViewController withObject:nil];
 
     [tabBarController dismissModalViewControllerAnimated:YES];
     
 }
+
 
 - (void)dealloc
 {

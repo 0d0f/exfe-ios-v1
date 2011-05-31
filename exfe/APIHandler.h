@@ -23,6 +23,9 @@
 - (NSString*)getMeInfo;
 - (NSString*)getUserEvents;
 - (NSString*)getUserNews;
+- (NSString*)getEventById:(int)eventid;
+- (NSString*)AddCommentById:(int)eventid comment:(NSString*)commenttext;
+
 - (NSString*)sentRSVPWith:(int)eventid rsvp:(NSString*)rsvp;
 - (BOOL) regDeviceToken:(NSString*) token;
 @end

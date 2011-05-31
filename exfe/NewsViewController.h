@@ -11,6 +11,7 @@
 
 @interface NewsViewController : UIViewController {
     IBOutlet UIWebView *webview;
+    UIBarButtonItem *barButtonItem;    
 }
 - (void)LoadUserNews;
 @end

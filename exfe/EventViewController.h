@@ -14,11 +14,14 @@
     NSDictionary* event;
     int eventid;
     BOOL interceptLinks;
-
+    UIBarButtonItem *barButtonItem;
 }
 @property (retain,nonatomic) NSDictionary* event;
 @property int eventid;
 @property BOOL interceptLinks;
 
 - (NSString*)GenerateHtmlWithEvent:(NSDictionary*)event;
+- (void)updateEventView;
+- (void)refresh;
+- (void)LoadEvent;
 @end

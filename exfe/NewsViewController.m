@@ -80,6 +80,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    barButtonItem = [[UIBarButtonItem alloc]
+                     initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                     target:self
+                     action:@selector(refresh)];
+	self.navigationItem.rightBarButtonItem = barButtonItem;
+    
 //    [self LoadUserNews];
 }
 

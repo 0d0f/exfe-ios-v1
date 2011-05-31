@@ -24,32 +24,54 @@
     interceptLinks=NO;
     eventData=[[NSMutableDictionary alloc]initWithCapacity:20];
 
-    
-    timer = [NSTimer scheduledTimerWithTimeInterval: 30
-                                             target: self
-                                           selector: @selector(setReload)
-                                           userInfo: nil
-                                            repeats: YES];    
+    reload=YES;
+//    timer = [NSTimer scheduledTimerWithTimeInterval: 30
+//                                             target: self
+//                                           selector: @selector(setReload)
+//                                           userInfo: nil
+//                                            repeats: YES];    
+    barButtonItem = [[UIBarButtonItem alloc]
+                     initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                     target:self
+                     action:@selector(setReload)];
+	self.navigationItem.rightBarButtonItem = barButtonItem;
+
 }
 - (void) setReload
 {
-    [NSThread detachNewThreadSelector:@selector(LoadUserEvents) toTarget:self withObject:nil];
+    CGRect frame = CGRectMake(0.0, 0.0, 25.0, 25.0);  
+    UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc] initWithFrame:frame];  
+    [loading sizeToFit];  
+    loading.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);  
+    [loading startAnimating];  
+    UIBarButtonItem *statusInd = [[UIBarButtonItem alloc] initWithCustomView:loading];  
+    
+    statusInd.style = UIBarButtonItemStylePlain;  
+    self.navigationItem.rightBarButtonItem =statusInd;
+    [loading release];
+    [statusInd release];
+
+    [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    
+    exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     [self LoadUserEventsFromDB];
+
 }
 - (BOOL)LoadUserEventsFromDB
 {
-    DBUtil *dbu=[DBUtil alloc];
-    
+    DBUtil *dbu=[DBUtil sharedManager];
     NSArray* eventobjects=[dbu getRecentEvent];
-    [dbu release];
+    
     if(eventobjects!=nil && [eventobjects count]>0)
     {
         [self RenderEvents:eventobjects tosave:NO];
+        [eventobjects release];
         return YES;
     }
     return NO;
@@ -61,15 +83,16 @@
     BOOL hasevent=NO;
     BOOL hasinvitation=NO;
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
-    DBUtil *dbu=[DBUtil alloc];
 
+    DBUtil *dbu=[DBUtil sharedManager];
     for(int i=0;i<[events count];i++)
     {
         id event=[events objectAtIndex:i];
         
         if([event isKindOfClass:[NSDictionary class]])
         {
-            NSLog(@"%@",[event JSONRepresentation]);
+//            NSLog(@"%@",[event JSONRepresentation]);
+
             if(save==YES)
                 [dbu updateEventWithid:[[event objectForKey:@"id"] intValue]  event:[event JSONRepresentation]];
             
@@ -88,7 +111,7 @@
             }
         }
     }
-    [dbu release];
+   // [dbu release];
 
     myevent=[myevent stringByAppendingString:@"</ul>"];
     myinvitation=[myinvitation stringByAppendingString:@"</ul>"];
@@ -100,7 +123,11 @@
     [webview loadHTMLString:html baseURL:nil];   
     
 }
+- (void)refresh
+{
+    [self LoadUserEvents];
 
+}
 - (void)LoadUserEvents
 {
     NSLog(@"load user events");
@@ -132,6 +159,8 @@
     }
     mapp.networkActivityIndicatorVisible = NO;
     [responseString release];
+    self.navigationItem.rightBarButtonItem = barButtonItem;
+
     [pool release];
     
 }
@@ -264,7 +293,6 @@
         
         if(event!=nil)
         {
-//            detailViewController.event=event;
             detailViewController.eventid=[[event objectForKey:@"id"] intValue]                        ;
         }
         [self.navigationController pushViewController:detailViewController animated:YES];
