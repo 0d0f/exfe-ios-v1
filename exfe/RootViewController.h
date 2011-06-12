@@ -25,6 +25,7 @@
 - (void)LoadUserEvents;
 - (BOOL)LoadUserEventsFromDB;
 - (void)RenderEvents:(NSArray*)events tosave:(BOOL)save;
+- (void)UpdateDBWithEventDicts:(NSArray*)events;
 - (void) setReload;
 - (void)refresh;
 @end

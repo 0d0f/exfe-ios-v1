@@ -7,7 +7,6 @@
 //
 
 #import "exfeAppDelegate.h"
-#import "NewsViewController.h"
 #import "RootViewController.h"
 #import "APIHandler.h"
 #import "DBUtil.h"
@@ -35,13 +34,8 @@
     self.window.rootViewController = self.navigationController;
     
 	UITabBarItem *customItem1 = [[UITabBarItem alloc] initWithTitle:nil image:[UIImage imageNamed:nil] tag:0];
-	UITabBarItem *customItem2 = [[UITabBarItem alloc] initWithTitle:nil image:[UIImage imageNamed:nil] tag:1];
 	UITabBarItem *customItem3 = [[UITabBarItem alloc] initWithTitle:nil image:[UIImage imageNamed:nil] tag:2];
 	
-    
-	NewsViewController *newsview=[[NewsViewController alloc] initWithNibName:@"NewsViewController" bundle:[NSBundle mainBundle]];
-	newsview.title=@"News";
-	newsview.tabBarItem.image= [UIImage imageNamed: @"news.png"];
     
 	MeViewController *meview=[[MeViewController alloc] initWithNibName:@"MeViewController" bundle:[NSBundle mainBundle]];
 	meview.title=@"Me";
@@ -53,14 +47,12 @@
     self.navigationController.tabBarItem.image= [UIImage imageNamed: @"sheet.png"];
     
     
-	tabBarController.viewControllers = [NSArray arrayWithObjects:self.navigationController , newsview,meview, nil];
+	tabBarController.viewControllers = [NSArray arrayWithObjects:self.navigationController ,meview, nil];
 
 	[tabBarController setTabBarItem:customItem1];
-	[tabBarController setTabBarItem:customItem2];
 	[tabBarController setTabBarItem:customItem3];
 
 	[customItem1 release];
-	[customItem2 release];
 	[customItem3 release];	
 
     
@@ -195,6 +187,9 @@
 
 -(void)loginViewControllerDidFinish:(LoginViewController *)loginViewController {
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
+
+    DBUtil *dbu=[DBUtil sharedManager];
+    [dbu emptyDBCache];
     NSArray *viewControllers = self.navigationController.viewControllers;
     RootViewController *rootViewController = [viewControllers objectAtIndex:0];
     [NSThread detachNewThreadSelector:@selector(LoadUserEvents) toTarget:rootViewController withObject:nil];

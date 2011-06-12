@@ -12,6 +12,7 @@
 #import "exfeAppDelegate.h"
 #import "APIHandler.h"
 #import "JSON/JSON.h"
+#import "Event.h"
 #import "DBUtil.h"
 
 @implementation RootViewController
@@ -66,8 +67,8 @@
 - (BOOL)LoadUserEventsFromDB
 {
     DBUtil *dbu=[DBUtil sharedManager];
-    NSArray* eventobjects=[dbu getRecentEvent];
-    
+//    NSArray* eventobjects=[dbu getRecentEvent];
+    NSArray* eventobjects=[dbu getRecentEventObj];
     if(eventobjects!=nil && [eventobjects count]>0)
     {
         [self RenderEvents:eventobjects tosave:NO];
@@ -76,10 +77,10 @@
     }
     return NO;
 }
+
 - (void)RenderEvents:(NSArray*)events tosave:(BOOL)save
 {
-    NSString *myevent=@"<h1>我发起的：</h1><ul>";
-    NSString *myinvitation=@"<h1>我的邀请：</h1><ul>";
+    NSString *myevent=@"";
     BOOL hasevent=NO;
     BOOL hasinvitation=NO;
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
@@ -87,40 +88,57 @@
     DBUtil *dbu=[DBUtil sharedManager];
     for(int i=0;i<[events count];i++)
     {
-        id event=[events objectAtIndex:i];
+        Event* event=(Event*)[events objectAtIndex:i];
         
-        if([event isKindOfClass:[NSDictionary class]])
+        if([event isKindOfClass:[Event class]])
         {
-//            NSLog(@"%@",[event JSONRepresentation]);
-
             if(save==YES)
-                [dbu updateEventWithid:[[event objectForKey:@"id"] intValue]  event:[event JSONRepresentation]];
+            {
+//                [dbu updateEventWithid:[[event objectForKey:@"id"] intValue]  event:[event JSONRepresentation]];
+//                [dbu updateEventobjWithid:[[event objectForKey:@"id"] intValue] event:event];
+            }
             
-            [eventData setObject:event forKey:[NSString stringWithFormat:@"http://local_%@/",[event objectForKey:@"id"]]];
-            int creator_id=[[(NSDictionary*)event objectForKey:@"creator_id"] intValue];
-            NSLog(@"creator_id:%i",creator_id);
-            if(creator_id==app.userid && [[event objectForKey:@"state"] isEqualToString:@"published"])
+            [eventData setObject:event forKey:[NSString stringWithFormat:@"http://local_%u/",event.id]];
+            
+            if([event.state isEqualToString:@"published"])
             {
-                hasevent=YES;
-                myevent=[myevent stringByAppendingFormat:@"<li><a href='http://local_%@/'>%@</a></li>",[[event objectForKey:@"id"] stringValue] ,[event objectForKey:@"title"]];
+                myevent=[myevent stringByAppendingFormat:@"<a href='http://local_%u/'><div class=\"tl clear\"><div class=\"face\"><img src=\"face1.png\"></div><div class=\"content\"><p><strong>createor_id:%u</strong><span>%@</span></p><p>%@..</p></div></div></a>",event.id,event.creator_id,[event.created_at substringToIndex:10],event.title];
+                
+                
+                
+                
+//                myevent=[myevent stringByAppendingFormat:@"<li><a href='http://local_%u/'>%@</a></li>",event.id  ,];
             }
-            if(creator_id!=app.userid && [[event objectForKey:@"state"] isEqualToString:@"published"])
-            {
-                hasinvitation=YES;
-                myinvitation=[myinvitation stringByAppendingFormat:@"<li><a href='http://local_%@/'>%@</a></li>",[[event objectForKey:@"id"] stringValue] ,[event objectForKey:@"title"]];
-            }
+            
         }
     }
-   // [dbu release];
 
-    myevent=[myevent stringByAppendingString:@"</ul>"];
-    myinvitation=[myinvitation stringByAppendingString:@"</ul>"];
-    NSString *html=@"";
-    if(hasevent==YES)
-        html=[html stringByAppendingString:myevent];
-    if(hasinvitation==YES)
-        html=[html stringByAppendingString:myinvitation];
-    [webview loadHTMLString:html baseURL:nil];   
+    myevent=[myevent stringByAppendingString:@""];
+    NSString *html=@"<head>\
+    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=GUTF=8\" />\
+    <title>timeline</title>\
+    <style type=\"text/css\">\
+    a {text-decoration:none}\
+    .clear{ clear:both; }\
+    .tl { font-family:Verdana, Arial, Helvetica, sans-serif; font-size:13px; width:310px; color:#333333;  border-top: 1px #999 solid;}\
+    .tl  .face{ float:left; width:48px}\
+    .tl  .face img{-moz-border-radius: 3px;\
+	-webkit-border-radius: 3px;\
+    border-radius: 3px;\
+    border:1px solid gray;\
+    margin:5px}\
+    .tl  .content{ float:right; width:242px;background: url(arrow.png) no-repeat right center; }\
+    .tl  .content strong{ font-size:13px;  width:130px; float:left; margin-bottom:5px}\
+    .tl  .content p{ color:#666666; clear:both; }\
+    .tl  .content span{ float:right; co57866lor:#0099FF; width:80px; font-size:12px; margin-right:20px}\
+    </style></head><body>";
+    html=[html stringByAppendingString:myevent];
+    html=[html stringByAppendingString:@"</body></html>"];
+    NSString *basepath = [[NSBundle mainBundle] bundlePath];
+    NSURL *baseURL = [NSURL fileURLWithPath:basepath];
+    NSLog(@"%@",html);
+
+    [webview loadHTMLString:html baseURL:baseURL];   
     
 }
 - (void)refresh
@@ -155,13 +173,35 @@
     else if([jsonobj isKindOfClass:[NSArray class]])
     {
     NSArray *userdict = (NSArray*)jsonobj;
-    [self RenderEvents:userdict tosave:YES];
+    [self UpdateDBWithEventDicts:userdict];
+//    [self RenderEvents:userdict tosave:YES];
     }
     mapp.networkActivityIndicatorVisible = NO;
     [responseString release];
     self.navigationItem.rightBarButtonItem = barButtonItem;
 
     [pool release];
+    
+}
+- (void)UpdateDBWithEventDicts:(NSArray*)events
+{
+    DBUtil *dbu=[DBUtil sharedManager];
+    for(int i=0;i<[events count];i++)
+    {
+        NSDictionary* eventdict=(NSDictionary*)[events objectAtIndex:i];
+        
+        [dbu updateEventobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:eventdict];
+        [dbu updateCommentobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"comments"]];
+        
+//        Event* event=(Event*)[events objectAtIndex:i];
+        
+//        if([event isKindOfClass:[Event class]])
+//        {
+            
+                //                [dbu updateEventWithid:[[event objectForKey:@"id"] intValue]  event:[event JSONRepresentation]];
+                //                [dbu updateEventobjWithid:[[event objectForKey:@"id"] intValue] event:event];
+//        }
+    }
     
 }
 - (void)viewDidAppear:(BOOL)animated
@@ -288,12 +328,13 @@
     if (self.interceptLinks && navigationType==UIWebViewNavigationTypeLinkClicked) {
         NSURL *url = request.URL;
         NSLog(@"%@",[url absoluteString]);
-        NSDictionary *event=[eventData objectForKey:[url absoluteString]];
+        Event *event=[eventData objectForKey:[url absoluteString]];
         EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil];
         
         if(event!=nil)
         {
-            detailViewController.eventid=[[event objectForKey:@"id"] intValue]                        ;
+            detailViewController.eventid=event.id;
+            detailViewController.eventobj=event;
         }
         [self.navigationController pushViewController:detailViewController animated:YES];
         [detailViewController release]; 	

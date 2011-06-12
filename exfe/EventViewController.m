@@ -15,6 +15,7 @@
 
 @implementation EventViewController
 @synthesize event;
+@synthesize eventobj;
 @synthesize eventid;
 @synthesize interceptLinks;
 
@@ -46,25 +47,12 @@
 {
     [super viewDidLoad];
     interceptLinks=NO;
- 
-//    UIBarButtonItem *segmentBarItem = [[UIBarButtonItem alloc] initWithCustomView:segmentedControl];
-//    [segmentedControl release];
-//    
-//    
-//	self.navigationItem.rightBarButtonItem = segmentBarItem;
-//    [segmentBarItem release];
-//    
-//    
-//	UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc] init];
-//    barButtonItem
-//	barButtonItem.title = @"返回";
+    conversationview.alpha= 0.0;
     barButtonItem = [[UIBarButtonItem alloc]
      initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
      target:self
-     action:@selector(refresh)];
+     action:@selector(toconversation)];
 	self.navigationItem.rightBarButtonItem = barButtonItem;
-	
-    
     
     DBUtil *dbu=[DBUtil sharedManager];
     
@@ -78,31 +66,55 @@
     
     self.event=[eventjson JSONValue];
     
-    NSString *html=[self GenerateHtmlWithEvent:self.event];
+    NSString *html=[self GenerateHtmlWithEvent];
     NSURL *baseURL = [NSURL fileURLWithPath:@""];
     [webview loadHTMLString:html baseURL:baseURL];
-}
 
-- (NSString*)GenerateHtmlWithEvent:(NSDictionary*)aevent
+//    NSString *htmlcomment=[self GenerateHtmlWithComment:self.event];
+//    NSURL *baseURLcomment = [NSURL fileURLWithPath:@""];
+//    [conversationview loadHTMLString:htmlcomment baseURL:baseURLcomment];
+    showeventinfo=YES;
+    
+}
+- (NSString*)GenerateHtmlWithComment:(NSDictionary*)aevent
 {
-    NSString *html=[NSString stringWithFormat:@"<h1>%@</h1>",[aevent objectForKey:@"title"]];
-    html=[html stringByAppendingFormat:@"<p>时间：%@</p>",[aevent objectForKey:@"begin_at"]];
-    html=[html stringByAppendingFormat:@"<p>地点：%@</p>",[aevent objectForKey:@"venue"]];
-    html=[html stringByAppendingFormat:@"<p>%@</p>",[aevent objectForKey:@"description"]];
-    NSArray* invitations=[aevent objectForKey:@"invitations"];
-    
-    html=[html stringByAppendingString:@"<p>参加者:</p>"];
-    
-    for(int i=0;i<[invitations count];i++)
+    NSString *html=@"";
+    id comments=[aevent objectForKey:@"comments"];
+    if(comments!=nil && [comments count]>0)
     {
-        NSDictionary *invation=[invitations objectAtIndex:i];
-        NSDictionary *invation_user=[invation objectForKey:@"invited_user"];
-        if([invation_user objectForKey:@"name"]!=nil)
+        for (int i=0;i<[comments count];i++)
         {
-            html=[html stringByAppendingFormat:@"<p>%@ : %@</p>",[invation_user objectForKey:@"name"] ,[invation objectForKey:@"state"]];
+            id comment=[comments objectAtIndex:i];
+            NSDictionary *userobj=[comment objectForKey:@"user"];
+            NSLog(@"user:%@",userobj);
+            html=[html stringByAppendingFormat:@"<p>%@ </p>",[comment objectForKey:@"comment"]];
+            html=[html stringByAppendingFormat:@"<p>-- by %@ </p>",[userobj objectForKey:@"name"]];
         }
-        
     }
+    html=[html stringByAppendingFormat:@"<p><a href='http://comment/#%i'>%@</a></p>",self.eventid,@"回复"];
+    
+    return html;
+}
+- (NSString*)GenerateHtmlWithEvent
+{
+    NSString *html=[NSString stringWithFormat:@"<h1>%@</h1>",eventobj.title];
+
+    html=[html stringByAppendingFormat:@"<p>时间：%@</p>",eventobj.begin_at];
+    html=[html stringByAppendingFormat:@"<p>地点：%@</p>",eventobj.venue];
+    html=[html stringByAppendingFormat:@"<p>%@</p>",eventobj.description];
+//    NSArray* invitations=[aevent objectForKey:@"invitations"];
+//    
+    html=[html stringByAppendingString:@"<p>参加者:</p>"];
+//    for(int i=0;i<[invitations count];i++)
+//    {
+//        NSDictionary *invation=[invitations objectAtIndex:i];
+//        NSDictionary *invation_user=[invation objectForKey:@"invited_identity_list"];
+//        if([invation_user objectForKey:@"name"]!=nil)
+//        {
+//            html=[html stringByAppendingFormat:@"<p>%@ : %@</p>",[invation_user objectForKey:@"name"] ,[invation objectForKey:@"state"]];
+//        }
+//        
+//    }
     html=[html stringByAppendingString:@"<p>您是否参加此活动？<a href='http://invitation/#yes'>是</a>,<a href='http://invitation/#no'>否</a>,<a href='http://invitation/#maybe'>也许</a></p>"];
     DBUtil *dbu=[DBUtil sharedManager];
     NSString *identifier=[dbu getIdentifierWithid:self.eventid];
@@ -111,18 +123,18 @@
     else
         html=[html stringByAppendingFormat:@"<p><a href='http://addical/#%i'>%@</a></p>",self.eventid,@"添加日历"];
     
-    id comments=[aevent objectForKey:@"comments"];
-    if(comments!=nil && [comments count]>0)
-    {
-        for (int i=0;i<[comments count];i++)
-        {
-            id comment=[comments objectAtIndex:i];
-            NSLog(@"comment:%@",comment);
-            html=[html stringByAppendingFormat:@"<p>%@ </p>",[comment objectForKey:@"comment"]];
-            html=[html stringByAppendingFormat:@"<p>-- by %@ </p>",[comment objectForKey:@"user_id"]];
-        }
-    }
-    html=[html stringByAppendingFormat:@"<p><a href='http://comment/#%i'>%@</a></p>",self.eventid,@"回复"];
+//    id comments=[aevent objectForKey:@"comments"];
+//    if(comments!=nil && [comments count]>0)
+//    {
+//        for (int i=0;i<[comments count];i++)
+//        {
+//            id comment=[comments objectAtIndex:i];
+//            NSLog(@"comment:%@",comment);
+//            html=[html stringByAppendingFormat:@"<p>%@ </p>",[comment objectForKey:@"comment"]];
+//            html=[html stringByAppendingFormat:@"<p>-- by %@ </p>",[comment objectForKey:@"user_id"]];
+//        }
+//    }
+//    html=[html stringByAppendingFormat:@"<p><a href='http://comment/#%i'>%@</a></p>",self.eventid,@"回复"];
     
     return html;
 }
@@ -151,7 +163,6 @@
             NSString *html=[self GenerateHtmlWithEvent:eventdict];
             NSURL *baseURL = [NSURL fileURLWithPath:@""];
             [webview loadHTMLString:html baseURL:baseURL];
-            //[responseString release];
             }
             else if( [[chunk objectAtIndex:0] isEqualToString:@"http://addical/"])
             {
@@ -220,7 +231,23 @@
     [super viewDidUnload];
     [barButtonItem release];
 }
-
+- (void)toconversation
+{
+    [UIView beginAnimations:@"ToggleViews" context:nil];
+    [UIView setAnimationDuration:1.0];
+    if(showeventinfo==YES)
+    {
+        webview.alpha = 0.0;
+        conversationview.alpha= 1.0;
+    }   
+    else
+    {
+        webview.alpha = 1.0;
+        conversationview.alpha= 0.0;
+    }
+    showeventinfo=!showeventinfo;
+    [UIView commitAnimations];    
+}
 - (void)refresh
 {
     CGRect frame = CGRectMake(0.0, 0.0, 25.0, 25.0);  
@@ -248,8 +275,7 @@
     if( [eventjson JSONValue]!=nil)
     {
         DBUtil *dbu=[DBUtil sharedManager];
-    
-        [dbu updateEventWithid:self.eventid event:eventjson];
+        [dbu updateEventobjWithid:self.eventid event:self.event];
         [self updateEventView];  
     }
     self.navigationItem.rightBarButtonItem = barButtonItem;
@@ -264,9 +290,9 @@
     NSString *responseString=[dbu getEventWithid:self.eventid];
     NSDictionary *eventdict = [responseString JSONValue];
     
-    NSString *html=[self GenerateHtmlWithEvent:eventdict];
+    NSString *html=[self GenerateHtmlWithComment:eventdict];
     NSURL *baseURL = [NSURL fileURLWithPath:@""];
-    [webview loadHTMLString:html baseURL:baseURL];
+    [conversationview loadHTMLString:html baseURL:baseURL];
 //    [responseString release];
 
     NSLog(@"event update");

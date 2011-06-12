@@ -16,15 +16,14 @@ static sqlite3 *database;
 }
 + (id)sharedManager;
 + (NSString*) DBPath;
+- (void) emptyDBCache;
 - (void) updateEventWithid:(int)eventid event:(NSString*)eventjson;
 - (NSString*) getEventWithid:(int)eventid;
 - (NSArray*) getRecentEvent;
 - (void) updateEventicalWithid:(int)eventid  identifier:(NSString*) eventIdentifier;
 - (NSString*)getIdentifierWithid:(int)eventid;
-//- (NSMutableArray*)getTitleList;
-//- (int) addnewzhstr:(NSString*)zh enstr:(NSString*)en;
-//- (void) updaterowid:(int)rowid withzhstr:(NSString*)zh enstr:(NSString*)en;
-//- (BOOL) deleterowid:(int)rowid;
-//- (NSDictionary*)getContentWithID:(int)rowid;
 
+- (void) updateEventobjWithid:(int)eventid event:(NSDictionary*)eventobj;
+- (void) updateCommentobjWithid:(int)eventid event:(NSArray*)commentdict;
+- (NSArray*) getRecentEventObj;
 @end

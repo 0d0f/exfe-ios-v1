@@ -45,7 +45,7 @@
 - (NSString*)checkUserLoginByUsername:(NSString*)email withPassword:(NSString*)passwd
 {
 
-    NSString *post =[[NSString alloc] initWithFormat:@"login=%@&password=%@",email,passwd];
+    NSString *post =[[NSString alloc] initWithFormat:@"email=%@&password=%@",email,passwd];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     
@@ -82,10 +82,9 @@
 {
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     
-//    NSLog(@"get User EventInfo:%@",app.username);
-//    NSLog(@"url:%@",[NSString stringWithFormat:@"%@/users/%i/events.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key]);
     NSError        *error = nil;
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/users/%i/events.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key]]];
+    NSLog(@"api: %@",[NSString stringWithFormat:@"%@/users/%i/events.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key]);
     [request setHTTPShouldHandleCookies:NO];
 
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
