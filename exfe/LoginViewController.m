@@ -27,7 +27,6 @@
 }
 - (IBAction) LoginButtonPress:(id) sender;
 {
-    NSLog(@"user:%@ passwd:%@",[textUsername text],[textPassword text]);
     
     APIHandler *api=[[APIHandler alloc]init];
     NSString *responseString=[api checkUserLoginByUsername:[textUsername text] withPassword:[textPassword text]];

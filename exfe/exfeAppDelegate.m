@@ -29,34 +29,10 @@
 
     meViewReload=NO;
     
-    // Override point for customization after application launch.
-    // Add the navigation controller's view to the window and display.
     self.window.rootViewController = self.navigationController;
-    
-	UITabBarItem *customItem1 = [[UITabBarItem alloc] initWithTitle:nil image:[UIImage imageNamed:nil] tag:0];
-	UITabBarItem *customItem3 = [[UITabBarItem alloc] initWithTitle:nil image:[UIImage imageNamed:nil] tag:2];
-	
-    
-	MeViewController *meview=[[MeViewController alloc] initWithNibName:@"MeViewController" bundle:[NSBundle mainBundle]];
-	meview.title=@"Me";
-	meview.tabBarItem.image= [UIImage imageNamed: @"me.png"];
-
-	tabBarController = [[UITabBarController alloc] init];
-    
+   
     self.navigationController.title=@"Home";
-    self.navigationController.tabBarItem.image= [UIImage imageNamed: @"sheet.png"];
-    
-    
-	tabBarController.viewControllers = [NSArray arrayWithObjects:self.navigationController ,meview, nil];
 
-	[tabBarController setTabBarItem:customItem1];
-	[tabBarController setTabBarItem:customItem3];
-
-	[customItem1 release];
-	[customItem3 release];	
-
-    
-	[self.window addSubview:tabBarController.view]; 
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
@@ -87,8 +63,25 @@
         LoginViewController *loginview = [[LoginViewController alloc]
                                           initWithNibName:@"LoginViewController" bundle:nil];
         loginview.delegate=self;
-        [tabBarController presentModalViewController:loginview animated:NO];
+        [self.navigationController presentModalViewController:loginview animated:YES];
+
     }
+    CGRect statusRect;
+    statusRect.size.width = [self.navigationController.view frame].size.width;
+    statusRect.size.height = 28; // Not this height is hard coded
+    statusRect.origin.x = 0;
+    statusRect.origin.y = [self.navigationController.view frame].size.height-28; 
+    
+    // Note that 120 is hard coded: would be better to find the height to subtract from the existing views
+    
+    // Create the status bar/toolbar	
+//    statusView = [[UIToolbar alloc] initWithFrame:statusRect];
+    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:statusRect];
+//
+
+
+//    [self.navigationController.view  addSubview:toolbar];
+
     [self.window makeKeyAndVisible];
     return YES;
 }
@@ -194,8 +187,7 @@
     RootViewController *rootViewController = [viewControllers objectAtIndex:0];
     [NSThread detachNewThreadSelector:@selector(LoadUserEvents) toTarget:rootViewController withObject:nil];
 
-    [tabBarController dismissModalViewControllerAnimated:YES];
-    
+    [self.navigationController dismissModalViewControllerAnimated:YES];
 }
 
 

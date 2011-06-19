@@ -18,6 +18,7 @@
 @synthesize eventobj;
 @synthesize eventid;
 @synthesize interceptLinks;
+@synthesize inputToolbar;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -49,7 +50,8 @@
     interceptLinks=NO;
     conversationview.alpha= 0.0;
     barButtonItem = [[UIBarButtonItem alloc]
-     initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+     initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize
+                     //UIBarButtonSystemItemRefresh
      target:self
      action:@selector(toconversation)];
 	self.navigationItem.rightBarButtonItem = barButtonItem;
@@ -70,25 +72,48 @@
     NSURL *baseURL = [NSURL fileURLWithPath:@""];
     [webview loadHTMLString:html baseURL:baseURL];
 
-//    NSString *htmlcomment=[self GenerateHtmlWithComment:self.event];
-//    NSURL *baseURLcomment = [NSURL fileURLWithPath:@""];
-//    [conversationview loadHTMLString:htmlcomment baseURL:baseURLcomment];
+    NSString *htmlcomment=[self GenerateHtmlWithComment];
+    NSURL *baseURLcomment = [NSURL fileURLWithPath:@""];
+    [conversationview loadHTMLString:htmlcomment baseURL:baseURLcomment];
     showeventinfo=YES;
     
+    keyboardIsVisible = NO;
+    
 }
-- (NSString*)GenerateHtmlWithComment:(NSDictionary*)aevent
+
+- (void)viewWillAppear:(BOOL)animated 
 {
+	[super viewWillAppear:animated];
+	/* Listen for keyboard */
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)viewWillDisappear:(BOOL)animated 
+{
+	[super viewWillDisappear:animated];
+	/* No longer listen for keyboard */
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (NSString*)GenerateHtmlWithComment
+{
+    DBUtil *dbu=[DBUtil sharedManager];
+    NSArray *comments=[dbu getCommentWithEventid:self.eventid];
     NSString *html=@"";
-    id comments=[aevent objectForKey:@"comments"];
+//    id comments=[aevent objectForKey:@"comments"];
     if(comments!=nil && [comments count]>0)
     {
         for (int i=0;i<[comments count];i++)
         {
-            id comment=[comments objectAtIndex:i];
-            NSDictionary *userobj=[comment objectForKey:@"user"];
-            NSLog(@"user:%@",userobj);
-            html=[html stringByAppendingFormat:@"<p>%@ </p>",[comment objectForKey:@"comment"]];
-            html=[html stringByAppendingFormat:@"<p>-- by %@ </p>",[userobj objectForKey:@"name"]];
+            Comment *comment=[comments objectAtIndex:i];
+            NSDictionary *user=[comment.userjson JSONValue];
+            NSString *username=@"";
+            if([user objectForKey:@"username"]!=[NSNull null])
+                username=[user objectForKey:@"name"];
+            html=[html stringByAppendingFormat:@"<p>%@ </p>",comment.comment];
+            html=[html stringByAppendingFormat:@"<p>-- by %@ </p>",username];
         }
     }
     html=[html stringByAppendingFormat:@"<p><a href='http://comment/#%i'>%@</a></p>",self.eventid,@"回复"];
@@ -97,6 +122,9 @@
 }
 - (NSString*)GenerateHtmlWithEvent
 {
+    DBUtil *dbu=[DBUtil sharedManager];
+    NSArray *invitations=[dbu getInvitationWithEventid:self.eventid];
+
     NSString *html=[NSString stringWithFormat:@"<h1>%@</h1>",eventobj.title];
 
     html=[html stringByAppendingFormat:@"<p>时间：%@</p>",eventobj.begin_at];
@@ -104,7 +132,16 @@
     html=[html stringByAppendingFormat:@"<p>%@</p>",eventobj.description];
 //    NSArray* invitations=[aevent objectForKey:@"invitations"];
 //    
-    html=[html stringByAppendingString:@"<p>参加者:</p>"];
+    if(invitations !=nil&&[invitations count]>0)
+    {
+        html=[html stringByAppendingString:@"<p>参加者:</p>"];
+        for (int i=0;i<[invitations count];i++)
+        {
+            Invitation *invitation=[invitations objectAtIndex:i];
+            html=[html stringByAppendingFormat:@"<p>%@ state:%@ via %@ </p>",invitation.username,invitation.state,invitation.provider];
+        }    
+    }
+    
 //    for(int i=0;i<[invitations count];i++)
 //    {
 //        NSDictionary *invation=[invitations objectAtIndex:i];
@@ -116,7 +153,6 @@
 //        
 //    }
     html=[html stringByAppendingString:@"<p>您是否参加此活动？<a href='http://invitation/#yes'>是</a>,<a href='http://invitation/#no'>否</a>,<a href='http://invitation/#maybe'>也许</a></p>"];
-    DBUtil *dbu=[DBUtil sharedManager];
     NSString *identifier=[dbu getIdentifierWithid:self.eventid];
     if(identifier!=nil)
         html=[html stringByAppendingFormat:@"<p><a href='http://addical/#%i'>%@</a></p>",self.eventid,@"删除日历"];
@@ -157,10 +193,12 @@
             
             NSDictionary *eventdict = [responseString JSONValue];
             DBUtil *dbu=[DBUtil sharedManager];
+            [dbu updateEventobjWithid:self.eventid event:eventdict];
+            [dbu updateInvitationobjWithid:self.eventid event:(NSArray*)[eventdict objectForKey:@"invitations"]];
+            //[dbu updateEventWithid:self.eventid event:responseString];
             
-            [dbu updateEventWithid:self.eventid event:responseString];
             
-            NSString *html=[self GenerateHtmlWithEvent:eventdict];
+            NSString *html=[self GenerateHtmlWithEvent];
             NSURL *baseURL = [NSURL fileURLWithPath:@""];
             [webview loadHTMLString:html baseURL:baseURL];
             }
@@ -211,11 +249,7 @@
 //                [responseString release];
 
             }
-
-
         }
-            
-        
         return NO;
     }
     //No need to intercept the initial request to fill the WebView
@@ -239,14 +273,37 @@
     {
         webview.alpha = 0.0;
         conversationview.alpha= 1.0;
+        //    self.view = [[UIView alloc] initWithFrame:screenFrame];
+        //    self.view.backgroundColor = [UIColor whiteColor];
+        /* Create toolbar */
+
     }   
     else
     {
         webview.alpha = 1.0;
         conversationview.alpha= 0.0;
     }
+    [UIView commitAnimations];  
+    
+    if(showeventinfo==YES)
+    {
+//        CGRect screenFrame = [[UIScreen mainScreen] applicationFrame];
+        CGRect screenFrame = [self.view frame];
+        
+        CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight);
+        self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
+    
+    [self.view addSubview:self.inputToolbar];
+
+    }
+    else
+    {
+        [self.inputToolbar removeFromSuperview];
+    }
     showeventinfo=!showeventinfo;
-    [UIView commitAnimations];    
+
+//    inputToolbar.delegate = self;
+    
 }
 - (void)refresh
 {
@@ -263,9 +320,6 @@
     [statusInd release];
     
     [NSThread detachNewThreadSelector:@selector(LoadEvent) toTarget:self withObject:nil];
-    
-
-    
 }
 - (void)LoadEvent
 {
@@ -285,22 +339,58 @@
 
 - (void)updateEventView
 {
-    DBUtil *dbu=[DBUtil sharedManager];
-    
-    NSString *responseString=[dbu getEventWithid:self.eventid];
-    NSDictionary *eventdict = [responseString JSONValue];
-    
-    NSString *html=[self GenerateHtmlWithComment:eventdict];
+    NSString *html=[self GenerateHtmlWithComment];
     NSURL *baseURL = [NSURL fileURLWithPath:@""];
     [conversationview loadHTMLString:html baseURL:baseURL];
-//    [responseString release];
 
     NSLog(@"event update");
 }
+- (void)updateConversationView
+{
+    NSString *htmlcomment=[self GenerateHtmlWithComment];
+    NSURL *baseURLcomment = [NSURL fileURLWithPath:@""];
+    [conversationview loadHTMLString:htmlcomment baseURL:baseURLcomment];
+    
+}
+
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification 
+{
+    /* Move the toolbar to above the keyboard */
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.3];
+	CGRect frame = self.inputToolbar.frame;
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        frame.origin.y = self.view.frame.size.height - frame.size.height - kKeyboardHeightPortrait;
+    }
+    else {
+        frame.origin.y = self.view.frame.size.width - frame.size.height - kKeyboardHeightLandscape - kStatusBarHeight;
+    }
+	self.inputToolbar.frame = frame;
+	[UIView commitAnimations];
+    keyboardIsVisible = YES;
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification 
+{
+    /* Move the toolbar back to bottom of the screen */
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:0.3];
+	CGRect frame = self.inputToolbar.frame;
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        frame.origin.y = self.view.frame.size.height - frame.size.height;
+    }
+    else {
+        frame.origin.y = self.view.frame.size.width - frame.size.height;
+    }
+	self.inputToolbar.frame = frame;
+	[UIView commitAnimations];
+    keyboardIsVisible = NO;
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "Comment.h"
+#import "JSON/JSON.h"
 
 @implementation Comment
 
@@ -48,7 +49,11 @@
         comment.updated_at = [dict objectForKey:@"updated_at"];
     else
         comment.updated_at = @"";
-    comment.userjson=@"";
+    if([dict objectForKey:@"user"]!=[NSNull null])
+            comment.userjson=[[dict objectForKey:@"user"] JSONRepresentation];
+    else
+        comment.userjson=@"";
+
     return comment;
     
 }

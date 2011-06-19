@@ -180,22 +180,24 @@
     NSString *commentjson=[api AddCommentById:self.eventid comment:textView.text];
    if([[commentjson JSONValue] objectForKey:@"comment"]!=nil)
    {
-       NSString *eventjson=[api getEventById:self.eventid];
+//       NSString *eventjson=[api getEventById:self.eventid];
        DBUtil *dbu=[DBUtil sharedManager];
-       [dbu updateEventWithid:self.eventid event:eventjson];
+       NSArray *arr=[[NSArray alloc]initWithObjects:[commentjson JSONValue], nil];
+       [dbu updateCommentobjWithid:self.eventid event:arr];
+       
+       [arr release];
+       
+       //[dbu updateEventWithid:self.eventid event:eventjson];
    }
     else
     {
         NSLog(@"comment failure");
     }
-    NSLog(@"post:%@",commentjson);
- 
-//    [api getEventById:self.eventid];
     [commentjson release];
     [api release];
     
     [textView resignFirstResponder];
-    [self.delegate updateEventView];
+    [self.delegate updateConversationView];
 //    [(EventViewController*)delegate update];
     [self dismissModalViewControllerAnimated:NO];
 }

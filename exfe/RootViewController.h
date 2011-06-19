@@ -14,7 +14,8 @@
     NSMutableData *responseData;
     NSMutableDictionary *eventData;
     UIBarButtonItem *barButtonItem;
-
+    IBOutlet UITableView *tableview;
+    NSArray* events;
     BOOL reload;
     NSTimer *timer;
 }
@@ -28,4 +29,5 @@
 - (void)UpdateDBWithEventDicts:(NSArray*)events;
 - (void) setReload;
 - (void)refresh;
+- (void) liftMainViewWhenKeybordAppears:(NSNotification*)aNotification;
 @end
