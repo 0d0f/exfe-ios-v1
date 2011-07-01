@@ -10,8 +10,14 @@
 #import "APIHandler.h"
 #import "DBUtil.h"
 #import "JSON/JSON.h"
-#import "CommentViewController.h"
 #import <EventKit/EventKit.h>
+#import "ImgCache.h"
+
+#define FONT_SIZE 14.0f
+#define CELL_CONTENT_WIDTH 320.0f
+#define CELL_CONTENT_MARGIN 10.0f
+#define CELL_IMAGE_WIDTH 40.0f
+#define CELL_IMAGE_HEIGHT 40.0f
 
 @implementation EventViewController
 @synthesize event;
@@ -48,36 +54,47 @@
 {
     [super viewDidLoad];
     interceptLinks=NO;
-    conversationview.alpha= 0.0;
+    
     barButtonItem = [[UIBarButtonItem alloc]
      initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize
                      //UIBarButtonSystemItemRefresh
      target:self
      action:@selector(toconversation)];
 	self.navigationItem.rightBarButtonItem = barButtonItem;
-    
     DBUtil *dbu=[DBUtil sharedManager];
+    comments=[dbu getCommentWithEventid:self.eventid];
     
-    NSString* eventjson=[dbu getEventWithid:self.eventid];
-    if(eventjson==nil)
-    {
-        APIHandler *api=[[APIHandler alloc]init];
-        eventjson=[api getEventById:self.eventid];
-        [api release];
-    }
-    
-    self.event=[eventjson JSONValue];
     
     NSString *html=[self GenerateHtmlWithEvent];
     NSURL *baseURL = [NSURL fileURLWithPath:@""];
     [webview loadHTMLString:html baseURL:baseURL];
 
-    NSString *htmlcomment=[self GenerateHtmlWithComment];
-    NSURL *baseURLcomment = [NSURL fileURLWithPath:@""];
-    [conversationview loadHTMLString:htmlcomment baseURL:baseURLcomment];
     showeventinfo=YES;
     
     keyboardIsVisible = NO;
+    
+    [conversationview setSeparatorColor:[UIColor clearColor]];
+    
+    conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
+    CGRect crect=conversionViewController.view.frame;
+    conversionViewController.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
+    conversionViewController.comments=comments;
+    [self.view addSubview:conversionViewController.view];
+    [conversionViewController.view setHidden:YES];
+    [conversationview setHidden:YES];
+//    CGRect screenFrame = [self.view frame];
+    
+//    CGRect crect=conversionViewController.view.frame;
+//      CGRect crect=self.view.frame;  
+//    conversionViewController.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
+//    CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight);
+//    
+//    self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
+//    inputToolbar.delegate = self;
+//    [self.view addSubview:conversionViewController.view];
+//    [self.view addSubview:self.inputToolbar];
+
+
     
 }
 
@@ -87,6 +104,8 @@
 	/* Listen for keyboard */
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+//    [UIView transitionFromView:conversionViewController.view toView:self.view duration:1 options:UIViewAnimationOptionTransitionFlipFromRight completion:nil];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated 
@@ -97,29 +116,6 @@
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (NSString*)GenerateHtmlWithComment
-{
-    DBUtil *dbu=[DBUtil sharedManager];
-    NSArray *comments=[dbu getCommentWithEventid:self.eventid];
-    NSString *html=@"";
-//    id comments=[aevent objectForKey:@"comments"];
-    if(comments!=nil && [comments count]>0)
-    {
-        for (int i=0;i<[comments count];i++)
-        {
-            Comment *comment=[comments objectAtIndex:i];
-            NSDictionary *user=[comment.userjson JSONValue];
-            NSString *username=@"";
-            if([user objectForKey:@"username"]!=[NSNull null])
-                username=[user objectForKey:@"name"];
-            html=[html stringByAppendingFormat:@"<p>%@ </p>",comment.comment];
-            html=[html stringByAppendingFormat:@"<p>-- by %@ </p>",username];
-        }
-    }
-    html=[html stringByAppendingFormat:@"<p><a href='http://comment/#%i'>%@</a></p>",self.eventid,@"回复"];
-    
-    return html;
-}
 - (NSString*)GenerateHtmlWithEvent
 {
     DBUtil *dbu=[DBUtil sharedManager];
@@ -158,19 +154,6 @@
         html=[html stringByAppendingFormat:@"<p><a href='http://addical/#%i'>%@</a></p>",self.eventid,@"删除日历"];
     else
         html=[html stringByAppendingFormat:@"<p><a href='http://addical/#%i'>%@</a></p>",self.eventid,@"添加日历"];
-    
-//    id comments=[aevent objectForKey:@"comments"];
-//    if(comments!=nil && [comments count]>0)
-//    {
-//        for (int i=0;i<[comments count];i++)
-//        {
-//            id comment=[comments objectAtIndex:i];
-//            NSLog(@"comment:%@",comment);
-//            html=[html stringByAppendingFormat:@"<p>%@ </p>",[comment objectForKey:@"comment"]];
-//            html=[html stringByAppendingFormat:@"<p>-- by %@ </p>",[comment objectForKey:@"user_id"]];
-//        }
-//    }
-//    html=[html stringByAppendingFormat:@"<p><a href='http://comment/#%i'>%@</a></p>",self.eventid,@"回复"];
     
     return html;
 }
@@ -213,7 +196,7 @@
                 }                 
                 [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZ"];
                 NSDate *sdate=[dateFormat dateFromString:datestr];
-//                NSString *dateString = [dateFormat stringFromDate:date];  
+
                 [dateFormat release];                
                 
                 DBUtil *dbu=[DBUtil sharedManager];
@@ -233,22 +216,6 @@
                 NSLog(@"identifier:%@",sevent.eventIdentifier);
                 
             }
-            else if( [[chunk objectAtIndex:0] isEqualToString:@"http://comment/"])
-            {
-
-                [CommentViewController present:self event:self.eventid delegate:self];
-                
-//                DBUtil *dbu=[DBUtil sharedManager];
-//                NSString *responseString=[dbu getEventWithid:self.eventid];
-//                NSDictionary *eventdict = [responseString JSONValue];
-//                
-//                
-//                NSString *html=[self GenerateHtmlWithEvent:eventdict];
-//                NSURL *baseURL = [NSURL fileURLWithPath:@""];
-//                [webview loadHTMLString:html baseURL:baseURL];
-//                [responseString release];
-
-            }
         }
         return NO;
     }
@@ -267,33 +234,31 @@
 }
 - (void)toconversation
 {
-    [UIView beginAnimations:@"ToggleViews" context:nil];
-    [UIView setAnimationDuration:1.0];
+    [conversionViewController.view setHidden:NO];
+//    [conversionViewController.view setHidden:YES];
     if(showeventinfo==YES)
     {
-        webview.alpha = 0.0;
-        conversationview.alpha= 1.0;
-        //    self.view = [[UIView alloc] initWithFrame:screenFrame];
-        //    self.view.backgroundColor = [UIColor whiteColor];
-        /* Create toolbar */
-
+        [UIView transitionFromView:webview toView:conversionViewController.view duration:1 options:UIViewAnimationOptionTransitionFlipFromLeft completion:nil];
     }   
     else
     {
-        webview.alpha = 1.0;
-        conversationview.alpha= 0.0;
+        
+        [UIView transitionFromView:conversionViewController.view toView:webview duration:1 options:UIViewAnimationOptionTransitionFlipFromRight completion:nil];
     }
-    [UIView commitAnimations];  
-    
+////    
     if(showeventinfo==YES)
     {
-//        CGRect screenFrame = [[UIScreen mainScreen] applicationFrame];
         CGRect screenFrame = [self.view frame];
-        
+  
+        CGRect crect=conversationview.frame;
+        conversationview.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
         CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight);
+
         self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
-    
-    [self.view addSubview:self.inputToolbar];
+        inputToolbar.delegate = self;
+        [self.view addSubview:self.inputToolbar];
+//        [baseview addSubview:self.inputToolbar];
+
 
     }
     else
@@ -301,9 +266,7 @@
         [self.inputToolbar removeFromSuperview];
     }
     showeventinfo=!showeventinfo;
-
-//    inputToolbar.delegate = self;
-    
+ 
 }
 - (void)refresh
 {
@@ -337,22 +300,6 @@
     
 }
 
-- (void)updateEventView
-{
-    NSString *html=[self GenerateHtmlWithComment];
-    NSURL *baseURL = [NSURL fileURLWithPath:@""];
-    [conversationview loadHTMLString:html baseURL:baseURL];
-
-    NSLog(@"event update");
-}
-- (void)updateConversationView
-{
-    NSString *htmlcomment=[self GenerateHtmlWithComment];
-    NSURL *baseURLcomment = [NSURL fileURLWithPath:@""];
-    [conversationview loadHTMLString:htmlcomment baseURL:baseURLcomment];
-    
-}
-
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
@@ -361,6 +308,7 @@
 
 - (void)keyboardWillShow:(NSNotification *)notification 
 {
+    NSLog(@"show keyboard");
     /* Move the toolbar to above the keyboard */
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.3];
@@ -392,5 +340,113 @@
 	[UIView commitAnimations];
     keyboardIsVisible = NO;
 }
+-(void)inputButtonPressed:(NSString *)inputText
+{
+    /* Called when toolbar button is pressed */
+//    NSLog(@"Pressed button with text: '%@'", inputText);
+//    [NSThread detachNewThreadSelector:@selector(postComment:) toTarget:self withObject:inputText];
+    [self performSelector:@selector(postComment:) withObject:inputText];
+ 
+}
+- (void)postComment:(NSString*)inputtext
+{
+    APIHandler *api=[[APIHandler alloc]init];
+    NSString *commentjson=[api AddCommentById:self.eventid comment:inputtext];
+    NSLog(@"commentjson:%@",commentjson);
+    if([[commentjson JSONValue] objectForKey:@"comment"]!=nil)
+    {
+        DBUtil *dbu=[DBUtil sharedManager];
+        NSArray *arr=[[NSArray alloc]initWithObjects:[commentjson JSONValue], nil];
+        [dbu updateCommentobjWithid:self.eventid event:arr];
+        [arr release];
+        Comment *comment=[Comment initWithDict:[commentjson JSONValue] EventID:self.eventid];
+//        [comments addObject:comment];
+        [comments insertObject:comment atIndex:0];
+        [conversationview reloadData];
+//        comments=[dbu getCommentWithEventid:self.eventid];
+        
 
+        
+    }
+    else
+    {
+        NSLog(@"comment failure");
+    }
+    [commentjson release];
+    [api release];    
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [comments count];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Comment *comment=[comments objectAtIndex:indexPath.row];
+    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH), 20000.0f);
+    
+    CGSize labelSize = [comment.comment sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+
+    return MAX(labelSize.height+CELL_CONTENT_MARGIN, 60.00f);
+
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+    Comment *comment=[comments objectAtIndex:indexPath.row];
+    //initWithDict
+    User *user=[User initWithDict:[comment.userjson JSONValue]];
+//    NSDictionary *user=;
+    UILabel *label=nil;
+    UIImageView *imageview=nil;
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        label = [[UILabel alloc] initWithFrame:CGRectZero];
+        [label setLineBreakMode:UILineBreakModeWordWrap];
+        [label setMinimumFontSize:FONT_SIZE];
+        [label setNumberOfLines:0];
+        [label setFont:[UIFont systemFontOfSize:FONT_SIZE]];
+        [label setTag:1];
+//        [[label layer] setBorderWidth:2.0f];
+        [[cell contentView] addSubview:label];
+       
+        imageview=[[UIImageView alloc] initWithFrame:CGRectZero];
+        [imageview setTag:2];
+        [[cell contentView] addSubview:imageview];
+
+    }
+    
+    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH ), 20000.0f);
+    
+    CGSize size = [comment.comment sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+    
+    if (!imageview)
+        label = (UILabel*)[cell viewWithTag:1];
+    
+    [label setText:comment.comment];
+    [label setFrame:CGRectMake(CELL_CONTENT_MARGIN+CELL_IMAGE_WIDTH, CELL_CONTENT_MARGIN, CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH), MAX(size.height, 50.0f))];
+
+    if (!imageview)
+        imageview = (UIImageView*)[imageview viewWithTag:2];
+    
+    if(user.avatar_file_name!=nil && ![user.avatar_file_name isEqualToString:@""])
+    {
+        NSLog(@"update image%@",user.avatar_file_name);
+        [imageview setFrame:CGRectMake(CELL_CONTENT_MARGIN, CELL_CONTENT_MARGIN, CELL_IMAGE_WIDTH, CELL_IMAGE_HEIGHT)];
+        NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+        NSString *imgurl=[NSString stringWithFormat:@"http://exfe.com/system/avatars/%u/thumb/%@",user.id,imgName];
+        UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
+        if(image!=nil && ![image isEqual:[NSNull null]]) 
+            imageview.image=image;
+    }
+    return cell;
+}
 @end

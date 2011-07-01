@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PullRefreshTableViewController.h"
 
-@interface RootViewController : UIViewController {
+@interface RootViewController : PullRefreshTableViewController{
+//UIViewController {
 	IBOutlet UIWebView *webview;
     BOOL interceptLinks;
     NSMutableData *responseData;
@@ -25,9 +27,7 @@
 
 - (void)LoadUserEvents;
 - (BOOL)LoadUserEventsFromDB;
-- (void)RenderEvents:(NSArray*)events tosave:(BOOL)save;
 - (void)UpdateDBWithEventDicts:(NSArray*)events;
-- (void) setReload;
-- (void)refresh;
-- (void) liftMainViewWhenKeybordAppears:(NSNotification*)aNotification;
+- (void) refresh;
+- (void)dorefresh;
 @end

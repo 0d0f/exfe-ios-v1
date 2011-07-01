@@ -25,7 +25,7 @@
 }
 + (Invitation*)initWithDict:(NSDictionary*)dict EventID:(NSInteger)eid
 {
-    Invitation* invitation= [[self alloc] init];
+    Invitation* invitation= [[[self alloc] init] autorelease];
     invitation.id = [[dict objectForKey:@"id"] integerValue];
     invitation.eventid=eid;
     invitation.state=[dict objectForKey:@"state"];

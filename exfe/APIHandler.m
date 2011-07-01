@@ -8,6 +8,7 @@
 
 #import "APIHandler.h"
 #import "exfeAppDelegate.h"
+#import "DBUtil.h"
 
 @implementation APIHandler
 @synthesize username;
@@ -39,7 +40,7 @@
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/events/%u/%@?api_key=%@",[APIHandler URL_API_ROOT],eventid,rsvp,api_key]]];
     [request setHTTPShouldHandleCookies:NO];
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    NSString *responseString = [[[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding] autorelease];
     return responseString;    
 }
 - (NSString*)checkUserLoginByUsername:(NSString*)email withPassword:(NSString*)passwd
@@ -81,10 +82,19 @@
 - (NSString*)getUserEvents
 {
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
+    DBUtil *dbu=[DBUtil sharedManager];
+    NSString *lastUpdateTime=[dbu getLastEventUpdateTime];
     
-    NSError        *error = nil;
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/users/%i/events.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key]]];
-    NSLog(@"api: %@",[NSString stringWithFormat:@"%@/users/%i/events.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key]);
+    NSError *error = nil;
+//    lastUpdateTime
+    NSString *apiurl=nil;
+    if(lastUpdateTime==nil)
+        apiurl=[NSString stringWithFormat:@"%@/users/%i/events.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key];
+    else
+        apiurl=[NSString stringWithFormat:@"%@/users/%i/events.json?updated_since=%@&api_key=%@",[APIHandler URL_API_ROOT],app.userid,lastUpdateTime,api_key];
+
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
+    NSLog(@"api: %@",apiurl);
     [request setHTTPShouldHandleCookies:NO];
 
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
@@ -127,9 +137,8 @@
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     [request setHTTPBody:postData];
     [request setHTTPShouldHandleCookies:NO];
-    
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    NSString *responseString = [[[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding] autorelease];
     id jsonobj=[responseString JSONValue];
     if([jsonobj isKindOfClass:[NSDictionary class]]   )
     {

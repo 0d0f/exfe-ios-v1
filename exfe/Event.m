@@ -25,7 +25,7 @@
 @synthesize state;
 + (Event*)initWithDict:(NSDictionary*)dict
 {
-    Event* event= [[self alloc] init];
+    Event* event= [[[self alloc] init] autorelease];
     event.id = [[dict objectForKey:@"id"] integerValue];
     
     if([dict objectForKey:@"title"]!=[NSNull null])
@@ -63,7 +63,7 @@
     else
         event.venue = @"";
 
-    event.creator_id = [[dict objectForKey:@"creator_id"] integerValue];
+    event.creator_id = [[dict objectForKey:@"host_id"] integerValue];
 
     if([dict objectForKey:@"created_at"]!=[NSNull null])
         event.created_at = [dict objectForKey:@"created_at"];

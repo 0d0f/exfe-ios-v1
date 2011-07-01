@@ -32,8 +32,6 @@ static id sharedManager = nil;
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
-	[fileManager release];
-//	int count=0;
 	if(!success)
 	{
 		return 0;
@@ -142,12 +140,16 @@ static id sharedManager = nil;
         {   Comment *commentobj=[[Comment alloc]init];
             commentobj.id=sqlite3_column_int(stm, 0);
             commentobj.eventid=sqlite3_column_int(stm, 1);
-            commentobj.comment=[NSString stringWithUTF8String:sqlite3_column_text(stm, 2)];
+            commentobj.comment =
+            [[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 2)] stringByTrimmingCharactersInSet:
+             [NSCharacterSet whitespaceAndNewlineCharacterSet]];            
             commentobj.user_id=sqlite3_column_int(stm, 3);
-            commentobj.userjson=[NSString stringWithUTF8String:sqlite3_column_text(stm, 4)];
-            commentobj.created_at=[NSString stringWithUTF8String:sqlite3_column_text(stm, 5)];
-            commentobj.updated_at=[NSString stringWithUTF8String:sqlite3_column_text(stm, 6)];
-            
+            char* userjson=(char*)sqlite3_column_text(stm, 4);
+            if(userjson!=nil)
+                commentobj.userjson=[NSString stringWithUTF8String:userjson];
+            commentobj.created_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 5)];
+            commentobj.updated_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 6)];
+            if(commentobj.comment!=nil && ![commentobj.comment isEqualToString:@""])
             [commentlist addObject:commentobj];
         }
     }
@@ -329,11 +331,11 @@ static id sharedManager = nil;
     const char *sql = "insert or replace into comments (id,eventid,comment,user_id,userjson,created_at,updated_at) values(?,?,?,?,?,?,?)";
     for(int i=0;i<[commentdict count];i++)
     {
-
+    Comment *commentobj=[Comment initWithDict:[commentdict objectAtIndex:i] EventID:eventid];
+    if(![commentobj.comment isEqualToString:@""])
     if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
     {
             
-            Comment *commentobj=[Comment initWithDict:[commentdict objectAtIndex:i] EventID:eventid];
             sqlite3_bind_int(stm, 1,commentobj.id ); 
             sqlite3_bind_int(stm, 2, eventid); 
             sqlite3_bind_text(stm,3,[commentobj.comment UTF8String], -1, SQLITE_TRANSIENT);
@@ -441,6 +443,7 @@ static id sharedManager = nil;
 
 - (void) updateUserobjWithid:(int)uid user:(NSDictionary*)userobj
 {
+    
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
@@ -501,10 +504,19 @@ static id sharedManager = nil;
         while(sqlite3_step(stm)== SQLITE_ROW)
         {
             user.id=userid;
-            user.name=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 0)];
-            user.avatar_file_name=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 1)];
-            user.email=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 2)];
-            user.bio=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 3)];
+            char *name=(char*)sqlite3_column_text(stm, 0);
+            if(name!=NULL)
+                user.name=[NSString stringWithUTF8String:name];
+            char *avatar_file_name=(char*)sqlite3_column_text(stm, 1);
+            if(avatar_file_name!=NULL)
+                user.avatar_file_name=[NSString stringWithUTF8String:avatar_file_name];
+
+            char *email=(char*)sqlite3_column_text(stm, 2);
+            if(email!=NULL)
+                user.email=[NSString stringWithUTF8String:email];
+            char *bio=(char*)sqlite3_column_text(stm, 3);
+            if(bio!=NULL)
+                user.bio=[NSString stringWithUTF8String:bio];
         }
     }
     sqlite3_finalize(stm);
@@ -514,14 +526,13 @@ static id sharedManager = nil;
 {
     const char *sql="SELECT identifier from eventical where eventid=?;";
     
-	NSString *dbpath=[DBUtil DBPath];
+	NSString *_dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
-	BOOL success=[fileManager fileExistsAtPath:dbpath];
+	BOOL success=[fileManager fileExistsAtPath:_dbpath];
 	[fileManager release];
-	int count=0;
 	if(!success)
 	{
-		return 0;
+		return nil;
 	} 
 	sqlite3_stmt *stm=nil;
 	NSString *identifier=nil;
@@ -532,11 +543,39 @@ static id sharedManager = nil;
         while(sqlite3_step(stm)== SQLITE_ROW)
         {
             
-            identifier=[NSString stringWithUTF8String:sqlite3_column_text(stm, 0)];
+            identifier=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 0)];
         }
     }
     sqlite3_finalize(stm);
 	return identifier;     
+}
+- (NSString*) getLastEventUpdateTime
+{
+    const char *sql="select max(updated_at) from events;";
+    
+	NSString *_dbpath=[DBUtil DBPath];
+	NSFileManager *fileManager=[NSFileManager defaultManager];
+	BOOL success=[fileManager fileExistsAtPath:_dbpath];
+	[fileManager release];
+	if(!success)
+	{
+		return nil;
+	} 
+	sqlite3_stmt *stm=nil;
+	NSString *LastUpdateTime=nil;
+    
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        int flag=sqlite3_step(stm);
+        if(flag== SQLITE_ROW)
+        {
+            char* last=(char*)sqlite3_column_text(stm, 0);
+            if(last !=NULL)
+                LastUpdateTime=[NSString stringWithUTF8String:last];
+        }
+    }
+    sqlite3_finalize(stm);
+	return LastUpdateTime;     
 }
 - (void)dealloc
 {

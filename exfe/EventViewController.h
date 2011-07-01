@@ -11,6 +11,9 @@
 #import "Comment.h"
 #import "Invitation.h"
 #import "UIInputToolbar.h"
+#import "PullRefreshTableViewController.h"
+#import "ConversionTableViewController.h"
+
 
 #define kStatusBarHeight 20
 #define kDefaultToolbarHeight 40
@@ -18,8 +21,14 @@
 #define kKeyboardHeightLandscape 140
 
 @interface EventViewController : UIViewController {
-    IBOutlet UIWebView *conversationview;
+//    UIViewController
+    //IBOutlet UIWebView *conversationview;
     IBOutlet UIWebView *webview;
+    IBOutlet UITableView *conversationview;
+    IBOutlet UIView *baseview;
+    IBOutlet UITableView *tableView;
+    ConversionTableViewController *conversionViewController;
+    
     NSDictionary* event;
     Event* eventobj;
     int eventid;
@@ -30,6 +39,8 @@
     BOOL keyboardIsVisible;
     
     UIInputToolbar *inputToolbar;
+    
+    NSMutableArray *comments;
 
 }
 @property (retain,nonatomic) NSDictionary* event;
@@ -40,10 +51,8 @@
 
 
 - (NSString*)GenerateHtmlWithEvent;
-- (NSString*)GenerateHtmlWithComment;
-- (void)updateEventView;
-- (void)updateConversationView;
 - (void)refresh;
 - (void)toconversation;
 - (void)LoadEvent;
+- (void)postComment:(NSString*)inputtext;
 @end

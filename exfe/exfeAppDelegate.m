@@ -56,7 +56,7 @@
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
         NSArray *viewControllers = self.navigationController.viewControllers;
         RootViewController *rootViewController = [viewControllers objectAtIndex:0];
-        [NSThread detachNewThreadSelector:@selector(setReload) toTarget:rootViewController withObject:nil];
+        [NSThread detachNewThreadSelector:@selector(refresh) toTarget:rootViewController withObject:nil];
     }
     else
     {
@@ -76,7 +76,7 @@
     
     // Create the status bar/toolbar	
 //    statusView = [[UIToolbar alloc] initWithFrame:statusRect];
-    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:statusRect];
+//    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:statusRect];
 //
 
 

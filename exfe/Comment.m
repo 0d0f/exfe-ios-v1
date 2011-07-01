@@ -50,7 +50,7 @@
     else
         comment.updated_at = @"";
     if([dict objectForKey:@"user"]!=[NSNull null])
-            comment.userjson=[[dict objectForKey:@"user"] JSONRepresentation];
+            comment.userjson=[[dict objectForKey:@"identity"] JSONRepresentation];
     else
         comment.userjson=@"";
 

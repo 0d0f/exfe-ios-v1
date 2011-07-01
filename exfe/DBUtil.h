@@ -33,4 +33,5 @@ static sqlite3 *database;
 - (NSArray*) getRecentEventObj;
 - (NSArray*) getInvitationWithEventid:(int)eventid;
 - (User*) getUserWithid:(int)userid;
+- (NSString*) getLastEventUpdateTime;
 @end
