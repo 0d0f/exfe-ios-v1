@@ -22,9 +22,13 @@
 - (NSString*)checkUserLoginByUsername:(NSString*)email withPassword:(NSString*)passwd;
 - (NSString*)getMeInfo;
 - (NSString*)getUserEvents;
+//- (id)getUserEvents;
 - (NSString*)getUserNews;
 - (NSString*)getEventById:(int)eventid;
 - (NSString*)AddCommentById:(int)eventid comment:(NSString*)commenttext;
+- (NSString*)getPostsWith:(int)crossid;
+
+
 
 - (NSString*)sentRSVPWith:(int)eventid rsvp:(NSString*)rsvp;
 - (BOOL) regDeviceToken:(NSString*) token;

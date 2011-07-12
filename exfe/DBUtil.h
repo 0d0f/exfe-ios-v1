@@ -10,17 +10,16 @@
 #import <sqlite3.h>
 #import "User.h"
 
-static sqlite3 *database;
 
 @interface DBUtil : NSObject {
-    NSString *dbpath;
+
 }
 + (id)sharedManager;
 + (NSString*) DBPath;
 - (void) emptyDBCache;
 - (void) updateEventWithid:(int)eventid event:(NSString*)eventjson;
 - (NSString*) getEventWithid:(int)eventid;
-- (NSArray*) getRecentEvent;
+//- (NSArray*) getRecentEvent;
 - (void) updateEventicalWithid:(int)eventid  identifier:(NSString*) eventIdentifier;
 - (NSString*)getIdentifierWithid:(int)eventid;
 
@@ -34,4 +33,6 @@ static sqlite3 *database;
 - (NSArray*) getInvitationWithEventid:(int)eventid;
 - (User*) getUserWithid:(int)userid;
 - (NSString*) getLastEventUpdateTime;
+- (NSString*) getLastCommentUpdateTimeWith:(int)eventid;
+
 @end

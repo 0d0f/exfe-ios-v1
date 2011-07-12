@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Event.h"
+#import "Cross.h"
 #import "Comment.h"
 #import "Invitation.h"
 #import "UIInputToolbar.h"
@@ -30,7 +30,7 @@
     ConversionTableViewController *conversionViewController;
     
     NSDictionary* event;
-    Event* eventobj;
+    Cross* eventobj;
     int eventid;
     BOOL interceptLinks;
     UIBarButtonItem *barButtonItem;
@@ -44,7 +44,7 @@
 
 }
 @property (retain,nonatomic) NSDictionary* event;
-@property (retain,nonatomic) Event* eventobj;
+@property (retain,nonatomic) Cross* eventobj;
 @property int eventid;
 @property BOOL interceptLinks;
 @property (nonatomic, retain) UIInputToolbar *inputToolbar;

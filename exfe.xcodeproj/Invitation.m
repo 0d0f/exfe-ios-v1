@@ -32,7 +32,10 @@
     if([dict objectForKey:@"invited_identity"]!=[NSNull null])
     {
         NSDictionary* iden=[dict objectForKey:@"invited_identity"];
-        invitation.username=[iden objectForKey:@"username"];
+        if([iden objectForKey:@"name"]!=[NSNull null])
+            invitation.username=[iden objectForKey:@"name"];
+        else
+            invitation.username=@"";
         invitation.provider=[iden objectForKey:@"provider"];
     }
     return invitation;

@@ -6,10 +6,10 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "Event.h"
+#import "Cross.h"
 
 
-@implementation Event
+@implementation Cross
 
 @synthesize id;
 @synthesize title;
@@ -18,14 +18,15 @@
 @synthesize begin_at;
 @synthesize end_at;
 @synthesize duration;
-@synthesize venue;
+@synthesize place_line1;
+@synthesize place_line2;
 @synthesize creator_id;
 @synthesize created_at;
 @synthesize updated_at;
 @synthesize state;
-+ (Event*)initWithDict:(NSDictionary*)dict
++ (Cross*)initWithDict:(NSDictionary*)dict
 {
-    Event* event= [[[self alloc] init] autorelease];
+    Cross* event= [[[self alloc] init] autorelease];
     event.id = [[dict objectForKey:@"id"] integerValue];
     
     if([dict objectForKey:@"title"]!=[NSNull null])
@@ -58,11 +59,17 @@
     else
         event.duration = 0;
     
-    if([dict objectForKey:@"venue"]!=[NSNull null])
-        event.venue = [dict objectForKey:@"venue"];
+    if([dict objectForKey:@"place_line1"]!=[NSNull null])
+        event.place_line1 = [dict objectForKey:@"place_line1"];
     else
-        event.venue = @"";
+        event.place_line1 = @"";
 
+    if([dict objectForKey:@"place_line2"]!=[NSNull null])
+        event.place_line2 = [dict objectForKey:@"place_line2"];
+    else
+        event.place_line2 = @"";
+
+    
     event.creator_id = [[dict objectForKey:@"host_id"] integerValue];
 
     if([dict objectForKey:@"created_at"]!=[NSNull null])
@@ -89,10 +96,11 @@
    [code release];
    [begin_at release];
    [end_at release];
-   [venue release];
+   [place_line1 release];
+   [place_line2 release];
    [created_at release];
    [updated_at release];
    [state release];  
-    [super dealloc];
+   [super dealloc];
 }
 @end

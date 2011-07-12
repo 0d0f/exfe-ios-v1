@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+<title>Exfe</title>
+
+<style>
+.exfer h3 {color: #0591af; font-size: 28px; height: 50px; line-height: 50px; font-family: Verdana; font-weight: normal; margin-top: 10px}
+.exfer p.tm {color: #020202; font-size: 18px; line-height: 22px}
+.exfer p.map {margin-top: 20px}
+.exfer .exfee {margin-top: 40px}
+.exfel ul.ynbtn {margin: 25px 0; height: 30px}
+.exfel ul.ynbtn li {width: 150px; float: left}
+.exfel ul.ynbtn li a {width: 131px; height: 31px; color: white; text-align: center; background: url(btn.png) no-repeat left top; display: block; font-size: 24px; line-height: 30px; text-decoration: none}
+.exfel ul.ynbtn li a.yes {background-position: left top}
+.exfel ul.ynbtn li a.no {background-position: right top}
+.exfel ul.ynbtn li a.maybe {background: none; color: #838383; text-decoration: underline; font-size: 18px; text-align: left}
+
+</style>
+<meta name="csrf-param" content="authenticity_token"/>
+<meta name="csrf-token" content="ESgBBnW/Z3J74vGN8JohSmk34FVihP6WGAYVYs6T1jo="/>
+</head>
+<body>
+
+<div class='exfer'>
+<p class='tm'>{#begin_at#}</p>
+<h3 id="place">{#place_line1#}</h3>
+<div id="place_lines">
+<p class='tm'>{#place_line1#}</p>
+<p class='tm'>{#place_line2#}</p>
+<p class='tm'></p>
+</div>
+
+<div>
+{#exfee_list}
+</div>
+
+<h2>{#title#}</h2>
+<div class='exfel'>
+<div class='description' id='cross_description'>
+<p>
+{#description#}
+</p>
+</div>
+</div>
+
+<ul class='hide rsvpButtons ynbtn'>
+<li>
+<a href="http://invitation/#yes" class="yes">是</a>
+</li>
+<li>
+<a href="http://invitation/#no" class="no">否</a>
+</li>
+<li>
+<a href="http://invitation/#maybe" class="maybe">可能</a>
+</li>
+</ul>
+</div>
+
+<img src="images/351F77A741F86BA34565922D489A2567">
+</body>
+</html>

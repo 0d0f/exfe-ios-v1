@@ -9,7 +9,8 @@
 #import "EventViewController.h"
 #import "APIHandler.h"
 #import "DBUtil.h"
-#import "JSON/JSON.h"
+//#import "JSON/JSON.h"
+#import "JSON/SBJson.h"
 #import <EventKit/EventKit.h>
 #import "ImgCache.h"
 
@@ -64,38 +65,33 @@
     DBUtil *dbu=[DBUtil sharedManager];
     comments=[dbu getCommentWithEventid:self.eventid];
     
-    
+//    NSURL *baseURL = [NSURL fileURLWithPath:@""];
     NSString *html=[self GenerateHtmlWithEvent];
-    NSURL *baseURL = [NSURL fileURLWithPath:@""];
+
+    //NSString *path = [[NSBundle mainBundle] bundlePath];
+
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
+    NSString *documentsDirectory = [paths objectAtIndex:0]; 
+
+    NSURL *baseURL = [NSURL fileURLWithPath:documentsDirectory];
     [webview loadHTMLString:html baseURL:baseURL];
 
     showeventinfo=YES;
     
     keyboardIsVisible = NO;
     
-    [conversationview setSeparatorColor:[UIColor clearColor]];
+    
     
     conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
     CGRect crect=conversionViewController.view.frame;
     conversionViewController.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
+    [conversionViewController.view setSeparatorColor:[UIColor clearColor]];
     conversionViewController.comments=comments;
+    conversionViewController.eventid=eventid;
     [self.view addSubview:conversionViewController.view];
     [conversionViewController.view setHidden:YES];
     [conversationview setHidden:YES];
-//    CGRect screenFrame = [self.view frame];
-    
-//    CGRect crect=conversionViewController.view.frame;
-//      CGRect crect=self.view.frame;  
-//    conversionViewController.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
-//    CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight);
-//    
-//    self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
-//    inputToolbar.delegate = self;
-//    [self.view addSubview:conversionViewController.view];
-//    [self.view addSubview:self.inputToolbar];
 
-
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -121,39 +117,79 @@
     DBUtil *dbu=[DBUtil sharedManager];
     NSArray *invitations=[dbu getInvitationWithEventid:self.eventid];
 
-    NSString *html=[NSString stringWithFormat:@"<h1>%@</h1>",eventobj.title];
-
-    html=[html stringByAppendingFormat:@"<p>时间：%@</p>",eventobj.begin_at];
-    html=[html stringByAppendingFormat:@"<p>地点：%@</p>",eventobj.venue];
-    html=[html stringByAppendingFormat:@"<p>%@</p>",eventobj.description];
-//    NSArray* invitations=[aevent objectForKey:@"invitations"];
+//    NSString *html=[NSString stringWithFormat:@"<h1>%@</h1>",eventobj.title];
+//
+//    html=[html stringByAppendingFormat:@"<p>时间：%@</p>",eventobj.begin_at];
+//    html=[html stringByAppendingFormat:@"<p>地点：%@</p>",eventobj.place_line1];
+//    html=[html stringByAppendingFormat:@"<p>地%@</p>",eventobj.place_line2];
+//    html=[html stringByAppendingFormat:@"<p>%@</p>",eventobj.description];
+////    NSArray* invitations=[aevent objectForKey:@"invitations"];
+////    
+//    if(invitations !=nil&&[invitations count]>0)
+//    {
+//        html=[html stringByAppendingString:@"<p>参加者:</p>"];
+//        for (int i=0;i<[invitations count];i++)
+//        {
+//            Invitation *invitation=[invitations objectAtIndex:i];
+//            html=[html stringByAppendingFormat:@"<p>%@ state:%@ via %@ </p>",invitation.username,invitation.state,invitation.provider];
+//        }    
+//    }
 //    
-    if(invitations !=nil&&[invitations count]>0)
-    {
-        html=[html stringByAppendingString:@"<p>参加者:</p>"];
-        for (int i=0;i<[invitations count];i++)
-        {
-            Invitation *invitation=[invitations objectAtIndex:i];
-            html=[html stringByAppendingFormat:@"<p>%@ state:%@ via %@ </p>",invitation.username,invitation.state,invitation.provider];
-        }    
+//
+//    html=[html stringByAppendingString:@"<p>您是否参加此活动？<a href='http://invitation/#yes'>是</a>,<a href='http://invitation/#no'>否</a>,<a href='http://invitation/#maybe'>也许</a></p>"];
+//    NSString *identifier=[dbu getIdentifierWithid:self.eventid];
+//    if(identifier!=nil)
+//        html=[html stringByAppendingFormat:@"<p><a href='http://addical/#%i'>%@</a></p>",self.eventid,@"删除日历"];
+//    else
+//        html=[html stringByAppendingFormat:@"<p><a href='http://addical/#%i'>%@</a></p>",self.eventid,@"添加日历"];
+//    
+    
+
+    
+    
+    NSDateFormatter *rfc3339TimestampFormatterWithTimeZone = [[NSDateFormatter alloc] init];
+    [rfc3339TimestampFormatterWithTimeZone setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease]];
+    [rfc3339TimestampFormatterWithTimeZone setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
+    
+    NSDate *theDate = nil;
+    NSError *error = nil; 
+    if (![rfc3339TimestampFormatterWithTimeZone getObjectValue:&theDate forString:eventobj.begin_at range:nil error:&error]) {
+        NSLog(@"Date '%@' could not be parsed: %@", eventobj.begin_at, error);
     }
     
-//    for(int i=0;i<[invitations count];i++)
-//    {
-//        NSDictionary *invation=[invitations objectAtIndex:i];
-//        NSDictionary *invation_user=[invation objectForKey:@"invited_identity_list"];
-//        if([invation_user objectForKey:@"name"]!=nil)
-//        {
-//            html=[html stringByAppendingFormat:@"<p>%@ : %@</p>",[invation_user objectForKey:@"name"] ,[invation objectForKey:@"state"]];
-//        }
-//        
-//    }
-    html=[html stringByAppendingString:@"<p>您是否参加此活动？<a href='http://invitation/#yes'>是</a>,<a href='http://invitation/#no'>否</a>,<a href='http://invitation/#maybe'>也许</a></p>"];
-    NSString *identifier=[dbu getIdentifierWithid:self.eventid];
-    if(identifier!=nil)
-        html=[html stringByAppendingFormat:@"<p><a href='http://addical/#%i'>%@</a></p>",self.eventid,@"删除日历"];
-    else
-        html=[html stringByAppendingFormat:@"<p><a href='http://addical/#%i'>%@</a></p>",self.eventid,@"添加日历"];
+    [rfc3339TimestampFormatterWithTimeZone release];
+    
+
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+//    -MM-dd HH:mm
+//    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
+//    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+//    NSLocale *Locale = [[NSLocale alloc] initWithLocaleIdentifier:[[NSLocale currentLocale] identifier]];
+//    [dateFormatter setLocale:Locale];
+//    
+//    [dateFormatter setDoesRelativeDateFormatting:YES];
+    
+    
+    NSString *dateString = [dateFormatter stringFromDate:theDate];
+    [dateFormatter release];
+    if(dateString==nil)
+        dateString=@"Anytime";
+    NSLog(@"dateString: %@", dateString);    
+    
+    NSString *xpath=[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"x.html"];
+    NSString *html=[NSString stringWithContentsOfFile:xpath encoding:NSUTF8StringEncoding error:nil];
+    html=[html stringByReplacingOccurrencesOfString:@"{#begin_at#}" withString:dateString];
+    html=[html stringByReplacingOccurrencesOfString:@"{#place_line1#}" withString:eventobj.place_line1];
+    html=[html stringByReplacingOccurrencesOfString:@"{#title#}" withString:eventobj.title];
+
+    NSString *exfeelist=@"";
+    //exfee avatar list
+    html=[html stringByReplacingOccurrencesOfString:@"{#exfee_list#}" withString:exfeelist];
+
+    NSString *description=[[eventobj.description stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"] stringByReplacingOccurrencesOfString:@"\r" withString:@"<br/>"];
+    
+    html=[html stringByReplacingOccurrencesOfString:@"{#description#}" withString:description];
     
     return html;
 }
@@ -169,7 +205,7 @@
             {
             NSString *rsvp=[chunk objectAtIndex:1];
             APIHandler *api=[[APIHandler alloc]init];
-            NSString *responseString=[api sentRSVPWith:[[self.event objectForKey:@"id"] intValue] rsvp:(NSString*)rsvp];
+            NSString *responseString=[api sentRSVPWith:self.eventid rsvp:(NSString*)rsvp];
             
             [api release];
             
@@ -178,12 +214,12 @@
             DBUtil *dbu=[DBUtil sharedManager];
             [dbu updateEventobjWithid:self.eventid event:eventdict];
             [dbu updateInvitationobjWithid:self.eventid event:(NSArray*)[eventdict objectForKey:@"invitations"]];
-            //[dbu updateEventWithid:self.eventid event:responseString];
             
             
             NSString *html=[self GenerateHtmlWithEvent];
-            NSURL *baseURL = [NSURL fileURLWithPath:@""];
-            [webview loadHTMLString:html baseURL:baseURL];
+//            NSString *path = [[NSBundle mainBundle] bundlePath];
+//            NSURL *baseURL = [NSURL fileURLWithPath:path];
+            [webview loadHTMLString:html baseURL:[NSURL URLWithString:[[NSBundle mainBundle] bundlePath]]];
             }
             else if( [[chunk objectAtIndex:0] isEqualToString:@"http://addical/"])
             {
@@ -270,6 +306,7 @@
 }
 - (void)refresh
 {
+    NSLog(@"refresh");
     CGRect frame = CGRectMake(0.0, 0.0, 25.0, 25.0);  
     UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc] initWithFrame:frame];  
     [loading sizeToFit];  
@@ -299,6 +336,13 @@
 
     
 }
+
+-(void)inputButtonPressed:(NSString *)inputText
+{
+    [conversionViewController performSelector:@selector(postComment:) withObject:inputText];
+    
+}
+
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
@@ -340,113 +384,7 @@
 	[UIView commitAnimations];
     keyboardIsVisible = NO;
 }
--(void)inputButtonPressed:(NSString *)inputText
-{
-    /* Called when toolbar button is pressed */
-//    NSLog(@"Pressed button with text: '%@'", inputText);
-//    [NSThread detachNewThreadSelector:@selector(postComment:) toTarget:self withObject:inputText];
-    [self performSelector:@selector(postComment:) withObject:inputText];
- 
-}
-- (void)postComment:(NSString*)inputtext
-{
-    APIHandler *api=[[APIHandler alloc]init];
-    NSString *commentjson=[api AddCommentById:self.eventid comment:inputtext];
-    NSLog(@"commentjson:%@",commentjson);
-    if([[commentjson JSONValue] objectForKey:@"comment"]!=nil)
-    {
-        DBUtil *dbu=[DBUtil sharedManager];
-        NSArray *arr=[[NSArray alloc]initWithObjects:[commentjson JSONValue], nil];
-        [dbu updateCommentobjWithid:self.eventid event:arr];
-        [arr release];
-        Comment *comment=[Comment initWithDict:[commentjson JSONValue] EventID:self.eventid];
-//        [comments addObject:comment];
-        [comments insertObject:comment atIndex:0];
-        [conversationview reloadData];
-//        comments=[dbu getCommentWithEventid:self.eventid];
-        
 
-        
-    }
-    else
-    {
-        NSLog(@"comment failure");
-    }
-    [commentjson release];
-    [api release];    
-}
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [comments count];
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    Comment *comment=[comments objectAtIndex:indexPath.row];
-    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH), 20000.0f);
-    
-    CGSize labelSize = [comment.comment sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
-
-    return MAX(labelSize.height+CELL_CONTENT_MARGIN, 60.00f);
-
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    Comment *comment=[comments objectAtIndex:indexPath.row];
-    //initWithDict
-    User *user=[User initWithDict:[comment.userjson JSONValue]];
-//    NSDictionary *user=;
-    UILabel *label=nil;
-    UIImageView *imageview=nil;
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        label = [[UILabel alloc] initWithFrame:CGRectZero];
-        [label setLineBreakMode:UILineBreakModeWordWrap];
-        [label setMinimumFontSize:FONT_SIZE];
-        [label setNumberOfLines:0];
-        [label setFont:[UIFont systemFontOfSize:FONT_SIZE]];
-        [label setTag:1];
-//        [[label layer] setBorderWidth:2.0f];
-        [[cell contentView] addSubview:label];
-       
-        imageview=[[UIImageView alloc] initWithFrame:CGRectZero];
-        [imageview setTag:2];
-        [[cell contentView] addSubview:imageview];
-
-    }
-    
-    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH ), 20000.0f);
-    
-    CGSize size = [comment.comment sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
-    
-    if (!imageview)
-        label = (UILabel*)[cell viewWithTag:1];
-    
-    [label setText:comment.comment];
-    [label setFrame:CGRectMake(CELL_CONTENT_MARGIN+CELL_IMAGE_WIDTH, CELL_CONTENT_MARGIN, CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH), MAX(size.height, 50.0f))];
-
-    if (!imageview)
-        imageview = (UIImageView*)[imageview viewWithTag:2];
-    
-    if(user.avatar_file_name!=nil && ![user.avatar_file_name isEqualToString:@""])
-    {
-        NSLog(@"update image%@",user.avatar_file_name);
-        [imageview setFrame:CGRectMake(CELL_CONTENT_MARGIN, CELL_CONTENT_MARGIN, CELL_IMAGE_WIDTH, CELL_IMAGE_HEIGHT)];
-        NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-        NSString *imgurl=[NSString stringWithFormat:@"http://exfe.com/system/avatars/%u/thumb/%@",user.id,imgName];
-        UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
-        if(image!=nil && ![image isEqual:[NSNull null]]) 
-            imageview.image=image;
-    }
-    return cell;
-}
 @end

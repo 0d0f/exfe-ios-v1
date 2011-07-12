@@ -42,15 +42,12 @@
         [[NSUserDefaults standardUserDefaults] setObject:[userdict objectForKey:@"id"]  forKey:@"userid"];
         
         [[NSUserDefaults standardUserDefaults] synchronize];
-        exfeAppDelegate* app=[[UIApplication sharedApplication] delegate];
-        
+        exfeAppDelegate *app=(exfeAppDelegate *)[[UIApplication sharedApplication] delegate];
         app.api_key=[userdict objectForKey:@"authentication_token"];
         app.userid=[[userdict objectForKey:@"id"] intValue];
         app.username=[textUsername text];
         app.meViewReload=YES;
         [self.delegate loginViewControllerDidFinish:self];
-//        [app.meview test];
-//        NSArray *viewControllers=app.tabBarController.viewControllers;
 
     }
     else

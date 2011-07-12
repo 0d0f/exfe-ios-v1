@@ -7,7 +7,8 @@
 //
 
 #import "Comment.h"
-#import "JSON/JSON.h"
+//#import "JSON/JSON.h"
+#import "JSON/SBJson.h"
 
 @implementation Comment
 
@@ -30,13 +31,12 @@
 
 + (Comment*)initWithDict:(NSDictionary*)dict EventID:(NSInteger)eid
 {
-    NSLog(@"commentid:%@",[dict objectForKey:@"id"]);
-    Comment* comment= [[self alloc] init];
+    Comment* comment= [[[self alloc] init] autorelease];
     comment.id = [[dict objectForKey:@"id"] integerValue];
     comment.eventid=eid;
 
-    if([dict objectForKey:@"comment"]!=[NSNull null])
-        comment.comment = [dict objectForKey:@"comment"];
+    if([dict objectForKey:@"content"]!=[NSNull null])
+        comment.comment = [dict objectForKey:@"content"];
     else
         comment.comment = @"";
 

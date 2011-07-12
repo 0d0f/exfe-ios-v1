@@ -185,9 +185,12 @@
     [dbu emptyDBCache];
     NSArray *viewControllers = self.navigationController.viewControllers;
     RootViewController *rootViewController = [viewControllers objectAtIndex:0];
-    [NSThread detachNewThreadSelector:@selector(LoadUserEvents) toTarget:rootViewController withObject:nil];
+
+//    [NSThread detachNewThreadSelector:@selector(LoadUserEvents) toTarget:rootViewController withObject:nil];
 
     [self.navigationController dismissModalViewControllerAnimated:YES];
+    [rootViewController performSelector:@selector(LoadUserEvents) withObject:nil];
+
 }
 
 

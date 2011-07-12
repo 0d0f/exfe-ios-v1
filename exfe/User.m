@@ -26,7 +26,7 @@
 }
 + (User*)initWithDict:(NSDictionary*)dict
 {
-    User* user= [[self alloc] init];
+    User* user= [[[self alloc] init] autorelease];
     user.id = [[dict objectForKey:@"id"] integerValue];
     
     if([dict objectForKey:@"name"]!=[NSNull null])

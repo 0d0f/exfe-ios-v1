@@ -33,11 +33,10 @@
 
 + (NSString*)URL_API_ROOT {
 	return @"http://api.exfe.com/v1";    
-//	return @"http://api.exfe.local:3000/v1";
 }
 - (NSString*)sentRSVPWith:(int)eventid rsvp:(NSString*)rsvp
 {
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/events/%u/%@?api_key=%@",[APIHandler URL_API_ROOT],eventid,rsvp,api_key]]];
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/crosses/%u/%@?api_key=%@",[APIHandler URL_API_ROOT],eventid,rsvp,api_key]]];
     [request setHTTPShouldHandleCookies:NO];
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding] autorelease];
@@ -78,31 +77,58 @@
     NSLog(@"me json:%@",responseString);
     return responseString;
 }
-
-- (NSString*)getUserEvents
+- (NSString*)getPostsWith:(int)crossid
 {
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     DBUtil *dbu=[DBUtil sharedManager];
-    NSString *lastUpdateTime=[dbu getLastEventUpdateTime];
-    
+    NSString *lastUpdateTime=[dbu getLastCommentUpdateTimeWith:crossid];
+
     NSError *error = nil;
-//    lastUpdateTime
     NSString *apiurl=nil;
     if(lastUpdateTime==nil)
-        apiurl=[NSString stringWithFormat:@"%@/users/%i/events.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key];
+        apiurl=[NSString stringWithFormat:@"%@/crosses/%i/posts.json?api_key=%@",[APIHandler URL_API_ROOT],crossid,api_key];
     else
-        apiurl=[NSString stringWithFormat:@"%@/users/%i/events.json?updated_since=%@&api_key=%@",[APIHandler URL_API_ROOT],app.userid,lastUpdateTime,api_key];
-
+        apiurl=[NSString stringWithFormat:@"%@/crosses/%i/posts.json?updated_since=%@&api_key=%@",[APIHandler URL_API_ROOT],crossid,lastUpdateTime,api_key];
+    
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
     NSLog(@"api: %@",apiurl);
     [request setHTTPShouldHandleCookies:NO];
-
+    
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
     if (error)
     {
         NSLog(@"%@",error);
     }
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    return responseString;       
+}
+
+- (NSString*)getUserEvents
+//- (id)getUserEvents
+{
+    exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
+
+    DBUtil *dbu=[DBUtil sharedManager];
+    NSString *lastUpdateTime=[dbu getLastEventUpdateTime];
+    NSError *error = nil;
+    NSString *apiurl=nil;
+    if(lastUpdateTime==nil)
+        apiurl=[NSString stringWithFormat:@"%@/users/%i/crosses.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key];
+    else
+        apiurl=[NSString stringWithFormat:@"%@/users/%i/crosses.json?updated_since=%@&api_key=%@",[APIHandler URL_API_ROOT],app.userid,lastUpdateTime,api_key];
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
+    NSLog(@"api: %@",apiurl);
+    [request setHTTPShouldHandleCookies:NO];
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
+    if (error)
+    {
+        NSLog(@"%@",error);
+    }
+    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+  //  id jsonobj= [responseString JSONValue];
+//    [responseString release];
+//    [pool release];
+//    return jsonobj;
     return responseString;    
 }
 - (NSString*)getUserNews
@@ -152,8 +178,8 @@
 }
 - (NSString*)getEventById:(int)eventid
 {
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/events/%i.json?api_key=%@",[APIHandler URL_API_ROOT],eventid,api_key]]];
-    NSLog(@"url:%@",[NSURL URLWithString:[NSString stringWithFormat:@"%@/events/%i.json?api_key=%@",[APIHandler URL_API_ROOT],eventid,api_key]]);
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/crosses/%i.json?api_key=%@",[APIHandler URL_API_ROOT],eventid,api_key]]];
+    NSLog(@"url:%@",[NSURL URLWithString:[NSString stringWithFormat:@"%@/crosses/%i.json?api_key=%@",[APIHandler URL_API_ROOT],eventid,api_key]]);
     [request setHTTPShouldHandleCookies:NO];
     
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
@@ -162,12 +188,12 @@
 }
 - (NSString*)AddCommentById:(int)eventid comment:(NSString*)commenttext
 {
-    NSString *post =[[NSString alloc] initWithFormat:@"comment=%@",commenttext];
+    NSString *post =[[NSString alloc] initWithFormat:@"content=%@",commenttext];
     
     NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
     
     NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/events/%i/comments.json?api_key=%@",[APIHandler URL_API_ROOT],eventid,api_key]]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/crosses/%i/posts.json?api_key=%@",[APIHandler URL_API_ROOT],eventid,api_key]]];
     
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];

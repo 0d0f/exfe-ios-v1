@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Event:NSObject{
+@interface Cross:NSObject{
     NSInteger id;
     NSString* title;
     NSString* description;
@@ -16,7 +16,8 @@
     NSString* begin_at;
     NSString* end_at;
     NSInteger duration;
-    NSString* venue;
+    NSString* place_line1;
+    NSString* place_line2;
     NSInteger creator_id;
     NSString* created_at;
     NSString* updated_at;
@@ -30,11 +31,12 @@
 @property (retain,nonatomic) NSString* begin_at;
 @property (retain,nonatomic) NSString* end_at;
 @property NSInteger duration;
-@property (retain,nonatomic) NSString* venue;
+@property (retain,nonatomic) NSString* place_line1;
+@property (retain,nonatomic) NSString* place_line2;
 @property NSInteger creator_id;
 @property (retain,nonatomic) NSString* created_at;
 @property (retain,nonatomic) NSString* updated_at;
 @property (retain,nonatomic) NSString* state;
 
-+ (Event*)initWithDict:(NSDictionary*)dict;
++ (Cross*)initWithDict:(NSDictionary*)dict;
 @end

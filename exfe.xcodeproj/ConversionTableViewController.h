@@ -11,8 +11,9 @@
 
 @interface ConversionTableViewController : PullRefreshTableViewController 
 {
-
+    int eventid;
     NSMutableArray *comments;
 }
+@property int eventid;
 @property (retain,nonatomic) NSMutableArray* comments;
 @end

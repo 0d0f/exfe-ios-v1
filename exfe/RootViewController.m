@@ -11,8 +11,9 @@
 #import "EventViewController.h"
 #import "exfeAppDelegate.h"
 #import "APIHandler.h"
-#import "JSON/JSON.h"
-#import "Event.h"
+//#import "JSON/JSON.h"
+#import "JSON/SBJson.h"
+#import "Cross.h"
 #import "DBUtil.h"
 #import "ImgCache.h"
 
@@ -24,7 +25,8 @@
 {
     [super viewDidLoad];
     eventData=[[NSMutableDictionary alloc]initWithCapacity:20];
-
+    DBUtil *dbu=[DBUtil sharedManager];
+    [dbu getLastEventUpdateTime];
     reload=YES;
 //    timer = [NSTimer scheduledTimerWithTimeInterval: 30
 //                                             target: self
@@ -46,20 +48,20 @@
 - (void)dorefresh
 {
     NSLog(@"refreshing");
-    CGRect frame = CGRectMake(0.0, 0.0, 25.0, 25.0);  
-    UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc] initWithFrame:frame];  
-    [loading sizeToFit];  
-    loading.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);  
-    [loading startAnimating];  
-    UIBarButtonItem *statusInd = [[UIBarButtonItem alloc] initWithCustomView:loading];  
-    
-    statusInd.style = UIBarButtonItemStylePlain;  
-    self.navigationItem.rightBarButtonItem =statusInd;
-    [loading release];
-    [statusInd release];
+//    CGRect frame = CGRectMake(0.0, 0.0, 25.0, 25.0);  
+//    UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc] initWithFrame:frame];  
+//    [loading sizeToFit];  
+//    loading.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);  
+//    [loading startAnimating];  
+//    UIBarButtonItem *statusInd = [[UIBarButtonItem alloc] initWithCustomView:loading];  
+//    
+//    statusInd.style = UIBarButtonItemStylePlain;  
+//    self.navigationItem.rightBarButtonItem =statusInd;
+//    [loading release];
+//    [statusInd release];
     
     [self LoadUserEvents]; 
-    [tableview reloadData];
+//    [tableview reloadData];
     [self stopLoading];
 }
 - (void) refresh
@@ -98,20 +100,14 @@
     }
     else if([jsonobj isKindOfClass:[NSArray class]])
     {
-        NSLog(@"here1");
-
-    NSArray *userdict = (NSArray*)jsonobj;
-    [self UpdateDBWithEventDicts:userdict];
+        [self UpdateDBWithEventDicts:(NSArray*)jsonobj];
     }
     mapp.networkActivityIndicatorVisible = NO;
-    [responseString release];
     [self LoadUserEventsFromDB];
-    self.navigationItem.rightBarButtonItem = barButtonItem;
     
 }
 - (void)UpdateDBWithEventDicts:(NSArray*)_events
 {
-    NSLog(@"here2");
 
     DBUtil *dbu=[DBUtil sharedManager];
     for(int i=0;i<[_events count];i++)
@@ -119,9 +115,8 @@
         NSDictionary* eventdict=(NSDictionary*)[_events objectAtIndex:i];
         
         [dbu updateEventobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:eventdict];
-        [dbu updateCommentobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"comments"]];
+        [dbu updateCommentobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"posts"]];
         [dbu updateInvitationobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"invitations"]];
-        
         [dbu updateUserobjWithid:[[[eventdict objectForKey:@"host"] objectForKey:@"id"] integerValue] user:[eventdict objectForKey:@"host"]];
     }
     
@@ -161,7 +156,7 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Event *event=[events objectAtIndex:indexPath.row];
+    Cross *event=[events objectAtIndex:indexPath.row];
 
     UIFont *cellFont = [UIFont systemFontOfSize:11];
     CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
@@ -183,7 +178,7 @@
     }
 
     DBUtil *dbu=[DBUtil sharedManager];
-    Event *event=[events objectAtIndex:indexPath.row];
+    Cross *event=[events objectAtIndex:indexPath.row];
     User* user=[dbu getUserWithid:event.creator_id];
 
     UILabel *time = [[[UILabel alloc] initWithFrame:CGRectMake(210.0,0.0,100.0,20)] autorelease];
@@ -193,8 +188,8 @@
     time.lineBreakMode = UILineBreakModeWordWrap;
     time.numberOfLines = 3;
     time.autoresizesSubviews = YES;
-    
-    time.text=[event.begin_at substringToIndex:10];;
+    if([event.begin_at length]>=10)
+        time.text=[event.begin_at substringToIndex:10];
     [cell.contentView addSubview:time];
 
     
@@ -285,7 +280,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"table selected");
-    Event *event=[events objectAtIndex:indexPath.row];
+    Cross *event=[events objectAtIndex:indexPath.row];
     EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil];
     
     if(event!=nil)
