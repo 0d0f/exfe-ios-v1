@@ -32,8 +32,12 @@
 }
 
 + (NSString*)URL_API_ROOT {
-	return @"http://api.exfe.com/v1";    
+	return @"http://exfeapi.dlol.us/v1";    
 }
++ (NSString*)URL_API_DOMAIN {
+	return @"http://exfeapi.dlol.us";    
+}
+
 - (NSString*)sentRSVPWith:(int)eventid rsvp:(NSString*)rsvp
 {
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/crosses/%u/%@?api_key=%@",[APIHandler URL_API_ROOT],eventid,rsvp,api_key]]];
@@ -45,12 +49,12 @@
 - (NSString*)checkUserLoginByUsername:(NSString*)email withPassword:(NSString*)passwd
 {
 
-    NSString *post =[[NSString alloc] initWithFormat:@"email=%@&password=%@",email,passwd];
+    NSString *post =[[NSString alloc] initWithFormat:@"user=%@&password=%@",email,passwd];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     
     NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[APIHandler URL_API_ROOT],@"users/login.json"]]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[APIHandler URL_API_ROOT],@"users/login"]]];
     
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
@@ -61,6 +65,7 @@
 
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    NSLog(@"%@",responseString);
     return responseString;
 }
 
@@ -113,9 +118,9 @@
     NSError *error = nil;
     NSString *apiurl=nil;
     if(lastUpdateTime==nil)
-        apiurl=[NSString stringWithFormat:@"%@/users/%i/crosses.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key];
+        apiurl=[NSString stringWithFormat:@"%@/users/%i/x?token=%@",[APIHandler URL_API_ROOT],app.userid,api_key];
     else
-        apiurl=[NSString stringWithFormat:@"%@/users/%i/crosses.json?updated_since=%@&api_key=%@",[APIHandler URL_API_ROOT],app.userid,lastUpdateTime,api_key];
+        apiurl=[NSString stringWithFormat:@"%@/users/%i/x?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],app.userid,lastUpdateTime,api_key];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
     NSLog(@"api: %@",apiurl);
     [request setHTTPShouldHandleCookies:NO];

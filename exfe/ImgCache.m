@@ -19,7 +19,7 @@ static id sharedManager = nil;
         if (sharedManager == nil) {
             sharedManager = [[self alloc] init];
             imgs = [[NSMutableDictionary alloc]initWithCapacity:50];
-
+            
         }
     }
     return sharedManager;
@@ -49,7 +49,22 @@ static id sharedManager = nil;
             result[12], result[13], result[14], result[15]
             ]; 
 }
-
++ (NSString *) getImgName:(NSString *)url
+{
+    NSString *md5key=[ImgCache md5:url];
+    NSString *cachefilename=[[ImgCache CachePath] stringByAppendingPathComponent:md5key];
+	NSFileManager *fileManager=[NSFileManager defaultManager];
+    
+    BOOL success=[fileManager fileExistsAtPath:cachefilename];
+    if(!success)
+    {
+        NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+        [data writeToFile:cachefilename atomically:YES];
+        
+    }
+    
+    return md5key;
+}
 - (UIImage*) getImgFrom:(NSString*)url
 {
     NSString *md5key=[ImgCache md5:url];
@@ -65,7 +80,7 @@ static id sharedManager = nil;
         img = [UIImage imageWithData:data];
         [data writeToFile:cachefilename atomically:YES];
     }
-
+    
     if(img!=nil)
         [imgs setObject:img forKey:md5key];
     else

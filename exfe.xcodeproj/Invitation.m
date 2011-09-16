@@ -11,9 +11,12 @@
 @implementation Invitation
 @synthesize id;
 @synthesize eventid;   
+@synthesize identity_id;
 @synthesize username;
 @synthesize provider;
 @synthesize state;
+@synthesize avatar;
+
 - (id)init
 {
     self = [super init];
@@ -26,18 +29,25 @@
 + (Invitation*)initWithDict:(NSDictionary*)dict EventID:(NSInteger)eid
 {
     Invitation* invitation= [[[self alloc] init] autorelease];
-    invitation.id = [[dict objectForKey:@"id"] integerValue];
+    invitation.id = [[dict objectForKey:@"invitation_id"] integerValue];
     invitation.eventid=eid;
-    invitation.state=[dict objectForKey:@"state"];
-    if([dict objectForKey:@"invited_identity"]!=[NSNull null])
-    {
-        NSDictionary* iden=[dict objectForKey:@"invited_identity"];
-        if([iden objectForKey:@"name"]!=[NSNull null])
-            invitation.username=[iden objectForKey:@"name"];
+    invitation.state=[[dict objectForKey:@"state"] integerValue];
+//    if([dict objectForKey:@"invited_identity"]!=[NSNull null])
+//    {
+//        NSDictionary* iden=[dict objectForKey:@"invited_identity"];
+        if([dict objectForKey:@"name"]!=[NSNull null])
+            invitation.username=[dict objectForKey:@"name"];
         else
             invitation.username=@"";
-        invitation.provider=[iden objectForKey:@"provider"];
-    }
+        
+        if([dict objectForKey:@"avatar_file_name"]!=[NSNull null])
+            invitation.avatar=[dict objectForKey:@"avatar_file_name"];
+        else
+            invitation.avatar=@"";
+        
+        invitation.provider=[dict objectForKey:@"provider"];
+        invitation.identity_id=[[dict objectForKey:@"identity_id"] integerValue];
+//    }
     return invitation;
 }
 @end

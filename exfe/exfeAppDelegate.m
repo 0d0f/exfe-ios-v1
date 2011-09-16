@@ -27,6 +27,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 
+    [self copyResource];
     meViewReload=NO;
     
     self.window.rootViewController = self.navigationController;
@@ -82,7 +83,7 @@
 
 //    [self.navigationController.view  addSubview:toolbar];
 
-    [self.window makeKeyAndVisible];
+//TODO FIX:    [self.window makeKeyAndVisible];
     return YES;
 }
 
@@ -193,7 +194,40 @@
 
 }
 
+- (void)copyResource
+{
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
+    NSString *documentsDirectory = [paths objectAtIndex:0]; 
+    
+    
+    NSArray* imagefiles =   [[NSBundle mainBundle] pathsForResourcesOfType:@"png" inDirectory:nil];
+    for (NSString *filenamefull in imagefiles) {
+        NSString *filename = [[filenamefull componentsSeparatedByString:@"/"] lastObject];
+        NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:filename];
+        [[NSFileManager defaultManager] copyItemAtPath:filenamefull toPath:writableDBPath error:NULL];
 
+        
+
+        //    NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"*.png"];
+
+    }
+//    NSBundle *thisBundle = [NSBundle bundleForClass:[self class]];
+//    if (commonDictionaryPath = [thisBundle pathForResource:@"CommonDictionary" ofType:@"plist"])  {
+        // when completed, it is the developer's responsibility to release theDictionary
+//    }    
+    
+//    NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"*.png"];
+//    
+//    NSString *olddbpath=[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"*.png"];
+//    
+//    if (![[NSFileManager defaultManager] isReadableFileAtPath:writableDBPath]) {
+//		
+//        if ([[NSFileManager defaultManager] copyItemAtPath:olddbpath toPath:writableDBPath error:NULL] != YES)
+//			
+//			NSAssert2(0, @"Fail to copy database from %@ to %@", olddbpath, writableDBPath);
+//    }
+
+}
 - (void)dealloc
 {
     [_window release];

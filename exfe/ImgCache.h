@@ -18,7 +18,7 @@ static NSMutableDictionary *imgs;
 + (id)sharedManager;
 + (NSString*) CachePath;
 + (NSString *) md5:(NSString *)str;
-
++ (NSString *) getImgName:(NSString *)url;
 - (UIImage*) getImgFrom:(NSString*)url;
 
 @end

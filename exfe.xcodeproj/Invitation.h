@@ -12,16 +12,20 @@
 {
     NSInteger id;
     NSInteger eventid;    
+    NSInteger identity_id;    
     NSString* username;
     NSString* provider;
-    NSString* state;
+    NSInteger state;
+    NSString* avatar;
     
 }
 @property NSInteger id;
 @property NSInteger eventid;
+@property NSInteger identity_id;
 @property (retain,nonatomic) NSString* username;
 @property (retain,nonatomic) NSString* provider;
-@property (retain,nonatomic) NSString* state;
+@property NSInteger state;
+@property (retain,nonatomic) NSString* avatar;
 
 + (Invitation*)initWithDict:(NSDictionary*)dict EventID:(NSInteger)eid;
 

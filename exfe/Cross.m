@@ -83,9 +83,9 @@
         event.updated_at = @"";
 
     if([dict objectForKey:@"state"]!=[NSNull null])
-        event.state = [dict objectForKey:@"state"];
+        event.state = [[dict objectForKey:@"state"] integerValue];
     else
-        event.state = @"";
+        event.state = 0;
 
     return event;
 }
@@ -100,7 +100,7 @@
    [place_line2 release];
    [created_at release];
    [updated_at release];
-   [state release];  
+   //[state release];  
    [super dealloc];
 }
 @end

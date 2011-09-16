@@ -94,14 +94,30 @@
     [api release];
     id jsonobj=[responseString JSONValue];
 
-    if([jsonobj isKindOfClass:[NSDictionary class]] && [jsonobj objectForKey:@"error"]!=nil )
+    id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
+    if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
     {
-        NSLog(@"error");
+        id crosses=[[jsonobj objectForKey:@"response"] objectForKey:@"crosses"];
+        if([crosses isKindOfClass:[NSArray class]])
+        {
+            [self UpdateDBWithEventDicts:(NSArray*)crosses];
+        }
     }
-    else if([jsonobj isKindOfClass:[NSArray class]])
+    else
     {
-        [self UpdateDBWithEventDicts:(NSArray*)jsonobj];
+        NSLog(@"error: %@",[[jsonobj objectForKey:@"meta"] objectForKey:@"error"]);
+        
     }
+
+
+//    if([jsonobj isKindOfClass:[NSDictionary class]] && [jsonobj objectForKey:@"error"]!=nil )
+//    {
+//        NSLog(@"error");
+//    }
+//    else if([jsonobj isKindOfClass:[NSArray class]])
+//    {
+//        [self UpdateDBWithEventDicts:(NSArray*)jsonobj];
+//    }
     mapp.networkActivityIndicatorVisible = NO;
     [self LoadUserEventsFromDB];
     
@@ -220,8 +236,8 @@
     {
     UIImageView *imageview=[[UIImageView alloc] initWithFrame:CGRectMake(10.0,10.0,40.0,40)] ;
     NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-    NSString *imgurl=[NSString stringWithFormat:@"http://api.exfe.com/system/avatars/%u/thumb/%@",user.id,imgName];
-    
+    NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
+        
     UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
     imageview.image=image;
     [cell.contentView addSubview:imageview];

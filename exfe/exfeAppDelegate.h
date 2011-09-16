@@ -36,4 +36,5 @@
 
 -(void)loginViewControllerDidFinish:(LoginViewController *)loginViewController;
 - (IBAction) RefreshRootview:(id) sender;
+- (void)copyResource;
 @end

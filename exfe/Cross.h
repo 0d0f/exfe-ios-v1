@@ -21,7 +21,7 @@
     NSInteger creator_id;
     NSString* created_at;
     NSString* updated_at;
-    NSString* state;
+    NSInteger state;
 }
 
 @property NSInteger id;
@@ -36,7 +36,7 @@
 @property NSInteger creator_id;
 @property (retain,nonatomic) NSString* created_at;
 @property (retain,nonatomic) NSString* updated_at;
-@property (retain,nonatomic) NSString* state;
+@property NSInteger state;
 
 + (Cross*)initWithDict:(NSDictionary*)dict;
 @end

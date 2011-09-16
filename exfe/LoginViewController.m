@@ -31,27 +31,30 @@
     APIHandler *api=[[APIHandler alloc]init];
     NSString *responseString=[api checkUserLoginByUsername:[textUsername text] withPassword:[textPassword text]];
     [api release];
-    NSDictionary *userdict = [responseString JSONValue];
+    NSDictionary *logindict = [responseString JSONValue];
     [responseString release];
-    NSLog(@"login:%@ : %@",[userdict objectForKey:@"email"] ,[textUsername text]);
-    if([userdict objectForKey:@"error"] ==nil)
+    NSLog(@"login:%@ : %@",[logindict objectForKey:@"email"] ,[textUsername text]);
+    id code=[[logindict objectForKey:@"meta"] objectForKey:@"code"];
+    if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
+//    if([[[logindict objectForKey:@"meta"] objectForKey:@"code"] isEqualToString:@"200"])
     {
-        NSLog(@"%@",[userdict objectForKey:@"authentication_token"]);
+        NSDictionary *userdict=[logindict objectForKey:@"response"];
+        NSLog(@"%@",[userdict objectForKey:@"auth_token"]);
         [[NSUserDefaults standardUserDefaults] setObject:[textUsername text]  forKey:@"username"];
-        [[NSUserDefaults standardUserDefaults] setObject:[userdict objectForKey:@"authentication_token"] forKey:@"api_key"];
-        [[NSUserDefaults standardUserDefaults] setObject:[userdict objectForKey:@"id"]  forKey:@"userid"];
+        [[NSUserDefaults standardUserDefaults] setObject:[userdict objectForKey:@"auth_token"] forKey:@"api_key"];
+        [[NSUserDefaults standardUserDefaults] setObject:[userdict objectForKey:@"userid"]  forKey:@"userid"];
         
         [[NSUserDefaults standardUserDefaults] synchronize];
         exfeAppDelegate *app=(exfeAppDelegate *)[[UIApplication sharedApplication] delegate];
-        app.api_key=[userdict objectForKey:@"authentication_token"];
-        app.userid=[[userdict objectForKey:@"id"] intValue];
+        app.api_key=[userdict objectForKey:@"auth_token"];
+        app.userid=[[userdict objectForKey:@"userid"] intValue];
         app.username=[textUsername text];
         app.meViewReload=YES;
         [self.delegate loginViewControllerDidFinish:self];
 
     }
     else
-        [hint setText:[userdict objectForKey:@"error"]];
+        [hint setText:[[logindict objectForKey:@"meta"] objectForKey:@"error"]];
         
 }
 
