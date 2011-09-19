@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		78125A141424CD5B0062BBD8 /* chat@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78125A121424CD5B0062BBD8 /* chat@2x~iphone.png */; };
+		78125A151424CD5B0062BBD8 /* chat~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78125A131424CD5B0062BBD8 /* chat~iphone.png */; };
 		7816A7481423C4DC00818601 /* app_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7816A7471423C4DC00818601 /* app_btn.png */; };
 		7833E95513C5B20A00FE3EDA /* x.html in Resources */ = {isa = PBXBuildFile; fileRef = 7833E95413C5B20A00FE3EDA /* x.html */; };
 		7833E95813C6030600FE3EDA /* btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7833E95713C6030600FE3EDA /* btn.png */; };
@@ -81,6 +83,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		78125A121424CD5B0062BBD8 /* chat@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat@2x~iphone.png"; sourceTree = "<group>"; };
+		78125A131424CD5B0062BBD8 /* chat~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~iphone.png"; sourceTree = "<group>"; };
 		7816A7471423C4DC00818601 /* app_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_btn.png; sourceTree = "<group>"; };
 		7833E95413C5B20A00FE3EDA /* x.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = x.html; sourceTree = "<group>"; };
 		7833E95713C6030600FE3EDA /* btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn.png; sourceTree = "<group>"; };
@@ -214,6 +218,8 @@
 				78F75BE113AFA84300C7B3CF /* arrow.png */,
 				78F75BCE13AD3EF100C7B3CF /* buttonbg@2x~iphone.png */,
 				78F75BCF13AD3EF100C7B3CF /* buttonbg~iphone.png */,
+				78125A121424CD5B0062BBD8 /* chat@2x~iphone.png */,
+				78125A131424CD5B0062BBD8 /* chat~iphone.png */,
 				78F75BD013AD3EF100C7B3CF /* textbg@2x~iphone.png */,
 				78F75BD113AD3EF100C7B3CF /* textbg~iphone.png */,
 				78F75BD213AD3EF100C7B3CF /* toolbarbg@2x~iphone.png */,
@@ -466,6 +472,8 @@
 				7833E95513C5B20A00FE3EDA /* x.html in Resources */,
 				7833E95813C6030600FE3EDA /* btn.png in Resources */,
 				7816A7481423C4DC00818601 /* app_btn.png in Resources */,
+				78125A141424CD5B0062BBD8 /* chat@2x~iphone.png in Resources */,
+				78125A151424CD5B0062BBD8 /* chat~iphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -127,7 +127,8 @@
 - (void)postComment:(NSString*)inputtext
 {
     APIHandler *api=[[APIHandler alloc]init];
-    NSString *commentjson=[api AddCommentById:eventid comment:inputtext];
+    NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
+    NSString *commentjson=[api AddCommentById:eventid comment:inputtext external_identity:uname];
     NSLog(@"commentjson:%@",commentjson);
     if([[commentjson JSONValue] objectForKey:@"posts"]!=nil)
     {

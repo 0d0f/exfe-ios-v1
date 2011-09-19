@@ -40,7 +40,7 @@
 
 - (NSString*)sentRSVPWith:(int)eventid rsvp:(NSString*)rsvp
 {
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/crosses/%u/%@?api_key=%@",[APIHandler URL_API_ROOT],eventid,rsvp,api_key]]];
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/x/%u/%@?token=%@",[APIHandler URL_API_ROOT],eventid,rsvp,api_key]]];
     [request setHTTPShouldHandleCookies:NO];
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding] autorelease];
@@ -84,16 +84,16 @@
 }
 - (NSString*)getPostsWith:(int)crossid
 {
-    exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
+//    exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     DBUtil *dbu=[DBUtil sharedManager];
     NSString *lastUpdateTime=[dbu getLastCommentUpdateTimeWith:crossid];
 
     NSError *error = nil;
     NSString *apiurl=nil;
     if(lastUpdateTime==nil)
-        apiurl=[NSString stringWithFormat:@"%@/crosses/%i/posts.json?api_key=%@",[APIHandler URL_API_ROOT],crossid,api_key];
+        apiurl=[NSString stringWithFormat:@"%@/x/%i/posts?token=%@",[APIHandler URL_API_ROOT],crossid,api_key];
     else
-        apiurl=[NSString stringWithFormat:@"%@/crosses/%i/posts.json?updated_since=%@&api_key=%@",[APIHandler URL_API_ROOT],crossid,lastUpdateTime,api_key];
+        apiurl=[NSString stringWithFormat:@"%@/x/%i/posts?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],crossid,lastUpdateTime,api_key];
     
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
     NSLog(@"api: %@",apiurl);
@@ -155,12 +155,12 @@
     NSLog(@"set user token:%@",app.username);
     
     
-    NSString *post =[[NSString alloc] initWithFormat:@"token=%@&provider=iOSAPN",token];
+    NSString *post =[[NSString alloc] initWithFormat:@"devicetoken=%@&provider=iOSAPN",token];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     
     NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/users/%i/identities.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key]]];
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/users/%i/regdevicetoken?token=%@",[APIHandler URL_API_ROOT],app.userid,api_key]]];
 
     
     [request setHTTPMethod:@"POST"];
@@ -170,13 +170,18 @@
     [request setHTTPShouldHandleCookies:NO];
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding] autorelease];
+    
     id jsonobj=[responseString JSONValue];
-    if([jsonobj isKindOfClass:[NSDictionary class]]   )
+    
+    id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
+    if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
     {
-        if([jsonobj objectForKey:@"error"]!=nil)
-            return NO;
-        if ([[jsonobj objectForKey:@"auth_token"] isEqualToString:token])
-            return YES;     
+        if([[jsonobj objectForKey:@"response"] isKindOfClass:[NSDictionary class]])
+        {
+            
+            if ([[[jsonobj objectForKey:@"response"] objectForKey:@"device_token"] isEqualToString:token])
+                return YES;     
+        }
     }
     return NO;
 
@@ -191,14 +196,14 @@
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
     return responseString;    
 }
-- (NSString*)AddCommentById:(int)eventid comment:(NSString*)commenttext
+- (NSString*)AddCommentById:(int)eventid comment:(NSString*)commenttext external_identity:(NSString*)external_identity
 {
-    NSString *post =[[NSString alloc] initWithFormat:@"content=%@",commenttext];
+    NSString *post =[[NSString alloc] initWithFormat:@"external_identity=%@&content=%@",external_identity,commenttext];
     
     NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
     
     NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/crosses/%i/posts.json?api_key=%@",[APIHandler URL_API_ROOT],eventid,api_key]]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/x/%i/posts?token=%@",[APIHandler URL_API_ROOT],eventid,api_key]]];
     
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];

@@ -264,25 +264,26 @@ const int INVITATION_MAYBE=0;
                 NSString *responseString=[api sentRSVPWith:self.eventid rsvp:(NSString*)rsvp];
                 
                 [api release];
-                
-                
-                NSDictionary *eventdict = [responseString JSONValue];
+
+                NSDictionary *rsvpDict = [responseString JSONValue];
+                id code=[[rsvpDict objectForKey:@"meta"] objectForKey:@"code"];
+                if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
+                {
                 DBUtil *dbu=[DBUtil sharedManager];
-                [dbu updateEventobjWithid:self.eventid event:eventdict];
-                [dbu updateInvitationobjWithid:self.eventid event:(NSArray*)[eventdict objectForKey:@"invitations"]];
+                    
+//                [dbu updateEventobjWithid:self.eventid event:eventdict];
+                [dbu updateInvitationobjWithid:self.eventid event:(NSArray*)[[rsvpDict objectForKey:@"response"] objectForKey:@"invitations"]];
                 
                 
                 NSString *html=[self GenerateHtmlWithEvent];
-                //            NSString *path = [[NSBundle mainBundle] bundlePath];
-                //            NSURL *baseURL = [NSURL fileURLWithPath:path];
                 
                 NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
                 NSString *documentsDirectory = [paths objectAtIndex:0]; 
                 
                 NSURL *baseURL = [NSURL fileURLWithPath:documentsDirectory];
                 [webview loadHTMLString:html baseURL:baseURL];
+                }
                 
-                //            [webview loadHTMLString:html baseURL:[NSURL URLWithString:[[NSBundle mainBundle] bundlePath]]];
             }
             else if( [[chunk objectAtIndex:0] isEqualToString:@"http://addical/"])
             {

@@ -131,7 +131,7 @@
         NSDictionary* eventdict=(NSDictionary*)[_events objectAtIndex:i];
         
         [dbu updateEventobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:eventdict];
-        [dbu updateCommentobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"posts"]];
+        [dbu updateCommentobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"conversation"]];
         [dbu updateInvitationobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"invitations"]];
         [dbu updateUserobjWithid:[[[eventdict objectForKey:@"host"] objectForKey:@"id"] integerValue] user:[eventdict objectForKey:@"host"]];
     }
