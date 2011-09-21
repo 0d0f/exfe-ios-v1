@@ -172,30 +172,52 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Cross *event=[events objectAtIndex:indexPath.row];
-
-    UIFont *cellFont = [UIFont systemFontOfSize:11];
-    CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
-    CGSize labelSize = [event.title sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
-    if(labelSize.height+30<50)
-        return 50;
-    else
-        return labelSize.height+30;
+    return 60;
+//    Cross *event=[events objectAtIndex:indexPath.row];
+//
+//    UIFont *cellFont = [UIFont systemFontOfSize:11];
+//    CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
+//    CGSize labelSize = [event.title sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
+//    if(labelSize.height+30<50)
+//        return 50;
+//    else
+//        return labelSize.height+30;
 }
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *MyIdentifier = @"MyIdentifier";
+    MyIdentifier = @"tblCellView";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    CrossCellView *cell = (CrossCellView *)[tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+    if(cell == nil) {
+        [[NSBundle mainBundle] loadNibNamed:@"CrossCellView" owner:self options:nil];
+        cell = tblCell;
     }
-
-    DBUtil *dbu=[DBUtil sharedManager];
     Cross *event=[events objectAtIndex:indexPath.row];
+    [cell setLabelText:event.title];
+    [cell setLabelTime:[event.begin_at substringToIndex:10]];
+//    [cell setLabelText:[arryData objectAtIndex:indexPath.row]];
+//    return cell;    
+
+//    static NSString *CellIdentifier = @"Cell";
+//    
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//    if (cell == nil) {
+//        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+//    }
+//
+//    Cross *event=[events objectAtIndex:indexPath.row];
+    DBUtil *dbu=[DBUtil sharedManager];
     User* user=[dbu getUserWithid:event.creator_id];
+    if(user.avatar_file_name!=nil)
+    {
+        NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+        NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
+        
+        UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
+        [cell setAvartar:image];
+    }    
 
 //    UILabel *time = [[[UILabel alloc] initWithFrame:CGRectMake(210.0,0.0,100.0,20)] autorelease];
 //    time.font = [UIFont systemFontOfSize:11];
@@ -220,7 +242,6 @@
 //    [cell.contentView addSubview:name];
 //    
 
-    [[cell textLabel] setText:event.title];
 
 //    UILabel *title = [[[UILabel alloc] initWithFrame:CGRectMake(60,20,260.0,30)] autorelease];
 //    title.font = [UIFont systemFontOfSize:11];
@@ -232,8 +253,8 @@
 //    title.text=event.title;
 //    [cell.contentView addSubview:title];
     
-    if(user.avatar_file_name!=nil)
-    {
+//    if(user.avatar_file_name!=nil)
+//    {
 //    UIImageView *imageview=[[UIImageView alloc] initWithFrame:CGRectMake(10.0,10.0,40.0,40)] ;
 //    NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
 //    NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
@@ -242,7 +263,7 @@
 //    imageview.image=image;
 //    [cell.contentView addSubview:imageview];
 //    [imageview release];
-    }
+//    }
 //    
 //    
 //    

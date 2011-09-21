@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PullRefreshTableViewController.h"
+#import "CrossCellView.h"
 
 @interface RootViewController : PullRefreshTableViewController{
 //UIViewController {
@@ -20,6 +21,9 @@
     NSArray* events;
     BOOL reload;
     NSTimer *timer;
+    
+    IBOutlet CrossCellView *tblCell;
+    
 }
 
 @property BOOL interceptLinks;

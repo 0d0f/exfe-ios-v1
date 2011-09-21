@@ -55,6 +55,8 @@
 		78BDB2EC13A512B7004561EA /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDB2EB13A512B7004561EA /* Comment.m */; };
 		78BDB2F213A67B2F004561EA /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDB2F113A67B2F004561EA /* Invitation.m */; };
 		78BDB2F513A773A1004561EA /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDB2F413A773A0004561EA /* User.m */; };
+		78C1D4091429C465008131BC /* CrossCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C1D4081429C465008131BC /* CrossCellView.m */; };
+		78C1D40C1429D30B008131BC /* CrossCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78C1D40B1429D30B008131BC /* CrossCellView.xib */; };
 		78D7AA7913BE12C7009495DA /* ConversionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7AA7713BE12C6009495DA /* ConversionTableViewController.m */; };
 		78D7AA7A13BE12C7009495DA /* ConversionTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */; };
 		78F75BC813AD3BBA00C7B3CF /* UIExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F75BC313AD3BBA00C7B3CF /* UIExpandingTextView.m */; };
@@ -159,6 +161,9 @@
 		78BDB2F113A67B2F004561EA /* Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Invitation.m; path = exfe.xcodeproj/Invitation.m; sourceTree = SOURCE_ROOT; };
 		78BDB2F313A773A0004561EA /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		78BDB2F413A773A0004561EA /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		78C1D4071429C464008131BC /* CrossCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossCellView.h; sourceTree = "<group>"; };
+		78C1D4081429C465008131BC /* CrossCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossCellView.m; sourceTree = "<group>"; };
+		78C1D40B1429D30B008131BC /* CrossCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossCellView.xib; sourceTree = "<group>"; };
 		78D7AA7613BE12C6009495DA /* ConversionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConversionTableViewController.h; path = exfe.xcodeproj/ConversionTableViewController.h; sourceTree = SOURCE_ROOT; };
 		78D7AA7713BE12C6009495DA /* ConversionTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ConversionTableViewController.m; path = exfe.xcodeproj/ConversionTableViewController.m; sourceTree = SOURCE_ROOT; };
 		78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ConversionTableViewController.xib; path = exfe.xcodeproj/ConversionTableViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -275,6 +280,9 @@
 				78F75BC113AD3B9E00C7B3CF /* UIInputToolbar */,
 				788C421A133FA3D000AAA425 /* exfeAppDelegate.h */,
 				788C421B133FA3D000AAA425 /* exfeAppDelegate.m */,
+				78C1D4071429C464008131BC /* CrossCellView.h */,
+				78C1D4081429C465008131BC /* CrossCellView.m */,
+				78C1D40B1429D30B008131BC /* CrossCellView.xib */,
 				788C4220133FA3D000AAA425 /* RootViewController.h */,
 				788C4221133FA3D000AAA425 /* RootViewController.m */,
 				7861AA8013523F9100FA13FA /* LoginViewController.h */,
@@ -474,6 +482,7 @@
 				7816A7481423C4DC00818601 /* app_btn.png in Resources */,
 				78125A141424CD5B0062BBD8 /* chat@2x~iphone.png in Resources */,
 				78125A151424CD5B0062BBD8 /* chat~iphone.png in Resources */,
+				78C1D40C1429D30B008131BC /* CrossCellView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -540,6 +549,7 @@
 				78A2B94B13C4B2DD00032F61 /* SBJsonTokeniser.m in Sources */,
 				78A2B94C13C4B2DD00032F61 /* SBJsonUTF8Stream.m in Sources */,
 				78A2B94D13C4B2DD00032F61 /* SBJsonWriter.m in Sources */,
+				78C1D4091429C465008131BC /* CrossCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
