@@ -185,7 +185,10 @@ const int INVITATION_MAYBE=0;
     [dateFormatter_human release];
     
     if(dateString==nil)
-        dateString=@"Anytime";
+    {
+        dateString_human=@"Anytime";
+        dateString=@"";
+    }
     NSLog(@"dateString: %@", dateString);    
     
     NSString *xpath=[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"x.html"];
@@ -402,8 +405,9 @@ const int INVITATION_MAYBE=0;
 
 -(void)inputButtonPressed:(NSString *)inputText
 {
-    [conversionViewController performSelector:@selector(postComment:) withObject:inputText];
-    
+ //   [conversionViewController performSelector:@selector(postComment:) withObject:inputText];
+//    [conversionViewController startLoading];
+    [NSThread detachNewThreadSelector:@selector(postComment:) toTarget:conversionViewController withObject:inputText];
 }
 
 

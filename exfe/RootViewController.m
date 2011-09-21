@@ -131,7 +131,7 @@
         NSDictionary* eventdict=(NSDictionary*)[_events objectAtIndex:i];
         
         [dbu updateEventobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:eventdict];
-        [dbu updateCommentobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"conversation"]];
+        [dbu updateCommentobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"conversations"]];
         [dbu updateInvitationobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"invitations"]];
         [dbu updateUserobjWithid:[[[eventdict objectForKey:@"host"] objectForKey:@"id"] integerValue] user:[eventdict objectForKey:@"host"]];
     }
@@ -197,51 +197,51 @@
     Cross *event=[events objectAtIndex:indexPath.row];
     User* user=[dbu getUserWithid:event.creator_id];
 
-    UILabel *time = [[[UILabel alloc] initWithFrame:CGRectMake(210.0,0.0,100.0,20)] autorelease];
-    time.font = [UIFont systemFontOfSize:11];
-    time.textAlignment = UITextAlignmentLeft;
-    time.textColor = [UIColor blackColor];
-    time.lineBreakMode = UILineBreakModeWordWrap;
-    time.numberOfLines = 3;
-    time.autoresizesSubviews = YES;
-    if([event.begin_at length]>=10)
-        time.text=[event.begin_at substringToIndex:10];
-    [cell.contentView addSubview:time];
+//    UILabel *time = [[[UILabel alloc] initWithFrame:CGRectMake(210.0,0.0,100.0,20)] autorelease];
+//    time.font = [UIFont systemFontOfSize:11];
+//    time.textAlignment = UITextAlignmentLeft;
+//    time.textColor = [UIColor blackColor];
+//    time.lineBreakMode = UILineBreakModeWordWrap;
+//    time.numberOfLines = 3;
+//    time.autoresizesSubviews = YES;
+//    if([event.begin_at length]>=10)
+//        time.text=[event.begin_at substringToIndex:10];
+//    [cell.contentView addSubview:time];
+//
+//    
+//    UILabel *name = [[[UILabel alloc] initWithFrame:CGRectMake(60.0,0.0,100.0,20)] autorelease];
+//    name.font = [UIFont systemFontOfSize:11];
+//    name.textAlignment = UITextAlignmentLeft;
+//    name.textColor = [UIColor blackColor];
+//    name.lineBreakMode = UILineBreakModeWordWrap;
+//    name.numberOfLines = 3;
+//    name.autoresizesSubviews = YES;
+//    name.text=user.name;
+//    [cell.contentView addSubview:name];
+//    
 
-    
-    UILabel *name = [[[UILabel alloc] initWithFrame:CGRectMake(60.0,0.0,100.0,20)] autorelease];
-    name.font = [UIFont systemFontOfSize:11];
-    name.textAlignment = UITextAlignmentLeft;
-    name.textColor = [UIColor blackColor];
-    name.lineBreakMode = UILineBreakModeWordWrap;
-    name.numberOfLines = 3;
-    name.autoresizesSubviews = YES;
-    name.text=user.name;
-    [cell.contentView addSubview:name];
-    
+    [[cell textLabel] setText:event.title];
 
-    
-
-    UILabel *title = [[[UILabel alloc] initWithFrame:CGRectMake(60,20,260.0,30)] autorelease];
-    title.font = [UIFont systemFontOfSize:11];
-    title.textAlignment = UITextAlignmentLeft;
-    title.textColor = [UIColor blackColor];
-    title.lineBreakMode = UILineBreakModeWordWrap;
-    title.numberOfLines = 3;
-    title.autoresizesSubviews = YES;
-    title.text=event.title;
-    [cell.contentView addSubview:title];
+//    UILabel *title = [[[UILabel alloc] initWithFrame:CGRectMake(60,20,260.0,30)] autorelease];
+//    title.font = [UIFont systemFontOfSize:11];
+//    title.textAlignment = UITextAlignmentLeft;
+//    title.textColor = [UIColor blackColor];
+//    title.lineBreakMode = UILineBreakModeWordWrap;
+//    title.numberOfLines = 3;
+//    title.autoresizesSubviews = YES;
+//    title.text=event.title;
+//    [cell.contentView addSubview:title];
     
     if(user.avatar_file_name!=nil)
     {
-    UIImageView *imageview=[[UIImageView alloc] initWithFrame:CGRectMake(10.0,10.0,40.0,40)] ;
-    NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-    NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
-        
-    UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
-    imageview.image=image;
-    [cell.contentView addSubview:imageview];
-    [imageview release];
+//    UIImageView *imageview=[[UIImageView alloc] initWithFrame:CGRectMake(10.0,10.0,40.0,40)] ;
+//    NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+//    NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
+//        
+//    UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
+//    imageview.image=image;
+//    [cell.contentView addSubview:imageview];
+//    [imageview release];
     }
 //    
 //    

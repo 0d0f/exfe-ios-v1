@@ -11,6 +11,7 @@
 #import "Comment.h"
 #import "Invitation.h"
 #import "User.h"
+#import "NSObject+SBJson.h"
 
 @implementation DBUtil
 static id sharedManager = nil;

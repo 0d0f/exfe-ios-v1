@@ -9,6 +9,7 @@
 #import "APIHandler.h"
 #import "exfeAppDelegate.h"
 #import "DBUtil.h"
+#import "NSObject+SBJson.h"
 
 @implementation APIHandler
 @synthesize username;
@@ -87,13 +88,20 @@
 //    exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     DBUtil *dbu=[DBUtil sharedManager];
     NSString *lastUpdateTime=[dbu getLastCommentUpdateTimeWith:crossid];
+    
+    NSDate *theDate = nil;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    theDate = [dateFormatter dateFromString:lastUpdateTime];  
+    [dateFormatter release];
+    
 
     NSError *error = nil;
     NSString *apiurl=nil;
     if(lastUpdateTime==nil)
         apiurl=[NSString stringWithFormat:@"%@/x/%i/posts?token=%@",[APIHandler URL_API_ROOT],crossid,api_key];
     else
-        apiurl=[NSString stringWithFormat:@"%@/x/%i/posts?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],crossid,lastUpdateTime,api_key];
+        apiurl=[NSString stringWithFormat:@"%@/x/%i/posts?updated_since=%i&token=%@",[APIHandler URL_API_ROOT],crossid,(int)[theDate timeIntervalSince1970],api_key];
     
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
     NSLog(@"api: %@",apiurl);
@@ -109,18 +117,24 @@
 }
 
 - (NSString*)getUserEvents
-//- (id)getUserEvents
 {
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
 
     DBUtil *dbu=[DBUtil sharedManager];
     NSString *lastUpdateTime=[dbu getLastEventUpdateTime];
+
+    NSDate *theDate = nil;
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    theDate = [dateFormatter dateFromString:lastUpdateTime];  
+    [dateFormatter release];
+    
     NSError *error = nil;
     NSString *apiurl=nil;
     if(lastUpdateTime==nil)
         apiurl=[NSString stringWithFormat:@"%@/users/%i/x?token=%@",[APIHandler URL_API_ROOT],app.userid,api_key];
     else
-        apiurl=[NSString stringWithFormat:@"%@/users/%i/x?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],app.userid,lastUpdateTime,api_key];
+        apiurl=[NSString stringWithFormat:@"%@/users/%i/x?updated_since=%i&token=%@",[APIHandler URL_API_ROOT],app.userid,(int)[theDate timeIntervalSince1970] ,api_key];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
     NSLog(@"api: %@",apiurl);
     [request setHTTPShouldHandleCookies:NO];

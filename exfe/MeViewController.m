@@ -9,6 +9,7 @@
 #import "MeViewController.h"
 #import "exfeAppDelegate.h"
 #import "APIHandler.h"
+#import "NSObject+SBJson.h"
 
 @implementation MeViewController
 

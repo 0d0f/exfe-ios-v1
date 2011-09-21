@@ -12,6 +12,7 @@
 #import "ImgCache.h"
 #import "APIHandler.h"
 #import "DBUtil.h"
+#import "NSObject+SBJson.h"
 
 #define FONT_SIZE 14.0f
 #define CELL_CONTENT_WIDTH 320.0f
@@ -96,31 +97,31 @@
 
 - (void)dorefresh
 {
-    NSLog(@"refreshing");
-
     APIHandler *api=[[APIHandler alloc]init];
     
     NSString *responseString=[api getPostsWith:eventid];
 
     DBUtil *dbu=[DBUtil sharedManager];
-        
-    NSArray *arr=[responseString JSONValue];
-    [dbu updateCommentobjWithid:eventid event:arr];
-    for(int i=0;i<[arr count];i++)
+
+    id code=[[[responseString JSONValue] objectForKey:@"meta"] objectForKey:@"code"];
+    if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
     {
-        Comment *commentobj=[Comment initWithDict:[arr objectAtIndex:i] EventID:eventid];
-        if(commentobj!=nil)
+        NSArray *arr=[[[responseString JSONValue] objectForKey:@"response"] objectForKey:@"conversations"];
+        
+        [dbu updateCommentobjWithid:eventid event:arr];
+        for(int i=0;i<[arr count];i++)
         {
-            [comments insertObject:commentobj atIndex:i];
-        //        
+            Comment *commentobj=[Comment initWithDict:[arr objectAtIndex:i] EventID:eventid];
+            if(commentobj!=nil)
+            {
+                [comments insertObject:commentobj atIndex:i];
+            }
+            
         }
-
+        if([arr count]>0)
+            [(UITableView*)self.view reloadData];
     }
-    if([arr count]>0)
-        [(UITableView*)self.view reloadData];
     [api release];
-
-    
     [self stopLoading];
 }
 
@@ -129,16 +130,17 @@
     APIHandler *api=[[APIHandler alloc]init];
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     NSString *commentjson=[api AddCommentById:eventid comment:inputtext external_identity:uname];
-    NSLog(@"commentjson:%@",commentjson);
-    if([[commentjson JSONValue] objectForKey:@"posts"]!=nil)
+    if([[[commentjson JSONValue] objectForKey:@"response"] objectForKey:@"conversation"]!=nil)
     {
-        DBUtil *dbu=[DBUtil sharedManager];
-        NSArray *arr=[[NSArray alloc]initWithObjects:[commentjson JSONValue], nil];
-        [dbu updateCommentobjWithid:self.eventid event:arr];
-        [arr release];
-        Comment *comment=[Comment initWithDict:[commentjson JSONValue] EventID:self.eventid];
-        //        [comments addObject:comment];
-        
+        //TODO
+//        DBUtil *dbu=[DBUtil sharedManager];
+//        NSArray *arr=[[NSArray alloc]initWithObjects:[commentjson JSONValue], nil];
+//        [dbu updateCommentobjWithid:self.eventid event:arr];
+//        [arr release];
+        Comment *comment=[Comment initWithDict:[[[commentjson JSONValue] objectForKey:@"response"] objectForKey:@"conversation"] EventID:self.eventid];
+        //[comments addObject:comment];
+        [comments insertObject:comment atIndex:0];        
+        [(UITableView*)self.view reloadData];
     }
     else
     {
@@ -146,7 +148,7 @@
     }
     [commentjson release];
     [api release];    
-    [self dorefresh];
+//    [self dorefresh];
 }
 
 #pragma mark - Table view data source
@@ -176,9 +178,7 @@
 {
     static NSString *CellIdentifier = @"Cell";
     Comment *comment=[comments objectAtIndex:indexPath.row];
-    //initWithDict
     User *user=[User initWithDict:[comment.userjson JSONValue]];
-    //    NSDictionary *user=;
     UILabel *label=nil;
     UIImageView *imageview=nil;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -190,7 +190,6 @@
         [label setNumberOfLines:0];
         [label setFont:[UIFont systemFontOfSize:FONT_SIZE]];
         [label setTag:1];
-        //        [[label layer] setBorderWidth:2.0f];
         [[cell contentView] addSubview:label];
         
         imageview=[[UIImageView alloc] initWithFrame:CGRectZero];
@@ -215,7 +214,8 @@
     {
         [imageview setFrame:CGRectMake(CELL_CONTENT_MARGIN, CELL_CONTENT_MARGIN, CELL_IMAGE_WIDTH, CELL_IMAGE_HEIGHT)];
         NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-        NSString *imgurl=[NSString stringWithFormat:@"http://api.exfe.com/system/avatars/%u/thumb/%@",user.id,imgName];
+        NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
+
         UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
         if(image!=nil && ![image isEqual:[NSNull null]]) 
             imageview.image=image;
