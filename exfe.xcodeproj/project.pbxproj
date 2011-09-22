@@ -108,6 +108,7 @@
 		7882BC90137079A4004F9DBD /* DBUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBUtil.h; sourceTree = "<group>"; };
 		7882BC91137079A4004F9DBD /* DBUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBUtil.m; sourceTree = "<group>"; };
 		7882BCCC137458F5004F9DBD /* exfe.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = exfe.db; sourceTree = "<group>"; };
+		78863CA81429F84300C85A1B /* exfe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = exfe.entitlements; sourceTree = "<group>"; };
 		788C4207133FA3D000AAA425 /* exfe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = exfe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		788C420B133FA3D000AAA425 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		788C420D133FA3D000AAA425 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -274,6 +275,7 @@
 		788C4211133FA3D000AAA425 /* exfe */ = {
 			isa = PBXGroup;
 			children = (
+				78863CA81429F84300C85A1B /* exfe.entitlements */,
 				78A2B92813C4B2DD00032F61 /* JSON */,
 				78F75BDE13AFA83700C7B3CF /* PullRefreshTableViewController.h */,
 				78F75BDF13AFA83700C7B3CF /* PullRefreshTableViewController.m */,
@@ -607,31 +609,12 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		788C423C133FA3D100AAA425 /* Debug */ = {
+		78863CA51429F7CC00C85A1B /* ad hoc */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Distribution: ju han";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: ju han";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
-				PROVISIONING_PROFILE = "491A5D71-46FC-49B3-8143-6A158C744DB2";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "491A5D71-46FC-49B3-8143-6A158C744DB2";
-				SDKROOT = iphoneos;
-			};
-			name = Debug;
-		};
-		788C423D133FA3D100AAA425 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_ENTITLEMENTS = exfe.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=*]" = exfe.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: ju han";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: ju han";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -641,8 +624,92 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "491A5D71-46FC-49B3-8143-6A158C744DB2";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "491A5D71-46FC-49B3-8143-6A158C744DB2";
+				PROVISIONING_PROFILE = "DBB15C66-D6E7-4186-B975-47C366FAD7C4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DBB15C66-D6E7-4186-B975-47C366FAD7C4";
+				SDKROOT = iphoneos;
+			};
+			name = "ad hoc";
+		};
+		78863CA61429F7CC00C85A1B /* ad hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = exfe/exfe.entitlements;
+				"CODE_SIGN_ENTITLEMENTS[sdk=*]" = exfe/exfe.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: ju han";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: ju han";
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "exfe/exfe-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = "exfe/exfe-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "DBB15C66-D6E7-4186-B975-47C366FAD7C4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "DBB15C66-D6E7-4186-B975-47C366FAD7C4";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = "ad hoc";
+		};
+		78863CA71429F7CC00C85A1B /* ad hoc */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/exfe.app/exfe";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "exfeTests/exfeTests-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				INFOPLIST_FILE = "exfeTests/exfeTests-Info.plist";
+				OTHER_LDFLAGS = (
+					"-framework",
+					SenTestingKit,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = "ad hoc";
+		};
+		788C423C133FA3D100AAA425 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		788C423D133FA3D100AAA425 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -651,6 +718,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: ju han (632XXR8Q24)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: ju han (632XXR8Q24)";
 				COPY_PHASE_STRIP = NO;
@@ -664,8 +732,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "exfe/exfe-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9C43867F-A823-412B-BF5E-8224CD461D38";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9C43867F-A823-412B-BF5E-8224CD461D38";
+				PROVISIONING_PROFILE = "E0AA8208-0EDC-4F4C-BA4F-72E65885C629";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E0AA8208-0EDC-4F4C-BA4F-72E65885C629";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -674,6 +742,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "iPhone Developer: ju han (632XXR8Q24)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: ju han (632XXR8Q24)";
 				COPY_PHASE_STRIP = YES;
@@ -686,8 +755,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "exfe/exfe-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "9C43867F-A823-412B-BF5E-8224CD461D38";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9C43867F-A823-412B-BF5E-8224CD461D38";
+				PROVISIONING_PROFILE = "E0AA8208-0EDC-4F4C-BA4F-72E65885C629";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E0AA8208-0EDC-4F4C-BA4F-72E65885C629";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -747,6 +816,7 @@
 			buildConfigurations = (
 				788C423C133FA3D100AAA425 /* Debug */,
 				788C423D133FA3D100AAA425 /* Release */,
+				78863CA51429F7CC00C85A1B /* ad hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -756,6 +826,7 @@
 			buildConfigurations = (
 				788C423F133FA3D100AAA425 /* Debug */,
 				788C4240133FA3D100AAA425 /* Release */,
+				78863CA61429F7CC00C85A1B /* ad hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -765,6 +836,7 @@
 			buildConfigurations = (
 				788C4242133FA3D100AAA425 /* Debug */,
 				788C4243133FA3D100AAA425 /* Release */,
+				78863CA71429F7CC00C85A1B /* ad hoc */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

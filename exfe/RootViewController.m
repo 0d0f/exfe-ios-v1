@@ -66,7 +66,7 @@
 }
 - (void) refresh
 {
-    [self performSelector:@selector(dorefresh) withObject:nil afterDelay:0.1];
+    [NSThread detachNewThreadSelector:@selector(dorefresh) toTarget:self withObject:nil];
 }
 
 - (BOOL)LoadUserEventsFromDB
