@@ -54,20 +54,6 @@
          timestampString = "337890851.520779"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "93"
-         endingLineNumber = "93"
-         landmarkName = "-RefreshRootview:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "exfe/exfeAppDelegate.m"
-         timestampString = "337890851.520779"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
          startingLineNumber = "131"
          endingLineNumber = "131"
          landmarkName = "-application:didReceiveRemoteNotification:"
@@ -93,11 +79,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/EventViewController.m"
-         timestampString = "338201740.960524"
+         timestampString = "339757679.64681"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "395"
-         endingLineNumber = "395"
+         startingLineNumber = "399"
+         endingLineNumber = "399"
          landmarkName = "-LoadEvent"
          landmarkType = "5">
       </FileBreakpoint>
@@ -135,11 +121,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe.xcodeproj/ConversionTableViewController.m"
-         timestampString = "338226922.544988"
+         timestampString = "339757679.64681"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "130"
-         endingLineNumber = "130"
+         startingLineNumber = "128"
+         endingLineNumber = "128"
          landmarkName = "-postComment:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -219,11 +205,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/EventViewController.m"
-         timestampString = "338201740.960524"
+         timestampString = "339757679.64681"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "278"
-         endingLineNumber = "278"
+         startingLineNumber = "282"
+         endingLineNumber = "282"
          landmarkName = "-webView:shouldStartLoadWithRequest:navigationType:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -233,11 +219,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/EventViewController.m"
-         timestampString = "338201740.960524"
+         timestampString = "339757679.64681"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "267"
-         endingLineNumber = "267"
+         startingLineNumber = "271"
+         endingLineNumber = "271"
          landmarkName = "-webView:shouldStartLoadWithRequest:navigationType:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -247,11 +233,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/EventViewController.m"
-         timestampString = "338201740.960524"
+         timestampString = "339757679.64681"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "281"
-         endingLineNumber = "281"
+         startingLineNumber = "285"
+         endingLineNumber = "285"
          landmarkName = "-webView:shouldStartLoadWithRequest:navigationType:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -275,11 +261,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe.xcodeproj/ConversionTableViewController.m"
-         timestampString = "338226922.544988"
+         timestampString = "339757679.64681"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "107"
-         endingLineNumber = "107"
+         startingLineNumber = "105"
+         endingLineNumber = "105"
          landmarkName = "-dorefresh"
          landmarkType = "5">
       </FileBreakpoint>
@@ -289,11 +275,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/EventViewController.m"
-         timestampString = "338201740.960524"
+         timestampString = "339757679.64681"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "188"
-         endingLineNumber = "188"
+         startingLineNumber = "192"
+         endingLineNumber = "192"
          landmarkName = "-GenerateHtmlWithEvent"
          landmarkType = "5">
       </FileBreakpoint>
@@ -303,11 +289,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/EventViewController.m"
-         timestampString = "338207371.752005"
+         timestampString = "339757679.64681"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "375"
-         endingLineNumber = "375"
+         startingLineNumber = "379"
+         endingLineNumber = "379"
          landmarkName = "-refresh"
          landmarkType = "5">
       </FileBreakpoint>
@@ -317,40 +303,12 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe.xcodeproj/ConversionTableViewController.m"
-         timestampString = "338232669.33499"
+         timestampString = "339757679.64681"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "140"
-         endingLineNumber = "140"
+         startingLineNumber = "138"
+         endingLineNumber = "138"
          landmarkName = "-postComment:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "exfe/APIHandler.m"
-         timestampString = "338365707.700594"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "121"
-         endingLineNumber = "121"
-         landmarkName = "-getUserEvents"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "exfe/RootViewController.m"
-         timestampString = "338365730.673058"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "82"
-         endingLineNumber = "82"
-         landmarkName = "-LoadUserEvents"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -379,6 +337,20 @@
          startingLineNumber = "30"
          endingLineNumber = "30"
          landmarkName = "-application:didFinishLaunchingWithOptions:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/EventViewController.m"
+         timestampString = "339760341.499439"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "430"
+         endingLineNumber = "430"
+         landmarkName = "-keyboardWillShow:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
