@@ -25,8 +25,8 @@
 {
     [super viewDidLoad];
     eventData=[[NSMutableDictionary alloc]initWithCapacity:20];
-    DBUtil *dbu=[DBUtil sharedManager];
-    [dbu getLastEventUpdateTime];
+//     DBUtil *dbu=[DBUtil sharedManager];
+//    [dbu getLastEventUpdateTime];
     reload=YES;
 //    timer = [NSTimer scheduledTimerWithTimeInterval: 30
 //                                             target: self
@@ -45,28 +45,21 @@
         events=[dbu getRecentEventObj];
     }
 }
-- (void)dorefresh
-{
-    NSLog(@"refreshing");
-//    CGRect frame = CGRectMake(0.0, 0.0, 25.0, 25.0);  
-//    UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc] initWithFrame:frame];  
-//    [loading sizeToFit];  
-//    loading.autoresizingMask = (UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin);  
-//    [loading startAnimating];  
-//    UIBarButtonItem *statusInd = [[UIBarButtonItem alloc] initWithCustomView:loading];  
+//- (void)dorefresh
+//{
+//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];  
 //    
-//    statusInd.style = UIBarButtonItemStylePlain;  
-//    self.navigationItem.rightBarButtonItem =statusInd;
-//    [loading release];
-//    [statusInd release];
-    
-    [self LoadUserEvents]; 
-//    [tableview reloadData];
-    [self stopLoading];
-}
+//    [self LoadUserEvents]; 
+//    [self stopLoading];
+//    [pool release];    
+//}
 - (void) refresh
 {
-    [NSThread detachNewThreadSelector:@selector(dorefresh) toTarget:self withObject:nil];
+    
+    [self LoadUserEvents]; 
+    [self stopLoading];
+
+//    [NSThread detachNewThreadSelector:@selector(dorefresh) toTarget:self withObject:nil];
 }
 
 - (BOOL)LoadUserEventsFromDB
@@ -109,15 +102,6 @@
         
     }
 
-
-//    if([jsonobj isKindOfClass:[NSDictionary class]] && [jsonobj objectForKey:@"error"]!=nil )
-//    {
-//        NSLog(@"error");
-//    }
-//    else if([jsonobj isKindOfClass:[NSArray class]])
-//    {
-//        [self UpdateDBWithEventDicts:(NSArray*)jsonobj];
-//    }
     mapp.networkActivityIndicatorVisible = NO;
     [self LoadUserEventsFromDB];
     
@@ -173,17 +157,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 60;
-//    Cross *event=[events objectAtIndex:indexPath.row];
-//
-//    UIFont *cellFont = [UIFont systemFontOfSize:11];
-//    CGSize constraintSize = CGSizeMake(280.0f, MAXFLOAT);
-//    CGSize labelSize = [event.title sizeWithFont:cellFont constrainedToSize:constraintSize lineBreakMode:UILineBreakModeWordWrap];
-//    if(labelSize.height+30<50)
-//        return 50;
-//    else
-//        return labelSize.height+30;
 }
-// Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *MyIdentifier = @"MyIdentifier";
@@ -197,122 +171,21 @@
     Cross *event=[events objectAtIndex:indexPath.row];
     [cell setLabelText:event.title];
     [cell setLabelTime:[event.begin_at substringToIndex:10]];
-//    [cell setLabelText:[arryData objectAtIndex:indexPath.row]];
-//    return cell;    
 
-//    static NSString *CellIdentifier = @"Cell";
-//    
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//    if (cell == nil) {
-//        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-//    }
-//
-//    Cross *event=[events objectAtIndex:indexPath.row];
     DBUtil *dbu=[DBUtil sharedManager];
     User* user=[dbu getUserWithid:event.creator_id];
     if(user.avatar_file_name!=nil)
     {
         NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-        NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
+//        NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
+        NSString *imgurl = [ImgCache getImgUrl:imgName];
         
         UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
         [cell setAvartar:image];
     }    
-
-//    UILabel *time = [[[UILabel alloc] initWithFrame:CGRectMake(210.0,0.0,100.0,20)] autorelease];
-//    time.font = [UIFont systemFontOfSize:11];
-//    time.textAlignment = UITextAlignmentLeft;
-//    time.textColor = [UIColor blackColor];
-//    time.lineBreakMode = UILineBreakModeWordWrap;
-//    time.numberOfLines = 3;
-//    time.autoresizesSubviews = YES;
-//    if([event.begin_at length]>=10)
-//        time.text=[event.begin_at substringToIndex:10];
-//    [cell.contentView addSubview:time];
-//
-//    
-//    UILabel *name = [[[UILabel alloc] initWithFrame:CGRectMake(60.0,0.0,100.0,20)] autorelease];
-//    name.font = [UIFont systemFontOfSize:11];
-//    name.textAlignment = UITextAlignmentLeft;
-//    name.textColor = [UIColor blackColor];
-//    name.lineBreakMode = UILineBreakModeWordWrap;
-//    name.numberOfLines = 3;
-//    name.autoresizesSubviews = YES;
-//    name.text=user.name;
-//    [cell.contentView addSubview:name];
-//    
-
-
-//    UILabel *title = [[[UILabel alloc] initWithFrame:CGRectMake(60,20,260.0,30)] autorelease];
-//    title.font = [UIFont systemFontOfSize:11];
-//    title.textAlignment = UITextAlignmentLeft;
-//    title.textColor = [UIColor blackColor];
-//    title.lineBreakMode = UILineBreakModeWordWrap;
-//    title.numberOfLines = 3;
-//    title.autoresizesSubviews = YES;
-//    title.text=event.title;
-//    [cell.contentView addSubview:title];
-    
-//    if(user.avatar_file_name!=nil)
-//    {
-//    UIImageView *imageview=[[UIImageView alloc] initWithFrame:CGRectMake(10.0,10.0,40.0,40)] ;
-//    NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-//    NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
-//        
-//    UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
-//    imageview.image=image;
-//    [cell.contentView addSubview:imageview];
-//    [imageview release];
-//    }
-//    
-//    
-//    
-//    UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
-//    cell.imageView.image=image;
-
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete)
-    {
-        // Delete the row from the data source.
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    else if (editingStyle == UITableViewCellEditingStyleInsert)
-    {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -342,39 +215,8 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
 }
-//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-//{
-//    NSLog(@"drag..");
-//}
-//-(bool) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
-//{
-//    if (self.interceptLinks && navigationType==UIWebViewNavigationTypeLinkClicked) {
-//        NSURL *url = request.URL;
-//        NSLog(@"%@",[url absoluteString]);
-//        Event *event=[eventData objectForKey:[url absoluteString]];
-//        EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil];
-//        
-//        if(event!=nil)
-//        {
-//            detailViewController.eventid=event.id;
-//            detailViewController.eventobj=event;
-//        }
-//        [self.navigationController pushViewController:detailViewController animated:YES];
-//        [detailViewController release]; 	
-//        
-//        return NO;
-//    }
-//    //No need to intercept the initial request to fill the WebView
-//    else {
-//        NSLog(@"interceptLinks");
-//        self.interceptLinks = YES;
-//        return YES;
-//    }
-//}
+
 
 - (void)dealloc
 {

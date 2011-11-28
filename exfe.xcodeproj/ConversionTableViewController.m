@@ -212,8 +212,8 @@
     {
         [imageview setFrame:CGRectMake(CELL_CONTENT_MARGIN, CELL_CONTENT_MARGIN, CELL_IMAGE_WIDTH, CELL_IMAGE_HEIGHT)];
         NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-        NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
-
+        //NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
+        NSString *imgurl = [ImgCache getImgUrl:imgName];
         UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
         if(image!=nil && ![image isEqual:[NSNull null]]) 
             imageview.image=image;

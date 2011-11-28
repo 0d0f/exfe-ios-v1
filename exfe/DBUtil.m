@@ -594,7 +594,10 @@ static sqlite3 *database;
         {
             char* last=(char*)sqlite3_column_text(stm, 0);
             if(last !=NULL)
-                LastUpdateTime=[NSString stringWithUTF8String:last];
+            {
+                LastUpdateTime=[[NSString alloc] initWithUTF8String:(char*)last];
+                [LastUpdateTime release];
+            }
         }
     }
     else 

@@ -261,8 +261,8 @@ const int INVITATION_MAYBE=0;
                     NSString* imgName = [invitation.avatar stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
 //                    NSString *imgurl=[NSString stringWithFormat:@"http://api.exfe.com/system/avatars/%u/thumb/%@",invitation.userid,imgName];
                     
-                    NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
-
+//                    NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
+                    NSString *imgurl = [ImgCache getImgUrl:imgName];
                     NSString *imgcachename=[ImgCache getImgName:imgurl];
                     
                     if(invitation.state ==INVITATION_YES)

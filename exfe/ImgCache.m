@@ -88,4 +88,12 @@ static id sharedManager = nil;
     return img;
     
 }
+
++ (NSString *) getImgUrl:(NSString*)imgName
+{
+    if([imgName isEqualToString:@"default.png"])
+        return [NSString stringWithFormat:@"http://img.exfe.com/web/80_80_%@",imgName];
+    else
+        return [NSString stringWithFormat:@"http://img.exfe.com/%@/%@/80_80_%@",[imgName substringWithRange:NSMakeRange(0, 1)],[imgName substringWithRange:NSMakeRange(1, 2)],imgName];
+}
 @end

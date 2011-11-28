@@ -33,10 +33,12 @@
 }
 
 + (NSString*)URL_API_ROOT {
-	return @"http://exfeapi.dlol.us/v1";    
+//	return @"http://exfeapi.dlol.us/v1";    
+	return @"http://api.exfe.com/v1";        
 }
 + (NSString*)URL_API_DOMAIN {
-	return @"http://exfeapi.dlol.us";    
+//	return @"http://exfeapi.dlol.us";    
+    return @"http://api.exfe.com";
 }
 
 - (NSString*)sentRSVPWith:(int)eventid rsvp:(NSString*)rsvp
@@ -148,6 +150,8 @@
 //    [responseString release];
 //    [pool release];
 //    return jsonobj;
+    [lastUpdateTime release];
+    
     return responseString;    
 }
 - (NSString*)getUserNews
