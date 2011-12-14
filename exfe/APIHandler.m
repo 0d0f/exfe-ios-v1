@@ -10,6 +10,7 @@
 #import "exfeAppDelegate.h"
 #import "DBUtil.h"
 #import "NSObject+SBJson.h"
+#import "NSData+Base64.h"
 
 @implementation APIHandler
 @synthesize username;
@@ -91,19 +92,24 @@
     DBUtil *dbu=[DBUtil sharedManager];
     NSString *lastUpdateTime=[dbu getLastCommentUpdateTimeWith:crossid];
     
-    NSDate *theDate = nil;
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    theDate = [dateFormatter dateFromString:lastUpdateTime];  
-    [dateFormatter release];
+//    NSDate *theDate = nil;
+//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//    theDate = [dateFormatter dateFromString:lastUpdateTime];  
+//    [dateFormatter release];
     
 
     NSError *error = nil;
     NSString *apiurl=nil;
     if(lastUpdateTime==nil)
         apiurl=[NSString stringWithFormat:@"%@/x/%i/posts?token=%@",[APIHandler URL_API_ROOT],crossid,api_key];
-    else
-        apiurl=[NSString stringWithFormat:@"%@/x/%i/posts?updated_since=%i&token=%@",[APIHandler URL_API_ROOT],crossid,(int)[theDate timeIntervalSince1970],api_key];
+    else{
+
+        CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
+        
+        
+        apiurl=[NSString stringWithFormat:@"%@/x/%i/posts?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],crossid,[(NSString *)dateurlString autorelease],api_key];
+    }
     
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
     NSLog(@"api: %@",apiurl);
@@ -120,23 +126,30 @@
 
 - (NSString*)getUserEvents
 {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
 
     DBUtil *dbu=[DBUtil sharedManager];
     NSString *lastUpdateTime=[dbu getLastEventUpdateTime];
 
-    NSDate *theDate = nil;
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    theDate = [dateFormatter dateFromString:lastUpdateTime];  
-    [dateFormatter release];
+//    NSDate *theDate = nil;
+//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//    
+//
+//    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//    theDate = [dateFormatter dateFromString:lastUpdateTime];  
+//    [dateFormatter release];
     
     NSError *error = nil;
     NSString *apiurl=nil;
     if(lastUpdateTime==nil)
         apiurl=[NSString stringWithFormat:@"%@/users/%i/x?token=%@",[APIHandler URL_API_ROOT],app.userid,api_key];
     else
-        apiurl=[NSString stringWithFormat:@"%@/users/%i/x?updated_since=%i&token=%@",[APIHandler URL_API_ROOT],app.userid,(int)[theDate timeIntervalSince1970] ,api_key];
+    {
+        CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
+        apiurl=[NSString stringWithFormat:@"%@/users/%i/x?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],app.userid,[(NSString *)dateurlString autorelease] ,api_key];
+    }
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
     NSLog(@"api: %@",apiurl);
     [request setHTTPShouldHandleCookies:NO];
@@ -146,13 +159,11 @@
         NSLog(@"%@",error);
     }
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-  //  id jsonobj= [responseString JSONValue];
-//    [responseString release];
-//    [pool release];
-//    return jsonobj;
+    [[NSUserDefaults standardUserDefaults] setObject:lastUpdateTime  forKey:@"lastupdatetime"];
+
+    [pool release];
     [lastUpdateTime release];
-    
-    return responseString;    
+    return responseString;
 }
 - (NSString*)getUserNews
 {
@@ -169,6 +180,8 @@
 }
 - (BOOL) regDeviceToken:(NSString*) token
 {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     NSLog(@"set user token:%@",app.username);
     
@@ -188,7 +201,6 @@
     [request setHTTPShouldHandleCookies:NO];
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding] autorelease];
-    
     id jsonobj=[responseString JSONValue];
     
     id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
@@ -198,11 +210,37 @@
         {
             
             if ([[[jsonobj objectForKey:@"response"] objectForKey:@"device_token"] isEqualToString:token])
+            {
+                [pool drain];
                 return YES;     
+            }
         }
     }
+    [pool drain];
     return NO;
+}
 
+- (NSString*)getUpdate
+{
+    exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
+    
+    NSLog(@"get User update:%@",app.username);
+    NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
+    if(lastUpdateTime==nil)
+        lastUpdateTime=@"0000-00-00 00:00:00";
+
+    CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
+    
+    
+    NSString *url=[NSString stringWithFormat:@"%@/users/%i/getupdate?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],app.userid,[(NSString *)dateurlString autorelease],api_key];
+    NSLog(@"url:%@",url);
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    [request setHTTPShouldHandleCookies:NO];
+    
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    NSLog(@"%@",responseString);
+    return responseString;    
 }
 - (NSString*)getEventById:(int)eventid
 {

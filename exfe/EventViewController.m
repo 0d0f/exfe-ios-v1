@@ -164,38 +164,7 @@ const int INVITATION_MAYBE=0;
 - (NSString*)GenerateHtmlWithEvent
 {
     DBUtil *dbu=[DBUtil sharedManager];
-    
-    //    NSString *html=[NSString stringWithFormat:@"<h1>%@</h1>",eventobj.title];
-    //
-    //    html=[html stringByAppendingFormat:@"<p>时间：%@</p>",eventobj.begin_at];
-    //    html=[html stringByAppendingFormat:@"<p>地点：%@</p>",eventobj.place_line1];
-    //    html=[html stringByAppendingFormat:@"<p>地%@</p>",eventobj.place_line2];
-    //    html=[html stringByAppendingFormat:@"<p>%@</p>",eventobj.description];
-    ////    NSArray* invitations=[aevent objectForKey:@"invitations"];
-    ////    
-    //    if(invitations !=nil&&[invitations count]>0)
-    //    {
-    //        html=[html stringByAppendingString:@"<p>参加者:</p>"];
-    //        for (int i=0;i<[invitations count];i++)
-    //        {
-    //            Invitation *invitation=[invitations objectAtIndex:i];
-    //            html=[html stringByAppendingFormat:@"<p>%@ state:%@ via %@ </p>",invitation.username,invitation.state,invitation.provider];
-    //        }    
-    //    }
-    //    
-    //
-    //    html=[html stringByAppendingString:@"<p>您是否参加此活动？<a href='http://invitation/#yes'>是</a>,<a href='http://invitation/#no'>否</a>,<a href='http://invitation/#maybe'>也许</a></p>"];
-    //    NSString *identifier=[dbu getIdentifierWithid:self.eventid];
-    //    if(identifier!=nil)
-    //        html=[html stringByAppendingFormat:@"<p><a href='http://addical/#%i'>%@</a></p>",self.eventid,@"删除日历"];
-    //    else
-    //        html=[html stringByAppendingFormat:@"<p><a href='http://addical/#%i'>%@</a></p>",self.eventid,@"添加日历"];
-    //    
-    
-//    NSDateFormatter *rfc3339TimestampFormatterWithTimeZone = [[NSDateFormatter alloc] init];
-//    [rfc3339TimestampFormatterWithTimeZone setLocale:[[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"] autorelease]];
-//    [rfc3339TimestampFormatterWithTimeZone setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZ"];
-    
+   
     NSDate *theDate = nil;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -281,7 +250,6 @@ const int INVITATION_MAYBE=0;
     NSString *description=[eventobj.description stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
     
     html=[html stringByReplacingOccurrencesOfString:@"{#description#}" withString:description];
-    NSLog(@"%@",html);
     return html;
 }
 -(bool) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType

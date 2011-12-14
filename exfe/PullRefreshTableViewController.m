@@ -125,7 +125,9 @@
     [UIView commitAnimations];
 
     // Refresh action!
-    [self refresh];
+    //[self refresh];
+    [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
+    
 }
 
 - (void)stopLoading {

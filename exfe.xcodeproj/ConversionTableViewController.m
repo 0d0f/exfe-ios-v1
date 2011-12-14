@@ -90,17 +90,14 @@
 }
 - (void)refresh
 {
-        [self performSelector:@selector(dorefresh) withObject:nil afterDelay:0.1];
-}
-
-- (void)dorefresh
-{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    
     APIHandler *api=[[APIHandler alloc]init];
     
     NSString *responseString=[api getPostsWith:eventid];
-
+    
     DBUtil *dbu=[DBUtil sharedManager];
-
+    
     id code=[[[responseString JSONValue] objectForKey:@"meta"] objectForKey:@"code"];
     if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
     {
@@ -121,10 +118,14 @@
     }
     [api release];
     [self stopLoading];
+    [pool drain];
 }
+
 
 - (void)postComment:(NSString*)inputtext
 {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
     APIHandler *api=[[APIHandler alloc]init];
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     NSString *commentjson=[api AddCommentById:eventid comment:inputtext external_identity:uname];
@@ -145,7 +146,8 @@
         NSLog(@"comment failure");
     }
     [commentjson release];
-    [api release];    
+    [api release]; 
+    [pool drain];
 //    [self dorefresh];
 }
 
@@ -174,51 +176,78 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    
+//    tblConversationCellView
+    static NSString *MyIdentifier = @"tblCrossCellView";
+
+    ConversationCellView *cell = (ConversationCellView *)[tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+    if(cell == nil) {
+        [[NSBundle mainBundle] loadNibNamed:@"ConversationCellView" owner:self options:nil];
+        cell = tblCell;
+    }
     Comment *comment=[comments objectAtIndex:indexPath.row];
     User *user=[User initWithDict:[comment.userjson JSONValue]];
-    UILabel *label=nil;
-    UIImageView *imageview=nil;
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        label = [[UILabel alloc] initWithFrame:CGRectZero];
-        [label setLineBreakMode:UILineBreakModeWordWrap];
-        [label setMinimumFontSize:FONT_SIZE];
-        [label setNumberOfLines:0];
-        [label setFont:[UIFont systemFontOfSize:FONT_SIZE]];
-        [label setTag:1];
-        [[cell contentView] addSubview:label];
+
+    [cell setLabelText:comment.comment];
+    [cell setLabelTime:comment.created_at];
+    dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
+        dispatch_async(imgQueue, ^{
+            NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+            NSString *imgurl = [ImgCache getImgUrl:imgName];
+            UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(image!=nil && ![image isEqual:[NSNull null]]) 
+                    [cell setAvartar:image];
+            });
+        });
         
-        imageview=[[UIImageView alloc] initWithFrame:CGRectZero];
-        [imageview setTag:2];
-        [[cell contentView] addSubview:imageview];
-    }
-    
-    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH ), 20000.0f);
-    
-    CGSize size = [comment.comment sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
-    
-    if (!label)
-        label = (UILabel*)[cell viewWithTag:1];
-    
-    [label setText:comment.comment];
-    [label setFrame:CGRectMake(CELL_CONTENT_MARGIN+CELL_IMAGE_WIDTH, CELL_CONTENT_MARGIN, CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH), MAX(size.height, 50.0f))];
-    
-    if (!imageview)
-        imageview = (UIImageView*)[cell viewWithTag:2];
-    
-    if(user.avatar_file_name!=nil && ![user.avatar_file_name isEqualToString:@""])
-    {
-        [imageview setFrame:CGRectMake(CELL_CONTENT_MARGIN, CELL_CONTENT_MARGIN, CELL_IMAGE_WIDTH, CELL_IMAGE_HEIGHT)];
-        NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-        //NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
-        NSString *imgurl = [ImgCache getImgUrl:imgName];
-        UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
-        if(image!=nil && ![image isEqual:[NSNull null]]) 
-            imageview.image=image;
-    }
+    dispatch_release(imgQueue);        
     return cell;
+
+
+//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+//        label = [[UILabel alloc] initWithFrame:CGRectZero];
+//        [label setLineBreakMode:UILineBreakModeWordWrap];
+//        [label setMinimumFontSize:FONT_SIZE];
+//        [label setNumberOfLines:0];
+//        [label setFont:[UIFont systemFontOfSize:FONT_SIZE]];
+//        [label setTag:1];
+//        [[cell contentView] addSubview:label];
+//        
+//        imageview=[[UIImageView alloc] initWithFrame:CGRectZero];
+//        [imageview setTag:2];
+//        [[cell contentView] addSubview:imageview];
+
+//    }
+//    Cross *event=[events objectAtIndex:indexPath.row];
+//    [cell setLabelText:event.title];
+//    [cell setLabelTime:[event.begin_at substringToIndex:10]];
+//    
+// 
+//    if (cell == nil) {
+//    }
+//    
+//    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH ), 20000.0f);
+//    
+//    CGSize size = [comment.comment sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+//    
+//    if (!label)
+//        label = (UILabel*)[cell viewWithTag:1];
+//    
+//    [label setText:comment.comment];
+//    [label setFrame:CGRectMake(CELL_CONTENT_MARGIN+CELL_IMAGE_WIDTH, CELL_CONTENT_MARGIN, CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH), MAX(size.height, 50.0f))];
+//    
+//    if (!imageview)
+//        imageview = (UIImageView*)[cell viewWithTag:2];
+//    
+//    if(user.avatar_file_name!=nil && ![user.avatar_file_name isEqualToString:@""])
+//    {
+//        [imageview setFrame:CGRectMake(CELL_CONTENT_MARGIN, CELL_CONTENT_MARGIN, CELL_IMAGE_WIDTH, CELL_IMAGE_HEIGHT)];
+//        
+//            
+//    }
+//    [pool drain];
 }
 /*
 // Override to support conditional editing of the table view.

@@ -19,7 +19,6 @@
 - (void) emptyDBCache;
 - (void) updateEventWithid:(int)eventid event:(NSString*)eventjson;
 - (NSString*) getEventWithid:(int)eventid;
-//- (NSArray*) getRecentEvent;
 - (void) updateEventicalWithid:(int)eventid  identifier:(NSString*) eventIdentifier;
 - (NSString*)getIdentifierWithid:(int)eventid;
 
@@ -27,6 +26,8 @@
 - (void) updateCommentobjWithid:(int)eventid event:(NSArray*)commentdict;
 - (void) updateInvitationobjWithid:(int)eventid event:(NSArray*)invitationdict;
 - (void) updateUserobjWithid:(int)uid user:(NSDictionary*)userobj;
+- (void) updateInvitationWithCrossId:(int)cross_id invitation:(NSDictionary*)invitationdict;
+- (void) updateCrossWithCrossId:(int)cross_id change:(NSDictionary*)changes;
 
 - (NSArray*) getCommentWithEventid:(int)eventid;
 - (NSArray*) getRecentEventObj;

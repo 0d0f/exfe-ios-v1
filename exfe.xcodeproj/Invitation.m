@@ -16,6 +16,7 @@
 @synthesize provider;
 @synthesize state;
 @synthesize avatar;
+@synthesize updated_at;
 
 - (id)init
 {
@@ -47,6 +48,7 @@
         
         invitation.provider=[dict objectForKey:@"provider"];
         invitation.identity_id=[[dict objectForKey:@"identity_id"] integerValue];
+        invitation.updated_at=[dict objectForKey:@"updated_at"];
 //    }
     return invitation;
 }

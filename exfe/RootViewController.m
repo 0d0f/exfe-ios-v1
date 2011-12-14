@@ -44,6 +44,7 @@
         DBUtil *dbu=[DBUtil sharedManager];
         events=[dbu getRecentEventObj];
     }
+    
 }
 //- (void)dorefresh
 //{
@@ -55,25 +56,186 @@
 //}
 - (void) refresh
 {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];  
+    NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
+    if(lastUpdateTime==nil)
+        [self LoadUserEvents]; 
+    else
+        [self LoadUpdate];
     
-    [self LoadUserEvents]; 
     [self stopLoading];
 
-//    [NSThread detachNewThreadSelector:@selector(dorefresh) toTarget:self withObject:nil];
+    [pool drain];    
 }
 
 - (BOOL)LoadUserEventsFromDB
 {
     DBUtil *dbu=[DBUtil sharedManager];
     events=[dbu getRecentEventObj];
+    
+//    lastupdatetime
     [tableview reloadData];
+    NSString *lastUpdateTime=[dbu getLastEventUpdateTime];
+    [[NSUserDefaults standardUserDefaults] setObject:lastUpdateTime  forKey:@"lastupdatetime"];
     return NO;
+}
+- (void)LoadUpdate
+{
+    NSLog(@"load user update");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
+    UIApplication* mapp = [UIApplication sharedApplication];
+    mapp.networkActivityIndicatorVisible = YES;
+    if(app.api_key==nil)
+        return;
+    APIHandler *api=[[APIHandler alloc]init];
+    NSString *responseString=[api getUpdate];
+    NSLog(@"%@",responseString);
+    [api release];
+    DBUtil *dbu=[DBUtil sharedManager];
+    id jsonobj=[responseString JSONValue];
+    id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
+    if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
+    {
+        id updateobjs=[jsonobj objectForKey:@"response"];
+        if([updateobjs isKindOfClass:[NSArray class]])
+        {
+            NSArray *updatelist=(NSArray*)updateobjs;
+            int count=[updatelist count];
+            for(int i=count-1;i>=0;i--)
+            {
+                NSDictionary *updateobj=[updatelist objectAtIndex:i];
+                id conversation=[updateobj objectForKey:@"conversation"];
+                NSArray *confirmed=[updateobj objectForKey:@"confirmed"];
+                NSArray *declined=[updateobj objectForKey:@"declined"];
+                NSArray *change=[updateobj objectForKey:@"change"];
+                
+                int cross_id=[[updateobj objectForKey:@"cross_id"] intValue];
+                if([conversation isKindOfClass:[NSArray class]])
+                {
+                        NSArray *conversations=(NSArray*)conversation;
+                        NSMutableArray *objs=[[NSMutableArray alloc]initWithCapacity:50];
+                        for(int idx=[conversations count]-1;idx>=0;idx--)
+                        {
+                            NSDictionary *conversationobj=[conversations objectAtIndex:idx];
+                            id meta=[[conversationobj objectForKey:@"meta"] JSONValue];
+                            if([meta isKindOfClass: [NSDictionary class]])
+                            {
+                                NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
+
+                                id postid=[meta objectForKey:@"id"];
+                                if(postid!=nil)
+                                {
+                                    [dict setObject:postid forKey:@"id"];
+                                    [dict setObject:[conversationobj objectForKey:@"message"] forKey:@"content"];
+                                    [dict setObject:[conversationobj objectForKey:@"identity"] forKey:@"identity"];
+                                    [dict setObject:[conversationobj objectForKey:@"time"] forKey:@"created_at"];
+                                    [dict setObject:[conversationobj objectForKey:@"time"] forKey:@"updated_at"];
+                                    [objs addObject:dict];
+                                    [dict release];
+                                }
+                            }
+                        }
+                        if([objs count]>0)
+                            [dbu updateCommentobjWithid:cross_id event:objs];   
+                        [objs release];
+                }
+                if([confirmed isKindOfClass:[NSArray class]])
+                {
+                    for(int idx=[confirmed count]-1;idx>=0;idx--)
+                    {
+                        NSDictionary *confirmedobj=[confirmed objectAtIndex:idx];
+                        id meta=[[confirmedobj objectForKey:@"meta"] JSONValue];
+                        NSDictionary *identity=[confirmedobj objectForKey:@"identity"];
+                        if([meta isKindOfClass: [NSDictionary class]])
+                        {
+                            NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
+                            
+                            id invitation_id = [meta objectForKey:@"id"];
+                            if(invitation_id!=nil)
+                            {
+                                [dict setObject:invitation_id forKey:@"invitation_id"];
+                                [dict setObject:@"1" forKey:@"state"];
+                                [dict setObject:[identity objectForKey:@"name"]  forKey:@"name"];
+                                if([meta objectForKey:@"provider"]==nil)
+                                    [dict setObject:@""  forKey:@"provider"];
+                                else
+                                    [dict setObject:[meta objectForKey:@"provider"]  forKey:@"provider"];
+                                [dict setObject:[identity objectForKey:@"avatar_file_name"]  forKey:@"avatar_file_name"];
+                                [dict setObject:[confirmedobj objectForKey:@"time"] forKey:@"updated_at"];
+                                [dbu updateInvitationWithCrossId:cross_id invitation:dict];
+                                [dict release];
+                            }
+                        }
+                    }
+                }
+                if([declined isKindOfClass:[NSArray class]])
+                {
+                    for(int idx=[declined count]-1;idx>=0;idx--)
+                    {
+                        NSDictionary *declinedobj=[declined objectAtIndex:idx];
+                        id meta=[[declinedobj objectForKey:@"meta"] JSONValue];
+                        NSDictionary *identity=[declinedobj objectForKey:@"identity"];
+                        if([meta isKindOfClass: [NSDictionary class]])
+                        {
+                            NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
+                            
+                            id invitation_id = [meta objectForKey:@"id"];
+                            if(invitation_id!=nil)
+                            {
+                                [dict setObject:invitation_id forKey:@"invitation_id"];
+                                [dict setObject:@"0" forKey:@"state"];
+                                [dict setObject:[identity objectForKey:@"name"]  forKey:@"name"];
+                                if([meta objectForKey:@"provider"]==nil)
+                                    [dict setObject:@""  forKey:@"provider"];
+                                else
+                                    [dict setObject:[meta objectForKey:@"provider"]  forKey:@"provider"];
+                                [dict setObject:[identity objectForKey:@"avatar_file_name"]  forKey:@"avatar_file_name"];
+                                [dict setObject:[declinedobj objectForKey:@"time"] forKey:@"updated_at"];
+                                [dbu updateInvitationWithCrossId:cross_id invitation:dict];
+                                [dict release];
+                            }
+                        }
+                    }
+                }
+                if([change isKindOfClass:[NSDictionary class]])
+                {
+//                    NSArray *keys=[(NSDictionary*)change allKeys];
+//                    for (int idx=0;i<[keys count];i++)
+//                    {
+//                        NSString *key=[keys objectAtIndex:idx];
+//                        id changeobj=[(NSDictionary*)change objectForKey:key];
+//                    }
+                }
+                
+                NSLog(@"%@",updateobj);
+            }
+        }
+
+    }
+
+//        id crosses=[[jsonobj objectForKey:@"response"] objectForKey:@"crosses"];
+//        if([crosses isKindOfClass:[NSArray class]])
+//        {
+//            [self UpdateDBWithEventDicts:(NSArray*)crosses];
+//        }
+//    else
+//    {
+//        NSLog(@"error: %@",[[jsonobj objectForKey:@"meta"] objectForKey:@"error"]);
+//        
+//    }
+    
+    mapp.networkActivityIndicatorVisible = NO;
+//    [self LoadUserEventsFromDB];
+    
+    
+    [pool drain];    
 }
 
 - (void)LoadUserEvents
 {
     NSLog(@"load user events");
-    
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     
     UIApplication* mapp = [UIApplication sharedApplication];
@@ -104,6 +266,9 @@
 
     mapp.networkActivityIndicatorVisible = NO;
     [self LoadUserEventsFromDB];
+    
+    
+    [pool drain];
     
 }
 - (void)UpdateDBWithEventDicts:(NSArray*)_events
@@ -160,8 +325,7 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *MyIdentifier = @"MyIdentifier";
-    MyIdentifier = @"tblCellView";
+    static NSString *MyIdentifier = @"tblCrossCellView";
     
     CrossCellView *cell = (CrossCellView *)[tableView dequeueReusableCellWithIdentifier:MyIdentifier];
     if(cell == nil) {
@@ -176,12 +340,24 @@
     User* user=[dbu getUserWithid:event.creator_id];
     if(user.avatar_file_name!=nil)
     {
-        NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-//        NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
-        NSString *imgurl = [ImgCache getImgUrl:imgName];
+        dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
         
-        UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
-        [cell setAvartar:image];
+        dispatch_async(imgQueue, ^{
+            NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+            NSString *imgurl = [ImgCache getImgUrl:imgName];
+            
+            UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
+
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(image!=nil && ![image isEqual:[NSNull null]]) 
+                    [cell setAvartar:image];
+
+            });
+        });
+        
+        dispatch_release(imgQueue);        
+        
     }    
     return cell;
 }
@@ -220,6 +396,7 @@
 
 - (void)dealloc
 {
+    [events release];
     [eventData release];
     [super dealloc];
 }

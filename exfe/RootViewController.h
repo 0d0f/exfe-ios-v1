@@ -31,6 +31,7 @@
 
 - (void)LoadUserEvents;
 - (BOOL)LoadUserEventsFromDB;
+- (void)LoadUpdate;
 - (void)UpdateDBWithEventDicts:(NSArray*)events;
 - (void) refresh;
 - (void)dorefresh;

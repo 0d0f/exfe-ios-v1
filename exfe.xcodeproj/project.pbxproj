@@ -20,7 +20,6 @@
 		7861AA8313523F9200FA13FA /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7861AA8113523F9200FA13FA /* LoginViewController.m */; };
 		7861AA8413523F9200FA13FA /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7861AA8213523F9200FA13FA /* LoginViewController.xib */; };
 		7861AAE61354225E00FA13FA /* APIHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7861AAE51354225D00FA13FA /* APIHandler.m */; };
-		7861AAE9135430EB00FA13FA /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 7861AAE8135430EB00FA13FA /* NSData+Base64.m */; };
 		7882BC8E137078A2004F9DBD /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882BC8D137078A2004F9DBD /* libsqlite3.dylib */; };
 		7882BC92137079A4004F9DBD /* DBUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7882BC91137079A4004F9DBD /* DBUtil.m */; };
 		7882BCCD137458F5004F9DBD /* exfe.db in Resources */ = {isa = PBXBuildFile; fileRef = 7882BCCC137458F5004F9DBD /* exfe.db */; };
@@ -57,6 +56,9 @@
 		78BDB2F513A773A1004561EA /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDB2F413A773A0004561EA /* User.m */; };
 		78C1D4091429C465008131BC /* CrossCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78C1D4081429C465008131BC /* CrossCellView.m */; };
 		78C1D40C1429D30B008131BC /* CrossCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78C1D40B1429D30B008131BC /* CrossCellView.xib */; };
+		78D0D65B148F5EFD00EA327C /* ConversationCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D0D65A148F5EFD00EA327C /* ConversationCellView.xib */; };
+		78D0D65F148F5F5300EA327C /* ConversationCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0D65E148F5F5200EA327C /* ConversationCellView.m */; };
+		78D0D668149131BC00EA327C /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0D667149131BB00EA327C /* NSData+Base64.m */; };
 		78D7AA7913BE12C7009495DA /* ConversionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7AA7713BE12C6009495DA /* ConversionTableViewController.m */; };
 		78D7AA7A13BE12C7009495DA /* ConversionTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */; };
 		78F75BC813AD3BBA00C7B3CF /* UIExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F75BC313AD3BBA00C7B3CF /* UIExpandingTextView.m */; };
@@ -102,8 +104,6 @@
 		7861AA8213523F9200FA13FA /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
 		7861AAE41354225C00FA13FA /* APIHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIHandler.h; sourceTree = "<group>"; };
 		7861AAE51354225D00FA13FA /* APIHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIHandler.m; sourceTree = "<group>"; };
-		7861AAE7135430EA00FA13FA /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
-		7861AAE8135430EB00FA13FA /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		7882BC8D137078A2004F9DBD /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		7882BC90137079A4004F9DBD /* DBUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBUtil.h; sourceTree = "<group>"; };
 		7882BC91137079A4004F9DBD /* DBUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBUtil.m; sourceTree = "<group>"; };
@@ -164,6 +164,11 @@
 		78C1D4071429C464008131BC /* CrossCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CrossCellView.h; sourceTree = "<group>"; };
 		78C1D4081429C465008131BC /* CrossCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CrossCellView.m; sourceTree = "<group>"; };
 		78C1D40B1429D30B008131BC /* CrossCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CrossCellView.xib; sourceTree = "<group>"; };
+		78D0D65A148F5EFD00EA327C /* ConversationCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConversationCellView.xib; sourceTree = "<group>"; };
+		78D0D65D148F5F5200EA327C /* ConversationCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConversationCellView.h; sourceTree = "<group>"; };
+		78D0D65E148F5F5200EA327C /* ConversationCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationCellView.m; sourceTree = "<group>"; };
+		78D0D666149131BB00EA327C /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		78D0D667149131BB00EA327C /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		78D7AA7613BE12C6009495DA /* ConversionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConversionTableViewController.h; path = exfe.xcodeproj/ConversionTableViewController.h; sourceTree = SOURCE_ROOT; };
 		78D7AA7713BE12C6009495DA /* ConversionTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ConversionTableViewController.m; path = exfe.xcodeproj/ConversionTableViewController.m; sourceTree = SOURCE_ROOT; };
 		78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ConversionTableViewController.xib; path = exfe.xcodeproj/ConversionTableViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -274,6 +279,8 @@
 		788C4211133FA3D000AAA425 /* exfe */ = {
 			isa = PBXGroup;
 			children = (
+				78D0D666149131BB00EA327C /* NSData+Base64.h */,
+				78D0D667149131BB00EA327C /* NSData+Base64.m */,
 				78A2B92813C4B2DD00032F61 /* JSON */,
 				78F75BDE13AFA83700C7B3CF /* PullRefreshTableViewController.h */,
 				78F75BDF13AFA83700C7B3CF /* PullRefreshTableViewController.m */,
@@ -289,13 +296,14 @@
 				7861AA8113523F9200FA13FA /* LoginViewController.m */,
 				7860596913437CE70092E962 /* MeViewController.h */,
 				7860596A13437CE80092E962 /* MeViewController.m */,
-				7861AAE7135430EA00FA13FA /* NSData+Base64.h */,
-				7861AAE8135430EB00FA13FA /* NSData+Base64.m */,
 				7856B7AE1358A06100B97BA6 /* EventViewController.h */,
 				7856B7AF1358A06100B97BA6 /* EventViewController.m */,
 				78D7AA7613BE12C6009495DA /* ConversionTableViewController.h */,
 				78D7AA7713BE12C6009495DA /* ConversionTableViewController.m */,
 				78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */,
+				78D0D65D148F5F5200EA327C /* ConversationCellView.h */,
+				78D0D65E148F5F5200EA327C /* ConversationCellView.m */,
+				78D0D65A148F5EFD00EA327C /* ConversationCellView.xib */,
 				78BDB2F313A773A0004561EA /* User.h */,
 				78BDB2F413A773A0004561EA /* User.m */,
 				7894122813A2AEC2005B41F7 /* Cross.h */,
@@ -483,6 +491,7 @@
 				78125A141424CD5B0062BBD8 /* chat@2x~iphone.png in Resources */,
 				78125A151424CD5B0062BBD8 /* chat~iphone.png in Resources */,
 				78C1D40C1429D30B008131BC /* CrossCellView.xib in Resources */,
+				78D0D65B148F5EFD00EA327C /* ConversationCellView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -524,7 +533,6 @@
 				7860596C13437CE80092E962 /* MeViewController.m in Sources */,
 				7861AA8313523F9200FA13FA /* LoginViewController.m in Sources */,
 				7861AAE61354225E00FA13FA /* APIHandler.m in Sources */,
-				7861AAE9135430EB00FA13FA /* NSData+Base64.m in Sources */,
 				7856B7B11358A06200B97BA6 /* EventViewController.m in Sources */,
 				7882BC92137079A4004F9DBD /* DBUtil.m in Sources */,
 				7894122A13A2AEC2005B41F7 /* Cross.m in Sources */,
@@ -550,6 +558,8 @@
 				78A2B94C13C4B2DD00032F61 /* SBJsonUTF8Stream.m in Sources */,
 				78A2B94D13C4B2DD00032F61 /* SBJsonWriter.m in Sources */,
 				78C1D4091429C465008131BC /* CrossCellView.m in Sources */,
+				78D0D65F148F5F5300EA327C /* ConversationCellView.m in Sources */,
+				78D0D668149131BC00EA327C /* NSData+Base64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -54,5 +54,5 @@
 - (void)refresh;
 - (void)toconversation;
 - (void)LoadEvent;
-- (void)postComment:(NSString*)inputtext;
+//- (void)postComment:(NSString*)inputtext;
 @end

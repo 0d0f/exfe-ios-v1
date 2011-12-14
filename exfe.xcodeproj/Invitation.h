@@ -17,6 +17,7 @@
     NSString* provider;
     NSInteger state;
     NSString* avatar;
+    NSString* updated_at;
     
 }
 @property NSInteger id;
@@ -26,6 +27,7 @@
 @property (retain,nonatomic) NSString* provider;
 @property NSInteger state;
 @property (retain,nonatomic) NSString* avatar;
+@property (retain,nonatomic) NSString* updated_at;
 
 + (Invitation*)initWithDict:(NSDictionary*)dict EventID:(NSInteger)eid;
 

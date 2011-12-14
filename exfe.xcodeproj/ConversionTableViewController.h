@@ -8,11 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import "PullRefreshTableViewController.h"
+#import "ConversationCellView.h"
 
 @interface ConversionTableViewController : PullRefreshTableViewController 
 {
     int eventid;
     NSMutableArray *comments;
+    
+    IBOutlet ConversationCellView *tblCell;
 }
 @property int eventid;
 @property (retain,nonatomic) NSMutableArray* comments;
