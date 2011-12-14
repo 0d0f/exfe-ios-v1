@@ -151,7 +151,7 @@ static sqlite3 *database;
 	} 
     NSArray *keys=[(NSDictionary*)changes allKeys];
     sqlite3_stmt *stm=nil;
-    const char *selectsql = "select * from cross_changed where cross_id=? and field=? and updated_at>?;";
+    const char *selectsql = "select * from cross_changed where cross_id_field_key=? and updated_at>?;";
 
     if(sqlite3_prepare_v2(database, selectsql, -1, &stm, NULL)==SQLITE_OK)
     {
@@ -161,21 +161,37 @@ static sqlite3 *database;
 
             id changeobj=[(NSDictionary*)changes objectForKey:key];
             NSString *time=[changeobj objectForKey:@"time"];
-            sqlite3_bind_int(stm, 1, cross_id);  
-            sqlite3_bind_text(stm,2,[key UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(stm,3,[time UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(stm,1,[[NSString stringWithFormat:@"%i_%@",cross_id,key] UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(stm,2,[time UTF8String], -1, SQLITE_TRANSIENT);
 
             if(sqlite3_step(stm) != SQLITE_ROW)
             {
-                const char *sql = "insert or replace into cross_changed (cross_id,field,updated_at) values(?,?,?)";
+                const char *sql = "insert or replace into cross_changed (cross_id_field_key,updated_at) values(?,?);";
                 if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
                 {
-                    sqlite3_bind_int(stm, 1, cross_id); 
-                    sqlite3_bind_text(stm,2,[key UTF8String], -1, SQLITE_TRANSIENT);
-                    sqlite3_bind_text(stm,3,[time UTF8String], -1, SQLITE_TRANSIENT);
+                    sqlite3_bind_text(stm,1,[[NSString stringWithFormat:@"%i_%@",cross_id,key] UTF8String], -1, SQLITE_TRANSIENT);
+                    sqlite3_bind_text(stm,2,[time UTF8String], -1, SQLITE_TRANSIENT);
                     
                     if(sqlite3_step(stm)== SQLITE_DONE)
                     {
+                        const char *updatesql =[[NSString stringWithFormat:@"update crosses set %@=? where id=?",key] UTF8String];
+                        if(sqlite3_prepare_v2(database, updatesql, -1, &stm, NULL)==SQLITE_OK)
+                        {
+                            NSString *newvalue=[changeobj objectForKey:@"new_value"];
+
+                            sqlite3_bind_text(stm,1,[newvalue UTF8String], -1, SQLITE_TRANSIENT);
+                            sqlite3_bind_int(stm, 2, cross_id); 
+                            if(sqlite3_step(stm)== SQLITE_DONE)
+                            {
+                                
+                            }
+                            else 
+                            {
+                                NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+                            }            
+
+                        }
+
                         
                     }
                     else 

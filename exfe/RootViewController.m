@@ -200,12 +200,7 @@
                 }
                 if([change isKindOfClass:[NSDictionary class]])
                 {
-//                    NSArray *keys=[(NSDictionary*)change allKeys];
-//                    for (int idx=0;i<[keys count];i++)
-//                    {
-//                        NSString *key=[keys objectAtIndex:idx];
-//                        id changeobj=[(NSDictionary*)change objectForKey:key];
-//                    }
+                    [dbu updateCrossWithCrossId:cross_id change:(NSDictionary*)change];
                 }
                 
                 NSLog(@"%@",updateobj);
@@ -214,19 +209,9 @@
 
     }
 
-//        id crosses=[[jsonobj objectForKey:@"response"] objectForKey:@"crosses"];
-//        if([crosses isKindOfClass:[NSArray class]])
-//        {
-//            [self UpdateDBWithEventDicts:(NSArray*)crosses];
-//        }
-//    else
-//    {
-//        NSLog(@"error: %@",[[jsonobj objectForKey:@"meta"] objectForKey:@"error"]);
-//        
-//    }
     
     mapp.networkActivityIndicatorVisible = NO;
-//    [self LoadUserEventsFromDB];
+    [self LoadUserEventsFromDB];
     
     
     [pool drain];    
