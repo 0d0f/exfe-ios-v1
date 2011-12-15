@@ -33,6 +33,41 @@ static sqlite3 *database;
     }
     return sharedManager;
 }
+
++ (void) upgradeDB
+{
+	NSString *dbpath=[DBUtil DBPath];
+	NSFileManager *fileManager=[NSFileManager defaultManager];
+	BOOL success=[fileManager fileExistsAtPath:dbpath];
+	if(!success)
+	{
+		return 0;
+	} 
+    sqlite3_stmt *stm=nil;
+    const char *sql = "select flag from crosses where id=1;";
+    int result=sqlite3_prepare_v2(database, sql, -1, &stm, NULL);
+    if(result==SQLITE_OK)
+    {
+    }
+    else
+    {
+        const char *upgradesql = "ALTER TABLE  `crosses` ADD  `flag` INT NOT NULL DEFAULT  '0';";
+        if(sqlite3_prepare_v2(database, upgradesql, -1, &stm, NULL)==SQLITE_OK)
+        {
+            if(sqlite3_step(stm)== SQLITE_DONE)
+            {
+                
+            }
+            else 
+            {
+                NSAssert1(0, @"Error while upgrade db. '%s'", sqlite3_errmsg(database));
+            }
+        }
+
+    }
+    sqlite3_finalize(stm);     
+}
+
 - (void) emptyDBCache
 {
 	NSString *dbpath=[DBUtil DBPath];
@@ -46,12 +81,8 @@ static sqlite3 *database;
     const char *sql = "delete from eventobject;";
     if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
     {
-        //        sqlite3_bind_int(stm, 1, eventid);  
-        //        sqlite3_bind_text(stm,2, [eventjson UTF8String], -1, SQLITE_TRANSIENT);
         if(sqlite3_step(stm)== SQLITE_DONE)
         {
-            //				rowid = sqlite3_last_insert_rowid(database);
-            //				//NSLog(@"rowid:%d",rowid);
         }
         else 
         {
@@ -136,10 +167,11 @@ static sqlite3 *database;
             
         }
     }
-    
+    sqlite3_finalize(stm);     
+    [self setCrossStatusWithCrossId:cross_id status:1];
  
 }
-- (void) updateCrossWithCrossId:(int)cross_id change:(NSDictionary*)changes
+- (NSDate*) updateCrossWithCrossId:(int)cross_id change:(NSDictionary*)changes lastupdatetime:(NSDate*)lastUpdateTime_datetime
 {
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
@@ -149,6 +181,9 @@ static sqlite3 *database;
 	{
 		return 0;
 	} 
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+
     NSArray *keys=[(NSDictionary*)changes allKeys];
     sqlite3_stmt *stm=nil;
     const char *selectsql = "select * from cross_changed where cross_id_field_key=? and updated_at>?;";
@@ -161,6 +196,7 @@ static sqlite3 *database;
 
             id changeobj=[(NSDictionary*)changes objectForKey:key];
             NSString *time=[changeobj objectForKey:@"time"];
+            
             sqlite3_bind_text(stm,1,[[NSString stringWithFormat:@"%i_%@",cross_id,key] UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_text(stm,2,[time UTF8String], -1, SQLITE_TRANSIENT);
 
@@ -183,7 +219,8 @@ static sqlite3 *database;
                             sqlite3_bind_int(stm, 2, cross_id); 
                             if(sqlite3_step(stm)== SQLITE_DONE)
                             {
-                                
+                                NSDate *update_datetime = [dateFormat dateFromString:time]; 
+                                lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
                             }
                             else 
                             {
@@ -207,6 +244,11 @@ static sqlite3 *database;
             
         }
     }
+    [dateFormat release];
+    sqlite3_finalize(stm);     
+    [self setCrossStatusWithCrossId:cross_id status:1];
+
+    return lastUpdateTime_datetime;
 }
 
 - (void) updateInvitationobjWithid:(int)eventid event:(NSArray*)invitationdict
@@ -324,7 +366,7 @@ static sqlite3 *database;
 //}
 - (NSArray*) getRecentEventObj
 {
-    const char *sql="SELECT id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state from crosses order by updated_at desc limit 20;";
+    const char *sql="SELECT id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,flag from crosses order by updated_at desc limit 20;";
     NSMutableArray *eventlist=[[NSMutableArray alloc] initWithCapacity:50];
     
     NSString *dbpath=[DBUtil DBPath];
@@ -357,6 +399,7 @@ static sqlite3 *database;
             eventobj.created_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 10)];
             eventobj.updated_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 11)];
             eventobj.state=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 12)];
+            eventobj.flag = sqlite3_column_int(stm, 13);
             [eventlist addObject:eventobj];
         }
     }
@@ -460,7 +503,35 @@ static sqlite3 *database;
     sqlite3_finalize(stm);
     return invitationlist;      
 }
+- (void) setCrossStatusWithCrossId:(int)cross_id status:(int)status
+{
+	NSString *dbpath=[DBUtil DBPath];
+	NSFileManager *fileManager=[NSFileManager defaultManager];
+	BOOL success=[fileManager fileExistsAtPath:dbpath];
+	[fileManager release];
+	if(!success)
+	{
+		return 0;
+	} 
+    sqlite3_stmt *stm=nil;
+    const char *sql = "update crosses set flag=? where id=?";
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        sqlite3_bind_int(stm, 1,status ); 
+        sqlite3_bind_int(stm, 2,cross_id ); 
+        if(sqlite3_step(stm)== SQLITE_DONE)
+        {
+            
+        }
+        else 
+        {
+            NSAssert1(0, @"Error while set cross status. '%s'", sqlite3_errmsg(database));
+        }            
 
+    }
+    
+    
+}
 - (void) updateCommentobjWithid:(int)eventid event:(NSArray*)commentdict
 {
 	NSString *dbpath=[DBUtil DBPath];
@@ -479,7 +550,6 @@ static sqlite3 *database;
     if(![commentobj.comment isEqualToString:@""])
     if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
     {
-            
             sqlite3_bind_int(stm, 1,commentobj.id ); 
             sqlite3_bind_int(stm, 2, eventid); 
             sqlite3_bind_text(stm,3,[commentobj.comment UTF8String], -1, SQLITE_TRANSIENT);
@@ -503,8 +573,8 @@ static sqlite3 *database;
         NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
     }
     }
-
     sqlite3_finalize(stm); 
+    [self setCrossStatusWithCrossId:eventid status:1];
 }
 
 - (void) updateEventobjWithid:(int)eventid event:(NSDictionary*)eventobj

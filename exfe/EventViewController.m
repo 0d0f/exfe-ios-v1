@@ -114,24 +114,7 @@ const int INVITATION_MAYBE=0;
 - (void)viewWillAppear:(BOOL)animated 
 {
 	[super viewWillAppear:animated];
-	/* Listen for keyboard */
-//	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    
-//    NSString *reqSysVer = @"5.0";
-//    NSString *currSysVer = [[UIDevice currentDevice] systemVersion]; 
-//
-//    if ([currSysVer compare:reqSysVer options:NSNumericSearch] != NSOrderedAscending) 
-//    {         
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
-//    }
-//    else
-//    {
-//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-//    }
-//    
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 
-    //    [UIView transitionFromView:conversionViewController.view toView:self.view duration:1 options:UIViewAnimationOptionTransitionFlipFromRight completion:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];

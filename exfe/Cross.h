@@ -22,6 +22,7 @@
     NSString* created_at;
     NSString* updated_at;
     NSInteger state;
+    NSInteger flag;
 }
 
 @property NSInteger id;
@@ -37,6 +38,7 @@
 @property (retain,nonatomic) NSString* created_at;
 @property (retain,nonatomic) NSString* updated_at;
 @property NSInteger state;
+@property NSInteger flag;
 
 + (Cross*)initWithDict:(NSDictionary*)dict;
 @end

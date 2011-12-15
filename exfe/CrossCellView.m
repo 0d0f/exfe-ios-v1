@@ -38,4 +38,8 @@
     cellAvatar.image=_img;
 }
 
+- (void)setFlagLight:(UIImage*)_img
+{
+    cellflaglight.image=_img;    
+}
 @end

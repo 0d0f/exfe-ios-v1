@@ -133,14 +133,6 @@
     DBUtil *dbu=[DBUtil sharedManager];
     NSString *lastUpdateTime=[dbu getLastEventUpdateTime];
 
-//    NSDate *theDate = nil;
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    
-//
-//    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//    theDate = [dateFormatter dateFromString:lastUpdateTime];  
-//    [dateFormatter release];
-    
     NSError *error = nil;
     NSString *apiurl=nil;
     if(lastUpdateTime==nil)
@@ -165,19 +157,7 @@
     [lastUpdateTime release];
     return responseString;
 }
-- (NSString*)getUserNews
-{
-    exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
-    
-    NSLog(@"get User News:%@",app.username);
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/users/%i/news.json?api_key=%@",[APIHandler URL_API_ROOT],app.userid,api_key]]];
-    [request setHTTPShouldHandleCookies:NO];
-    
-    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@",responseString);
-    return responseString;     
-}
+
 - (BOOL) regDeviceToken:(NSString*) token
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -192,7 +172,6 @@
     
     NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/users/%i/regdevicetoken?token=%@",[APIHandler URL_API_ROOT],app.userid,api_key]]];
-
     
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
@@ -226,6 +205,7 @@
     
     NSLog(@"get User update:%@",app.username);
     NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
+
     if(lastUpdateTime==nil)
         lastUpdateTime=@"0000-00-00 00:00:00";
 

@@ -42,6 +42,7 @@
     NSString *uidstr=[[NSUserDefaults standardUserDefaults] stringForKey:@"userid"]; 
     
     [DBUtil sharedManager];
+    [DBUtil upgradeDB];
     //check user login
     if(uname!=nil && [apikey length]>2 && [uidstr intValue]>0)
     {

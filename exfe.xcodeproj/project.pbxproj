@@ -51,6 +51,7 @@
 		78A2B94B13C4B2DD00032F61 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B93D13C4B2DD00032F61 /* SBJsonTokeniser.m */; };
 		78A2B94C13C4B2DD00032F61 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B93F13C4B2DD00032F61 /* SBJsonUTF8Stream.m */; };
 		78A2B94D13C4B2DD00032F61 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B94113C4B2DD00032F61 /* SBJsonWriter.m */; };
+		78B5EEAC149A83AE00F2ACE1 /* flaglight.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B5EEAB149A83AE00F2ACE1 /* flaglight.png */; };
 		78BDB2EC13A512B7004561EA /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDB2EB13A512B7004561EA /* Comment.m */; };
 		78BDB2F213A67B2F004561EA /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDB2F113A67B2F004561EA /* Invitation.m */; };
 		78BDB2F513A773A1004561EA /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDB2F413A773A0004561EA /* User.m */; };
@@ -155,6 +156,7 @@
 		78A2B93F13C4B2DD00032F61 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
 		78A2B94013C4B2DD00032F61 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		78A2B94113C4B2DD00032F61 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		78B5EEAB149A83AE00F2ACE1 /* flaglight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = flaglight.png; sourceTree = "<group>"; };
 		78BDB2EA13A512B7004561EA /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
 		78BDB2EB13A512B7004561EA /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
 		78BDB2F013A67B2E004561EA /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Invitation.h; path = exfe.xcodeproj/Invitation.h; sourceTree = SOURCE_ROOT; };
@@ -222,6 +224,7 @@
 		7861AA67135230A400FA13FA /* resource */ = {
 			isa = PBXGroup;
 			children = (
+				78B5EEAB149A83AE00F2ACE1 /* flaglight.png */,
 				7833E95413C5B20A00FE3EDA /* x.html */,
 				7833E95713C6030600FE3EDA /* btn.png */,
 				7816A7471423C4DC00818601 /* app_btn.png */,
@@ -492,6 +495,7 @@
 				78125A151424CD5B0062BBD8 /* chat~iphone.png in Resources */,
 				78C1D40C1429D30B008131BC /* CrossCellView.xib in Resources */,
 				78D0D65B148F5EFD00EA327C /* ConversationCellView.xib in Resources */,
+				78B5EEAC149A83AE00F2ACE1 /* flaglight.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

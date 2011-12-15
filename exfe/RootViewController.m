@@ -72,11 +72,7 @@
 {
     DBUtil *dbu=[DBUtil sharedManager];
     events=[dbu getRecentEventObj];
-    
-//    lastupdatetime
     [tableview reloadData];
-    NSString *lastUpdateTime=[dbu getLastEventUpdateTime];
-    [[NSUserDefaults standardUserDefaults] setObject:lastUpdateTime  forKey:@"lastupdatetime"];
     return NO;
 }
 - (void)LoadUpdate
@@ -97,6 +93,12 @@
     id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
     if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
     {
+        NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+
+        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate *lastUpdateTime_datetime = [dateFormat dateFromString:lastUpdateTime]; 
+        
         id updateobjs=[jsonobj objectForKey:@"response"];
         if([updateobjs isKindOfClass:[NSArray class]])
         {
@@ -133,11 +135,15 @@
                                     [dict setObject:[conversationobj objectForKey:@"time"] forKey:@"updated_at"];
                                     [objs addObject:dict];
                                     [dict release];
+                                    NSDate *update_datetime = [dateFormat dateFromString:[conversationobj objectForKey:@"time"]]; 
+                                    lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
                                 }
                             }
                         }
                         if([objs count]>0)
+                        {
                             [dbu updateCommentobjWithid:cross_id event:objs];   
+                        }
                         [objs release];
                 }
                 if([confirmed isKindOfClass:[NSArray class]])
@@ -165,6 +171,9 @@
                                 [dict setObject:[confirmedobj objectForKey:@"time"] forKey:@"updated_at"];
                                 [dbu updateInvitationWithCrossId:cross_id invitation:dict];
                                 [dict release];
+                                NSDate *update_datetime = [dateFormat dateFromString:[confirmedobj objectForKey:@"time"]]; 
+                                lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
+
                             }
                         }
                     }
@@ -194,25 +203,29 @@
                                 [dict setObject:[declinedobj objectForKey:@"time"] forKey:@"updated_at"];
                                 [dbu updateInvitationWithCrossId:cross_id invitation:dict];
                                 [dict release];
+                                NSDate *update_datetime = [dateFormat dateFromString:[declinedobj objectForKey:@"time"]]; 
+                                lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
+
                             }
                         }
                     }
                 }
                 if([change isKindOfClass:[NSDictionary class]])
                 {
-                    [dbu updateCrossWithCrossId:cross_id change:(NSDictionary*)change];
+                    NSDate* changeupdatetime=[dbu updateCrossWithCrossId:cross_id change:(NSDictionary*)change lastupdatetime:lastUpdateTime_datetime] ;
+                    lastUpdateTime_datetime=[changeupdatetime laterDate:lastUpdateTime_datetime];
+
                 }
-                
                 NSLog(@"%@",updateobj);
             }
         }
-
+        lastUpdateTime = [dateFormat stringFromDate:lastUpdateTime_datetime]; 
+        [dateFormat release];
+        [[NSUserDefaults standardUserDefaults] setObject:lastUpdateTime  forKey:@"lastupdatetime"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
     }
-
-    
     mapp.networkActivityIndicatorVisible = NO;
     [self LoadUserEventsFromDB];
-    
     
     [pool drain];    
 }
@@ -320,7 +333,20 @@
     Cross *event=[events objectAtIndex:indexPath.row];
     [cell setLabelText:event.title];
     [cell setLabelTime:[event.begin_at substringToIndex:10]];
-
+    
+    if(event.flag==1)
+    {
+        NSString *flaglightimgpath = [[NSBundle mainBundle] pathForResource:@"flaglight" ofType:@"png"];
+        UIImage *flaglightimg = [UIImage imageWithContentsOfFile:flaglightimgpath];
+        [cell setFlagLight:flaglightimg];
+    }
+    else
+    {
+//        UIImage *flaglightimg = [UIImage imageWithContentsOfFile:flaglightimgpath];
+        [cell setFlagLight:nil];
+        
+    }
+    
     DBUtil *dbu=[DBUtil sharedManager];
     User* user=[dbu getUserWithid:event.creator_id];
     if(user.avatar_file_name!=nil)
@@ -361,8 +387,10 @@
     }
     [self.navigationController pushViewController:detailViewController animated:YES];
     [detailViewController release]; 	
-
-
+    DBUtil *dbu=[DBUtil sharedManager];
+    [dbu setCrossStatusWithCrossId:event.id status:0];
+    event.flag=0;
+    [tableview reloadData];
 }
 
 - (void)didReceiveMemoryWarning

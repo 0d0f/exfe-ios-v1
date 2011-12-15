@@ -24,6 +24,8 @@
 @synthesize created_at;
 @synthesize updated_at;
 @synthesize state;
+@synthesize flag;
+
 + (Cross*)initWithDict:(NSDictionary*)dict
 {
     Cross* event= [[[self alloc] init] autorelease];
@@ -86,6 +88,11 @@
         event.state = [[dict objectForKey:@"state"] integerValue];
     else
         event.state = 0;
+
+    if([dict objectForKey:@"flag"]!=[NSNull null])
+        event.flag = [[dict objectForKey:@"flag"] integerValue];
+    else
+        event.flag = 0;
 
     return event;
 }

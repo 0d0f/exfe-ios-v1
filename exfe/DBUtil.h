@@ -17,6 +17,7 @@
 + (id)sharedManager;
 + (NSString*) DBPath;
 - (void) emptyDBCache;
++ (void) upgradeDB;
 - (void) updateEventWithid:(int)eventid event:(NSString*)eventjson;
 - (NSString*) getEventWithid:(int)eventid;
 - (void) updateEventicalWithid:(int)eventid  identifier:(NSString*) eventIdentifier;
@@ -27,7 +28,7 @@
 - (void) updateInvitationobjWithid:(int)eventid event:(NSArray*)invitationdict;
 - (void) updateUserobjWithid:(int)uid user:(NSDictionary*)userobj;
 - (void) updateInvitationWithCrossId:(int)cross_id invitation:(NSDictionary*)invitationdict;
-- (void) updateCrossWithCrossId:(int)cross_id change:(NSDictionary*)changes;
+- (NSDate*) updateCrossWithCrossId:(int)cross_id change:(NSDictionary*)changes lastupdatetime:(NSDate*)lastUpdateTime_datetime;
 
 - (NSArray*) getCommentWithEventid:(int)eventid;
 - (NSArray*) getRecentEventObj;
@@ -35,5 +36,5 @@
 - (User*) getUserWithid:(int)userid;
 - (NSString*) getLastEventUpdateTime;
 - (NSString*) getLastCommentUpdateTimeWith:(int)eventid;
-
+- (void) setCrossStatusWithCrossId:(int)cross_id status:(int)status ;
 @end
