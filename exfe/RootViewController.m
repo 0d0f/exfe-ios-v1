@@ -25,25 +25,23 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    eventData=[[NSMutableDictionary alloc]initWithCapacity:20];
+//    eventData=[[NSMutableDictionary alloc]initWithCapacity:20];
     reload=YES;
-//    timer = [NSTimer scheduledTimerWithTimeInterval: 60
-//                                             target: self
-//                                           selector: @selector(refresh)
-//                                           userInfo: nil
-//                                            repeats: YES];    
     barButtonItem = [[UIBarButtonItem alloc]
                      initWithBarButtonSystemItem:UIBarButtonSystemItemStop
                      target:self
                      action:@selector(ShowSettingView)];
 	self.navigationItem.rightBarButtonItem = barButtonItem;
-    
+//    
     if(events==nil)
     {
         DBUtil *dbu=[DBUtil sharedManager];
         events=[dbu getRecentEventObj];
     }
-    
+//    
+//    tableview.scrollsToTop=YES;
+//    [tableview scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+
 }
 
 - (void) refresh
@@ -224,8 +222,16 @@
 }
 - (void)emptyView
 {
-    [events release];
-    [eventData release];
+    NSMutableArray *discardedItems = [NSMutableArray array];
+    Cross *item;
+    
+    for (item in events) {
+            [discardedItems addObject:item];
+    }
+    
+    [events removeObjectsInArray:discardedItems];    
+//    [events release];
+//    [eventData release];
     [tableview reloadData];
 }
 - (void)LoadUserEvents
@@ -420,7 +426,7 @@
 - (void)dealloc
 {
     [events release];
-    [eventData release];
+//    [eventData release];
     [super dealloc];
 }
 

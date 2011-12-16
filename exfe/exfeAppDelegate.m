@@ -30,10 +30,11 @@
     [self copyResource];
     meViewReload=NO;
     
-    self.window.rootViewController = self.navigationController;
-   
+    [self.window addSubview:self.navigationController.view];
+    [self.window makeKeyAndVisible];
     self.navigationController.title=@"Home";
-
+//    self.window.rootViewController = self.navigationController;
+////
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 

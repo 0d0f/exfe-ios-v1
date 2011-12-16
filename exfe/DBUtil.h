@@ -32,7 +32,7 @@
 - (NSDate*) updateCrossWithCrossId:(int)cross_id change:(NSDictionary*)changes lastupdatetime:(NSDate*)lastUpdateTime_datetime;
 
 - (NSArray*) getCommentWithEventid:(int)eventid;
-- (NSArray*) getRecentEventObj;
+- (NSMutableArray*) getRecentEventObj;
 - (NSArray*) getInvitationWithEventid:(int)eventid;
 - (User*) getUserWithid:(int)userid;
 - (NSString*) getLastEventUpdateTime;

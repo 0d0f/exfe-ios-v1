@@ -405,7 +405,7 @@ static sqlite3 *database;
 //		sqlite3_finalize(stm);
 //    return eventlist;
 //}
-- (NSArray*) getRecentEventObj
+- (NSMutableArray*) getRecentEventObj
 {
     const char *sql="SELECT id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,flag from crosses order by updated_at desc limit 20;";
     NSMutableArray *eventlist=[[NSMutableArray alloc] initWithCapacity:50];

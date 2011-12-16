@@ -45,7 +45,7 @@
     
     NSArray *viewControllers = app.navigationController.viewControllers;
     RootViewController *rootViewController = [viewControllers objectAtIndex:0];
-
+    [rootViewController emptyView];
     
     [app logoutViewControllerDidFinish:self];
 

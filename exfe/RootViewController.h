@@ -18,7 +18,7 @@
     NSMutableDictionary *eventData;
     UIBarButtonItem *barButtonItem;
     IBOutlet UITableView *tableview;
-    NSArray* events;
+    NSMutableArray* events;
     BOOL reload;
     NSTimer *timer;
     
