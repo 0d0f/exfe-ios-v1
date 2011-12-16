@@ -209,7 +209,7 @@ static sqlite3 *database;
         }
     }
     sqlite3_finalize(stm);     
-    [self setCrossStatusWithCrossId:cross_id status:1];
+//    [self setCrossStatusWithCrossId:cross_id status:1];
  
 }
 - (NSDate*) updateCrossWithCrossId:(int)cross_id change:(NSDictionary*)changes lastupdatetime:(NSDate*)lastUpdateTime_datetime
@@ -287,7 +287,7 @@ static sqlite3 *database;
     }
     [dateFormat release];
     sqlite3_finalize(stm);     
-    [self setCrossStatusWithCrossId:cross_id status:1];
+//    [self setCrossStatusWithCrossId:cross_id status:1];
 
     return lastUpdateTime_datetime;
 }
@@ -615,7 +615,7 @@ static sqlite3 *database;
     }
     }
     sqlite3_finalize(stm); 
-    [self setCrossStatusWithCrossId:eventid status:1];
+//    [self setCrossStatusWithCrossId:eventid status:1];
 }
 
 - (void) updateEventobjWithid:(int)eventid event:(NSDictionary*)eventobj

@@ -133,6 +133,7 @@
                         if([objs count]>0)
                         {
                             [dbu updateCommentobjWithid:cross_id event:objs];   
+                            [dbu setCrossStatusWithCrossId:cross_id status:1];
                         }
                         [objs release];
                 }
@@ -160,6 +161,8 @@
                                 [dict setObject:[identity objectForKey:@"avatar_file_name"]  forKey:@"avatar_file_name"];
                                 [dict setObject:[confirmedobj objectForKey:@"time"] forKey:@"updated_at"];
                                 [dbu updateInvitationWithCrossId:cross_id invitation:dict];
+                                [dbu setCrossStatusWithCrossId:cross_id status:1];
+
                                 [dict release];
 
                             }
@@ -193,6 +196,8 @@
                                 [dict setObject:[identity objectForKey:@"avatar_file_name"]  forKey:@"avatar_file_name"];
                                 [dict setObject:[declinedobj objectForKey:@"time"] forKey:@"updated_at"];
                                 [dbu updateInvitationWithCrossId:cross_id invitation:dict];
+                                [dbu setCrossStatusWithCrossId:cross_id status:1];
+
                                 [dict release];
                                 NSDate *update_datetime = [dateFormat dateFromString:[declinedobj objectForKey:@"time"]]; 
                                 lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
@@ -204,6 +209,8 @@
                 if([change isKindOfClass:[NSDictionary class]])
                 {
                     NSDate* changeupdatetime=[dbu updateCrossWithCrossId:cross_id change:(NSDictionary*)change lastupdatetime:lastUpdateTime_datetime] ;
+                    [dbu setCrossStatusWithCrossId:cross_id status:1];
+
                     lastUpdateTime_datetime=[changeupdatetime laterDate:lastUpdateTime_datetime];
 
                 }
@@ -362,8 +369,6 @@
             NSString *imgurl = [ImgCache getImgUrl:imgName];
             
             UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
-
-            
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(image!=nil && ![image isEqual:[NSNull null]]) 
                     [cell setAvartar:image];
