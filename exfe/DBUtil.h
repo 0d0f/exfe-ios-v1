@@ -17,6 +17,7 @@
 + (id)sharedManager;
 + (NSString*) DBPath;
 - (void) emptyDBCache;
+- (void) emptyDBData;
 + (void) upgradeDB;
 - (void) updateEventWithid:(int)eventid event:(NSString*)eventjson;
 - (NSString*) getEventWithid:(int)eventid;

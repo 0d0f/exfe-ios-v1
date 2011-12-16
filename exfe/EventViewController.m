@@ -9,21 +9,13 @@
 #import "EventViewController.h"
 #import "APIHandler.h"
 #import "DBUtil.h"
-//#import "JSON/JSON.h"
 #import "JSON/SBJson.h"
 #import <EventKit/EventKit.h>
 #import "ImgCache.h"
 
-//#define FONT_SIZE 14.0f
-//#define CELL_CONTENT_WIDTH 320.0f
-//#define CELL_CONTENT_MARGIN 10.0f
-//#define CELL_IMAGE_WIDTH 40.0f
-//#define CELL_IMAGE_HEIGHT 40.0f
-
 const int INVITATION_YES=1;
 const int INVITATION_NO=2;
 const int INVITATION_MAYBE=0;
-
 
 @implementation EventViewController
 @synthesize event;
@@ -70,23 +62,13 @@ const int INVITATION_MAYBE=0;
                      target:self
                      action:@selector(toconversation)];
     
-    
-    
-    //    barButtonItem = [[UIBarButtonItem alloc]
-    //     initWithBarButtonSystemItem:UIBarButtonSystemItemOrganize
-    //     target:self
-    //     action:@selector(toconversation)];
-    
 	self.navigationItem.rightBarButtonItem = barButtonItem;
     DBUtil *dbu=[DBUtil sharedManager];
     comments=[dbu getCommentWithEventid:self.eventid];
     
-    //    NSURL *baseURL = [NSURL fileURLWithPath:@""];
     self.navigationItem.title=eventobj.title;
     
     NSString *html=[self GenerateHtmlWithEvent];
-    //NSString *path = [[NSBundle mainBundle] bundlePath];
-    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
     NSString *documentsDirectory = [paths objectAtIndex:0]; 
     
@@ -96,8 +78,6 @@ const int INVITATION_MAYBE=0;
     showeventinfo=YES;
     
     keyboardIsVisible = NO;
-    
-    
     
     conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
     CGRect crect=conversionViewController.view.frame;

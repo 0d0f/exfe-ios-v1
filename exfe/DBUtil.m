@@ -67,7 +67,48 @@ static sqlite3 *database;
     }
     sqlite3_finalize(stm);     
 }
-
+- (void) emptyDBData
+{
+	NSString *dbpath=[DBUtil DBPath];
+	NSFileManager *fileManager=[NSFileManager defaultManager];
+	BOOL success=[fileManager fileExistsAtPath:dbpath];
+	if(!success)
+	{
+		return 0;
+	} 
+    sqlite3_stmt *stm=nil;
+    const char *sql = "delete from comments;";
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        sqlite3_step(stm);
+    }
+    sql = "delete from cross_changed;";
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        sqlite3_step(stm);
+    }
+    sql = "delete from crosses;";
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        sqlite3_step(stm);
+    }
+    sql = "delete from eventical;";
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        sqlite3_step(stm);
+    }
+    sql = "delete from invitations;";
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        sqlite3_step(stm);
+    }
+    sql = "delete from users;";
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        sqlite3_step(stm);
+    }
+    sqlite3_finalize(stm);       
+}
 - (void) emptyDBCache
 {
 	NSString *dbpath=[DBUtil DBPath];

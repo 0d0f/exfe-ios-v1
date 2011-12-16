@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "LoginViewController.h"
 #import "MeViewController.h"
-
+#import "UserSettingViewController.h"
 
 @interface exfeAppDelegate : NSObject <UIApplicationDelegate,LoginViewControllerDelegate> {
 
@@ -35,6 +35,8 @@
 @property (nonatomic, retain) IBOutlet UINavigationController *navigationController;
 
 -(void)loginViewControllerDidFinish:(LoginViewController *)loginViewController;
+-(void)logoutViewControllerDidFinish:(UserSettingViewController *)UserSettingViewController;
+- (void)showLoginView;
 - (IBAction) RefreshRootview:(id) sender;
 - (void)copyResource;
 @end

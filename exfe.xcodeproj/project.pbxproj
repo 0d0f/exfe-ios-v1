@@ -20,6 +20,8 @@
 		7861AA8313523F9200FA13FA /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7861AA8113523F9200FA13FA /* LoginViewController.m */; };
 		7861AA8413523F9200FA13FA /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7861AA8213523F9200FA13FA /* LoginViewController.xib */; };
 		7861AAE61354225E00FA13FA /* APIHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7861AAE51354225D00FA13FA /* APIHandler.m */; };
+		7864DDE9149B4B9B005DF0BE /* UserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7864DDE7149B4B9B005DF0BE /* UserSettingViewController.m */; };
+		7864DDEA149B4B9B005DF0BE /* UserSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7864DDE8149B4B9B005DF0BE /* UserSettingViewController.xib */; };
 		7882BC8E137078A2004F9DBD /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882BC8D137078A2004F9DBD /* libsqlite3.dylib */; };
 		7882BC92137079A4004F9DBD /* DBUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7882BC91137079A4004F9DBD /* DBUtil.m */; };
 		7882BCCD137458F5004F9DBD /* exfe.db in Resources */ = {isa = PBXBuildFile; fileRef = 7882BCCC137458F5004F9DBD /* exfe.db */; };
@@ -105,6 +107,9 @@
 		7861AA8213523F9200FA13FA /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginViewController.xib; sourceTree = "<group>"; };
 		7861AAE41354225C00FA13FA /* APIHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APIHandler.h; sourceTree = "<group>"; };
 		7861AAE51354225D00FA13FA /* APIHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APIHandler.m; sourceTree = "<group>"; };
+		7864DDE6149B4B9B005DF0BE /* UserSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettingViewController.h; sourceTree = "<group>"; };
+		7864DDE7149B4B9B005DF0BE /* UserSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingViewController.m; sourceTree = "<group>"; };
+		7864DDE8149B4B9B005DF0BE /* UserSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserSettingViewController.xib; sourceTree = "<group>"; };
 		7882BC8D137078A2004F9DBD /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		7882BC90137079A4004F9DBD /* DBUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBUtil.h; sourceTree = "<group>"; };
 		7882BC91137079A4004F9DBD /* DBUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBUtil.m; sourceTree = "<group>"; };
@@ -238,11 +243,15 @@
 				78F75BD213AD3EF100C7B3CF /* toolbarbg@2x~iphone.png */,
 				78F75BD313AD3EF100C7B3CF /* toolbarbg~iphone.png */,
 				7882BCCC137458F5004F9DBD /* exfe.db */,
+				78C1D40B1429D30B008131BC /* CrossCellView.xib */,
+				78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */,
+				78D0D65A148F5EFD00EA327C /* ConversationCellView.xib */,
 				788C421D133FA3D000AAA425 /* MainWindow.xib */,
 				7861AA8213523F9200FA13FA /* LoginViewController.xib */,
 				7856B7B01358A06200B97BA6 /* EventViewController.xib */,
 				7860596B13437CE80092E962 /* MeViewController.xib */,
 				788C4223133FA3D000AAA425 /* RootViewController.xib */,
+				7864DDE8149B4B9B005DF0BE /* UserSettingViewController.xib */,
 			);
 			name = resource;
 			sourceTree = "<group>";
@@ -292,7 +301,6 @@
 				788C421B133FA3D000AAA425 /* exfeAppDelegate.m */,
 				78C1D4071429C464008131BC /* CrossCellView.h */,
 				78C1D4081429C465008131BC /* CrossCellView.m */,
-				78C1D40B1429D30B008131BC /* CrossCellView.xib */,
 				788C4220133FA3D000AAA425 /* RootViewController.h */,
 				788C4221133FA3D000AAA425 /* RootViewController.m */,
 				7861AA8013523F9100FA13FA /* LoginViewController.h */,
@@ -303,10 +311,10 @@
 				7856B7AF1358A06100B97BA6 /* EventViewController.m */,
 				78D7AA7613BE12C6009495DA /* ConversionTableViewController.h */,
 				78D7AA7713BE12C6009495DA /* ConversionTableViewController.m */,
-				78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */,
 				78D0D65D148F5F5200EA327C /* ConversationCellView.h */,
 				78D0D65E148F5F5200EA327C /* ConversationCellView.m */,
-				78D0D65A148F5EFD00EA327C /* ConversationCellView.xib */,
+				7864DDE6149B4B9B005DF0BE /* UserSettingViewController.h */,
+				7864DDE7149B4B9B005DF0BE /* UserSettingViewController.m */,
 				78BDB2F313A773A0004561EA /* User.h */,
 				78BDB2F413A773A0004561EA /* User.m */,
 				7894122813A2AEC2005B41F7 /* Cross.h */,
@@ -496,6 +504,7 @@
 				78C1D40C1429D30B008131BC /* CrossCellView.xib in Resources */,
 				78D0D65B148F5EFD00EA327C /* ConversationCellView.xib in Resources */,
 				78B5EEAC149A83AE00F2ACE1 /* flaglight.png in Resources */,
+				7864DDEA149B4B9B005DF0BE /* UserSettingViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -564,6 +573,7 @@
 				78C1D4091429C465008131BC /* CrossCellView.m in Sources */,
 				78D0D65F148F5F5300EA327C /* ConversationCellView.m in Sources */,
 				78D0D668149131BC00EA327C /* NSData+Base64.m in Sources */,
+				7864DDE9149B4B9B005DF0BE /* UserSettingViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -636,8 +646,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "8BBAAB30-C8B5-4A70-9D26-E8E2FE71A564";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8BBAAB30-C8B5-4A70-9D26-E8E2FE71A564";
+				PROVISIONING_PROFILE = "14A582B3-0E85-4EA4-945B-91ACDD66B52A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "14A582B3-0E85-4EA4-945B-91ACDD66B52A";
 				SDKROOT = iphoneos;
 			};
 			name = "ad hoc";
@@ -660,8 +670,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "exfe/exfe-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "32440845-EACF-4676-A7FB-D32368828007";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "32440845-EACF-4676-A7FB-D32368828007";
+				PROVISIONING_PROFILE = "14A582B3-0E85-4EA4-945B-91ACDD66B52A";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "14A582B3-0E85-4EA4-945B-91ACDD66B52A";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -694,8 +704,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: ju han (632XXR8Q24)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: ju han (632XXR8Q24)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
@@ -705,6 +715,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				PROVISIONING_PROFILE = "29ACDC96-FBCF-4074-9481-D1A4B7A67148";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "29ACDC96-FBCF-4074-9481-D1A4B7A67148";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -713,7 +725,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: ju han";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
@@ -722,6 +734,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "27810EFD-ACC9-43D4-87AF-6F6AB8583C76";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
@@ -744,8 +757,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "exfe/exfe-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "1F05AF03-25F0-4340-BBD4-0F9D00DFB574";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "1F05AF03-25F0-4340-BBD4-0F9D00DFB574";
+				PROVISIONING_PROFILE = "29ACDC96-FBCF-4074-9481-D1A4B7A67148";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "29ACDC96-FBCF-4074-9481-D1A4B7A67148";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -767,7 +780,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "exfe/exfe-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "D65456C4-2F46-4216-9F35-2D4E81EA4E48";
+				PROVISIONING_PROFILE = "27810EFD-ACC9-43D4-87AF-6F6AB8583C76";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D65456C4-2F46-4216-9F35-2D4E81EA4E48";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;

@@ -35,4 +35,6 @@
 - (void)UpdateDBWithEventDicts:(NSArray*)events;
 - (void) refresh;
 - (void)dorefresh;
+- (void) ShowSettingView;
+- (void)emptyView;
 @end

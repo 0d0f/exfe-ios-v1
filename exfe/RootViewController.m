@@ -10,6 +10,7 @@
 #import "MeViewController.h"
 #import "EventViewController.h"
 #import "exfeAppDelegate.h"
+#import "UserSettingViewController.h"
 #import "APIHandler.h"
 //#import "JSON/JSON.h"
 #import "JSON/SBJson.h"
@@ -25,19 +26,17 @@
 {
     [super viewDidLoad];
     eventData=[[NSMutableDictionary alloc]initWithCapacity:20];
-//     DBUtil *dbu=[DBUtil sharedManager];
-//    [dbu getLastEventUpdateTime];
     reload=YES;
-//    timer = [NSTimer scheduledTimerWithTimeInterval: 30
+//    timer = [NSTimer scheduledTimerWithTimeInterval: 60
 //                                             target: self
-//                                           selector: @selector(setReload)
+//                                           selector: @selector(refresh)
 //                                           userInfo: nil
 //                                            repeats: YES];    
-//    barButtonItem = [[UIBarButtonItem alloc]
-//                     initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-//                     target:self
-//                     action:@selector(refresh)];
-//	self.navigationItem.rightBarButtonItem = barButtonItem;
+    barButtonItem = [[UIBarButtonItem alloc]
+                     initWithBarButtonSystemItem:UIBarButtonSystemItemStop
+                     target:self
+                     action:@selector(ShowSettingView)];
+	self.navigationItem.rightBarButtonItem = barButtonItem;
     
     if(events==nil)
     {
@@ -46,14 +45,7 @@
     }
     
 }
-//- (void)dorefresh
-//{
-//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];  
-//    
-//    [self LoadUserEvents]; 
-//    [self stopLoading];
-//    [pool release];    
-//}
+
 - (void) refresh
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];  
@@ -86,7 +78,6 @@
         return;
     APIHandler *api=[[APIHandler alloc]init];
     NSString *responseString=[api getUpdate];
-    NSLog(@"%@",responseString);
     [api release];
     DBUtil *dbu=[DBUtil sharedManager];
     id jsonobj=[responseString JSONValue];
@@ -135,10 +126,11 @@
                                     [dict setObject:[conversationobj objectForKey:@"time"] forKey:@"updated_at"];
                                     [objs addObject:dict];
                                     [dict release];
-                                    NSDate *update_datetime = [dateFormat dateFromString:[conversationobj objectForKey:@"time"]]; 
-                                    lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
                                 }
                             }
+                            NSDate *update_datetime = [dateFormat dateFromString:[conversationobj objectForKey:@"time"]]; 
+                            lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
+
                         }
                         if([objs count]>0)
                         {
@@ -171,11 +163,12 @@
                                 [dict setObject:[confirmedobj objectForKey:@"time"] forKey:@"updated_at"];
                                 [dbu updateInvitationWithCrossId:cross_id invitation:dict];
                                 [dict release];
-                                NSDate *update_datetime = [dateFormat dateFromString:[confirmedobj objectForKey:@"time"]]; 
-                                lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
 
                             }
                         }
+                        NSDate *update_datetime = [dateFormat dateFromString:[confirmedobj objectForKey:@"time"]]; 
+                        lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
+
                     }
                 }
                 if([declined isKindOfClass:[NSArray class]])
@@ -229,7 +222,12 @@
     
     [pool drain];    
 }
-
+- (void)emptyView
+{
+    [events release];
+    [eventData release];
+    [tableview reloadData];
+}
 - (void)LoadUserEvents
 {
     NSLog(@"load user events");
@@ -399,6 +397,18 @@
     [super didReceiveMemoryWarning];
     
     // Relinquish ownership any cached data, images, etc that aren't in use.
+}
+
+-(void)ShowSettingView
+{
+    NSLog(@"gogogo");
+    UserSettingViewController *settingview=[[UserSettingViewController alloc] initWithNibName:@"UserSettingViewController" bundle:nil];
+//    LoginViewController *loginview = [[LoginViewController alloc]
+//                                      initWithNibName:@"LoginViewController" bundle:nil];
+//    loginview.delegate=self;
+    
+    [self presentModalViewController:settingview animated:YES];
+    //[self.navigationController presentModalViewController:loginview animated:YES];
 }
 
 - (void)viewDidUnload
