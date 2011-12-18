@@ -27,12 +27,37 @@
     [super viewDidLoad];
 //    eventData=[[NSMutableDictionary alloc]initWithCapacity:20];
     reload=YES;
-    barButtonItem = [[UIBarButtonItem alloc]
-                     initWithBarButtonSystemItem:UIBarButtonSystemItemStop
-                     target:self
-                     action:@selector(ShowSettingView)];
-	self.navigationItem.rightBarButtonItem = barButtonItem;
-//    
+    self.navigationController.title=@"Home";
+    CGRect frame = CGRectMake(0, 0,self.navigationController.view.frame.size.width , 44);
+    UILabel *label = [[[UILabel alloc] initWithFrame:frame] autorelease];
+    label.backgroundColor = [UIColor clearColor];
+    label.font = [UIFont boldSystemFontOfSize:20.0];
+    label.shadowColor = [UIColor colorWithWhite:0.0 alpha:0];
+    label.textAlignment = UITextAlignmentCenter;
+    label.textColor = [UIColor blackColor];
+    label.text = [self.navigationController navigationBar].topItem.title;
+
+    [self.navigationController navigationBar].topItem.titleView = label;
+
+        if ([[self.navigationController navigationBar] respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) { 
+            UIImage *toolBarIMG = [UIImage imageNamed: @"navbar_bg.jpg"];  
+            [[self.navigationController navigationBar] setBackgroundImage:toolBarIMG forBarMetrics:0];
+        }
+    NSString *settingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"navbar_setting" ofType:@"png"];
+    UIImage *settingbtnimg = [UIImage imageWithContentsOfFile:settingbtnimgpath];
+    
+    UIButton *settingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
+    [settingButton addTarget:self action:@selector(ShowSettingView) forControlEvents:UIControlEventTouchUpInside];
+    settingButton.frame = (CGRect) {
+        .size.width = 40,
+        .size.height = 30,
+    };
+    barButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
+
+    [self.navigationController navigationBar].topItem.rightBarButtonItem=barButtonItem;
+
+    //self.navigationItem.rightBarButtonItem = barButtonItem;
     if(events==nil)
     {
         DBUtil *dbu=[DBUtil sharedManager];
@@ -347,14 +372,17 @@
     
     if(event.flag==1)
     {
-        NSString *flaglightimgpath = [[NSBundle mainBundle] pathForResource:@"flaglight" ofType:@"png"];
-        UIImage *flaglightimg = [UIImage imageWithContentsOfFile:flaglightimgpath];
-        [cell setFlagLight:flaglightimg];
+        [cell setNewTitleColor:YES];
+
+//        NSString *flaglightimgpath = [[NSBundle mainBundle] pathForResource:@"flaglight" ofType:@"png"];
+//        UIImage *flaglightimg = [UIImage imageWithContentsOfFile:flaglightimgpath];
+//        [cell setFlagLight:flaglightimg];
     }
     else
     {
+                [cell setNewTitleColor:NO];
 //        UIImage *flaglightimg = [UIImage imageWithContentsOfFile:flaglightimgpath];
-        [cell setFlagLight:nil];
+//        [cell setFlagLight:nil];
         
     }
     

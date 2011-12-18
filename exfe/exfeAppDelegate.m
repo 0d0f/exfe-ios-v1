@@ -32,9 +32,8 @@
     
     [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
-    self.navigationController.title=@"Home";
-//    self.window.rootViewController = self.navigationController;
-////
+
+    
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
@@ -243,6 +242,8 @@
 //    }
 
 }
+
+
 - (void)dealloc
 {
     [_window release];
@@ -250,4 +251,11 @@
     [super dealloc];
 }
 
+@end
+
+@implementation UINavigationBar (UINavigationBarCategory)
+- (void)drawRect:(CGRect)rect {
+    UIImage *img = [UIImage imageNamed:@"navbar_bg.jpg"];
+    [img drawInRect:rect];
+}
 @end

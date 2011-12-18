@@ -18,4 +18,5 @@
 - (void)setLabelTime:(NSString *)_text;
 - (void)setAvartar:(UIImage*)_img;
 - (void)setFlagLight:(UIImage*)_img;
+- (void)setNewTitleColor:(BOOL)_new;
 @end

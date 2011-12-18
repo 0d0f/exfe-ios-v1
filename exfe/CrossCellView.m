@@ -42,4 +42,11 @@
 {
     cellflaglight.image=_img;    
 }
+- (void)setNewTitleColor:(BOOL)_new
+{
+    if(_new==YES)
+        cellText.textColor=[UIColor colorWithRed:5/255.0f green:145/255.0f blue:172/255.0f alpha:1];
+    else
+        cellText.textColor=[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
+}
 @end
