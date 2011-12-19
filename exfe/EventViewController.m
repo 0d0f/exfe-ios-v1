@@ -11,6 +11,7 @@
 #import "DBUtil.h"
 #import "JSON/SBJson.h"
 #import <EventKit/EventKit.h>
+#import "UIButton+StyledButton.h"
 #import "ImgCache.h"
 
 const int INVITATION_YES=1;
@@ -51,6 +52,15 @@ const int INVITATION_MAYBE=0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    NSString *settingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"navbar_setting" ofType:@"png"];
+//    UIImage *settingbtnimg = [UIImage imageWithContentsOfFile:settingbtnimgpath];
+//
+//    UIFont *font = [UIFont boldSystemFontOfSize:12.0f];
+//    UIButton* backbutton=[UIButton styledButtonWithBackgroundImage:settingbtnimg font:font title:@"Back" target:self selector:@selector(pushback)];
+//    UIBarButtonItem *backbarButtonItem=[[[UIBarButtonItem alloc] initWithCustomView:backbutton] autorelease];
+//    self.navigationItem.backBarButtonItem=backbarButtonItem;
+
+    
     interceptLinks=NO;
     
     NSString *chatimgpath = [[NSBundle mainBundle] pathForResource:@"chat" ofType:@"png"];
@@ -66,9 +76,21 @@ const int INVITATION_MAYBE=0;
     DBUtil *dbu=[DBUtil sharedManager];
     comments=[dbu getCommentWithEventid:self.eventid];
     
-    self.navigationItem.title=eventobj.title;
+    CGRect frame = CGRectMake(0, 0,400 , 44);
+    UILabel *label = [[[UILabel alloc] initWithFrame:frame] autorelease];
+    label.backgroundColor = [UIColor clearColor];
+    label.font = [UIFont boldSystemFontOfSize:20.0];
+    label.shadowColor = [UIColor colorWithWhite:0.0 alpha:0];
+    label.textAlignment = UITextAlignmentCenter;
+    label.textColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
+    label.text = eventobj.title;
+    self.navigationItem.titleView=label;
+ //   self.topItem.titleView = label;    
+//    self.navigationItem.title=
+//    self.navigationController.title=eventobj.title;
     
     NSString *html=[self GenerateHtmlWithEvent];
+    NSLog(@"%@",html);
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
     NSString *documentsDirectory = [paths objectAtIndex:0]; 
     
@@ -421,6 +443,10 @@ const int INVITATION_MAYBE=0;
     keyboardIsVisible = NO;
 }
 
+-(void)pushback
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 
 @end

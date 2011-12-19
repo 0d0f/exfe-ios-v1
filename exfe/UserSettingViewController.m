@@ -59,6 +59,9 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+//    self.topItem.titleView = label;
+//    self.
+
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
@@ -91,6 +94,11 @@
 {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (IBAction) Done:(id) sender
+{
+    [self dismissModalViewControllerAnimated:YES];    
 }
 
 @end

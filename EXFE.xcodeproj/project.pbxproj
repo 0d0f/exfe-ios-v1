@@ -24,6 +24,8 @@
 		7861AAE61354225E00FA13FA /* APIHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 7861AAE51354225D00FA13FA /* APIHandler.m */; };
 		7864DDE9149B4B9B005DF0BE /* UserSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7864DDE7149B4B9B005DF0BE /* UserSettingViewController.m */; };
 		7864DDEA149B4B9B005DF0BE /* UserSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7864DDE8149B4B9B005DF0BE /* UserSettingViewController.xib */; };
+		7867EBBF149F39D5002F401C /* CustomUINavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7867EBBE149F39D5002F401C /* CustomUINavigationBar.m */; };
+		7867EBCB149FCB18002F401C /* UIButton+StyledButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7867EBCA149FCB18002F401C /* UIButton+StyledButton.m */; };
 		7882BC8E137078A2004F9DBD /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882BC8D137078A2004F9DBD /* libsqlite3.dylib */; };
 		7882BC92137079A4004F9DBD /* DBUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7882BC91137079A4004F9DBD /* DBUtil.m */; };
 		7882BCCD137458F5004F9DBD /* exfe.db in Resources */ = {isa = PBXBuildFile; fileRef = 7882BCCC137458F5004F9DBD /* exfe.db */; };
@@ -56,6 +58,8 @@
 		78A2B94B13C4B2DD00032F61 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B93D13C4B2DD00032F61 /* SBJsonTokeniser.m */; };
 		78A2B94C13C4B2DD00032F61 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B93F13C4B2DD00032F61 /* SBJsonUTF8Stream.m */; };
 		78A2B94D13C4B2DD00032F61 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B94113C4B2DD00032F61 /* SBJsonWriter.m */; };
+		78B320FC149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B320FB149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m */; };
+		78B320FF149FEB5500C87B7F /* CustomUIToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B320FE149FEB5500C87B7F /* CustomUIToolbar.m */; };
 		78B53618149E458B00CE9FFF /* navbar_bg~iphone.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 78B53617149E458B00CE9FFF /* navbar_bg~iphone.jpg */; };
 		78B5361B149E46A600CE9FFF /* navbar_setting@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B53619149E46A500CE9FFF /* navbar_setting@2x~iphone.png */; };
 		78B5361C149E46A600CE9FFF /* navbar_setting~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B5361A149E46A500CE9FFF /* navbar_setting~iphone.png */; };
@@ -119,17 +123,21 @@
 		7864DDE6149B4B9B005DF0BE /* UserSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSettingViewController.h; sourceTree = "<group>"; };
 		7864DDE7149B4B9B005DF0BE /* UserSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserSettingViewController.m; sourceTree = "<group>"; };
 		7864DDE8149B4B9B005DF0BE /* UserSettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserSettingViewController.xib; sourceTree = "<group>"; };
+		7867EBBD149F39D5002F401C /* CustomUINavigationBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUINavigationBar.h; sourceTree = "<group>"; };
+		7867EBBE149F39D5002F401C /* CustomUINavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUINavigationBar.m; sourceTree = "<group>"; };
+		7867EBC9149FCB17002F401C /* UIButton+StyledButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIButton+StyledButton.h"; path = "../UIButton+StyledButton.h"; sourceTree = "<group>"; };
+		7867EBCA149FCB18002F401C /* UIButton+StyledButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIButton+StyledButton.m"; path = "../UIButton+StyledButton.m"; sourceTree = "<group>"; };
 		7882BC8D137078A2004F9DBD /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		7882BC90137079A4004F9DBD /* DBUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBUtil.h; sourceTree = "<group>"; };
 		7882BC91137079A4004F9DBD /* DBUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBUtil.m; sourceTree = "<group>"; };
 		7882BCCC137458F5004F9DBD /* exfe.db */ = {isa = PBXFileReference; lastKnownFileType = file; path = exfe.db; sourceTree = "<group>"; };
-		788C4207133FA3D000AAA425 /* exfe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = exfe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		788C4207133FA3D000AAA425 /* EXFE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EXFE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		788C420B133FA3D000AAA425 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		788C420D133FA3D000AAA425 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		788C420F133FA3D000AAA425 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		788C4213133FA3D000AAA425 /* exfe-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "exfe-Info.plist"; sourceTree = "<group>"; };
+		788C4213133FA3D000AAA425 /* EXFE-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EXFE-Info.plist"; sourceTree = "<group>"; };
 		788C4215133FA3D000AAA425 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		788C4217133FA3D000AAA425 /* exfe-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "exfe-Prefix.pch"; sourceTree = "<group>"; };
+		788C4217133FA3D000AAA425 /* EXFE-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EXFE-Prefix.pch"; sourceTree = "<group>"; };
 		788C4218133FA3D000AAA425 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		788C421A133FA3D000AAA425 /* exfeAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = exfeAppDelegate.h; sourceTree = "<group>"; };
 		788C421B133FA3D000AAA425 /* exfeAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = exfeAppDelegate.m; sourceTree = "<group>"; };
@@ -137,10 +145,10 @@
 		788C4220133FA3D000AAA425 /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		788C4221133FA3D000AAA425 /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		788C4224133FA3D000AAA425 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
-		788C422B133FA3D100AAA425 /* exfeTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = exfeTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		788C4233133FA3D100AAA425 /* exfeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "exfeTests-Info.plist"; sourceTree = "<group>"; };
+		788C422B133FA3D100AAA425 /* EXFETests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EXFETests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		788C4233133FA3D100AAA425 /* EXFETests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EXFETests-Info.plist"; sourceTree = "<group>"; };
 		788C4235133FA3D100AAA425 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		788C4237133FA3D100AAA425 /* exfeTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "exfeTests-Prefix.pch"; sourceTree = "<group>"; };
+		788C4237133FA3D100AAA425 /* EXFETests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EXFETests-Prefix.pch"; sourceTree = "<group>"; };
 		788C4238133FA3D100AAA425 /* exfeTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = exfeTests.h; sourceTree = "<group>"; };
 		788C423A133FA3D100AAA425 /* exfeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = exfeTests.m; sourceTree = "<group>"; };
 		7894122813A2AEC2005B41F7 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
@@ -171,6 +179,10 @@
 		78A2B93F13C4B2DD00032F61 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
 		78A2B94013C4B2DD00032F61 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		78A2B94113C4B2DD00032F61 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		78B320FA149FD9E500C87B7F /* UIBarButtonItem+StyledButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+StyledButton.h"; sourceTree = "<group>"; };
+		78B320FB149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+StyledButton.m"; sourceTree = "<group>"; };
+		78B320FD149FEB5500C87B7F /* CustomUIToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUIToolbar.h; sourceTree = "<group>"; };
+		78B320FE149FEB5500C87B7F /* CustomUIToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUIToolbar.m; sourceTree = "<group>"; };
 		78B53617149E458B00CE9FFF /* navbar_bg~iphone.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "navbar_bg~iphone.jpg"; sourceTree = "<group>"; };
 		78B53619149E46A500CE9FFF /* navbar_setting@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar_setting@2x~iphone.png"; sourceTree = "<group>"; };
 		78B5361A149E46A500CE9FFF /* navbar_setting~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar_setting~iphone.png"; sourceTree = "<group>"; };
@@ -290,8 +302,8 @@
 		788C4208133FA3D000AAA425 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				788C4207133FA3D000AAA425 /* exfe.app */,
-				788C422B133FA3D100AAA425 /* exfeTests.octest */,
+				788C4207133FA3D000AAA425 /* EXFE.app */,
+				788C422B133FA3D100AAA425 /* EXFETests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -312,6 +324,10 @@
 		788C4211133FA3D000AAA425 /* exfe */ = {
 			isa = PBXGroup;
 			children = (
+				7867EBC9149FCB17002F401C /* UIButton+StyledButton.h */,
+				7867EBCA149FCB18002F401C /* UIButton+StyledButton.m */,
+				78B320FA149FD9E500C87B7F /* UIBarButtonItem+StyledButton.h */,
+				78B320FB149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m */,
 				78D0D666149131BB00EA327C /* NSData+Base64.h */,
 				78D0D667149131BB00EA327C /* NSData+Base64.m */,
 				78A2B92813C4B2DD00032F61 /* JSON */,
@@ -336,6 +352,10 @@
 				78D0D65E148F5F5200EA327C /* ConversationCellView.m */,
 				7864DDE6149B4B9B005DF0BE /* UserSettingViewController.h */,
 				7864DDE7149B4B9B005DF0BE /* UserSettingViewController.m */,
+				7867EBBD149F39D5002F401C /* CustomUINavigationBar.h */,
+				7867EBBE149F39D5002F401C /* CustomUINavigationBar.m */,
+				78B320FD149FEB5500C87B7F /* CustomUIToolbar.h */,
+				78B320FE149FEB5500C87B7F /* CustomUIToolbar.m */,
 				78BDB2F313A773A0004561EA /* User.h */,
 				78BDB2F413A773A0004561EA /* User.m */,
 				7894122813A2AEC2005B41F7 /* Cross.h */,
@@ -359,9 +379,9 @@
 		788C4212133FA3D000AAA425 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				788C4213133FA3D000AAA425 /* exfe-Info.plist */,
+				788C4213133FA3D000AAA425 /* EXFE-Info.plist */,
 				788C4214133FA3D000AAA425 /* InfoPlist.strings */,
-				788C4217133FA3D000AAA425 /* exfe-Prefix.pch */,
+				788C4217133FA3D000AAA425 /* EXFE-Prefix.pch */,
 				788C4218133FA3D000AAA425 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -380,9 +400,9 @@
 		788C4232133FA3D100AAA425 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				788C4233133FA3D100AAA425 /* exfeTests-Info.plist */,
+				788C4233133FA3D100AAA425 /* EXFETests-Info.plist */,
 				788C4234133FA3D100AAA425 /* InfoPlist.strings */,
-				788C4237133FA3D100AAA425 /* exfeTests-Prefix.pch */,
+				788C4237133FA3D100AAA425 /* EXFETests-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -435,9 +455,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		788C4206133FA3D000AAA425 /* exfe */ = {
+		788C4206133FA3D000AAA425 /* EXFE */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 788C423E133FA3D100AAA425 /* Build configuration list for PBXNativeTarget "exfe" */;
+			buildConfigurationList = 788C423E133FA3D100AAA425 /* Build configuration list for PBXNativeTarget "EXFE" */;
 			buildPhases = (
 				788C4203133FA3D000AAA425 /* Sources */,
 				788C4204133FA3D000AAA425 /* Frameworks */,
@@ -447,14 +467,14 @@
 			);
 			dependencies = (
 			);
-			name = exfe;
+			name = EXFE;
 			productName = exfe;
-			productReference = 788C4207133FA3D000AAA425 /* exfe.app */;
+			productReference = 788C4207133FA3D000AAA425 /* EXFE.app */;
 			productType = "com.apple.product-type.application";
 		};
-		788C422A133FA3D100AAA425 /* exfeTests */ = {
+		788C422A133FA3D100AAA425 /* EXFETests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 788C4241133FA3D100AAA425 /* Build configuration list for PBXNativeTarget "exfeTests" */;
+			buildConfigurationList = 788C4241133FA3D100AAA425 /* Build configuration list for PBXNativeTarget "EXFETests" */;
 			buildPhases = (
 				788C4226133FA3D100AAA425 /* Sources */,
 				788C4227133FA3D100AAA425 /* Frameworks */,
@@ -466,9 +486,9 @@
 			dependencies = (
 				788C4230133FA3D100AAA425 /* PBXTargetDependency */,
 			);
-			name = exfeTests;
+			name = EXFETests;
 			productName = exfeTests;
-			productReference = 788C422B133FA3D100AAA425 /* exfeTests.octest */;
+			productReference = 788C422B133FA3D100AAA425 /* EXFETests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -479,7 +499,7 @@
 			attributes = {
 				LastUpgradeCheck = 0420;
 			};
-			buildConfigurationList = 788C4201133FA3D000AAA425 /* Build configuration list for PBXProject "exfe" */;
+			buildConfigurationList = 788C4201133FA3D000AAA425 /* Build configuration list for PBXProject "EXFE" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -491,8 +511,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				788C4206133FA3D000AAA425 /* exfe */,
-				788C422A133FA3D100AAA425 /* exfeTests */,
+				788C4206133FA3D000AAA425 /* EXFE */,
+				788C422A133FA3D100AAA425 /* EXFETests */,
 			);
 		};
 /* End PBXProject section */
@@ -602,6 +622,10 @@
 				78D0D65F148F5F5300EA327C /* ConversationCellView.m in Sources */,
 				78D0D668149131BC00EA327C /* NSData+Base64.m in Sources */,
 				7864DDE9149B4B9B005DF0BE /* UserSettingViewController.m in Sources */,
+				7867EBBF149F39D5002F401C /* CustomUINavigationBar.m in Sources */,
+				7867EBCB149FCB18002F401C /* UIButton+StyledButton.m in Sources */,
+				78B320FC149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m in Sources */,
+				78B320FF149FEB5500C87B7F /* CustomUIToolbar.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -618,7 +642,7 @@
 /* Begin PBXTargetDependency section */
 		788C4230133FA3D100AAA425 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 788C4206133FA3D000AAA425 /* exfe */;
+			target = 788C4206133FA3D000AAA425 /* EXFE */;
 			targetProxy = 788C422F133FA3D100AAA425 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -694,10 +718,10 @@
 					"\"$(SRCROOT)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "exfe/exfe-Prefix.pch";
+				GCC_PREFIX_HEADER = "exfe/EXFE-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "exfe/exfe-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "exfe/EXFE-Info.plist";
+				PRODUCT_NAME = EXFE;
 				PROVISIONING_PROFILE = "14A582B3-0E85-4EA4-945B-91ACDD66B52A";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "14A582B3-0E85-4EA4-945B-91ACDD66B52A";
 				VALIDATE_PRODUCT = YES;
@@ -715,14 +739,14 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "exfeTests/exfeTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "exfeTests/EXFETests-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "exfeTests/exfeTests-Info.plist";
+				INFOPLIST_FILE = "exfeTests/EXFETests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = EXFETests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -781,10 +805,10 @@
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "exfe/exfe-Prefix.pch";
+				GCC_PREFIX_HEADER = "exfe/EXFE-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "exfe/exfe-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "exfe/EXFE-Info.plist";
+				PRODUCT_NAME = EXFE;
 				PROVISIONING_PROFILE = "29ACDC96-FBCF-4074-9481-D1A4B7A67148";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "29ACDC96-FBCF-4074-9481-D1A4B7A67148";
 				WRAPPER_EXTENSION = app;
@@ -804,10 +828,10 @@
 					"\"$(SRCROOT)\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "exfe/exfe-Prefix.pch";
+				GCC_PREFIX_HEADER = "exfe/EXFE-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "exfe/exfe-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				INFOPLIST_FILE = "exfe/EXFE-Info.plist";
+				PRODUCT_NAME = EXFE;
 				PROVISIONING_PROFILE = "27810EFD-ACC9-43D4-87AF-6F6AB8583C76";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D65456C4-2F46-4216-9F35-2D4E81EA4E48";
 				VALIDATE_PRODUCT = YES;
@@ -825,14 +849,14 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "exfeTests/exfeTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "exfeTests/EXFETests-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "exfeTests/exfeTests-Info.plist";
+				INFOPLIST_FILE = "exfeTests/EXFETests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = EXFETests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -848,14 +872,14 @@
 					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "exfeTests/exfeTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "exfeTests/EXFETests-Prefix.pch";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "exfeTests/exfeTests-Info.plist";
+				INFOPLIST_FILE = "exfeTests/EXFETests-Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
 					SenTestingKit,
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = EXFETests;
 				TEST_HOST = "$(BUNDLE_LOADER)";
 				WRAPPER_EXTENSION = octest;
 			};
@@ -864,7 +888,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		788C4201133FA3D000AAA425 /* Build configuration list for PBXProject "exfe" */ = {
+		788C4201133FA3D000AAA425 /* Build configuration list for PBXProject "EXFE" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				788C423C133FA3D100AAA425 /* Debug */,
@@ -874,7 +898,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		788C423E133FA3D100AAA425 /* Build configuration list for PBXNativeTarget "exfe" */ = {
+		788C423E133FA3D100AAA425 /* Build configuration list for PBXNativeTarget "EXFE" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				788C423F133FA3D100AAA425 /* Debug */,
@@ -884,7 +908,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		788C4241133FA3D100AAA425 /* Build configuration list for PBXNativeTarget "exfeTests" */ = {
+		788C4241133FA3D100AAA425 /* Build configuration list for PBXNativeTarget "EXFETests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				788C4242133FA3D100AAA425 /* Debug */,

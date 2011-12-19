@@ -33,8 +33,8 @@
 - (BOOL)LoadUserEventsFromDB;
 - (void)LoadUpdate;
 - (void)UpdateDBWithEventDicts:(NSArray*)events;
-- (void) refresh;
-- (void)dorefresh;
-- (void) ShowSettingView;
+- (void)refresh;
+- (void)ShowSettingView;
 - (void)emptyView;
+- (void)pushback;
 @end

@@ -8,8 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserSettingViewController : UIViewController
+@interface UserSettingViewController : UIViewController{
+
+    IBOutlet UIToolbar* toolbar;
+    
+}
 
 - (IBAction) Logout:(id) sender;
+- (IBAction) Done:(id) sender;
 
 @end

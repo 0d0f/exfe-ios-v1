@@ -5,18 +5,20 @@
 //  Created by huoju on 3/28/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
-
+#import <QuartzCore/QuartzCore.h>
 #import "RootViewController.h"
 #import "MeViewController.h"
 #import "EventViewController.h"
 #import "exfeAppDelegate.h"
 #import "UserSettingViewController.h"
 #import "APIHandler.h"
-//#import "JSON/JSON.h"
 #import "JSON/SBJson.h"
 #import "Cross.h"
 #import "DBUtil.h"
 #import "ImgCache.h"
+#import "UIButton+StyledButton.h"
+#import "UIBarButtonItem+StyledButton.h"
+
 
 @implementation RootViewController
 @synthesize interceptLinks;
@@ -28,21 +30,7 @@
 //    eventData=[[NSMutableDictionary alloc]initWithCapacity:20];
     reload=YES;
     self.navigationController.title=@"Home";
-    CGRect frame = CGRectMake(0, 0,self.navigationController.view.frame.size.width , 44);
-    UILabel *label = [[[UILabel alloc] initWithFrame:frame] autorelease];
-    label.backgroundColor = [UIColor clearColor];
-    label.font = [UIFont boldSystemFontOfSize:20.0];
-    label.shadowColor = [UIColor colorWithWhite:0.0 alpha:0];
-    label.textAlignment = UITextAlignmentCenter;
-    label.textColor = [UIColor blackColor];
-    label.text = [self.navigationController navigationBar].topItem.title;
-
-    [self.navigationController navigationBar].topItem.titleView = label;
-
-        if ([[self.navigationController navigationBar] respondsToSelector:@selector(setBackgroundImage:forBarMetrics:)]) { 
-            UIImage *toolBarIMG = [UIImage imageNamed: @"navbar_bg.jpg"];  
-            [[self.navigationController navigationBar] setBackgroundImage:toolBarIMG forBarMetrics:0];
-        }
+    
     NSString *settingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"navbar_setting" ofType:@"png"];
     UIImage *settingbtnimg = [UIImage imageWithContentsOfFile:settingbtnimgpath];
     
@@ -53,11 +41,27 @@
         .size.width = 40,
         .size.height = 30,
     };
+    [[settingButton layer] setCornerRadius:5.0f];
+    [[settingButton layer] setBorderWidth:1.0f];
+    [[settingButton layer] setBorderColor:[UIColor blackColor].CGColor];
+
     barButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
 
-    [self.navigationController navigationBar].topItem.rightBarButtonItem=barButtonItem;
+    //TOFIX: Add leftbutton for fill space, otherwise the custom title can't align center.
+    [self.navigationController navigationBar].topItem.leftBarButtonItem=barButtonItem;
+    [self.navigationController navigationBar].topItem.rightBarButtonItem=barButtonItem;    
 
-    //self.navigationItem.rightBarButtonItem = barButtonItem;
+    self.navigationItem.backBarButtonItem = [UIBarButtonItem styledBackBarButtonItemWithTarget:self selector:@selector(pushback)];
+    
+//    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New Title" style:UIBarButtonItemStyleBordered target:self action:@selector(pushback)];     
+
+    if ([[self.navigationController navigationBar] respondsToSelector:@selector (setBackgroundImage:forBarMetrics:)]) {  // iOS 5
+        UIImage *toolBarIMG = [UIImage imageNamed: @"navbar_bg.jpg"];  
+        [[self.navigationController navigationBar] setBackgroundImage:toolBarIMG forBarMetrics:0];
+    }
+
+
+
     if(events==nil)
     {
         DBUtil *dbu=[DBUtil sharedManager];
@@ -422,7 +426,10 @@
         detailViewController.eventid=event.id;
         detailViewController.eventobj=event;
     }
+    
+    
     [self.navigationController pushViewController:detailViewController animated:YES];
+    
     [detailViewController release]; 	
     DBUtil *dbu=[DBUtil sharedManager];
     [dbu setCrossStatusWithCrossId:event.id status:0];
@@ -455,7 +462,10 @@
     [super viewDidUnload];
 }
 
-
+-(void)pushback
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 - (void)dealloc
 {
     [events release];
@@ -464,3 +474,4 @@
 }
 
 @end
+

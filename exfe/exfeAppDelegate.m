@@ -253,9 +253,4 @@
 
 @end
 
-@implementation UINavigationBar (UINavigationBarCategory)
-- (void)drawRect:(CGRect)rect {
-    UIImage *img = [UIImage imageNamed:@"navbar_bg.jpg"];
-    [img drawInRect:rect];
-}
-@end
+
