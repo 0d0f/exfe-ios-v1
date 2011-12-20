@@ -30,8 +30,19 @@
 {
     NSString *password=[textPassword text];
     NSString *username=[textUsername text];
-    dispatch_queue_t loginQueue = dispatch_queue_create("dologin", NULL);
+    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];  
+    [view setTag:103]; 
+    [view setBackgroundColor:[UIColor blackColor]];
+    [view setAlpha:0.8]; 
+    [self.view addSubview:view];  
+    activityIndicatorview = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 32.0f, 32.0f)];
+    [activityIndicatorview setCenter:view.center]; 
+    [activityIndicatorview setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];   
+    [view addSubview:activityIndicatorview];  
+    [view release]; 
+    [activityIndicatorview startAnimating];   
     
+    dispatch_queue_t loginQueue = dispatch_queue_create("dologin", NULL);
     dispatch_async(loginQueue, ^{
         APIHandler *api=[[APIHandler alloc]init];
         NSString *responseString=[api checkUserLoginByUsername:username withPassword:password];
@@ -64,6 +75,9 @@
             [hint setText:[[logindict objectForKey:@"meta"] objectForKey:@"error"]];
             });
         }
+        [activityIndicatorview stopAnimating];  
+        UIView *view = (UIView *)[self.view viewWithTag:103];   
+        [view removeFromSuperview]; 
     
     });
     dispatch_release(loginQueue);        
@@ -87,12 +101,29 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+//    activityIndicatorview = [[UIActivityIndicatorView alloc] 
+//                             initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+//    
+//    activityIndicatorview.frame = CGRectMake(self.view.bounds.size.width / 2.0f - activityIndicatorview.frame.size.width /2.0f, self.view.bounds.size.height / 2.0f - activityIndicatorview.frame.size.height /2.0f, activityIndicatorview.frame.size.width, activityIndicatorview.frame.size.height);
+//    [activityIndicatorview setBackgroundColor:[UIColor blackColor]];
+//    [activityIndicatorview setAlpha:0.8]; 
+//
+//    [self.view addSubview:activityIndicatorview];  
+//    [activityIndicatorview startAnimating];   
+    
+    //then add to the view
+
+//    self.view.frame.size.height/2-80/2
+//    self.view.frame.size.width/2 -80/2   
+
+    
     // Do any additional setup after loading the view from its nib.
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }

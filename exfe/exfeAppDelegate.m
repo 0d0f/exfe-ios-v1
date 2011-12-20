@@ -38,7 +38,6 @@
     
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     NSString *apikey=[[NSUserDefaults standardUserDefaults] stringForKey:@"api_key"]; 
-    NSLog(@"api_key:%@",apikey);
     NSString *uidstr=[[NSUserDefaults standardUserDefaults] stringForKey:@"userid"]; 
     
     [DBUtil sharedManager];
@@ -170,6 +169,7 @@
 
     [self.navigationController dismissModalViewControllerAnimated:YES];
     [rootViewController performSelector:@selector(LoadUserEvents) withObject:nil];
+//    [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
 
 }
 -(void)logoutViewControllerDidFinish:(UserSettingViewController *)UserSettingViewController

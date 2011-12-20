@@ -52,8 +52,6 @@
 
     self.navigationItem.backBarButtonItem = [UIBarButtonItem styledBackBarButtonItemWithTarget:self selector:@selector(pushback)];
     
-//    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"New Title" style:UIBarButtonItemStyleBordered target:self action:@selector(pushback)];     
-
     if ([[self.navigationController navigationBar] respondsToSelector:@selector (setBackgroundImage:forBarMetrics:)]) {  // iOS 5
         UIImage *toolBarIMG = [UIImage imageNamed: @"navbar_bg.jpg"];  
         [[self.navigationController navigationBar] setBackgroundImage:toolBarIMG forBarMetrics:0];
@@ -65,9 +63,12 @@
 //        DBUtil *dbu=[DBUtil sharedManager];
 //        events=[dbu getRecentEventObj];
     }
-    [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
-
-
+    NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
+    NSString *apikey=[[NSUserDefaults standardUserDefaults] stringForKey:@"api_key"]; 
+    if(uname!=nil && [apikey length]>2 )
+    {
+        [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
+    }
 }
 
 - (void) refresh

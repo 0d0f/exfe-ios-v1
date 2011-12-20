@@ -52,14 +52,6 @@ const int INVITATION_MAYBE=0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    NSString *settingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"navbar_setting" ofType:@"png"];
-//    UIImage *settingbtnimg = [UIImage imageWithContentsOfFile:settingbtnimgpath];
-//
-//    UIFont *font = [UIFont boldSystemFontOfSize:12.0f];
-//    UIButton* backbutton=[UIButton styledButtonWithBackgroundImage:settingbtnimg font:font title:@"Back" target:self selector:@selector(pushback)];
-//    UIBarButtonItem *backbarButtonItem=[[[UIBarButtonItem alloc] initWithCustomView:backbutton] autorelease];
-//    self.navigationItem.backBarButtonItem=backbarButtonItem;
-
     
     interceptLinks=NO;
     
@@ -73,8 +65,6 @@ const int INVITATION_MAYBE=0;
                      action:@selector(toconversation)];
     
 	self.navigationItem.rightBarButtonItem = barButtonItem;
-    DBUtil *dbu=[DBUtil sharedManager];
-    comments=[NSMutableArray arrayWithArray:[dbu getCommentWithEventid:self.eventid]];
     
     CGRect frame = CGRectMake(0, 0,400 , 44);
     UILabel *label = [[[UILabel alloc] initWithFrame:frame] autorelease];
@@ -85,32 +75,32 @@ const int INVITATION_MAYBE=0;
     label.textColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
     label.text = eventobj.title;
     self.navigationItem.titleView=label;
- //   self.topItem.titleView = label;    
-//    self.navigationItem.title=
-//    self.navigationController.title=eventobj.title;
-    
-    NSString *html=[self GenerateHtmlWithEvent];
-    NSLog(@"%@",html);
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
     NSString *documentsDirectory = [paths objectAtIndex:0]; 
     
     NSURL *baseURL = [NSURL fileURLWithPath:documentsDirectory];
-    [webview loadHTMLString:html baseURL:baseURL];
-    
     showeventinfo=YES;
-    
     keyboardIsVisible = NO;
-    
-    conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
-    CGRect crect=conversionViewController.view.frame;
-    conversionViewController.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
-//    [conversionViewController.view setSeparatorColor:[UIColor clearColor]];
-    conversionViewController.comments=comments;
-    conversionViewController.eventid=eventid;
-    [self.view addSubview:conversionViewController.view];
-    [conversionViewController.view setHidden:YES];
-    [conversationview setHidden:YES];
-    
+
+    dispatch_queue_t loaddata= dispatch_queue_create("loaddata", NULL);
+    dispatch_async(loaddata, ^{
+        NSString *html=[self GenerateHtmlWithEvent];
+        DBUtil *dbu=[DBUtil sharedManager];
+        NSArray* _comments=[dbu getCommentWithEventid:self.eventid];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [webview loadHTMLString:html baseURL:baseURL];
+            conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
+            CGRect crect=conversionViewController.view.frame;
+            conversionViewController.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
+            comments=[NSMutableArray arrayWithArray: _comments];
+            conversionViewController.comments=comments;
+            conversionViewController.eventid=eventid;
+            [self.view addSubview:conversionViewController.view];
+            [conversionViewController.view setHidden:YES];
+            [conversationview setHidden:YES];
+        });
+    });
+    dispatch_release(loaddata);
 }
 
 - (void)viewWillAppear:(BOOL)animated 
