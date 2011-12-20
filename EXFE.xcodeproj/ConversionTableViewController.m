@@ -148,7 +148,6 @@
     [commentjson release];
     [api release]; 
     [pool drain];
-//    [self dorefresh];
 }
 
 #pragma mark - Table view data source

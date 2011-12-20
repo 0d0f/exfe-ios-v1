@@ -28,11 +28,13 @@
 }
 - (IBAction) LoginButtonPress:(id) sender;
 {
+    NSString *password=[textPassword text];
+    NSString *username=[textUsername text];
     dispatch_queue_t loginQueue = dispatch_queue_create("dologin", NULL);
     
     dispatch_async(loginQueue, ^{
         APIHandler *api=[[APIHandler alloc]init];
-        NSString *responseString=[api checkUserLoginByUsername:[textUsername text] withPassword:[textPassword text]];
+        NSString *responseString=[api checkUserLoginByUsername:username withPassword:password];
         [api release];
         NSDictionary *logindict = [responseString JSONValue];
         [responseString release];

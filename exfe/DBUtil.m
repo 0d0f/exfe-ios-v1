@@ -41,7 +41,7 @@ static sqlite3 *database;
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
 	if(!success)
 	{
-		return 0;
+		return;
 	} 
     sqlite3_stmt *stm=nil;
     const char *sql = "select flag from crosses where id=1;";
@@ -74,7 +74,7 @@ static sqlite3 *database;
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
 	if(!success)
 	{
-		return 0;
+		return;
 	} 
     sqlite3_stmt *stm=nil;
     const char *sql = "delete from comments;";
@@ -116,7 +116,7 @@ static sqlite3 *database;
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
 	if(!success)
 	{
-		return 0;
+		return;
 	} 
     sqlite3_stmt *stm=nil;
     const char *sql = "delete from eventobject;";
@@ -167,7 +167,7 @@ static sqlite3 *database;
 	[fileManager release];
 	if(!success)
 	{
-		return 0;
+		return;
 	} 
     Invitation *invitationobj=[Invitation initWithDict:invitationdict EventID:cross_id];
 
@@ -300,7 +300,7 @@ static sqlite3 *database;
 	[fileManager release];
 	if(!success)
 	{
-		return 0;
+		return;
 	} 
     sqlite3_stmt *stm=nil;
     const char *sql = "insert or replace into invitations (id,eventid,username,provider,state,avatar_file_name,userid,updated_at) values(?,?,?,?,?,?,?,?)";
@@ -439,7 +439,7 @@ static sqlite3 *database;
             eventobj.creator_id=sqlite3_column_int(stm, 9);
             eventobj.created_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 10)];
             eventobj.updated_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 11)];
-            eventobj.state=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 12)];
+            eventobj.state=sqlite3_column_int(stm, 12);
             eventobj.flag = sqlite3_column_int(stm, 13);
             [eventlist addObject:eventobj];
         }
@@ -456,7 +456,6 @@ static sqlite3 *database;
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
 	[fileManager release];
-	int count=0;
 	if(!success)
 	{
 		return 0;
@@ -470,7 +469,7 @@ static sqlite3 *database;
 			while(sqlite3_step(stm)== SQLITE_ROW)
 			{
 				
-				 eventjson=[NSString stringWithUTF8String:sqlite3_column_text(stm, 0)];
+				 eventjson=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 0)];
 			}
 		}
 		sqlite3_finalize(stm);
@@ -552,7 +551,7 @@ static sqlite3 *database;
 	[fileManager release];
 	if(!success)
 	{
-		return 0;
+		return;
 	} 
     sqlite3_stmt *stm=nil;
     const char *sql = "update crosses set flag=? where id=?";
@@ -581,7 +580,7 @@ static sqlite3 *database;
 	[fileManager release];
 	if(!success)
 	{
-		return 0;
+		return;
 	} 
     sqlite3_stmt *stm=nil;
     const char *sql = "insert or replace into comments (id,eventid,comment,user_id,userjson,created_at,updated_at) values(?,?,?,?,?,?,?)";
@@ -630,7 +629,7 @@ static sqlite3 *database;
 	[fileManager release];
 	if(!success)
 	{
-		return 0;
+		return;
 	} 
     sqlite3_stmt *stm=nil;
     const char *sql = "insert or replace into crosses (id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -674,10 +673,9 @@ static sqlite3 *database;
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
 	[fileManager release];
-	int count=0;
 	if(!success)
 	{
-		return 0;
+		return;
 	} 
     sqlite3_stmt *stm=nil;
     const char *sql = "insert or replace into eventical (eventid,identifier) values(?,?)";
@@ -705,7 +703,7 @@ static sqlite3 *database;
 	[fileManager release];
 	if(!success)
 	{
-		return 0;
+		return;
 	} 
     sqlite3_stmt *stm=nil;
     const char *sql = "insert or replace into users (id,name,avatar_file_name,email,bio) values(?,?,?,?,?)";

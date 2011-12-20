@@ -74,7 +74,7 @@ const int INVITATION_MAYBE=0;
     
 	self.navigationItem.rightBarButtonItem = barButtonItem;
     DBUtil *dbu=[DBUtil sharedManager];
-    comments=[dbu getCommentWithEventid:self.eventid];
+    comments=[NSMutableArray arrayWithArray:[dbu getCommentWithEventid:self.eventid]];
     
     CGRect frame = CGRectMake(0, 0,400 , 44);
     UILabel *label = [[[UILabel alloc] initWithFrame:frame] autorelease];
@@ -104,7 +104,7 @@ const int INVITATION_MAYBE=0;
     conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
     CGRect crect=conversionViewController.view.frame;
     conversionViewController.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
-    [conversionViewController.view setSeparatorColor:[UIColor clearColor]];
+//    [conversionViewController.view setSeparatorColor:[UIColor clearColor]];
     conversionViewController.comments=comments;
     conversionViewController.eventid=eventid;
     [self.view addSubview:conversionViewController.view];
@@ -344,9 +344,6 @@ const int INVITATION_MAYBE=0;
         self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
         inputToolbar.delegate = self;
         [self.view addSubview:self.inputToolbar];
-        //        [baseview addSubview:self.inputToolbar];
-        
-        
     }
     else
     {
@@ -381,7 +378,7 @@ const int INVITATION_MAYBE=0;
     {
         DBUtil *dbu=[DBUtil sharedManager];
         [dbu updateEventobjWithid:self.eventid event:self.event];
-        [self updateEventView];  
+//        [self updateEventView];  
     }
     self.navigationItem.rightBarButtonItem = barButtonItem;
     

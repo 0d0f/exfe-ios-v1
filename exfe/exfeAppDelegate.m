@@ -56,9 +56,6 @@
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
         }
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-        NSArray *viewControllers = self.navigationController.viewControllers;
-        RootViewController *rootViewController = [viewControllers objectAtIndex:0];
-        [NSThread detachNewThreadSelector:@selector(refresh) toTarget:rootViewController withObject:nil];
     }
     else
     {
@@ -68,33 +65,17 @@
         [self.navigationController presentModalViewController:loginview animated:YES];
 
     }
-//    CGRect statusRect;
-//    statusRect.size.width = [self.navigationController.view frame].size.width;
-//    statusRect.size.height = 28; // Not this height is hard coded
-//    statusRect.origin.x = 0;
-//    statusRect.origin.y = [self.navigationController.view frame].size.height-28; 
-    
-    // Note that 120 is hard coded: would be better to find the height to subtract from the existing views
-    
-    // Create the status bar/toolbar	
-//    statusView = [[UIToolbar alloc] initWithFrame:statusRect];
-//    UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:statusRect];
-//
 
-
-//    [self.navigationController.view  addSubview:toolbar];
-
-//TODO FIX:    [self.window makeKeyAndVisible];
     return YES;
 }
-- (IBAction) RefreshRootview:(id) sender
-{
-    
-    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-    NSArray *viewControllers = self.navigationController.viewControllers;
-    RootViewController *rootViewController = [viewControllers objectAtIndex:0];
-    [NSThread detachNewThreadSelector:@selector(LoadUserEvents) toTarget:rootViewController withObject:nil];
-}
+//- (IBAction) RefreshRootview:(id) sender
+//{
+//    
+//    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+//    NSArray *viewControllers = self.navigationController.viewControllers;
+//    RootViewController *rootViewController = [viewControllers objectAtIndex:0];
+//    [NSThread detachNewThreadSelector:@selector(LoadUserEvents) toTarget:rootViewController withObject:nil];
+//}
 // Delegation methods
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     
@@ -186,8 +167,6 @@
     [dbu emptyDBCache];
     NSArray *viewControllers = self.navigationController.viewControllers;
     RootViewController *rootViewController = [viewControllers objectAtIndex:0];
-
-//    [NSThread detachNewThreadSelector:@selector(LoadUserEvents) toTarget:rootViewController withObject:nil];
 
     [self.navigationController dismissModalViewControllerAnimated:YES];
     [rootViewController performSelector:@selector(LoadUserEvents) withObject:nil];

@@ -74,8 +74,8 @@
 
     LoginViewController *loginview = [[LoginViewController alloc]
                                       initWithNibName:@"LoginViewController" bundle:nil];
-    exfeAppDelegate* app=[[UIApplication sharedApplication] delegate];
-    
+    exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
+
     loginview.delegate=app;
 
     [app.tabBarController presentModalViewController:loginview animated:NO];
@@ -84,7 +84,7 @@
 }
 - (void)viewWillAppear:(BOOL)animated
 {
-    exfeAppDelegate* app=[[UIApplication sharedApplication] delegate];
+    exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     if(app.meViewReload==NO)
         NSLog(@"will appear");
     else if(app.meViewReload==YES)

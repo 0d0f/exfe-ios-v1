@@ -27,7 +27,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    eventData=[[NSMutableDictionary alloc]initWithCapacity:20];
     reload=YES;
     self.navigationController.title=@"Home";
     
@@ -60,16 +59,14 @@
         [[self.navigationController navigationBar] setBackgroundImage:toolBarIMG forBarMetrics:0];
     }
 
-
-
     if(events==nil)
     {
-        DBUtil *dbu=[DBUtil sharedManager];
-        events=[dbu getRecentEventObj];
+        [self LoadUserEventsFromDB];
+//        DBUtil *dbu=[DBUtil sharedManager];
+//        events=[dbu getRecentEventObj];
     }
-//    
-//    tableview.scrollsToTop=YES;
-//    [tableview scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
+    [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
+
 
 }
 
@@ -266,10 +263,9 @@
     }
     
     [events removeObjectsInArray:discardedItems];    
-//    [events release];
-//    [eventData release];
     [tableview reloadData];
 }
+
 - (void)LoadUserEvents
 {
     NSLog(@"load user events");
@@ -447,14 +443,8 @@
 
 -(void)ShowSettingView
 {
-    NSLog(@"gogogo");
     UserSettingViewController *settingview=[[UserSettingViewController alloc] initWithNibName:@"UserSettingViewController" bundle:nil];
-//    LoginViewController *loginview = [[LoginViewController alloc]
-//                                      initWithNibName:@"LoginViewController" bundle:nil];
-//    loginview.delegate=self;
-    
     [self presentModalViewController:settingview animated:YES];
-    //[self.navigationController presentModalViewController:loginview animated:YES];
 }
 
 - (void)viewDidUnload

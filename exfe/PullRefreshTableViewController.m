@@ -125,7 +125,6 @@
     [UIView commitAnimations];
 
     // Refresh action!
-    //[self refresh];
     [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
     
 }

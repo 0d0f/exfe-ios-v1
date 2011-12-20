@@ -20,7 +20,7 @@
 #define kKeyboardHeightPortrait 216
 #define kKeyboardHeightLandscape 140
 
-@interface EventViewController : UIViewController {
+@interface EventViewController : UIViewController <UIInputToolbarDelegate> {
 //    UIViewController
     //IBOutlet UIWebView *conversationview;
     IBOutlet UIWebView *webview;
@@ -49,7 +49,7 @@
 @property BOOL interceptLinks;
 @property (nonatomic, retain) UIInputToolbar *inputToolbar;
 
-
+-(void)inputButtonPressed:(NSString *)inputText;
 - (NSString*)GenerateHtmlWithEvent;
 - (void)refresh;
 - (void)toconversation;

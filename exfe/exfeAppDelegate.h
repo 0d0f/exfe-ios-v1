@@ -38,6 +38,6 @@
 -(void)loginViewControllerDidFinish:(LoginViewController *)loginViewController;
 -(void)logoutViewControllerDidFinish:(UserSettingViewController *)UserSettingViewController;
 - (void)showLoginView;
-- (IBAction) RefreshRootview:(id) sender;
+//- (IBAction) RefreshRootview:(id) sender;
 - (void)copyResource;
 @end
