@@ -14,8 +14,8 @@
     IBOutlet UITextField *textUsername;
     IBOutlet UITextField *textPassword;    
     IBOutlet UILabel *hint;
-    UIActivityIndicatorView* activityIndicatorview;
-    
+    IBOutlet UIActivityIndicatorView* activityIndicatorview;
+    IBOutlet UIButton *loginbtn;
 }
 @property (nonatomic, assign) id <LoginViewControllerDelegate> delegate;
 

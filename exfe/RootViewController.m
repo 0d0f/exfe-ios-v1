@@ -47,7 +47,7 @@
     barButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
 
     //TOFIX: Add leftbutton for fill space, otherwise the custom title can't align center.
-    [self.navigationController navigationBar].topItem.leftBarButtonItem=barButtonItem;
+//    [self.navigationController navigationBar].topItem.leftBarButtonItem=barButtonItem;
     [self.navigationController navigationBar].topItem.rightBarButtonItem=barButtonItem;    
 
     self.navigationItem.backBarButtonItem = [UIBarButtonItem styledBackBarButtonItemWithTarget:self selector:@selector(pushback)];

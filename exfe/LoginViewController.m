@@ -10,6 +10,8 @@
 #import "APIHandler.h"
 #import "exfeAppDelegate.h"
 #import "NSObject+SBJson.h"
+#import <QuartzCore/QuartzCore.h>
+
 
 @implementation LoginViewController
 @synthesize delegate;
@@ -28,19 +30,25 @@
 }
 - (IBAction) LoginButtonPress:(id) sender;
 {
+    textPassword.layer.borderColor=[UIColor colorWithRed:204/255.0f green:204/255.0f blue:204/255.0f alpha:1].CGColor; 
+    textUsername.layer.borderColor=[UIColor colorWithRed:204/255.0f green:204/255.0f blue:204/255.0f alpha:1].CGColor; 
     NSString *password=[textPassword text];
     NSString *username=[textUsername text];
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];  
-    [view setTag:103]; 
-    [view setBackgroundColor:[UIColor blackColor]];
-    [view setAlpha:0.8]; 
-    [self.view addSubview:view];  
-    activityIndicatorview = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 32.0f, 32.0f)];
-    [activityIndicatorview setCenter:view.center]; 
-    [activityIndicatorview setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];   
-    [view addSubview:activityIndicatorview];  
-    [view release]; 
+//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];  
+//    [view setTag:103]; 
+//    [view setBackgroundColor:[UIColor blackColor]];
+//    [view setAlpha:0.8]; 
+//    [self.view addSubview:view];  
+//    activityIndicatorview = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 32.0f, 32.0f)];
+//    [activityIndicatorview setCenter:view.center]; 
+//    [activityIndicatorview setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];   
+//    [view addSubview:activityIndicatorview];  
+//    [view release]; 
+    [activityIndicatorview setHidden:NO];
     [activityIndicatorview startAnimating];   
+    [hint setText:@""];
+    [loginbtn setEnabled:NO];
+    [loginbtn setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
     
     dispatch_queue_t loginQueue = dispatch_queue_create("dologin", NULL);
     dispatch_async(loginQueue, ^{
@@ -53,8 +61,6 @@
         if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                
-
             NSDictionary *userdict=[logindict objectForKey:@"response"];
             [[NSUserDefaults standardUserDefaults] setObject:[textUsername text]  forKey:@"username"];
             [[NSUserDefaults standardUserDefaults] setObject:[userdict objectForKey:@"auth_token"] forKey:@"api_key"];
@@ -67,18 +73,23 @@
             app.username=[textUsername text];
             app.meViewReload=YES;
             [self.delegate loginViewControllerDidFinish:self];
+            [activityIndicatorview stopAnimating]; 
+            [activityIndicatorview setHidden:YES];
+            [loginbtn setEnabled:YES];
+            [loginbtn setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
             });
         }
         else
         {            
             dispatch_async(dispatch_get_main_queue(), ^{
-            [hint setText:[[logindict objectForKey:@"meta"] objectForKey:@"error"]];
+            if([[[logindict objectForKey:@"meta"] objectForKey:@"code"] intValue]==404)
+                [hint setText:@"Incorrect identity or password"];
+                [activityIndicatorview stopAnimating]; 
+                [activityIndicatorview setHidden:YES];
+                [loginbtn setEnabled:YES];
+                [loginbtn setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
             });
         }
-        [activityIndicatorview stopAnimating];  
-        UIView *view = (UIView *)[self.view viewWithTag:103];   
-        [view removeFromSuperview]; 
-    
     });
     dispatch_release(loginQueue);        
 }

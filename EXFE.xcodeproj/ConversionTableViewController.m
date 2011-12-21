@@ -137,9 +137,11 @@
 //        [dbu updateCommentobjWithid:self.eventid event:arr];
 //        [arr release];
         Comment *comment=[Comment initWithDict:[[[commentjson JSONValue] objectForKey:@"response"] objectForKey:@"conversation"] EventID:self.eventid];
+        [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
+
         //[comments addObject:comment];
-        [comments insertObject:comment atIndex:0];        
-        [(UITableView*)self.view reloadData];
+//        [comments insertObject:comment atIndex:0];        
+//        [(UITableView*)self.view reloadData];
     }
     else
     {
@@ -164,13 +166,14 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Comment *comment=[self.comments objectAtIndex:indexPath.row];
-    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH), 20000.0f);
-    
-    CGSize labelSize = [comment.comment sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
-    
-    return MAX(labelSize.height+CELL_CONTENT_MARGIN, 60.00f);
-    
+    return 60;
+//    Comment *comment=[self.comments objectAtIndex:indexPath.row];
+//    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH), 20000.0f);
+//    
+//    CGSize labelSize = [comment.comment sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
+//    
+//    return MAX(labelSize.height+CELL_CONTENT_MARGIN, 60.00f);
+//    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
