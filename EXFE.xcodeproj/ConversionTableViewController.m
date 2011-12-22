@@ -93,7 +93,6 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
     APIHandler *api=[[APIHandler alloc]init];
-    
     NSString *responseString=[api getPostsWith:eventid];
     
     DBUtil *dbu=[DBUtil sharedManager];

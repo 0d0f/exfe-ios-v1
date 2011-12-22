@@ -21,7 +21,7 @@
 + (NSString*)URL_API_ROOT;
 + (NSString*)URL_API_DOMAIN;
 - (NSString*)checkUserLoginByUsername:(NSString*)email withPassword:(NSString*)passwd;
-- (NSString*)getMeInfo;
+- (NSString*)getProfile;
 - (NSString*)getUserEvents;
 - (NSString*)getUpdate;
 - (NSString*)getEventById:(int)eventid;

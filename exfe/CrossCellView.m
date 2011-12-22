@@ -33,14 +33,27 @@
 {
     cellTime.text=_text;
 }
+- (void)setLabelPlace:(NSString *)_text
+{
+    cellPlace.text=_text;
+}
 - (void)setAvartar:(UIImage*)_img
 {
     cellAvatar.image=_img;
 }
-
-- (void)setFlagLight:(UIImage*)_img
+- (void)setCellModel:(int)type
 {
-    cellflaglight.image=_img;    
+    if(type==1) //height = 44
+    {
+        [cellAvatar setFrame:CGRectMake(cellAvatar.frame.origin.x, 2, cellAvatar.frame.size.width, cellAvatar.frame.size.height)];
+        [cellText setFrame:CGRectMake(cellText.frame.origin.x,11,cellText.frame.size.width,cellText.frame.size.height)];
+    }
+    else if (type == 2) //height = 62
+    {
+        
+    }
+        
+    
 }
 - (void)setNewTitleColor:(BOOL)_new
 {

@@ -73,18 +73,19 @@
     return responseString;
 }
 
-- (NSString*)getMeInfo
+- (NSString*)getProfile
 {
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
 
-    NSLog(@"getMeInfo:%@",app.username);
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@?api_key=%@",[APIHandler URL_API_ROOT],@"users/self.json",api_key]]];
+    NSString *url=[NSString stringWithFormat:@"%@/users/%i/getprofile?token=%@",[APIHandler URL_API_ROOT],app.userid,api_key];
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setHTTPShouldHandleCookies:NO];
-
+    
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"me json:%@",responseString);
-    return responseString;
+    NSLog(@"%@",responseString);
+    return responseString;    
+
 }
 - (NSString*)getPostsWith:(int)crossid
 {
@@ -213,7 +214,6 @@
     
     
     NSString *url=[NSString stringWithFormat:@"%@/users/%i/getupdate?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],app.userid,[(NSString *)dateurlString autorelease],api_key];
-    NSLog(@"url:%@",url);
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setHTTPShouldHandleCookies:NO];
     
@@ -225,7 +225,6 @@
 - (NSString*)getEventById:(int)eventid
 {
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/crosses/%i.json?api_key=%@",[APIHandler URL_API_ROOT],eventid,api_key]]];
-    NSLog(@"url:%@",[NSURL URLWithString:[NSString stringWithFormat:@"%@/crosses/%i.json?api_key=%@",[APIHandler URL_API_ROOT],eventid,api_key]]);
     [request setHTTPShouldHandleCookies:NO];
     
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];

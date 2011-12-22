@@ -11,12 +11,13 @@
 @interface CrossCellView : UITableViewCell  {
     IBOutlet UILabel *cellText;
     IBOutlet UILabel *cellTime;
+    IBOutlet UILabel *cellPlace;
     IBOutlet UIImageView *cellAvatar;
-    IBOutlet UIImageView *cellflaglight;    
 }
 - (void)setLabelText:(NSString *)_text;
 - (void)setLabelTime:(NSString *)_text;
+- (void)setLabelPlace:(NSString *)_text;
 - (void)setAvartar:(UIImage*)_img;
-- (void)setFlagLight:(UIImage*)_img;
 - (void)setNewTitleColor:(BOOL)_new;
+- (void)setCellModel:(int)type;
 @end

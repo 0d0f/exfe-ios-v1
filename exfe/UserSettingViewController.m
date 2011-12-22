@@ -10,6 +10,9 @@
 #import "exfeAppDelegate.h"
 #import "RootViewController.h"
 #import "DBUtil.h"
+#import "APIHandler.h"
+#import "JSON/SBJson.h"
+
 
 @implementation UserSettingViewController
 
@@ -53,6 +56,26 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    APIHandler *api=[[APIHandler alloc]init];
+    NSString *responseString=[api getProfile];
+    NSDictionary *profileDict = [responseString JSONValue];
+    id code=[[profileDict objectForKey:@"meta"] objectForKey:@"code"];
+    if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
+    {
+//identities
+        id response=[profileDict objectForKey:@"response"];
+        if([response isKindOfClass:[NSDictionary class]])
+        {
+            id identities = [response objectForKey:@"identities"];
+            for(int i=0;i<[identities count];i++)
+            {
+                id user = [response objectForKey:@"user"];
+            }
+        }
+
+        NSLog(@"profile:%@",responseString);
+    }
+    
     // Do any additional setup after loading the view from its nib.
 }
 

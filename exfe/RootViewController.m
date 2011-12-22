@@ -356,7 +356,15 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 60;
+    Cross *event=[events objectAtIndex:indexPath.row];
+    
+    NSString *place=event.place_line1;
+    NSString *time=[event.begin_at substringToIndex:10];
+
+    if([place isEqualToString:@""]  && [time isEqualToString:@"0000-00-00"])
+        return 44;
+
+    return 62;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -368,24 +376,28 @@
         cell = tblCell;
     }
     Cross *event=[events objectAtIndex:indexPath.row];
-    [cell setLabelText:event.title];
-    [cell setLabelTime:[event.begin_at substringToIndex:10]];
-    
-    if(event.flag==1)
-    {
-        [cell setNewTitleColor:YES];
 
-//        NSString *flaglightimgpath = [[NSBundle mainBundle] pathForResource:@"flaglight" ofType:@"png"];
-//        UIImage *flaglightimg = [UIImage imageWithContentsOfFile:flaglightimgpath];
-//        [cell setFlagLight:flaglightimg];
-    }
+    NSString *place=[event.place_line1 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *time=[[event.begin_at stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] substringToIndex:10];
+    if([place isEqualToString:@""]  && [time isEqualToString:@"0000-00-00"])
+        [cell setCellModel:1];
+
+    [cell setLabelText: [event.title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+    
+    if([time isEqualToString:@"0000-00-00"])
+        [cell setLabelTime:@""];
     else
-    {
-                [cell setNewTitleColor:NO];
-//        UIImage *flaglightimg = [UIImage imageWithContentsOfFile:flaglightimgpath];
-//        [cell setFlagLight:nil];
-        
+    {   
+        if([time length]==10)
+            time=[time substringWithRange:NSMakeRange(5,5)];
+        [cell setLabelTime:time];
     }
+    [cell setLabelPlace:place];
+
+    if(event.flag==1)
+        [cell setNewTitleColor:YES];
+    else
+        [cell setNewTitleColor:NO];
     
     DBUtil *dbu=[DBUtil sharedManager];
     User* user=[dbu getUserWithid:event.creator_id];
