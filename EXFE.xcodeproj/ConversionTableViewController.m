@@ -166,19 +166,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 60;
-//    Comment *comment=[self.comments objectAtIndex:indexPath.row];
-//    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH), 20000.0f);
-//    
-//    CGSize labelSize = [comment.comment sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
-//    
-//    return MAX(labelSize.height+CELL_CONTENT_MARGIN, 60.00f);
-//    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-//    tblConversationCellView
     static NSString *MyIdentifier = @"tblCrossCellView";
 
     ConversationCellView *cell = (ConversationCellView *)[tableView dequeueReusableCellWithIdentifier:MyIdentifier];
@@ -206,49 +198,6 @@
     dispatch_release(imgQueue);        
     return cell;
 
-
-//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-//        label = [[UILabel alloc] initWithFrame:CGRectZero];
-//        [label setLineBreakMode:UILineBreakModeWordWrap];
-//        [label setMinimumFontSize:FONT_SIZE];
-//        [label setNumberOfLines:0];
-//        [label setFont:[UIFont systemFontOfSize:FONT_SIZE]];
-//        [label setTag:1];
-//        [[cell contentView] addSubview:label];
-//        
-//        imageview=[[UIImageView alloc] initWithFrame:CGRectZero];
-//        [imageview setTag:2];
-//        [[cell contentView] addSubview:imageview];
-
-//    }
-//    Cross *event=[events objectAtIndex:indexPath.row];
-//    [cell setLabelText:event.title];
-//    [cell setLabelTime:[event.begin_at substringToIndex:10]];
-//    
-// 
-//    if (cell == nil) {
-//    }
-//    
-//    CGSize constraint = CGSizeMake(CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH ), 20000.0f);
-//    
-//    CGSize size = [comment.comment sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:UILineBreakModeWordWrap];
-//    
-//    if (!label)
-//        label = (UILabel*)[cell viewWithTag:1];
-//    
-//    [label setText:comment.comment];
-//    [label setFrame:CGRectMake(CELL_CONTENT_MARGIN+CELL_IMAGE_WIDTH, CELL_CONTENT_MARGIN, CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2 + CELL_IMAGE_WIDTH), MAX(size.height, 50.0f))];
-//    
-//    if (!imageview)
-//        imageview = (UIImageView*)[cell viewWithTag:2];
-//    
-//    if(user.avatar_file_name!=nil && ![user.avatar_file_name isEqualToString:@""])
-//    {
-//        [imageview setFrame:CGRectMake(CELL_CONTENT_MARGIN, CELL_CONTENT_MARGIN, CELL_IMAGE_WIDTH, CELL_IMAGE_HEIGHT)];
-//        
-//            
-//    }
-//    [pool drain];
 }
 /*
 // Override to support conditional editing of the table view.

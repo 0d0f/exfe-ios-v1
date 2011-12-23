@@ -7,11 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ProfileCellView.h"
 
 @interface UserSettingViewController : UIViewController{
 
     IBOutlet UIToolbar* toolbar;
-    
+    IBOutlet UIImageView* useravatar;
+    IBOutlet UILabel* username;
+    IBOutlet UITableView* tabview;
+    NSMutableArray *identitiesData;
+    IBOutlet ProfileCellView *tblCell;
 }
 
 - (IBAction) Logout:(id) sender;

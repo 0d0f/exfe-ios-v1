@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		78090CF514A4792B00AB0D66 /* ProfileCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78090CF414A4792B00AB0D66 /* ProfileCellView.m */; };
+		78090CF814A4798700AB0D66 /* ProfileCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78090CF714A4798700AB0D66 /* ProfileCellView.xib */; };
+		78090D0214A499D000AB0D66 /* device_iPhone@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78090D0014A499CE00AB0D66 /* device_iPhone@2x~iphone.png */; };
+		78090D0314A499D000AB0D66 /* device_iPhone~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78090D0114A499CE00AB0D66 /* device_iPhone~iphone.png */; };
 		78125A141424CD5B0062BBD8 /* chat@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78125A121424CD5B0062BBD8 /* chat@2x~iphone.png */; };
 		78125A151424CD5B0062BBD8 /* chat~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78125A131424CD5B0062BBD8 /* chat~iphone.png */; };
 		7816A7481423C4DC00818601 /* app_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7816A7471423C4DC00818601 /* app_btn.png */; };
@@ -26,6 +30,7 @@
 		7864DDEA149B4B9B005DF0BE /* UserSettingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7864DDE8149B4B9B005DF0BE /* UserSettingViewController.xib */; };
 		7867EBBF149F39D5002F401C /* CustomUINavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7867EBBE149F39D5002F401C /* CustomUINavigationBar.m */; };
 		7867EBCB149FCB18002F401C /* UIButton+StyledButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7867EBCA149FCB18002F401C /* UIButton+StyledButton.m */; };
+		786DE65B14A4596D00477E39 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 786DE65A14A4596C00477E39 /* Identity.m */; };
 		7882BC8E137078A2004F9DBD /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882BC8D137078A2004F9DBD /* libsqlite3.dylib */; };
 		7882BC92137079A4004F9DBD /* DBUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7882BC91137079A4004F9DBD /* DBUtil.m */; };
 		7882BCCD137458F5004F9DBD /* exfe.db in Resources */ = {isa = PBXBuildFile; fileRef = 7882BCCC137458F5004F9DBD /* exfe.db */; };
@@ -101,6 +106,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		78090CF314A4792B00AB0D66 /* ProfileCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileCellView.h; sourceTree = "<group>"; };
+		78090CF414A4792B00AB0D66 /* ProfileCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileCellView.m; sourceTree = "<group>"; };
+		78090CF714A4798700AB0D66 /* ProfileCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileCellView.xib; sourceTree = "<group>"; };
+		78090D0014A499CE00AB0D66 /* device_iPhone@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "device_iPhone@2x~iphone.png"; sourceTree = "<group>"; };
+		78090D0114A499CE00AB0D66 /* device_iPhone~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "device_iPhone~iphone.png"; sourceTree = "<group>"; };
 		78125A121424CD5B0062BBD8 /* chat@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat@2x~iphone.png"; sourceTree = "<group>"; };
 		78125A131424CD5B0062BBD8 /* chat~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~iphone.png"; sourceTree = "<group>"; };
 		7816A7471423C4DC00818601 /* app_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_btn.png; sourceTree = "<group>"; };
@@ -127,6 +137,8 @@
 		7867EBBE149F39D5002F401C /* CustomUINavigationBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUINavigationBar.m; sourceTree = "<group>"; };
 		7867EBC9149FCB17002F401C /* UIButton+StyledButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIButton+StyledButton.h"; path = "../UIButton+StyledButton.h"; sourceTree = "<group>"; };
 		7867EBCA149FCB18002F401C /* UIButton+StyledButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIButton+StyledButton.m"; path = "../UIButton+StyledButton.m"; sourceTree = "<group>"; };
+		786DE65914A4596C00477E39 /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
+		786DE65A14A4596C00477E39 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		7882BC8D137078A2004F9DBD /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		7882BC90137079A4004F9DBD /* DBUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBUtil.h; sourceTree = "<group>"; };
 		7882BC91137079A4004F9DBD /* DBUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBUtil.m; sourceTree = "<group>"; };
@@ -252,6 +264,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		78090CF914A47ABB00AB0D66 /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				78090CF314A4792B00AB0D66 /* ProfileCellView.h */,
+				78090CF414A4792B00AB0D66 /* ProfileCellView.m */,
+				78C1D4071429C464008131BC /* CrossCellView.h */,
+				78C1D4081429C465008131BC /* CrossCellView.m */,
+				78D0D65D148F5F5200EA327C /* ConversationCellView.h */,
+				78D0D65E148F5F5200EA327C /* ConversationCellView.m */,
+			);
+			name = TableViewCell;
+			sourceTree = "<group>";
+		};
 		7861AA67135230A400FA13FA /* resource */ = {
 			isa = PBXGroup;
 			children = (
@@ -269,6 +294,8 @@
 				78B5361A149E46A500CE9FFF /* navbar_setting~iphone.png */,
 				78B53617149E458B00CE9FFF /* navbar_bg~iphone.jpg */,
 				78B5361F149E48A100CE9FFF /* navbar_bg@2x~iphone.jpg */,
+				78090D0014A499CE00AB0D66 /* device_iPhone@2x~iphone.png */,
+				78090D0114A499CE00AB0D66 /* device_iPhone~iphone.png */,
 				78125A121424CD5B0062BBD8 /* chat@2x~iphone.png */,
 				78125A131424CD5B0062BBD8 /* chat~iphone.png */,
 				78F75BD013AD3EF100C7B3CF /* textbg@2x~iphone.png */,
@@ -277,6 +304,7 @@
 				78F75BD313AD3EF100C7B3CF /* toolbarbg~iphone.png */,
 				7882BCCC137458F5004F9DBD /* exfe.db */,
 				78C1D40B1429D30B008131BC /* CrossCellView.xib */,
+				78090CF714A4798700AB0D66 /* ProfileCellView.xib */,
 				78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */,
 				78D0D65A148F5EFD00EA327C /* ConversationCellView.xib */,
 				788C421D133FA3D000AAA425 /* MainWindow.xib */,
@@ -336,8 +364,7 @@
 				78F75BC113AD3B9E00C7B3CF /* UIInputToolbar */,
 				788C421A133FA3D000AAA425 /* exfeAppDelegate.h */,
 				788C421B133FA3D000AAA425 /* exfeAppDelegate.m */,
-				78C1D4071429C464008131BC /* CrossCellView.h */,
-				78C1D4081429C465008131BC /* CrossCellView.m */,
+				78090CF914A47ABB00AB0D66 /* TableViewCell */,
 				788C4220133FA3D000AAA425 /* RootViewController.h */,
 				788C4221133FA3D000AAA425 /* RootViewController.m */,
 				7861AA8013523F9100FA13FA /* LoginViewController.h */,
@@ -348,14 +375,14 @@
 				7856B7AF1358A06100B97BA6 /* EventViewController.m */,
 				78D7AA7613BE12C6009495DA /* ConversionTableViewController.h */,
 				78D7AA7713BE12C6009495DA /* ConversionTableViewController.m */,
-				78D0D65D148F5F5200EA327C /* ConversationCellView.h */,
-				78D0D65E148F5F5200EA327C /* ConversationCellView.m */,
 				7864DDE6149B4B9B005DF0BE /* UserSettingViewController.h */,
 				7864DDE7149B4B9B005DF0BE /* UserSettingViewController.m */,
 				7867EBBD149F39D5002F401C /* CustomUINavigationBar.h */,
 				7867EBBE149F39D5002F401C /* CustomUINavigationBar.m */,
 				78B320FD149FEB5500C87B7F /* CustomUIToolbar.h */,
 				78B320FE149FEB5500C87B7F /* CustomUIToolbar.m */,
+				786DE65914A4596C00477E39 /* Identity.h */,
+				786DE65A14A4596C00477E39 /* Identity.m */,
 				78BDB2F313A773A0004561EA /* User.h */,
 				78BDB2F413A773A0004561EA /* User.m */,
 				7894122813A2AEC2005B41F7 /* Cross.h */,
@@ -553,6 +580,9 @@
 				78B53620149E48A200CE9FFF /* navbar_bg@2x~iphone.jpg in Resources */,
 				783CF22D149E524000C7D80E /* Icon.png in Resources */,
 				783CF22E149E524000C7D80E /* Icon@2x.png in Resources */,
+				78090CF814A4798700AB0D66 /* ProfileCellView.xib in Resources */,
+				78090D0214A499D000AB0D66 /* device_iPhone@2x~iphone.png in Resources */,
+				78090D0314A499D000AB0D66 /* device_iPhone~iphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -626,6 +656,8 @@
 				7867EBCB149FCB18002F401C /* UIButton+StyledButton.m in Sources */,
 				78B320FC149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m in Sources */,
 				78B320FF149FEB5500C87B7F /* CustomUIToolbar.m in Sources */,
+				786DE65B14A4596D00477E39 /* Identity.m in Sources */,
+				78090CF514A4792B00AB0D66 /* ProfileCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
