@@ -49,6 +49,8 @@
 		788C4236133FA3D100AAA425 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 788C4234133FA3D100AAA425 /* InfoPlist.strings */; };
 		788C4239133FA3D100AAA425 /* exfeTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 788C4238133FA3D100AAA425 /* exfeTests.h */; };
 		788C423B133FA3D100AAA425 /* exfeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 788C423A133FA3D100AAA425 /* exfeTests.m */; };
+		788C9C0414A87B6800FBEE49 /* default_avatar@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 788C9C0214A87B6800FBEE49 /* default_avatar@2x~iphone.png */; };
+		788C9C0514A87B6800FBEE49 /* default_avatar~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 788C9C0314A87B6800FBEE49 /* default_avatar~iphone.png */; };
 		7894122A13A2AEC2005B41F7 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 7894122913A2AEC2005B41F7 /* Cross.m */; };
 		789ECC6E149C9D5800F3B627 /* titlebar@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 789ECC6D149C9D5800F3B627 /* titlebar@2x~iphone.png */; };
 		78A2B94213C4B2DD00032F61 /* NSObject+SBJson.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B92A13C4B2DD00032F61 /* NSObject+SBJson.m */; };
@@ -163,6 +165,8 @@
 		788C4237133FA3D100AAA425 /* EXFETests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "EXFETests-Prefix.pch"; sourceTree = "<group>"; };
 		788C4238133FA3D100AAA425 /* exfeTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = exfeTests.h; sourceTree = "<group>"; };
 		788C423A133FA3D100AAA425 /* exfeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = exfeTests.m; sourceTree = "<group>"; };
+		788C9C0214A87B6800FBEE49 /* default_avatar@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar@2x~iphone.png"; sourceTree = "<group>"; };
+		788C9C0314A87B6800FBEE49 /* default_avatar~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar~iphone.png"; sourceTree = "<group>"; };
 		7894122813A2AEC2005B41F7 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
 		7894122913A2AEC2005B41F7 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
 		789ECC6D149C9D5800F3B627 /* titlebar@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "titlebar@2x~iphone.png"; sourceTree = "<group>"; };
@@ -285,6 +289,8 @@
 				783CF22B149E523F00C7D80E /* Icon.png */,
 				783CF22C149E523F00C7D80E /* Icon@2x.png */,
 				7833E95713C6030600FE3EDA /* btn.png */,
+				788C9C0214A87B6800FBEE49 /* default_avatar@2x~iphone.png */,
+				788C9C0314A87B6800FBEE49 /* default_avatar~iphone.png */,
 				789ECC6D149C9D5800F3B627 /* titlebar@2x~iphone.png */,
 				7816A7471423C4DC00818601 /* app_btn.png */,
 				78F75BE113AFA84300C7B3CF /* arrow.png */,
@@ -583,6 +589,8 @@
 				78090CF814A4798700AB0D66 /* ProfileCellView.xib in Resources */,
 				78090D0214A499D000AB0D66 /* device_iPhone@2x~iphone.png in Resources */,
 				78090D0314A499D000AB0D66 /* device_iPhone~iphone.png in Resources */,
+				788C9C0414A87B6800FBEE49 /* default_avatar@2x~iphone.png in Resources */,
+				788C9C0514A87B6800FBEE49 /* default_avatar~iphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -730,8 +738,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "98927166-95C5-48DC-9FEF-54A067884CA5";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "98927166-95C5-48DC-9FEF-54A067884CA5";
+				PROVISIONING_PROFILE = "D188A771-FA2F-4696-8C79-4BFA8E2ADF8F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D188A771-FA2F-4696-8C79-4BFA8E2ADF8F";
 				SDKROOT = iphoneos;
 			};
 			name = "ad hoc";
@@ -754,8 +762,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "exfe/EXFE-Info.plist";
 				PRODUCT_NAME = EXFE;
-				PROVISIONING_PROFILE = "98927166-95C5-48DC-9FEF-54A067884CA5";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "98927166-95C5-48DC-9FEF-54A067884CA5";
+				PROVISIONING_PROFILE = "D188A771-FA2F-4696-8C79-4BFA8E2ADF8F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D188A771-FA2F-4696-8C79-4BFA8E2ADF8F";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -788,8 +796,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: ju han (632XXR8Q24)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: ju han (632XXR8Q24)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
@@ -799,8 +807,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "3EEE31D1-0F1B-4F90-86B7-3940E9001299";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3EEE31D1-0F1B-4F90-86B7-3940E9001299";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -841,8 +849,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "exfe/EXFE-Info.plist";
 				PRODUCT_NAME = EXFE;
-				PROVISIONING_PROFILE = "29ACDC96-FBCF-4074-9481-D1A4B7A67148";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "29ACDC96-FBCF-4074-9481-D1A4B7A67148";
+				PROVISIONING_PROFILE = "3EEE31D1-0F1B-4F90-86B7-3940E9001299";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "3EEE31D1-0F1B-4F90-86B7-3940E9001299";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -864,8 +872,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "exfe/EXFE-Info.plist";
 				PRODUCT_NAME = EXFE;
-				PROVISIONING_PROFILE = "27810EFD-ACC9-43D4-87AF-6F6AB8583C76";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D65456C4-2F46-4216-9F35-2D4E81EA4E48";
+				PROVISIONING_PROFILE = "9EE1A6C6-D073-4544-A5C2-9F7EAFAC54E1";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9EE1A6C6-D073-4544-A5C2-9F7EAFAC54E1";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

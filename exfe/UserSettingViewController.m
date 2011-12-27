@@ -6,6 +6,7 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import <QuartzCore/QuartzCore.h>
 #import "UserSettingViewController.h"
 #import "exfeAppDelegate.h"
 #import "RootViewController.h"
@@ -14,6 +15,7 @@
 #import "JSON/SBJson.h"
 #import "ImgCache.h"
 #import "Identity.h"
+#import "UIBarButtonItem+StyledButton.h"
 
 @implementation UserSettingViewController
 
@@ -42,6 +44,8 @@
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"username"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"api_key"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userid"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetoken"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetokenreg"];
     DBUtil *dbu=[DBUtil sharedManager];
     [dbu emptyDBData];
     
@@ -57,6 +61,25 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    UIBarButtonItem *flexibleSpaceLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    
+    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
+    [doneButton addTarget:self action:@selector(Done:) forControlEvents:UIControlEventTouchUpInside];
+    [doneButton setTitle:@"Close" forState:UIControlStateNormal];
+    doneButton.frame = (CGRect) {
+        .size.width = 50,
+        .size.height = 28,
+    };
+    [[doneButton layer] setCornerRadius:5.0f];
+    [[doneButton layer] setBorderWidth:1.0f];
+    [[doneButton layer] setBorderColor:[UIColor blackColor].CGColor];
+
+    [toolbar setItems:[NSArray arrayWithObjects:flexibleSpaceLeft, [[[UIBarButtonItem alloc] initWithCustomView:doneButton] autorelease], nil]];
+    
+    [flexibleSpaceLeft release];
+    
     APIHandler *api=[[APIHandler alloc]init];
     NSString *responseString=[api getProfile];
     NSDictionary *profileDict = [responseString JSONValue];
@@ -118,7 +141,6 @@
 
         NSLog(@"profile:%@",responseString);
     }
-    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -147,7 +169,6 @@
     else
     {
         exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];  
-        
         LoginViewController *loginview = [[LoginViewController alloc]
                                           initWithNibName:@"LoginViewController" bundle:nil];
         loginview.delegate=app;
@@ -197,6 +218,18 @@
     Identity *userIdentity=[[identitiesData objectAtIndex:[indexPath section]]  objectAtIndex:indexPath.row];
     if([indexPath section]==0)
     {
+        if([userIdentity.avatar_file_name isEqualToString:@""])
+        {
+            UIImage *img = [UIImage imageNamed:@"default_avatar.png"];
+            [cell setAvartar:img];
+        }
+        else
+        {
+            NSString* imgName = [userIdentity.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+            NSString *imgurl = [ImgCache getImgUrl:imgName];
+            UIImage *img = [[ImgCache sharedManager] getImgFrom:imgurl];
+            [cell setAvartar:img];
+        }
         if(![userIdentity.name isEqualToString:@""])
             [cell setLabelName:userIdentity.name];
         else
@@ -207,31 +240,57 @@
     }
     else
     {
-        
         UIImage *img = [UIImage imageNamed:@"device_iPhone.png"];
+        [cell setLabelStatus:1];
         [cell setAvartar:img];
-        [cell setLabelName:@"iPhone"];
+        [cell setLabelName:userIdentity.external_username];
+        
+        if([userIdentity.external_identity isEqualToString:[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"]])
+        {
+            [cell IsThisDevice:@""];
+        }
         return cell;
     }
-//    User *user=[User initWithDict:[comment.userjson JSONValue]];
-//    
-//    [cell setLabelText:comment.comment];
-//    [cell setLabelTime:comment.created_at];
-//    dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
-//    dispatch_async(imgQueue, ^{
-//        NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-//        NSString *imgurl = [ImgCache getImgUrl:imgName];
-//        UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
-//        
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            if(image!=nil && ![image isEqual:[NSNull null]]) 
-//                [cell setAvartar:image];
-//        });
-//    });
-//    
-//    dispatch_release(imgQueue);        
-//    return cell;
-//    
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+//    if(section==1)
+//        return 50;
+//    else
+//        return 0;
+    return 10;
+}
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    
+    if(footerView == nil) {
+        //allocate the view if it doesn't exist yet
+        footerView  = [[UIView alloc] init];
+        
+        //we would like to show a gloosy red button, so get the image first
+//        UIImage *image = [[UIImage imageNamed:@"button_red.png"]
+//                          stretchableImageWithLeftCapWidth:8 topCapHeight:8];
+        
+        //create the button
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//        [button setBackgroundImage:image forState:UIControlStateNormal];
+        
+        //the button should be as big as a table view cell
+        [button setFrame:CGRectMake(200, 10, 100, 40)];
+        
+        //set title, font size and font color
+        [button setTitle:@"Sign Out" forState:UIControlStateNormal];
+//        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
+//        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        
+        //set action of the button
+        [button addTarget:self action:@selector(Logout:)
+         forControlEvents:UIControlEventTouchUpInside];
+        
+        //add the button to the view
+        [footerView addSubview:button];
+    }
+    
+    //return the view for the footer
+    return footerView;
+}
 @end

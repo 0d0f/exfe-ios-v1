@@ -78,10 +78,9 @@
 							<object class="IBUILabel" id="384306732">
 								<reference key="NSNextResponder" ref="463537696"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{253, 27}, {37, 21}}</string>
+								<string key="NSFrame">{{217, 30}, {89, 21}}</string>
 								<reference key="NSSuperview" ref="463537696"/>
 								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:328</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -93,6 +92,7 @@
 								<nil key="IBUIHighlightedColor"/>
 								<int key="IBUIBaselineAdjustment">1</int>
 								<float key="IBUIMinimumFontSize">10</float>
+								<int key="IBUITextAlignment">2</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription" id="701999963">
 									<string key="name">Verdana</string>
 									<string key="family">Verdana</string>
@@ -233,8 +233,8 @@
 						<array class="NSMutableArray" key="children">
 							<reference ref="814478896"/>
 							<reference ref="904651154"/>
-							<reference ref="384306732"/>
 							<reference ref="763566239"/>
+							<reference ref="384306732"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>

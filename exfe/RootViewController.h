@@ -21,7 +21,6 @@
     NSMutableArray* events;
     BOOL reload;
     NSTimer *timer;
-    
     IBOutlet CrossCellView *tblCell;
     
 }

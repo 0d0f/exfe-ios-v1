@@ -11,6 +11,7 @@
 @interface ProfileCellView : UITableViewCell{
     IBOutlet UILabel *cellName;
     IBOutlet UILabel *cellIdentity;
+    IBOutlet UILabel *isThisDevice;    
     IBOutlet UIImageView *cellAvatar;
     IBOutlet UIImageView *cellStatus;    
 }
@@ -18,5 +19,7 @@
 - (void)setLabelIdentity:(NSString *)_text;
 - (void)setCellStatus:(UIImage *)_img;
 - (void)setAvartar:(UIImage*)_img;
+- (void)setLabelStatus:(int)type;
+- (void)IsThisDevice:(NSString*)devicename;
 
 @end

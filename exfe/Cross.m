@@ -25,6 +25,7 @@
 @synthesize updated_at;
 @synthesize state;
 @synthesize flag;
+@synthesize time_type;
 
 + (Cross*)initWithDict:(NSDictionary*)dict
 {
@@ -94,6 +95,10 @@
     else
         event.flag = 0;
 
+    if([dict objectForKey:@"time_type"]!=[NSNull null])
+        event.time_type = [[dict objectForKey:@"time_type"] integerValue];
+    else
+        event.time_type = 0;
     return event;
 }
 - (void)dealloc

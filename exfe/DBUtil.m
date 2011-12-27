@@ -44,14 +44,14 @@ static sqlite3 *database;
 		return;
 	} 
     sqlite3_stmt *stm=nil;
-    const char *sql = "select flag from crosses where id=1;";
+    const char *sql = "select time_type from crosses where id=1;";
     int result=sqlite3_prepare_v2(database, sql, -1, &stm, NULL);
     if(result==SQLITE_OK)
     {
     }
     else
     {
-        const char *upgradesql = "ALTER TABLE  `crosses` ADD  `flag` INT NOT NULL DEFAULT  '0';";
+        const char *upgradesql = "ALTER TABLE  `crosses` ADD  `time_type` INT NOT NULL DEFAULT  '0';";
         if(sqlite3_prepare_v2(database, upgradesql, -1, &stm, NULL)==SQLITE_OK)
         {
             if(sqlite3_step(stm)== SQLITE_DONE)
@@ -407,7 +407,7 @@ static sqlite3 *database;
 //}
 - (NSMutableArray*) getRecentEventObj
 {
-    const char *sql="SELECT id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,flag from crosses order by updated_at desc limit 20;";
+    const char *sql="SELECT id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,flag,time_type from crosses order by updated_at desc limit 20;";
     NSMutableArray *eventlist=[[NSMutableArray alloc] initWithCapacity:50];
     
     NSString *dbpath=[DBUtil DBPath];
@@ -441,6 +441,7 @@ static sqlite3 *database;
             eventobj.updated_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 11)];
             eventobj.state=sqlite3_column_int(stm, 12);
             eventobj.flag = sqlite3_column_int(stm, 13);
+            eventobj.time_type = sqlite3_column_int(stm, 14);
             [eventlist addObject:eventobj];
         }
     }
@@ -632,7 +633,7 @@ static sqlite3 *database;
 		return;
 	} 
     sqlite3_stmt *stm=nil;
-    const char *sql = "insert or replace into crosses (id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    const char *sql = "insert or replace into crosses (id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,time_type) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
 
     if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
@@ -650,6 +651,7 @@ static sqlite3 *database;
         sqlite3_bind_text(stm,11, [evento.created_at UTF8String], -1, SQLITE_TRANSIENT);
         sqlite3_bind_text(stm,12, [evento.updated_at UTF8String], -1, SQLITE_TRANSIENT);
         sqlite3_bind_int(stm,13, evento.state );
+        sqlite3_bind_int(stm,14, evento.time_type);
         
         if(sqlite3_step(stm)== SQLITE_DONE)
         {

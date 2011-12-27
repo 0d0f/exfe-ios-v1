@@ -167,7 +167,9 @@
     NSLog(@"set user token:%@",app.username);
     
     
-    NSString *post =[[NSString alloc] initWithFormat:@"devicetoken=%@&provider=iOSAPN",token];
+    CFStringRef devicenameString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)[[UIDevice currentDevice] name],NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
+
+    NSString *post =[[NSString alloc] initWithFormat:@"devicetoken=%@&provider=iOSAPN&devicename=%@",token,[(NSString *)devicenameString autorelease]];
     
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     
@@ -181,6 +183,7 @@
     [request setHTTPShouldHandleCookies:NO];
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding] autorelease];
+    NSLog(@"response %@",responseString);
     id jsonobj=[responseString JSONValue];
     
     id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];

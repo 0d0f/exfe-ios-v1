@@ -82,13 +82,15 @@
                                  stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] 
                                 stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-//    NSString *token=[[NSString alloc]initWithData:deviceToken encoding:
-//                     NSASCIIStringEncoding];
     NSLog(@"deviceToken: %@", tokenAsString);
+    NSLog(@"name: %@", [[UIDevice currentDevice] name]);
     APIHandler *api=[[APIHandler alloc]init];
     BOOL reg=[api regDeviceToken:tokenAsString];
     if(reg==YES)
+    {
         [[NSUserDefaults standardUserDefaults] setObject:@"YES"  forKey:@"devicetokenreg"];
+        [[NSUserDefaults standardUserDefaults] setObject:tokenAsString  forKey:@"devicetoken"];
+    }
     [api release];
 }
 

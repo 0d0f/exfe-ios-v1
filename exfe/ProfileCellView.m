@@ -47,5 +47,18 @@
 {
     cellStatus.image =_img;
 }
-
+- (void)setLabelStatus:(int)type
+{
+    if(type==1)
+    {
+        cellName.frame=CGRectMake(cellName.frame.origin.x, 11, cellName.frame.size.width, cellName.frame.size.height);
+    }
+      
+}
+- (void)IsThisDevice:(NSString*)devicename
+{
+    if(![devicename isEqualToString:@""])
+        isThisDevice.text=devicename;
+    [isThisDevice setHidden:NO];
+}
 @end

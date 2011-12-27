@@ -17,6 +17,7 @@
     IBOutlet UITableView* tabview;
     NSMutableArray *identitiesData;
     IBOutlet ProfileCellView *tblCell;
+    UIView *footerView;
 }
 
 - (IBAction) Logout:(id) sender;

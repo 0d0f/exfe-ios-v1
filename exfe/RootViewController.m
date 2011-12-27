@@ -28,8 +28,10 @@
 {
     [super viewDidLoad];
     reload=YES;
-    self.navigationController.title=@"Home";
-    
+    NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
+
+    //self.navigationController.title=uname;
+    [self.navigationController navigationBar].topItem.title=uname;
     NSString *settingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"navbar_setting" ofType:@"png"];
     UIImage *settingbtnimg = [UIImage imageWithContentsOfFile:settingbtnimgpath];
     
@@ -63,7 +65,7 @@
 //        DBUtil *dbu=[DBUtil sharedManager];
 //        events=[dbu getRecentEventObj];
     }
-    NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
+//    NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     NSString *apikey=[[NSUserDefaults standardUserDefaults] stringForKey:@"api_key"]; 
     if(uname!=nil && [apikey length]>2 )
     {
@@ -378,19 +380,33 @@
     Cross *event=[events objectAtIndex:indexPath.row];
 
     NSString *place=[event.place_line1 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSString *time=[[event.begin_at stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] substringToIndex:10];
-    if([place isEqualToString:@""]  && [time isEqualToString:@"0000-00-00"])
+    NSString *time=[event.begin_at stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString *time_str=[time substringWithRange:NSMakeRange(11,8)];
+    if([place isEqualToString:@""]  && [time isEqualToString:@"0000-00-00 00:00:00"])
         [cell setCellModel:1];
 
     [cell setLabelText: [event.title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
     
-    if([time isEqualToString:@"0000-00-00"])
+    if([time isEqualToString:@"0000-00-00 00:00:00"])
         [cell setLabelTime:@""];
     else
     {   
-        if([time length]==10)
-            time=[time substringWithRange:NSMakeRange(5,5)];
-        [cell setLabelTime:time];
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        
+        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+        NSDate *time_datetime = [dateFormat dateFromString:time]; 
+        [dateFormat setDateFormat:@"ha ccc MM-dd"];
+        if(event.time_type==2)
+        {
+            [dateFormat setDateFormat:@"ccc MM-dd"];
+        }
+        NSString *result=[dateFormat stringFromDate:time_datetime]; 
+        
+//        ccc
+//        if([time length]==10)
+//            time=[time substringWithRange:NSMakeRange(5,5)];
+        [cell setLabelTime:result];
+        [dateFormat release];
     }
     [cell setLabelPlace:place];
 
