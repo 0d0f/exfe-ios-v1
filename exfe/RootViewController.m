@@ -13,7 +13,6 @@
 #import "UserSettingViewController.h"
 #import "APIHandler.h"
 #import "JSON/SBJson.h"
-#import "Cross.h"
 #import "DBUtil.h"
 #import "ImgCache.h"
 #import "UIButton+StyledButton.h"
@@ -78,9 +77,12 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];  
     NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
     if(lastUpdateTime==nil)
-        [self LoadUserEvents]; 
+        [self LoadUserEvents:NO]; 
     else
+    {
+        [self LoadUserEvents:YES]; 
         [self LoadUpdate];
+    }
     
     [self stopLoading];
 
@@ -243,7 +245,11 @@
                     lastUpdateTime_datetime=[changeupdatetime laterDate:lastUpdateTime_datetime];
 
                 }
-                NSLog(@"%@",updateobj);
+                for (NSString *key in (NSDictionary*)updateobj)
+                {
+                    NSLog(@"%@",key);
+                }
+//                NSLog(@"%@",updateobj);
             }
         }
         lastUpdateTime = [dateFormat stringFromDate:lastUpdateTime_datetime]; 
@@ -255,6 +261,9 @@
     [self LoadUserEventsFromDB];
     
     [pool drain];    
+    NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
+    NSLog(@"update:%@",lastUpdateTime);
+
 }
 - (void)emptyView
 {
@@ -269,7 +278,7 @@
     [tableview reloadData];
 }
 
-- (void)LoadUserEvents
+- (void)LoadUserEvents:(BOOL)isnew
 {
     NSLog(@"load user events");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -292,7 +301,7 @@
         id crosses=[[jsonobj objectForKey:@"response"] objectForKey:@"crosses"];
         if([crosses isKindOfClass:[NSArray class]])
         {
-            [self UpdateDBWithEventDicts:(NSArray*)crosses];
+            [self UpdateDBWithEventDicts:(NSArray*)crosses isnew:isnew];
         }
     }
     else
@@ -304,11 +313,21 @@
     mapp.networkActivityIndicatorVisible = NO;
     [self LoadUserEventsFromDB];
     
+    //getLastEventUpdateTime
+    NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
+
+    if(isnew==NO && lastUpdateTime == nil)
+    {
+        DBUtil *dbu=[DBUtil sharedManager];
+        lastUpdateTime=[dbu getLastEventUpdateTime];
+        [[NSUserDefaults standardUserDefaults] setObject:lastUpdateTime  forKey:@"lastupdatetime"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     
     [pool drain];
     
 }
-- (void)UpdateDBWithEventDicts:(NSArray*)_events
+- (void)UpdateDBWithEventDicts:(NSArray*)_events isnew:(BOOL)isnew
 {
 
     DBUtil *dbu=[DBUtil sharedManager];
@@ -316,7 +335,7 @@
     {
         NSDictionary* eventdict=(NSDictionary*)[_events objectAtIndex:i];
         
-        [dbu updateEventobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:eventdict];
+        [dbu updateEventobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:eventdict isnew:isnew];
         [dbu updateCommentobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"conversations"]];
         [dbu updateInvitationobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"invitations"]];
         [dbu updateUserobjWithid:[[[eventdict objectForKey:@"host"] objectForKey:@"id"] integerValue] user:[eventdict objectForKey:@"host"]];
@@ -381,9 +400,11 @@
 
     NSString *place=[event.place_line1 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSString *time=[event.begin_at stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSString *time_str=[time substringWithRange:NSMakeRange(11,8)];
-    if([place isEqualToString:@""]  && [time isEqualToString:@"0000-00-00 00:00:00"])
+//    NSString *time_str=[time substringWithRange:NSMakeRange(11,8)];
+    if([place isEqualToString:@""]  && ([time isEqualToString:@"0000-00-00 00:00:00"] || event.time_type==3))
         [cell setCellModel:1];
+    else
+        [cell setCellModel:2];
 
     [cell setLabelText: [event.title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
     
@@ -458,8 +479,12 @@
     [detailViewController release]; 	
     DBUtil *dbu=[DBUtil sharedManager];
     [dbu setCrossStatusWithCrossId:event.id status:0];
-    event.flag=0;
-    [tableview reloadData];
+    if(event.flag==1)
+    {
+        event.flag=0;
+        
+        [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -485,6 +510,19 @@
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+- (Cross*)getEventByCrossId:(int)cross_id
+{
+    for (Cross *event in events)
+    {
+        NSLog(@"cross_id:%u",event.id);
+        if(event.id==cross_id)
+            return event;
+    }
+    return nil;
+    
+}
+
 - (void)dealloc
 {
     [events release];

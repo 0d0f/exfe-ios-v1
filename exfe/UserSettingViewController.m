@@ -46,6 +46,8 @@
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"userid"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetoken"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetokenreg"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"lastupdatetime"];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     DBUtil *dbu=[DBUtil sharedManager];
     [dbu emptyDBData];
     
@@ -254,11 +256,10 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-//    if(section==1)
-//        return 50;
-//    else
-//        return 0;
-    return 10;
+    if(section==1)
+        return 50;
+    else
+        return 10;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
     
@@ -271,6 +272,7 @@
 //                          stretchableImageWithLeftCapWidth:8 topCapHeight:8];
         
         //create the button
+        
         UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
 //        [button setBackgroundImage:image forState:UIControlStateNormal];
         
@@ -279,13 +281,11 @@
         
         //set title, font size and font color
         [button setTitle:@"Sign Out" forState:UIControlStateNormal];
-//        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
+        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
 //        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         
         //set action of the button
-        [button addTarget:self action:@selector(Logout:)
-         forControlEvents:UIControlEventTouchUpInside];
-        
+        [button addTarget:self action:@selector(Logout:) forControlEvents:UIControlEventTouchDown];
         //add the button to the view
         [footerView addSubview:button];
     }

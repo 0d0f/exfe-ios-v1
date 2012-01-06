@@ -618,7 +618,7 @@ static sqlite3 *database;
 //    [self setCrossStatusWithCrossId:eventid status:1];
 }
 
-- (void) updateEventobjWithid:(int)eventid event:(NSDictionary*)eventobj
+- (void) updateEventobjWithid:(int)eventid event:(NSDictionary*)eventobj isnew:(BOOL)newflag
 {
     
     Cross *evento=[Cross initWithDict:eventobj];
@@ -633,7 +633,7 @@ static sqlite3 *database;
 		return;
 	} 
     sqlite3_stmt *stm=nil;
-    const char *sql = "insert or replace into crosses (id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,time_type) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    const char *sql = "insert or replace into crosses (id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,flag,time_type) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
 
     if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
@@ -651,7 +651,11 @@ static sqlite3 *database;
         sqlite3_bind_text(stm,11, [evento.created_at UTF8String], -1, SQLITE_TRANSIENT);
         sqlite3_bind_text(stm,12, [evento.updated_at UTF8String], -1, SQLITE_TRANSIENT);
         sqlite3_bind_int(stm,13, evento.state );
-        sqlite3_bind_int(stm,14, evento.time_type);
+        if(newflag==YES)
+            sqlite3_bind_int(stm,14, 1);
+        else
+            sqlite3_bind_int(stm,14, 0);
+        sqlite3_bind_int(stm,15, evento.time_type);
         
         if(sqlite3_step(stm)== SQLITE_DONE)
         {
@@ -742,7 +746,6 @@ static sqlite3 *database;
 - (User*) getUserWithid:(int)userid
 {
     const char *sql="SELECT name,avatar_file_name,email,bio from users where id=?";
-    
     NSString *_dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:_dbpath];

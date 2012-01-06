@@ -135,7 +135,7 @@
 //        NSArray *arr=[[NSArray alloc]initWithObjects:[commentjson JSONValue], nil];
 //        [dbu updateCommentobjWithid:self.eventid event:arr];
 //        [arr release];
-        Comment *comment=[Comment initWithDict:[[[commentjson JSONValue] objectForKey:@"response"] objectForKey:@"conversation"] EventID:self.eventid];
+//        Comment *comment=[Comment initWithDict:[[[commentjson JSONValue] objectForKey:@"response"] objectForKey:@"conversation"] EventID:self.eventid];
         [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
 
         //[comments addObject:comment];

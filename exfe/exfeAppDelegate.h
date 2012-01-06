@@ -40,4 +40,5 @@
 - (void)showLoginView;
 //- (IBAction) RefreshRootview:(id) sender;
 - (void)copyResource;
+- (void)ReceivePushData:(NSDictionary*)userInfo RunOnForeground:(BOOL)isForeground;
 @end

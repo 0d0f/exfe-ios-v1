@@ -131,8 +131,9 @@
     
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
 
-    DBUtil *dbu=[DBUtil sharedManager];
-    NSString *lastUpdateTime=[dbu getLastEventUpdateTime];
+//    DBUtil *dbu=[DBUtil sharedManager];
+//    NSString *lastUpdateTime=[dbu getLastEventUpdateTime];
+    NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
 
     NSError *error = nil;
     NSString *apiurl=nil;
@@ -152,10 +153,22 @@
         NSLog(@"%@",error);
     }
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    [[NSUserDefaults standardUserDefaults] setObject:lastUpdateTime  forKey:@"lastupdatetime"];
+//    NSString *saved_lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
+//
+//    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+//    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//    NSDate *lastUpdateTime_datetime = [dateFormat dateFromString:saved_lastUpdateTime]; 
+//
+//    NSDate *update_datetime = [dateFormat dateFromString:lastUpdateTime]; 
+//    
+//
+//    lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
 
+//    [[NSUserDefaults standardUserDefaults] setObject:[dateFormat stringFromDate:lastUpdateTime_datetime]  forKey:@"lastupdatetime"];
+//    [[NSUserDefaults standardUserDefaults] synchronize];
+//    [dateFormat release];
     [pool release];
-    [lastUpdateTime release];
+//    [lastUpdateTime release];
     return responseString;
 }
 
@@ -208,7 +221,9 @@
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     
     NSLog(@"get User update:%@",app.username);
+    [[NSUserDefaults standardUserDefaults] synchronize];
     NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
+
 
     if(lastUpdateTime==nil)
         lastUpdateTime=@"0000-00-00 00:00:00";
@@ -218,6 +233,7 @@
     
     NSString *url=[NSString stringWithFormat:@"%@/users/%i/getupdate?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],app.userid,[(NSString *)dateurlString autorelease],api_key];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
+    NSLog(@"%@",url);
     [request setHTTPShouldHandleCookies:NO];
     
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];

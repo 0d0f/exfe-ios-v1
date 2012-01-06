@@ -50,6 +50,8 @@
     }
     else if (type == 2) //height = 62
     {
+        [cellAvatar setFrame:CGRectMake(cellAvatar.frame.origin.x, 11, cellAvatar.frame.size.width, cellAvatar.frame.size.height)];
+        [cellText setFrame:CGRectMake(cellText.frame.origin.x,10,cellText.frame.size.width,cellText.frame.size.height)];
         
     }
         

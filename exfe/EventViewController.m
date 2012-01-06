@@ -85,13 +85,13 @@ const int INVITATION_MAYBE=0;
     dispatch_queue_t loaddata= dispatch_queue_create("loaddata", NULL);
     dispatch_async(loaddata, ^{
         NSString *html=[self GenerateHtmlWithEvent];
-        DBUtil *dbu=[DBUtil sharedManager];
-        NSArray* _comments=[dbu getCommentWithEventid:self.eventid];
         dispatch_async(dispatch_get_main_queue(), ^{
             [webview loadHTMLString:html baseURL:baseURL];
             conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
             CGRect crect=conversionViewController.view.frame;
             conversionViewController.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
+            DBUtil *dbu=[DBUtil sharedManager];
+            NSArray* _comments=[dbu getCommentWithEventid:self.eventid];
             comments=[NSMutableArray arrayWithArray: _comments];
             conversionViewController.comments=comments;
             conversionViewController.eventid=eventid;
@@ -102,7 +102,21 @@ const int INVITATION_MAYBE=0;
     });
     dispatch_release(loaddata);
 }
-
+- (void)loadConversationData
+{
+            conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
+            CGRect crect=conversionViewController.view.frame;
+            conversionViewController.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
+            DBUtil *dbu=[DBUtil sharedManager];
+            NSArray* _comments=[dbu getCommentWithEventid:self.eventid];
+            comments=[NSMutableArray arrayWithArray: _comments];
+            conversionViewController.comments=comments;
+            conversionViewController.eventid=eventid;
+            [self.view addSubview:conversionViewController.view];
+            [conversionViewController.view setHidden:YES];
+            [conversationview setHidden:YES];
+    [self toconversation];
+}
 - (void)viewWillAppear:(BOOL)animated 
 {
 	[super viewWillAppear:animated];
@@ -367,12 +381,10 @@ const int INVITATION_MAYBE=0;
     if( [eventjson JSONValue]!=nil)
     {
         DBUtil *dbu=[DBUtil sharedManager];
-        [dbu updateEventobjWithid:self.eventid event:self.event];
+        [dbu updateEventobjWithid:self.eventid event:self.event isnew:NO];
 //        [self updateEventView];  
     }
     self.navigationItem.rightBarButtonItem = barButtonItem;
-    
-    
 }
 
 -(void)inputButtonPressed:(NSString *)inputText
@@ -434,6 +446,5 @@ const int INVITATION_MAYBE=0;
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
-
 
 @end

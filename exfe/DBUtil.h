@@ -24,7 +24,7 @@
 - (void) updateEventicalWithid:(int)eventid  identifier:(NSString*) eventIdentifier;
 - (NSString*)getIdentifierWithid:(int)eventid;
 
-- (void) updateEventobjWithid:(int)eventid event:(NSDictionary*)eventobj;
+- (void) updateEventobjWithid:(int)eventid event:(NSDictionary*)eventobj isnew:(BOOL)newflag;
 - (void) updateCommentobjWithid:(int)eventid event:(NSArray*)commentdict;
 - (void) updateInvitationobjWithid:(int)eventid event:(NSArray*)invitationdict;
 - (void) updateUserobjWithid:(int)uid user:(NSDictionary*)userobj;

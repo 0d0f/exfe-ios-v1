@@ -26,7 +26,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
     [self copyResource];
     meViewReload=NO;
     
@@ -64,18 +63,18 @@
         [self.navigationController presentModalViewController:loginview animated:YES];
 
     }
+    //NSLog(@"start app..%@",launchOptions);
+    
+    NSDictionary *remoteNotif = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
+    if(remoteNotif)
+    {
+        [self ReceivePushData:remoteNotif RunOnForeground:FALSE];
+        //[self handleRemoteNotification:application userInfo:remoteNotif];
+    }
 
     return YES;
 }
-//- (IBAction) RefreshRootview:(id) sender
-//{
-//    
-//    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
-//    NSArray *viewControllers = self.navigationController.viewControllers;
-//    RootViewController *rootViewController = [viewControllers objectAtIndex:0];
-//    [NSThread detachNewThreadSelector:@selector(LoadUserEvents) toTarget:rootViewController withObject:nil];
-//}
-// Delegation methods
+
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     
     NSString * tokenAsString = [[[deviceToken description] 
@@ -98,28 +97,55 @@
     NSLog(@"Error in registration. Error: %@", err);
 }
 
+- (void)ReceivePushData:(NSDictionary*)userInfo RunOnForeground:(BOOL)isForeground
+{
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    RootViewController *rootViewController = [viewControllers objectAtIndex:0];
+
+    if([[userInfo objectForKey:@"args"] objectForKey:@"cid"] !=NULL && ![[[userInfo objectForKey:@"args"] objectForKey:@"cid"] isEqualToString:@""])
+    {
+        if([[[userInfo objectForKey:@"args"] objectForKey:@"cid"] intValue]>0 )
+        {
+            int cross_id=[[[userInfo objectForKey:@"args"] objectForKey:@"cid"] intValue];
+            NSString *type=[[userInfo objectForKey:@"args"] objectForKey:@"t"];
+            dispatch_queue_t fetchDataQueue = dispatch_queue_create("fetch new data thread", NULL);
+            
+            dispatch_async(fetchDataQueue, ^{
+                [rootViewController refresh];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSLog(@"load new data complete, push view...");
+                    if (isForeground != TRUE)
+                    {
+                        Cross *cross=[rootViewController getEventByCrossId:cross_id];
+                        
+                        if(cross!=nil)
+                        {
+                            EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil];
+                            detailViewController.eventid=cross_id;
+                            detailViewController.eventobj=cross;
+                            [self.navigationController pushViewController:detailViewController animated:YES];
+                            if([type isEqualToString:@"c"])
+                                [detailViewController loadConversationData];
+                            [detailViewController release]; 	
+                            
+                        }
+                    }
+                });
+            });
+            
+            dispatch_release(fetchDataQueue);              
+            //fetch, then push controller in mainqueue
+            
+        }
+    }    
+}
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    
-    NSLog(@"收到推送消息 ：%@",userInfo);
-    if([[userInfo objectForKey:@"c"] objectForKey:@"eid"] !=NULL && [[userInfo objectForKey:@"c"] objectForKey:@"t"]!=NULL)
-    {
-        NSLog(@"get event id:%@ , type:%@",[[userInfo objectForKey:@"c"] objectForKey:@"eid"],[[userInfo objectForKey:@"c"] objectForKey:@"t"]);
-
-        if( [[[userInfo objectForKey:@"c"] objectForKey:@"t"] isEqualToString:@"i"])
-        {
-//            NSArray *viewControllers = self.navigationController.viewControllers;
-//            RootViewController *rootViewController = [viewControllers objectAtIndex:0];
-            EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil];
-
-            detailViewController.eventid=[[[userInfo objectForKey:@"c"] objectForKey:@"eid"] intValue];
-
-            [self.navigationController pushViewController:detailViewController animated:YES];
-            [detailViewController release]; 	
-        }
-    }
-       
-       
+    NSLog(@"appstate:%u",application.applicationState);
+    BOOL isForeground=TRUE;
+    if(application.applicationState != UIApplicationStateActive)
+        isForeground=FALSE;
+    [self ReceivePushData:userInfo RunOnForeground:isForeground];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -170,8 +196,7 @@
     RootViewController *rootViewController = [viewControllers objectAtIndex:0];
 
     [self.navigationController dismissModalViewControllerAnimated:YES];
-    [rootViewController performSelector:@selector(LoadUserEvents) withObject:nil];
-//    [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
+    [rootViewController performSelector:@selector(LoadUserEvents:) withObject:NO];
 
 }
 -(void)logoutViewControllerDidFinish:(UserSettingViewController *)UserSettingViewController
@@ -187,8 +212,6 @@
     
 }
 
-
-
 - (void)copyResource
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
@@ -200,28 +223,7 @@
         NSString *filename = [[filenamefull componentsSeparatedByString:@"/"] lastObject];
         NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:filename];
         [[NSFileManager defaultManager] copyItemAtPath:filenamefull toPath:writableDBPath error:NULL];
-
-        
-
-        //    NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"*.png"];
-
     }
-//    NSBundle *thisBundle = [NSBundle bundleForClass:[self class]];
-//    if (commonDictionaryPath = [thisBundle pathForResource:@"CommonDictionary" ofType:@"plist"])  {
-        // when completed, it is the developer's responsibility to release theDictionary
-//    }    
-    
-//    NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"*.png"];
-//    
-//    NSString *olddbpath=[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"*.png"];
-//    
-//    if (![[NSFileManager defaultManager] isReadableFileAtPath:writableDBPath]) {
-//		
-//        if ([[NSFileManager defaultManager] copyItemAtPath:olddbpath toPath:writableDBPath error:NULL] != YES)
-//			
-//			NSAssert2(0, @"Fail to copy database from %@ to %@", olddbpath, writableDBPath);
-//    }
-
 }
 
 
