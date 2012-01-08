@@ -90,65 +90,76 @@
 }
 - (void)refresh
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
-    APIHandler *api=[[APIHandler alloc]init];
-    NSString *responseString=[api getPostsWith:eventid];
-    
-    DBUtil *dbu=[DBUtil sharedManager];
-    
-    id code=[[[responseString JSONValue] objectForKey:@"meta"] objectForKey:@"code"];
-    if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
-    {
-        NSArray *arr=[[[responseString JSONValue] objectForKey:@"response"] objectForKey:@"conversations"];
-        
-        [dbu updateCommentobjWithid:eventid event:arr];
-        for(int i=0;i<[arr count];i++)
-        {
-            Comment *commentobj=[Comment initWithDict:[arr objectAtIndex:i] EventID:eventid];
-            if(commentobj!=nil)
-            {
-                [comments insertObject:commentobj atIndex:i];
-            }
-            
-        }
-        if([arr count]>0)
-            [(UITableView*)self.view reloadData];
-    }
-    [api release];
-    [self stopLoading];
-    [pool drain];
+    [self refreshAndHideKeyboard:nil];
 }
 
-
-- (void)postComment:(NSString*)inputtext
+- (void)refreshAndHideKeyboard:(UIInputToolbar*)inputToolbar
+{
+    dispatch_queue_t refreshQueue = dispatch_queue_create("refreshconversation thread", NULL);
+    dispatch_async(refreshQueue, ^{
+        BOOL reload=FALSE;
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        APIHandler *api=[[APIHandler alloc]init];
+        NSString *responseString=[api getPostsWith:eventid];
+        NSLog(@"conversation:%@",responseString);
+        
+        DBUtil *dbu=[DBUtil sharedManager];
+        
+        id code=[[[responseString JSONValue] objectForKey:@"meta"] objectForKey:@"code"];
+        if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
+        {
+            
+            NSArray *arr=[[[responseString JSONValue] objectForKey:@"response"] objectForKey:@"conversations"];
+            [dbu updateCommentobjWithid:eventid event:arr];
+            for(int i=0;i<[arr count];i++)
+            {
+                Comment *commentobj=[Comment initWithDict:[arr objectAtIndex:i] EventID:eventid];
+                if(commentobj!=nil)
+                {
+                    [comments insertObject:commentobj atIndex:i];
+                }
+            }
+            if([arr count]>0)
+                reload=TRUE;
+        }
+        [api release];
+        [pool drain];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(reload)
+            {
+                [(UITableView*)self.view reloadData];
+            }
+            
+            [self stopLoading];
+            if(inputToolbar!=nil)
+            {
+                [inputToolbar becomeFirstResponder];
+                [inputToolbar setInputEnabled:YES];
+                [inputToolbar hidekeyboard];
+            }
+        });
+    });
+    
+    dispatch_release(refreshQueue);      
+}
+- (BOOL)postComment:(NSString*)inputtext
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
     APIHandler *api=[[APIHandler alloc]init];
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     NSString *commentjson=[api AddCommentById:eventid comment:inputtext external_identity:uname];
+    BOOL success=FALSE;
     if([[[commentjson JSONValue] objectForKey:@"response"] objectForKey:@"conversation"]!=nil)
     {
-        //TODO
-//        DBUtil *dbu=[DBUtil sharedManager];
-//        NSArray *arr=[[NSArray alloc]initWithObjects:[commentjson JSONValue], nil];
-//        [dbu updateCommentobjWithid:self.eventid event:arr];
-//        [arr release];
-//        Comment *comment=[Comment initWithDict:[[[commentjson JSONValue] objectForKey:@"response"] objectForKey:@"conversation"] EventID:self.eventid];
-        [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
-
-        //[comments addObject:comment];
-//        [comments insertObject:comment atIndex:0];        
-//        [(UITableView*)self.view reloadData];
-    }
-    else
-    {
-        NSLog(@"comment failure");
+        success=TRUE;
     }
     [commentjson release];
     [api release]; 
     [pool drain];
+    //[NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
+    return success;
 }
 
 #pragma mark - Table view data source

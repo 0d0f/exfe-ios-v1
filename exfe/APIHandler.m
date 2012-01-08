@@ -252,7 +252,7 @@
 }
 - (NSString*)AddCommentById:(int)eventid comment:(NSString*)commenttext external_identity:(NSString*)external_identity
 {
-    NSString *post =[[NSString alloc] initWithFormat:@"external_identity=%@&content=%@",external_identity,commenttext];
+    NSString *post =[[NSString alloc] initWithFormat:@"external_identity=%@&content=%@&via=iOS",external_identity,commenttext];
     
     NSData *postData = [post dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
     
@@ -269,8 +269,6 @@
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
     return responseString;    
-//    curl -d "comment=bbbb" http://api.exfe.com/v1/events/18/comments.json?api_key=kUWeTGQwBKpTyuCERkHd
-//    return @"";
 }
 - (void)dealloc
 {

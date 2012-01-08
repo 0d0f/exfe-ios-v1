@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "PullRefreshTableViewController.h"
 #import "ConversationCellView.h"
+#import "UIInputToolbar.h"
 
 @interface ConversionTableViewController : PullRefreshTableViewController 
 {
@@ -19,4 +20,8 @@
 }
 @property int eventid;
 @property (retain,nonatomic) NSMutableArray* comments;
+
+- (BOOL)postComment:(NSString*)inputtext;
+- (void)refreshAndHideKeyboard:(UIInputToolbar*)inputToolbar;
+
 @end

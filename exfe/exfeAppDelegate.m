@@ -127,7 +127,6 @@
                             if([type isEqualToString:@"c"])
                                 [detailViewController loadConversationData];
                             [detailViewController release]; 	
-                            
                         }
                     }
                 });

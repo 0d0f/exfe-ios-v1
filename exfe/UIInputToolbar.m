@@ -38,11 +38,25 @@
         [delegate inputButtonPressed:self.textView.text];
     }
     
+}
+- (void)hidekeyboard
+{
     /* Remove the keyboard and clear the text */
     [self.textView resignFirstResponder];
-    [self.textView clearText];
-}
 
+    [self.textView clearText];
+    
+}
+- (void)setInputEnabled:(BOOL)enabled
+{
+    [self.textView setUserInteractionEnabled:enabled];
+    [inputButton setEnabled:enabled];
+    if(enabled==TRUE)
+        [self.textView setTextColor:[UIColor blackColor]];
+    else
+        [self.textView setTextColor:[UIColor grayColor]];
+
+}
 -(void)setupToolbar:(NSString *)buttonLabel
 {
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleRightMargin;

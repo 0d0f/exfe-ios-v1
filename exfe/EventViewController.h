@@ -37,8 +37,8 @@
     BOOL showeventinfo;
 
     BOOL keyboardIsVisible;
-    
     UIInputToolbar *inputToolbar;
+    UITextField* placeholder;
     
     NSMutableArray *comments;
 

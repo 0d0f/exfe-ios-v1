@@ -13,6 +13,7 @@
 #import <EventKit/EventKit.h>
 #import "UIButton+StyledButton.h"
 #import "ImgCache.h"
+#import "ConversationCellView.h"
 
 const int INVITATION_YES=1;
 const int INVITATION_NO=2;
@@ -36,6 +37,7 @@ const int INVITATION_MAYBE=0;
 
 - (void)dealloc
 {
+    [placeholder release];
     [super dealloc];
 }
 
@@ -81,6 +83,8 @@ const int INVITATION_MAYBE=0;
     NSURL *baseURL = [NSURL fileURLWithPath:documentsDirectory];
     showeventinfo=YES;
     keyboardIsVisible = NO;
+    placeholder=[[UITextField alloc]init];
+    [self.view addSubview:placeholder];
 
     dispatch_queue_t loaddata= dispatch_queue_create("loaddata", NULL);
     dispatch_async(loaddata, ^{
@@ -300,7 +304,6 @@ const int INVITATION_MAYBE=0;
                 sevent.endDate   = [[NSDate alloc] initWithTimeInterval:600 sinceDate:sevent.startDate];
                 sevent.location =[self.event objectForKey:@"venue"];
                 
-                
                 [sevent setCalendar:[eventStore defaultCalendarForNewEvents]];
                 NSError *err;
                 [eventStore saveEvent:sevent span:EKSpanThisEvent error:&err]; 
@@ -389,9 +392,27 @@ const int INVITATION_MAYBE=0;
 
 -(void)inputButtonPressed:(NSString *)inputText
 {
- //   [conversionViewController performSelector:@selector(postComment:) withObject:inputText];
-//    [conversionViewController startLoading];
-    [NSThread detachNewThreadSelector:@selector(postComment:) toTarget:conversionViewController withObject:inputText];
+    [placeholder becomeFirstResponder];
+    [inputToolbar setInputEnabled:NO];
+
+    dispatch_queue_t commentQueue = dispatch_queue_create("comment thread", NULL);
+    dispatch_async(commentQueue, ^{
+        BOOL result=[conversionViewController postComment:inputText];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if(result==true)
+            {
+                [conversionViewController refreshAndHideKeyboard:inputToolbar];
+            }
+            else
+            {
+                [inputToolbar becomeFirstResponder];
+                [inputToolbar setInputEnabled:YES];
+                NSLog(@"show error alert");
+            }
+        });
+    });
+    dispatch_release(commentQueue);     
 }
 
 
