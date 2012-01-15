@@ -14,6 +14,7 @@
 #import "UIButton+StyledButton.h"
 #import "ImgCache.h"
 #import "ConversationCellView.h"
+#import "exfeAppDelegate.h"
 
 const int INVITATION_YES=1;
 const int INVITATION_NO=2;
@@ -156,6 +157,10 @@ const int INVITATION_MAYBE=0;
 
 - (NSString*)GenerateHtmlWithEvent
 {
+    NSLog(@"generate new html...");
+    exfeAppDelegate *app=(exfeAppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    
     DBUtil *dbu=[DBUtil sharedManager];
    
     NSDate *theDate = nil;
@@ -203,45 +208,48 @@ const int INVITATION_MAYBE=0;
         html=[html stringByReplacingOccurrencesOfString:@"{#place_line2#}" withString:place_line2];
     }
     html=[html stringByReplacingOccurrencesOfString:@"{#title#}" withString:eventobj.title];
+
+    NSString *rsvpstatus=@"<ul class='rsvpButtons ynbtn'><li><a href='http://invitation/#yes' class='yes'>YES</a></li><li><a href='http://invitation/#no' class='no'>NO</a></li><li><a href='http://invitation/#maybe' class='maybe'>Maybe</a></li></ul>";
+
     
     NSString *exfeelist=@"";
     NSArray *invitations=[dbu getInvitationWithEventid:self.eventid];
 
     if(invitations !=nil&&[invitations count]>0)
     {
-        //          exfeelist=[exfeelist stringByAppendingString:@""];
         for (int i=0;i<[invitations count];i++)
         {
             Invitation *invitation=[invitations objectAtIndex:i];
-            //              exfeelist=[exfeelist stringByAppendingFormat:@"<p>%@ state:%@ via %@ </p>",invitation.username,invitation.state,invitation.provider];
-            
             if(![invitation.avatar isEqualToString:@""])
             {
-                
                 if(![invitation.avatar isEqualToString:@""])
                 {
                     NSString* imgName = [invitation.avatar stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-//                    NSString *imgurl=[NSString stringWithFormat:@"http://api.exfe.com/system/avatars/%u/thumb/%@",invitation.userid,imgName];
-                    
-//                    NSString *imgurl=[NSString stringWithFormat:@"%@/eimgs/80_80_%@",[APIHandler URL_API_DOMAIN],imgName];
                     NSString *imgurl = [ImgCache getImgUrl:imgName];
                     NSString *imgcachename=[ImgCache getImgName:imgurl];
                     
                     if(invitation.state ==INVITATION_YES)
+                    {
                         exfeelist=[exfeelist stringByAppendingFormat:@"<img src='images/%@'>",imgcachename];
+                    }
                     else
                         exfeelist=[exfeelist stringByAppendingFormat:@"<img class='rsvp_no'src='images/%@'>",imgcachename];
-                    
                 }
             }
-            
+            if(invitation.user_id==app.userid)
+            {
+                if(invitation.state ==INVITATION_YES)
+                    rsvpstatus=@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Accepted</span>\".</span>";
+                else if(invitation.state ==INVITATION_NO)
+                    rsvpstatus=@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Declined</span>\".</span>";
+
+            }
         }
     }    
-    
     html=[html stringByReplacingOccurrencesOfString:@"{#exfee_list#}" withString:exfeelist];
-    
+    html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_status#}" withString:rsvpstatus];
+
     NSString *description=[eventobj.description stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
-    
     html=[html stringByReplacingOccurrencesOfString:@"{#description#}" withString:description];
     return html;
 }
@@ -267,9 +275,7 @@ const int INVITATION_MAYBE=0;
                 {
                 DBUtil *dbu=[DBUtil sharedManager];
                     
-//                [dbu updateEventobjWithid:self.eventid event:eventdict];
                 [dbu updateInvitationobjWithid:self.eventid event:(NSArray*)[[rsvpDict objectForKey:@"response"] objectForKey:@"invitations"]];
-                
                 
                 NSString *html=[self GenerateHtmlWithEvent];
                 

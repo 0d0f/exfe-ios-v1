@@ -51,11 +51,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/EventViewController.m"
-         timestampString = "347720225.648755"
+         timestampString = "348346322.427616"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "384"
-         endingLineNumber = "384"
+         startingLineNumber = "389"
+         endingLineNumber = "389"
          landmarkName = "-LoadEvent"
          landmarkType = "5">
       </FileBreakpoint>
@@ -107,11 +107,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/LoginViewController.m"
-         timestampString = "346087229.446242"
+         timestampString = "348346322.427616"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "61"
-         endingLineNumber = "61"
+         startingLineNumber = "52"
+         endingLineNumber = "52"
          landmarkName = "-LoginButtonPress:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -121,11 +121,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/DBUtil.m"
-         timestampString = "346672138.672922"
+         timestampString = "348342093.061136"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "626"
-         endingLineNumber = "626"
+         startingLineNumber = "629"
+         endingLineNumber = "629"
          landmarkName = "-updateEventobjWithid:event:isnew:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -134,69 +134,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "exfe/EventViewController.m"
-         timestampString = "347720225.648755"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "271"
-         endingLineNumber = "271"
-         landmarkName = "-webView:shouldStartLoadWithRequest:navigationType:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "exfe/EventViewController.m"
-         timestampString = "347720225.648755"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "260"
-         endingLineNumber = "260"
-         landmarkName = "-webView:shouldStartLoadWithRequest:navigationType:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "exfe/EventViewController.m"
-         timestampString = "347720225.648755"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "274"
-         endingLineNumber = "274"
-         landmarkName = "-webView:shouldStartLoadWithRequest:navigationType:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
          filePath = "exfe/APIHandler.m"
-         timestampString = "346756268.797491"
+         timestampString = "347993432.975258"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "179"
-         endingLineNumber = "179"
+         startingLineNumber = "172"
+         endingLineNumber = "172"
          landmarkName = "-regDeviceToken:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "exfe/EventViewController.m"
-         timestampString = "347720225.648755"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "364"
-         endingLineNumber = "364"
-         landmarkName = "-refresh"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -233,21 +177,7 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/APIHandler.m"
-         timestampString = "346231953.151321"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "116"
-         endingLineNumber = "116"
-         landmarkName = "-getPostsWith:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "exfe/APIHandler.m"
-         timestampString = "346231953.151321"
+         timestampString = "347993432.975258"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "109"
@@ -260,13 +190,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "exfe/EventViewController.m"
-         timestampString = "347720225.648755"
+         filePath = "exfe/APIHandler.m"
+         timestampString = "347993432.975258"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "251"
-         endingLineNumber = "251"
-         landmarkName = "-webView:shouldStartLoadWithRequest:navigationType:"
+         startingLineNumber = "102"
+         endingLineNumber = "102"
+         landmarkName = "-getPostsWith:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -303,11 +233,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/RootViewController.m"
-         timestampString = "347369028.989731"
+         timestampString = "348072502.547207"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "220"
-         endingLineNumber = "220"
+         startingLineNumber = "221"
+         endingLineNumber = "221"
          landmarkName = "-LoadUpdate"
          landmarkType = "5">
       </FileBreakpoint>
@@ -317,11 +247,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/DBUtil.m"
-         timestampString = "345737993.223535"
+         timestampString = "348341834.388869"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "292"
-         endingLineNumber = "292"
+         startingLineNumber = "293"
+         endingLineNumber = "293"
          landmarkName = "-updateCrossWithCrossId:change:lastupdatetime:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -331,11 +261,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/DBUtil.m"
-         timestampString = "345737993.223535"
+         timestampString = "348341834.388869"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "263"
-         endingLineNumber = "263"
+         startingLineNumber = "264"
+         endingLineNumber = "264"
          landmarkName = "-updateCrossWithCrossId:change:lastupdatetime:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -345,11 +275,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/UserSettingViewController.m"
-         timestampString = "346791088.13589"
+         timestampString = "348086097.098708"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "161"
-         endingLineNumber = "161"
+         startingLineNumber = "158"
+         endingLineNumber = "158"
          landmarkName = "-viewDidDisappear:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -373,11 +303,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/exfeAppDelegate.m"
-         timestampString = "347540243.219592"
+         timestampString = "347993621.437873"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "190"
-         endingLineNumber = "190"
+         startingLineNumber = "193"
+         endingLineNumber = "193"
          landmarkName = "-loginViewControllerDidFinish:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -387,11 +317,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/LoginViewController.m"
-         timestampString = "346087229.446242"
+         timestampString = "348346322.427616"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "48"
-         endingLineNumber = "48"
+         startingLineNumber = "39"
+         endingLineNumber = "39"
          landmarkName = "-LoginButtonPress:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -401,11 +331,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/LoginViewController.m"
-         timestampString = "346087229.446242"
+         timestampString = "348346322.427616"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "55"
-         endingLineNumber = "55"
+         startingLineNumber = "46"
+         endingLineNumber = "46"
          landmarkName = "-LoginButtonPress:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -428,26 +358,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "exfe/UserSettingViewController.m"
-         timestampString = "346791088.13589"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "97"
-         endingLineNumber = "97"
-         landmarkName = "-viewDidLoad"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
          filePath = "exfe/APIHandler.m"
-         timestampString = "346756268.797491"
+         timestampString = "347993432.975258"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "198"
-         endingLineNumber = "198"
+         startingLineNumber = "191"
+         endingLineNumber = "191"
          landmarkName = "-regDeviceToken:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -457,11 +373,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/APIHandler.m"
-         timestampString = "346756268.797491"
+         timestampString = "347993432.975258"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "200"
-         endingLineNumber = "200"
+         startingLineNumber = "193"
+         endingLineNumber = "193"
          landmarkName = "-regDeviceToken:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -471,11 +387,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/UserSettingViewController.m"
-         timestampString = "346791088.13589"
+         timestampString = "348086097.098708"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "248"
-         endingLineNumber = "248"
+         startingLineNumber = "245"
+         endingLineNumber = "245"
          landmarkName = "-tableView:cellForRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -513,11 +429,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/RootViewController.m"
-         timestampString = "347369028.989731"
+         timestampString = "348072502.547207"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "129"
-         endingLineNumber = "129"
+         startingLineNumber = "130"
+         endingLineNumber = "130"
          landmarkName = "-LoadUpdate"
          landmarkType = "5">
       </FileBreakpoint>
@@ -526,26 +442,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "exfe/UserSettingViewController.m"
-         timestampString = "346791088.13589"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "280"
-         endingLineNumber = "280"
-         landmarkName = "-tableView:viewForFooterInSection:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
          filePath = "exfe/RootViewController.m"
-         timestampString = "347524635.218722"
+         timestampString = "348072502.547207"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "516"
-         endingLineNumber = "516"
+         startingLineNumber = "517"
+         endingLineNumber = "517"
          landmarkName = "-getEventByCrossId:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -555,11 +457,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/APIHandler.m"
-         timestampString = "347558465.287284"
+         timestampString = "347993432.975258"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "255"
-         endingLineNumber = "255"
+         startingLineNumber = "251"
+         endingLineNumber = "251"
          landmarkName = "-AddCommentById:comment:external_identity:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -575,6 +477,76 @@
          startingLineNumber = "94"
          endingLineNumber = "94"
          landmarkName = "-refresh"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/EventViewController.m"
+         timestampString = "348346322.427616"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "222"
+         endingLineNumber = "222"
+         landmarkName = "-GenerateHtmlWithEvent"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/RootViewController.m"
+         timestampString = "348146005.8633"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "230"
+         endingLineNumber = "230"
+         landmarkName = "-LoadUpdate"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/DBUtil.m"
+         timestampString = "348342232.490489"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "320"
+         endingLineNumber = "320"
+         landmarkName = "-updateInvitationobjWithid:event:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/DBUtil.m"
+         timestampString = "348342330.10435"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "307"
+         endingLineNumber = "307"
+         landmarkName = "-updateInvitationobjWithid:event:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/EventViewController.m"
+         timestampString = "348346361.204337"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "239"
+         endingLineNumber = "239"
+         landmarkName = "-GenerateHtmlWithEvent"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

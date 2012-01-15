@@ -64,7 +64,6 @@
 //        DBUtil *dbu=[DBUtil sharedManager];
 //        events=[dbu getRecentEventObj];
     }
-//    NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     NSString *apikey=[[NSUserDefaults standardUserDefaults] stringForKey:@"api_key"]; 
     if(uname!=nil && [apikey length]>2 )
     {
@@ -74,6 +73,7 @@
 
 - (void) refresh
 {
+    @synchronized(self) {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];  
     NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
     if(lastUpdateTime==nil)
@@ -86,7 +86,8 @@
     
     [self stopLoading];
 
-    [pool drain];    
+    [pool drain];   
+    }
 }
 
 - (BOOL)LoadUserEventsFromDB
@@ -385,7 +386,7 @@
     if([place isEqualToString:@""]  && [time isEqualToString:@"0000-00-00"])
         return 44;
 
-    return 62;
+    return 61;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

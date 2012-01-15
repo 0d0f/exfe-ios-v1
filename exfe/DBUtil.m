@@ -180,7 +180,7 @@ static sqlite3 *database;
         
         if(sqlite3_step(stm) != SQLITE_ROW)
         {
-            const char *sql = "insert or replace into invitations (id,eventid,username,provider,state,avatar_file_name,userid,updated_at) values(?,?,?,?,?,?,?,?)";
+            const char *sql = "insert or replace into invitations (id,eventid,username,provider,state,avatar_file_name,user_id,identity_id,updated_at) values(?,?,?,?,?,?,?,?,?)";
             if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
             {
                 sqlite3_bind_int(stm, 1,invitationobj.id ); 
@@ -189,8 +189,9 @@ static sqlite3 *database;
                 sqlite3_bind_text(stm,4,[invitationobj.provider UTF8String], -1, SQLITE_TRANSIENT);
                 sqlite3_bind_int(stm,5,invitationobj.state);
                 sqlite3_bind_text(stm,6,[invitationobj.avatar UTF8String], -1, SQLITE_TRANSIENT);
-                sqlite3_bind_int(stm, 7,invitationobj.identity_id ); 
-                sqlite3_bind_text(stm,8,[invitationobj.updated_at UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_int(stm, 7,invitationobj.user_id ); 
+                sqlite3_bind_int(stm, 8,invitationobj.identity_id ); 
+                sqlite3_bind_text(stm,9,[invitationobj.updated_at UTF8String], -1, SQLITE_TRANSIENT);
                 
                 if(sqlite3_step(stm)== SQLITE_DONE)
                 {
@@ -303,7 +304,7 @@ static sqlite3 *database;
 		return;
 	} 
     sqlite3_stmt *stm=nil;
-    const char *sql = "insert or replace into invitations (id,eventid,username,provider,state,avatar_file_name,userid,updated_at) values(?,?,?,?,?,?,?,?)";
+    const char *sql = "insert or replace into invitations (id,eventid,username,provider,state,avatar_file_name,identity_id,user_id,updated_at) values(?,?,?,?,?,?,?,?,?)";
     for(int i=0;i<[invitationdict count];i++)
     {
         
@@ -317,7 +318,8 @@ static sqlite3 *database;
             sqlite3_bind_int(stm,5,invitationobj.state);
             sqlite3_bind_text(stm,6,[invitationobj.avatar UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_int(stm, 7,invitationobj.identity_id ); 
-            sqlite3_bind_text(stm,8,[invitationobj.updated_at UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_int(stm, 8,invitationobj.user_id ); 
+            sqlite3_bind_text(stm,9,[invitationobj.updated_at UTF8String], -1, SQLITE_TRANSIENT);
             
             if(sqlite3_step(stm)== SQLITE_DONE)
             {
@@ -505,7 +507,7 @@ static sqlite3 *database;
 
 - (NSArray*) getInvitationWithEventid:(int)eventid
 {
-    const char *sql="SELECT `id` ,`username`,`provider`,`state`,`avatar_file_name`,`userid` from invitations where eventid=? order by id ;";
+    const char *sql="SELECT `id` ,`username`,`provider`,`state`,`avatar_file_name`,`identity_id`,`user_id` from invitations where eventid=? order by id ;";
     NSMutableArray *invitationlist=[[NSMutableArray alloc] initWithCapacity:50];
     
     NSString *sqldbpath=[DBUtil DBPath];
@@ -532,7 +534,7 @@ static sqlite3 *database;
             invitationobj.state=sqlite3_column_int(stm, 3);
             invitationobj.avatar=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 4)];
             invitationobj.identity_id=sqlite3_column_int(stm, 5);
-            
+            invitationobj.user_id=sqlite3_column_int(stm, 6);
             [invitationlist addObject:invitationobj];
         }
     }

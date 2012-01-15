@@ -12,6 +12,7 @@
 @synthesize id;
 @synthesize eventid;   
 @synthesize identity_id;
+@synthesize user_id;
 @synthesize username;
 @synthesize provider;
 @synthesize state;
@@ -31,6 +32,7 @@
 {
     Invitation* invitation= [[[self alloc] init] autorelease];
     invitation.id = [[dict objectForKey:@"invitation_id"] integerValue];
+    invitation.user_id = [[dict objectForKey:@"user_id"] integerValue];
     invitation.eventid=eid;
     invitation.state=[[dict objectForKey:@"state"] integerValue];
 //    if([dict objectForKey:@"invited_identity"]!=[NSNull null])

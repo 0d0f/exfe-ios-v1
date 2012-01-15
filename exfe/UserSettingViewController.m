@@ -67,7 +67,6 @@
     UIBarButtonItem *flexibleSpaceLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
     [doneButton addTarget:self action:@selector(Done:) forControlEvents:UIControlEventTouchUpInside];
     [doneButton setTitle:@"Close" forState:UIControlStateNormal];
     doneButton.frame = (CGRect) {
@@ -81,69 +80,67 @@
     [toolbar setItems:[NSArray arrayWithObjects:flexibleSpaceLeft, [[[UIBarButtonItem alloc] initWithCustomView:doneButton] autorelease], nil]];
     
     [flexibleSpaceLeft release];
+    dispatch_queue_t fetchdataQueue = dispatch_queue_create("fetchdata thread", NULL);
     
-    APIHandler *api=[[APIHandler alloc]init];
-    NSString *responseString=[api getProfile];
-    NSDictionary *profileDict = [responseString JSONValue];
-    id code=[[profileDict objectForKey:@"meta"] objectForKey:@"code"];
-    if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
-    {
-//identities
-        id response=[profileDict objectForKey:@"response"];
-        if([response isKindOfClass:[NSDictionary class]])
+    dispatch_async(fetchdataQueue, ^{
+        APIHandler *api=[[APIHandler alloc]init];
+        NSString *responseString=[api getProfile];
+        NSDictionary *profileDict = [responseString JSONValue];
+        id code=[[profileDict objectForKey:@"meta"] objectForKey:@"code"];
+        if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
         {
-            if(identitiesData == nil)
-                identitiesData=[[NSMutableArray alloc] initWithCapacity:2];
-            id identities = [response objectForKey:@"identities"];
-            //identitiesData=identities;
-            NSMutableArray* identities_section=[[NSMutableArray alloc] initWithCapacity:10];
-            NSMutableArray* devices_section=[[NSMutableArray alloc] initWithCapacity:5];
-            for(int i=0;i<[identities count];i++)
+            id response=[profileDict objectForKey:@"response"];
+            if([response isKindOfClass:[NSDictionary class]])
             {
-                Identity* useridentity=[Identity initWithDict:[identities objectAtIndex:i]];
-                if ([useridentity.provider isEqualToString:@"iOSAPN"])
-                    [devices_section addObject:useridentity];    
-                else
-                    [identities_section addObject:useridentity];
-            }
-            if([identities_section count]>0)
-                [identitiesData addObject:identities_section];
-            if([devices_section count]>0)
-                [identitiesData addObject:devices_section];
-            
-            id user = [response objectForKey:@"user"];
-            if([user isKindOfClass:[NSDictionary class]])
-            {
-                NSDictionary* userdict=(NSDictionary*)user;
-                NSString* atatar_file_name= [userdict objectForKey:@"avatar_file_name"];
-                if(atatar_file_name)
+                if(identitiesData == nil)
+                    identitiesData=[[NSMutableArray alloc] initWithCapacity:2];
+                id identities = [response objectForKey:@"identities"];
+                NSMutableArray* identities_section=[[NSMutableArray alloc] initWithCapacity:10];
+                NSMutableArray* devices_section=[[NSMutableArray alloc] initWithCapacity:5];
+                for(int i=0;i<[identities count];i++)
                 {
-                dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
-            
-                dispatch_async(imgQueue, ^{ 
-                    NSString* imgName = [atatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-                    NSString *imgurl = [ImgCache getImgUrl:imgName];
-                
-                    UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if(image!=nil && ![image isEqual:[NSNull null]]) 
-                            [useravatar setImage:image];
-                            //[cell setAvartar:image];
-                    
-                    });
-                });
-            
-                dispatch_release(imgQueue);        
+                    Identity* useridentity=[Identity initWithDict:[identities objectAtIndex:i]];
+                    if ([useridentity.provider isEqualToString:@"iOSAPN"])
+                        [devices_section addObject:useridentity];    
+                    else
+                        [identities_section addObject:useridentity];
                 }
-                NSString* name= [userdict objectForKey:@"name"];
-                [username setText:name];
+                if([identities_section count]>0)
+                    [identitiesData addObject:identities_section];
+                if([devices_section count]>0)
+                    [identitiesData addObject:devices_section];
+                
+                id user = [response objectForKey:@"user"];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                [tabview reloadData];
+                if([user isKindOfClass:[NSDictionary class]])
+                {
+                    NSDictionary* userdict=(NSDictionary*)user;
+                    NSString* atatar_file_name= [userdict objectForKey:@"avatar_file_name"];
+                    if(atatar_file_name)
+                    {
+                            dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
+                            dispatch_async(imgQueue, ^{ 
+                                NSString* imgName = [atatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+                                NSString *imgurl = [ImgCache getImgUrl:imgName];
+                                
+                                UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    if(image!=nil && ![image isEqual:[NSNull null]]) 
+                                        [useravatar setImage:image];
+                                });
+                            });
+                            dispatch_release(imgQueue);        
+                    }
+                    NSString* name= [userdict objectForKey:@"name"];
+                    [username setText:name];
+                }
+            });
             }
 
         }
-
-        NSLog(@"profile:%@",responseString);
-    }
-    // Do any additional setup after loading the view from its nib.
+    });
+    dispatch_release(fetchdataQueue);        
 }
 
 - (void)viewDidUnload

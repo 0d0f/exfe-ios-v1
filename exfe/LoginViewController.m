@@ -34,16 +34,7 @@
     textUsername.layer.borderColor=[UIColor colorWithRed:204/255.0f green:204/255.0f blue:204/255.0f alpha:1].CGColor; 
     NSString *password=[textPassword text];
     NSString *username=[textUsername text];
-//    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 80, 80)];  
-//    [view setTag:103]; 
-//    [view setBackgroundColor:[UIColor blackColor]];
-//    [view setAlpha:0.8]; 
-//    [self.view addSubview:view];  
-//    activityIndicatorview = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 32.0f, 32.0f)];
-//    [activityIndicatorview setCenter:view.center]; 
-//    [activityIndicatorview setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleWhite];   
-//    [view addSubview:activityIndicatorview];  
-//    [view release]; 
+
     [activityIndicatorview setHidden:NO];
     [activityIndicatorview startAnimating];   
     [hint setText:@""];

@@ -63,7 +63,7 @@
         [self.navigationController presentModalViewController:loginview animated:YES];
 
     }
-    //NSLog(@"start app..%@",launchOptions);
+    NSLog(@"start app..%@",launchOptions);
     
     NSDictionary *remoteNotif = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
     if(remoteNotif)
@@ -140,7 +140,6 @@
 }
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    NSLog(@"appstate:%u",application.applicationState);
     BOOL isForeground=TRUE;
     if(application.applicationState != UIApplicationStateActive)
         isForeground=FALSE;
@@ -165,6 +164,8 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
@@ -172,6 +173,8 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+    [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */

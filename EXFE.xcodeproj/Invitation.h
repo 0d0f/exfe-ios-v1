@@ -13,6 +13,7 @@
     NSInteger id;
     NSInteger eventid;    
     NSInteger identity_id;    
+    NSInteger user_id;    
     NSString* username;
     NSString* provider;
     NSInteger state;
@@ -23,6 +24,7 @@
 @property NSInteger id;
 @property NSInteger eventid;
 @property NSInteger identity_id;
+@property NSInteger user_id;
 @property (retain,nonatomic) NSString* username;
 @property (retain,nonatomic) NSString* provider;
 @property NSInteger state;

@@ -89,16 +89,9 @@
 }
 - (NSString*)getPostsWith:(int)crossid
 {
-//    exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
+    NSString *identity_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"device_identity_id"]; 
     DBUtil *dbu=[DBUtil sharedManager];
     NSString *lastUpdateTime=[dbu getLastCommentUpdateTimeWith:crossid];
-    
-//    NSDate *theDate = nil;
-//    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//    theDate = [dateFormatter dateFromString:lastUpdateTime];  
-//    [dateFormatter release];
-    
 
     NSError *error = nil;
     NSString *apiurl=nil;
@@ -109,7 +102,7 @@
         CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
         
         
-        apiurl=[NSString stringWithFormat:@"%@/x/%i/posts?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],crossid,[(NSString *)dateurlString autorelease],api_key];
+        apiurl=[NSString stringWithFormat:@"%@/x/%i/posts?updated_since=%@&token=%@&ddid=%@",[APIHandler URL_API_ROOT],crossid,[(NSString *)dateurlString autorelease],api_key,identity_id];
     }
     
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
@@ -207,6 +200,8 @@
             
             if ([[[jsonobj objectForKey:@"response"] objectForKey:@"device_token"] isEqualToString:token])
             {
+                NSString *identity_id=[[jsonobj objectForKey:@"response"] objectForKey:@"identity_id"];
+                [[NSUserDefaults standardUserDefaults] setObject:identity_id  forKey:@"device_identity_id"];
                 [pool drain];
                 return YES;     
             }
@@ -224,6 +219,7 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
 
+    NSString *identity_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"device_identity_id"]; 
 
     if(lastUpdateTime==nil)
         lastUpdateTime=@"0000-00-00 00:00:00";
@@ -231,7 +227,7 @@
     CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
     
     
-    NSString *url=[NSString stringWithFormat:@"%@/users/%i/getupdate?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],app.userid,[(NSString *)dateurlString autorelease],api_key];
+    NSString *url=[NSString stringWithFormat:@"%@/users/%i/getupdate?updated_since=%@&token=%@&ddid=%@",[APIHandler URL_API_ROOT],app.userid,[(NSString *)dateurlString autorelease],api_key,identity_id];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     NSLog(@"%@",url);
     [request setHTTPShouldHandleCookies:NO];
