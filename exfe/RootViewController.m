@@ -179,11 +179,13 @@
                         if([meta isKindOfClass: [NSDictionary class]])
                         {
                             NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
-                            
                             id invitation_id = [meta objectForKey:@"id"];
                             if(invitation_id!=nil)
                             {
                                 [dict setObject:invitation_id forKey:@"invitation_id"];
+                                
+                                [dict setObject:[confirmedobj objectForKey:@"to_id"] forKey:@"identity_id"];
+                                [dict setObject:[confirmedobj objectForKey:@"user_id"] forKey:@"user_id"];
                                 [dict setObject:@"1" forKey:@"state"];
                                 [dict setObject:[identity objectForKey:@"name"]  forKey:@"name"];
                                 if([meta objectForKey:@"provider"]==nil)
@@ -196,12 +198,10 @@
                                 [dbu setCrossStatusWithCrossId:cross_id status:1];
 
                                 [dict release];
-
                             }
                         }
                         NSDate *update_datetime = [dateFormat dateFromString:[confirmedobj objectForKey:@"time"]]; 
                         lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
-
                     }
                 }
                 if([declined isKindOfClass:[NSArray class]])
@@ -219,7 +219,10 @@
                             if(invitation_id!=nil)
                             {
                                 [dict setObject:invitation_id forKey:@"invitation_id"];
-                                [dict setObject:@"0" forKey:@"state"];
+                                [dict setObject:[declinedobj objectForKey:@"to_id"] forKey:@"identity_id"];
+
+                                [dict setObject:[declinedobj objectForKey:@"user_id"] forKey:@"user_id"];
+                                [dict setObject:@"2" forKey:@"state"];
                                 [dict setObject:[identity objectForKey:@"name"]  forKey:@"name"];
                                 if([meta objectForKey:@"provider"]==nil)
                                     [dict setObject:@""  forKey:@"provider"];
@@ -233,7 +236,6 @@
                                 [dict release];
                                 NSDate *update_datetime = [dateFormat dateFromString:[declinedobj objectForKey:@"time"]]; 
                                 lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
-
                             }
                         }
                     }

@@ -209,8 +209,10 @@ const int INVITATION_MAYBE=0;
     }
     html=[html stringByReplacingOccurrencesOfString:@"{#title#}" withString:eventobj.title];
 
-    NSString *rsvpstatus=@"<ul class='rsvpButtons ynbtn'><li><a href='http://invitation/#yes' class='yes'>YES</a></li><li><a href='http://invitation/#no' class='no'>NO</a></li><li><a href='http://invitation/#maybe' class='maybe'>Maybe</a></li></ul>";
-
+    NSString *rsvpstatus=@"<a id='x_rsvp_yes' href='http://invitation/#yes' class='x_rsvp_button'>Accept</a><a id='x_rsvp_no' href='http://invitation/#no' class='x_rsvp_button'>Decline</a><a id='x_rsvp_maybe' href='http://invitation/#maybe' class='x_rsvp_button'>interested</a>";
+    
+//    <ul class='rsvpButtons ynbtn'><li><a href='http://invitation/#yes' class='yes'>YES</a></li><li><a href='http://invitation/#no' class='no'>NO</a></li><li><a href='http://invitation/#maybe' class='maybe'>Maybe</a></li></ul>
+//    <a id='x_rsvp_change' href='javascript:void(0);' style='display: inline; '>Change?</a>
     
     NSString *exfeelist=@"";
     NSArray *invitations=[dbu getInvitationWithEventid:self.eventid];
@@ -238,10 +240,12 @@ const int INVITATION_MAYBE=0;
             }
             if(invitation.user_id==app.userid)
             {
+                rsvpstatus=@"<a id='x_rsvp_yes' href='http://invitation/#yes' style='display: none;' class='x_rsvp_button'>Accept</a><a id='x_rsvp_no' href='http://invitation/#no' style='display: none;' class='x_rsvp_button'>Decline</a><a id='x_rsvp_maybe' href='http://invitation/#maybe' style='display: none;' class='x_rsvp_button'>interested</a>";
+
                 if(invitation.state ==INVITATION_YES)
-                    rsvpstatus=@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Accepted</span>\".</span>";
+                    rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Accepted</span>\".</span>                <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
                 else if(invitation.state ==INVITATION_NO)
-                    rsvpstatus=@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Declined</span>\".</span>";
+                    rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Declined</span>\".</span>                <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
 
             }
         }
@@ -316,6 +320,12 @@ const int INVITATION_MAYBE=0;
                 [dbu updateEventicalWithid:self.eventid identifier:sevent.eventIdentifier];
                 NSLog(@"identifier:%@",sevent.eventIdentifier);
                 
+            }
+            else if( [[chunk objectAtIndex:0] isEqualToString:@"http://changersvp/"])
+            {
+                NSString* scriptstr=@"document.getElementById('x_rsvp_msg').style.display='none';document.getElementById('x_rsvp_change').style.display='none';document.getElementById('x_rsvp_yes').style.display='block';document.getElementById('x_rsvp_no').style.display='block';document.getElementById('x_rsvp_maybe').style.display='block';";
+                NSString *rsvp =[webview stringByEvaluatingJavaScriptFromString:scriptstr];  
+                NSLog(@"changersvp:%@",rsvp);
             }
         }
         return NO;

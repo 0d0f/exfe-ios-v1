@@ -14,8 +14,8 @@
 		78125A141424CD5B0062BBD8 /* chat@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78125A121424CD5B0062BBD8 /* chat@2x~iphone.png */; };
 		78125A151424CD5B0062BBD8 /* chat~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78125A131424CD5B0062BBD8 /* chat~iphone.png */; };
 		7816A7481423C4DC00818601 /* app_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7816A7471423C4DC00818601 /* app_btn.png */; };
+		7819824C14C45D3C007EA029 /* btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7819824B14C45D3C007EA029 /* btn.png */; };
 		7833E95513C5B20A00FE3EDA /* x.html in Resources */ = {isa = PBXBuildFile; fileRef = 7833E95413C5B20A00FE3EDA /* x.html */; };
-		7833E95813C6030600FE3EDA /* btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7833E95713C6030600FE3EDA /* btn.png */; };
 		783CF22D149E524000C7D80E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 783CF22B149E523F00C7D80E /* Icon.png */; };
 		783CF22E149E524000C7D80E /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783CF22C149E523F00C7D80E /* Icon@2x.png */; };
 		7847F91C138EA8AE00540E8E /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7847F91B138EA8AE00540E8E /* EventKit.framework */; };
@@ -116,8 +116,8 @@
 		78125A121424CD5B0062BBD8 /* chat@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat@2x~iphone.png"; sourceTree = "<group>"; };
 		78125A131424CD5B0062BBD8 /* chat~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~iphone.png"; sourceTree = "<group>"; };
 		7816A7471423C4DC00818601 /* app_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_btn.png; sourceTree = "<group>"; };
+		7819824B14C45D3C007EA029 /* btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn.png; sourceTree = "<group>"; };
 		7833E95413C5B20A00FE3EDA /* x.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = x.html; sourceTree = "<group>"; };
-		7833E95713C6030600FE3EDA /* btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn.png; sourceTree = "<group>"; };
 		783CF22B149E523F00C7D80E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		783CF22C149E523F00C7D80E /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		7847F91B138EA8AE00540E8E /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
@@ -286,9 +286,9 @@
 			children = (
 				78B5EEAB149A83AE00F2ACE1 /* flaglight.png */,
 				7833E95413C5B20A00FE3EDA /* x.html */,
+				7819824B14C45D3C007EA029 /* btn.png */,
 				783CF22B149E523F00C7D80E /* Icon.png */,
 				783CF22C149E523F00C7D80E /* Icon@2x.png */,
-				7833E95713C6030600FE3EDA /* btn.png */,
 				788C9C0214A87B6800FBEE49 /* default_avatar@2x~iphone.png */,
 				788C9C0314A87B6800FBEE49 /* default_avatar~iphone.png */,
 				789ECC6D149C9D5800F3B627 /* titlebar@2x~iphone.png */,
@@ -571,7 +571,6 @@
 				78F75BE213AFA84300C7B3CF /* arrow.png in Resources */,
 				78D7AA7A13BE12C7009495DA /* ConversionTableViewController.xib in Resources */,
 				7833E95513C5B20A00FE3EDA /* x.html in Resources */,
-				7833E95813C6030600FE3EDA /* btn.png in Resources */,
 				7816A7481423C4DC00818601 /* app_btn.png in Resources */,
 				78125A141424CD5B0062BBD8 /* chat@2x~iphone.png in Resources */,
 				78125A151424CD5B0062BBD8 /* chat~iphone.png in Resources */,
@@ -591,6 +590,7 @@
 				78090D0314A499D000AB0D66 /* device_iPhone~iphone.png in Resources */,
 				788C9C0414A87B6800FBEE49 /* default_avatar@2x~iphone.png in Resources */,
 				788C9C0514A87B6800FBEE49 /* default_avatar~iphone.png in Resources */,
+				7819824C14C45D3C007EA029 /* btn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
