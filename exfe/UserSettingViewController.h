@@ -22,5 +22,5 @@
 
 - (IBAction) Logout:(id) sender;
 - (IBAction) Done:(id) sender;
-
+- (void) LoadData:(id)user;
 @end

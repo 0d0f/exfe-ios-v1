@@ -47,6 +47,9 @@
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetoken"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"devicetokenreg"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"lastupdatetime"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"my_users"];
+    [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"my_identities"];
+    
     [[NSUserDefaults standardUserDefaults] synchronize];
     DBUtil *dbu=[DBUtil sharedManager];
     [dbu emptyDBData];
@@ -80,6 +83,19 @@
     [toolbar setItems:[NSArray arrayWithObjects:flexibleSpaceLeft, [[[UIBarButtonItem alloc] initWithCustomView:doneButton] autorelease], nil]];
     
     [flexibleSpaceLeft release];
+
+    id my_identities=[[NSUserDefaults standardUserDefaults] objectForKey:@"my_identities"];
+    id my_users=[[NSUserDefaults standardUserDefaults] objectForKey:@"my_users"];
+    if(my_identities && my_users)
+    {
+        NSMutableArray* sections=[NSKeyedUnarchiver unarchiveObjectWithData:my_identities];
+        NSMutableArray* identities=[sections objectAtIndex:0];
+        Identity* identity=[identities objectAtIndex:0];
+        NSLog(@"%@",identity.name);
+        NSDictionary* user=[NSKeyedUnarchiver unarchiveObjectWithData:my_users];
+        identitiesData= [sections retain];
+        [self LoadData:user];
+    }
     dispatch_queue_t fetchdataQueue = dispatch_queue_create("fetchdata thread", NULL);
     
     dispatch_async(fetchdataQueue, ^{
@@ -92,7 +108,10 @@
             id response=[profileDict objectForKey:@"response"];
             if([response isKindOfClass:[NSDictionary class]])
             {
-                if(identitiesData == nil)
+                
+                if(identitiesData != nil)
+                    [identitiesData release];
+                
                     identitiesData=[[NSMutableArray alloc] initWithCapacity:2];
                 id identities = [response objectForKey:@"identities"];
                 NSMutableArray* identities_section=[[NSMutableArray alloc] initWithCapacity:10];
@@ -111,30 +130,14 @@
                     [identitiesData addObject:devices_section];
                 
                 id user = [response objectForKey:@"user"];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                [tabview reloadData];
-                if([user isKindOfClass:[NSDictionary class]])
-                {
-                    NSDictionary* userdict=(NSDictionary*)user;
-                    NSString* atatar_file_name= [userdict objectForKey:@"avatar_file_name"];
-                    if(atatar_file_name)
-                    {
-                            dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
-                            dispatch_async(imgQueue, ^{ 
-                                NSString* imgName = [atatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
-                                NSString *imgurl = [ImgCache getImgUrl:imgName];
-                                
-                                UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
-                                dispatch_async(dispatch_get_main_queue(), ^{
-                                    if(image!=nil && ![image isEqual:[NSNull null]]) 
-                                        [useravatar setImage:image];
-                                });
-                            });
-                            dispatch_release(imgQueue);        
-                    }
-                    NSString* name= [userdict objectForKey:@"name"];
-                    [username setText:name];
-                }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSData *encodedidentitydata =[NSKeyedArchiver archivedDataWithRootObject:identitiesData];
+                [[NSUserDefaults standardUserDefaults] setObject:encodedidentitydata  forKey:@"my_identities"];
+                NSData *userentitydata =[NSKeyedArchiver archivedDataWithRootObject:user];
+                [[NSUserDefaults standardUserDefaults] setObject:userentitydata  forKey:@"my_users"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+                
+                [self LoadData:user];
             });
             }
 
@@ -142,7 +145,32 @@
     });
     dispatch_release(fetchdataQueue);        
 }
-
+- (void) LoadData:(id)user
+{
+    [tabview reloadData];
+    if([user isKindOfClass:[NSDictionary class]])
+    {
+        NSDictionary* userdict=(NSDictionary*)user;
+        NSString* atatar_file_name= [userdict objectForKey:@"avatar_file_name"];
+        if(atatar_file_name)
+        {
+            dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
+            dispatch_async(imgQueue, ^{ 
+                NSString* imgName = [atatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+                NSString *imgurl = [ImgCache getImgUrl:imgName];
+                
+                UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(image!=nil && ![image isEqual:[NSNull null]]) 
+                        [useravatar setImage:image];
+                });
+            });
+            dispatch_release(imgQueue);        
+        }
+        NSString* name= [userdict objectForKey:@"name"];
+        [username setText:name];
+    }    
+}
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -184,6 +212,7 @@
 
 - (IBAction) Done:(id) sender
 {
+    [identitiesData release];
     [self dismissModalViewControllerAnimated:YES];    
 }
 
@@ -196,9 +225,7 @@
 //
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    NSLog(@"count %i",[identitiesData count]);
     return [[identitiesData objectAtIndex:section] count];
-//    return [identitiesData count];
 }
 //
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -253,36 +280,53 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    if(section==1)
-        return 50;
-    else
-        return 10;
+    if(section == [identitiesData count]-1)
+        return 40.0;
+    return 1.0;
 }
+-(CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if(section == 0)
+        return 30.0;
+    return 15.0;
+}
+-(UIView*)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section
+{
+    return [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
+}
+
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+//        return [[[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)] autorelease];
     
     if(footerView == nil) {
         //allocate the view if it doesn't exist yet
         footerView  = [[UIView alloc] init];
         
-        //we would like to show a gloosy red button, so get the image first
-//        UIImage *image = [[UIImage imageNamed:@"button_red.png"]
-//                          stretchableImageWithLeftCapWidth:8 topCapHeight:8];
-        
         //create the button
         
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//        [button setBackgroundImage:image forState:UIControlStateNormal];
-        
-        //the button should be as big as a table view cell
-        [button setFrame:CGRectMake(200, 10, 100, 40)];
-        
-        //set title, font size and font color
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setTitle:@"Sign Out" forState:UIControlStateNormal];
-        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:20]];
-//        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        
-        //set action of the button
-        [button addTarget:self action:@selector(Logout:) forControlEvents:UIControlEventTouchDown];
+        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18]];
+        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [button setFrame:CGRectMake(200, 10, 100, 40)];
+        [[button layer] setCornerRadius:5.0f];
+        [[button layer] setBorderWidth:1.0f];
+        [[button layer] setBorderColor:[UIColor blackColor].CGColor];
+        [button addTarget:self action:@selector(Logout:) forControlEvents:UIControlEventTouchUpInside];
+
+
+//        
+//        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//        [button setFrame:CGRectMake(200, 10, 100, 40)];
+//        [[button layer] setCornerRadius:1.0f];
+//
+//        [button setTitle:@"Sign Out" forState:UIControlStateNormal];
+//        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18]];
+////        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//        
+//        //set action of the button
+//        [button addTarget:self action:@selector(Logout:) forControlEvents:UIControlEventTouchDown];
         //add the button to the view
         [footerView addSubview:button];
     }
