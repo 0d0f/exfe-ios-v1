@@ -62,6 +62,8 @@
             app.api_key=[userdict objectForKey:@"auth_token"];
             app.userid=[[userdict objectForKey:@"userid"] intValue];
             app.username=[textUsername text];
+                
+            self.navigationController.title=app.username;
             app.meViewReload=YES;
             [self.delegate loginViewControllerDidFinish:self];
             [activityIndicatorview stopAnimating]; 

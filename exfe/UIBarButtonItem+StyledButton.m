@@ -12,13 +12,16 @@
 @implementation UIBarButtonItem (StyledButton)
 + (UIBarButtonItem *)styledBackBarButtonItemWithTarget:(id)target selector:(SEL)selector
 {
-    UIImage *image = [UIImage imageNamed:@"buttonbg.png"];
-    image = [image stretchableImageWithLeftCapWidth:20.0f topCapHeight:20.0f];
+//    UIImage *image = [UIImage imageNamed:@"buttonbg.png"];
+//    image = [image stretchableImageWithLeftCapWidth:20.0f topCapHeight:20.0f];
+    
+    NSString *backbtnimgpath = [[NSBundle mainBundle] pathForResource:@"buttonbg" ofType:@"png"];
+    UIImage *backbtnimg = [UIImage imageWithContentsOfFile:backbtnimgpath];
     
     NSString *title = NSLocalizedString(@"Back", nil);
     UIFont *font = [UIFont boldSystemFontOfSize:12.0f];
     
-    UIButton *button = [UIButton styledButtonWithBackgroundImage:image font:font title:title target:target selector:selector];
+    UIButton *button = [UIButton styledButtonWithBackgroundImage:backbtnimg font:font title:title target:target selector:selector];
     button.titleLabel.textColor = [UIColor blackColor];
     
     CGSize textSize = [title sizeWithFont:font];

@@ -38,8 +38,8 @@
     [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
     [settingButton addTarget:self action:@selector(ShowSettingView) forControlEvents:UIControlEventTouchUpInside];
     settingButton.frame = (CGRect) {
-        .size.width = 40,
-        .size.height = 30,
+        .size.width = 33,
+        .size.height = 29,
     };
     [[settingButton layer] setCornerRadius:5.0f];
     [[settingButton layer] setBorderWidth:1.0f];
@@ -476,6 +476,13 @@
         detailViewController.eventobj=event;
     }
     
+    NSString *backbtnimgpath = [[NSBundle mainBundle] pathForResource:@"backbtn" ofType:@"png"];
+    UIImage *backbtnimg = [UIImage imageWithContentsOfFile:backbtnimgpath];
+    
+    UIBarButtonItem *backBar = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleDone target:nil action:nil];
+    [backBar setImage:backbtnimg];
+    [self navigationItem].backBarButtonItem=backBar;
+    [backBar release];
     
     [self.navigationController pushViewController:detailViewController animated:YES];
     
