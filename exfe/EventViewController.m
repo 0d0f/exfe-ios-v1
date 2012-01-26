@@ -63,9 +63,6 @@ const int INVITATION_MAYBE=0;
 	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
 	[button setBackgroundImage:backbtnimg forState:UIControlStateNormal];
     [button setTitle:@" Back" forState:UIControlStateNormal];
-//    CGRect fr = [[button titleLabel] frame];
-//    fr.origin.x = 0;
-//    [[button titleLabel] setFrame:fr];
     
     button.titleLabel.font  = [UIFont boldSystemFontOfSize:12.0f];
     [button setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
@@ -221,10 +218,13 @@ const int INVITATION_MAYBE=0;
     {
         html=[html stringByReplacingOccurrencesOfString:@"{#place_line1#}" withString:@"Any Place"];
         html=[html stringByReplacingOccurrencesOfString:@"{#place_line2#}" withString:@""];
+        html=[html stringByReplacingOccurrencesOfString:@"{#map_display}" withString:@"none"];
     }
     else
     {
         html=[html stringByReplacingOccurrencesOfString:@"{#place_line1#}" withString:eventobj.place_line1];
+        html=[html stringByReplacingOccurrencesOfString:@"{#map_display}" withString:@"inline"];
+
         NSString *place_line2=[eventobj.place_line2 stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
         html=[html stringByReplacingOccurrencesOfString:@"{#place_line2#}" withString:place_line2];
     }
@@ -348,6 +348,22 @@ const int INVITATION_MAYBE=0;
                 NSString *rsvp =[webview stringByEvaluatingJavaScriptFromString:scriptstr];  
                 NSLog(@"changersvp:%@",rsvp);
             }
+        }
+        else if( [[chunk objectAtIndex:0] isEqualToString:@"http://showmap/"])
+        {
+            NSString *q =@"";
+            if(![eventobj.place_line2 isEqualToString:@""])
+                q =[NSString stringWithFormat:@"%@",eventobj.place_line2];
+            else
+                q =[NSString stringWithFormat:@"%@",eventobj.place_line1];
+//            float latitude = 35.4634;
+//            float longitude = 9.43425;
+            int zoom = 13;
+            NSString *stringURL = [NSString stringWithFormat:@"http://maps.google.com/maps?q=%@&z=%d", [q stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], zoom];
+//            NSString *stringURL = [NSString stringWithFormat:@"http://maps.google.com/maps?q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
+            NSURL *url = [NSURL URLWithString:stringURL];
+            [[UIApplication sharedApplication] openURL:url];
+            
         }
         return NO;
     }

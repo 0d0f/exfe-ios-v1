@@ -59,15 +59,14 @@
     settingButton.frame = CGRectMake(0, 0, settingbtnimg.size.width, settingbtnimg.size.height);
     [settingButton addTarget:self action:@selector(ShowSettingView) forControlEvents:UIControlEventTouchUpInside];
     
-    UIBarButtonItem *customsettingBarItem = [[UIBarButtonItem alloc] initWithCustomView:settingButton];
-	self.navigationItem.leftBarButtonItem = customsettingBarItem;
-    [customsettingBarItem release];
-    
+//    UIBarButtonItem *customsettingBarItem = [[UIBarButtonItem alloc] initWithCustomView:settingButton];
+//	self.navigationItem.leftBarButtonItem = customsettingBarItem;
+//    [customsettingBarItem release];
+//    
     barButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
     
-    
-    //TOFIX: Add leftbutton for fill space, otherwise the custom title can't align center.
-    
+//    UIBarButtonItem *flexibleSpaceLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+
     [self.navigationController navigationBar].topItem.rightBarButtonItem=barButtonItem;      
 }
 

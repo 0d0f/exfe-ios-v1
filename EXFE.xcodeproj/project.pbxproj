@@ -39,6 +39,7 @@
 		786DE65B14A4596D00477E39 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 786DE65A14A4596C00477E39 /* Identity.m */; };
 		78741D9614CEFD5200543188 /* navbar_setting@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78741D9414CEFD5200543188 /* navbar_setting@2x~iphone.png */; };
 		78741D9714CEFD5200543188 /* navbar_setting~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78741D9514CEFD5200543188 /* navbar_setting~iphone.png */; };
+		787EB8D814D15FB1007D157D /* map.png in Resources */ = {isa = PBXBuildFile; fileRef = 787EB8D714D15FB1007D157D /* map.png */; };
 		7882BC8E137078A2004F9DBD /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882BC8D137078A2004F9DBD /* libsqlite3.dylib */; };
 		7882BC92137079A4004F9DBD /* DBUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7882BC91137079A4004F9DBD /* DBUtil.m */; };
 		7882BCCD137458F5004F9DBD /* exfe.db in Resources */ = {isa = PBXBuildFile; fileRef = 7882BCCC137458F5004F9DBD /* exfe.db */; };
@@ -154,6 +155,7 @@
 		786DE65A14A4596C00477E39 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
 		78741D9414CEFD5200543188 /* navbar_setting@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar_setting@2x~iphone.png"; sourceTree = "<group>"; };
 		78741D9514CEFD5200543188 /* navbar_setting~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar_setting~iphone.png"; sourceTree = "<group>"; };
+		787EB8D714D15FB1007D157D /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map.png; sourceTree = "<group>"; };
 		7882BC8D137078A2004F9DBD /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		7882BC90137079A4004F9DBD /* DBUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBUtil.h; sourceTree = "<group>"; };
 		7882BC91137079A4004F9DBD /* DBUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBUtil.m; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 				788C9C0314A87B6800FBEE49 /* default_avatar~iphone.png */,
 				789ECC6D149C9D5800F3B627 /* titlebar@2x~iphone.png */,
 				7816A7471423C4DC00818601 /* app_btn.png */,
+				787EB8D714D15FB1007D157D /* map.png */,
 				78F75BE113AFA84300C7B3CF /* arrow.png */,
 				78741D9414CEFD5200543188 /* navbar_setting@2x~iphone.png */,
 				78741D9514CEFD5200543188 /* navbar_setting~iphone.png */,
@@ -611,6 +614,7 @@
 				785EAAC714D046E70063E702 /* signoutbtn~iphone.png in Resources */,
 				785EAACA14D0495E0063E702 /* chat@2x~iphone.png in Resources */,
 				785EAACB14D0495E0063E702 /* chat~iphone.png in Resources */,
+				787EB8D814D15FB1007D157D /* map.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
