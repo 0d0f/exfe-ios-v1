@@ -11,8 +11,6 @@
 		78090CF814A4798700AB0D66 /* ProfileCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78090CF714A4798700AB0D66 /* ProfileCellView.xib */; };
 		78090D0214A499D000AB0D66 /* device_iPhone@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78090D0014A499CE00AB0D66 /* device_iPhone@2x~iphone.png */; };
 		78090D0314A499D000AB0D66 /* device_iPhone~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78090D0114A499CE00AB0D66 /* device_iPhone~iphone.png */; };
-		78125A141424CD5B0062BBD8 /* chat@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78125A121424CD5B0062BBD8 /* chat@2x~iphone.png */; };
-		78125A151424CD5B0062BBD8 /* chat~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78125A131424CD5B0062BBD8 /* chat~iphone.png */; };
 		7816A7481423C4DC00818601 /* app_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7816A7471423C4DC00818601 /* app_btn.png */; };
 		7819824C14C45D3C007EA029 /* btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7819824B14C45D3C007EA029 /* btn.png */; };
 		7833E95513C5B20A00FE3EDA /* x.html in Resources */ = {isa = PBXBuildFile; fileRef = 7833E95413C5B20A00FE3EDA /* x.html */; };
@@ -21,6 +19,14 @@
 		7847F91C138EA8AE00540E8E /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7847F91B138EA8AE00540E8E /* EventKit.framework */; };
 		7856B7B11358A06200B97BA6 /* EventViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7856B7AF1358A06100B97BA6 /* EventViewController.m */; };
 		7856B7B21358A06200B97BA6 /* EventViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7856B7B01358A06200B97BA6 /* EventViewController.xib */; };
+		785EAAC014D045260063E702 /* backbtn@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785EAABC14D045250063E702 /* backbtn@2x~iphone.png */; };
+		785EAAC114D045260063E702 /* backbtn~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785EAABD14D045250063E702 /* backbtn~iphone.png */; };
+		785EAAC214D045260063E702 /* close_settingbtn@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785EAABE14D045250063E702 /* close_settingbtn@2x~iphone.png */; };
+		785EAAC314D045260063E702 /* close_settingbtn~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785EAABF14D045260063E702 /* close_settingbtn~iphone.png */; };
+		785EAAC614D046E70063E702 /* signoutbtn@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785EAAC414D046E70063E702 /* signoutbtn@2x~iphone.png */; };
+		785EAAC714D046E70063E702 /* signoutbtn~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785EAAC514D046E70063E702 /* signoutbtn~iphone.png */; };
+		785EAACA14D0495E0063E702 /* chat@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785EAAC814D0495B0063E702 /* chat@2x~iphone.png */; };
+		785EAACB14D0495E0063E702 /* chat~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785EAAC914D0495C0063E702 /* chat~iphone.png */; };
 		7860596C13437CE80092E962 /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7860596A13437CE80092E962 /* MeViewController.m */; };
 		7860596D13437CE80092E962 /* MeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7860596B13437CE80092E962 /* MeViewController.xib */; };
 		7861AA8313523F9200FA13FA /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7861AA8113523F9200FA13FA /* LoginViewController.m */; };
@@ -31,6 +37,8 @@
 		7867EBBF149F39D5002F401C /* CustomUINavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7867EBBE149F39D5002F401C /* CustomUINavigationBar.m */; };
 		7867EBCB149FCB18002F401C /* UIButton+StyledButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7867EBCA149FCB18002F401C /* UIButton+StyledButton.m */; };
 		786DE65B14A4596D00477E39 /* Identity.m in Sources */ = {isa = PBXBuildFile; fileRef = 786DE65A14A4596C00477E39 /* Identity.m */; };
+		78741D9614CEFD5200543188 /* navbar_setting@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78741D9414CEFD5200543188 /* navbar_setting@2x~iphone.png */; };
+		78741D9714CEFD5200543188 /* navbar_setting~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78741D9514CEFD5200543188 /* navbar_setting~iphone.png */; };
 		7882BC8E137078A2004F9DBD /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 7882BC8D137078A2004F9DBD /* libsqlite3.dylib */; };
 		7882BC92137079A4004F9DBD /* DBUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7882BC91137079A4004F9DBD /* DBUtil.m */; };
 		7882BCCD137458F5004F9DBD /* exfe.db in Resources */ = {isa = PBXBuildFile; fileRef = 7882BCCC137458F5004F9DBD /* exfe.db */; };
@@ -67,11 +75,7 @@
 		78A2B94D13C4B2DD00032F61 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B94113C4B2DD00032F61 /* SBJsonWriter.m */; };
 		78B320FC149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B320FB149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m */; };
 		78B320FF149FEB5500C87B7F /* CustomUIToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B320FE149FEB5500C87B7F /* CustomUIToolbar.m */; };
-		78B32FB814CEF8BE0081450F /* backbtn@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B32FB714CEF8BD0081450F /* backbtn@2x~iphone.png */; };
-		78B32FBC14CEF97E0081450F /* backbtn~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B32FBB14CEF97D0081450F /* backbtn~iphone.png */; };
 		78B53618149E458B00CE9FFF /* navbar_bg~iphone.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 78B53617149E458B00CE9FFF /* navbar_bg~iphone.jpg */; };
-		78B5361B149E46A600CE9FFF /* navbar_setting@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B53619149E46A500CE9FFF /* navbar_setting@2x~iphone.png */; };
-		78B5361C149E46A600CE9FFF /* navbar_setting~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78B5361A149E46A500CE9FFF /* navbar_setting~iphone.png */; };
 		78B53620149E48A200CE9FFF /* navbar_bg@2x~iphone.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 78B5361F149E48A100CE9FFF /* navbar_bg@2x~iphone.jpg */; };
 		78BDB2EC13A512B7004561EA /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDB2EB13A512B7004561EA /* Comment.m */; };
 		78BDB2F213A67B2F004561EA /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDB2F113A67B2F004561EA /* Invitation.m */; };
@@ -81,12 +85,13 @@
 		78D0D65B148F5EFD00EA327C /* ConversationCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D0D65A148F5EFD00EA327C /* ConversationCellView.xib */; };
 		78D0D65F148F5F5300EA327C /* ConversationCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0D65E148F5F5200EA327C /* ConversationCellView.m */; };
 		78D0D668149131BC00EA327C /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D0D667149131BB00EA327C /* NSData+Base64.m */; };
+		78D774CF14CEFB3E00D51C52 /* buttonbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D774CD14CEFB3E00D51C52 /* buttonbg@2x~iphone.png */; };
+		78D774D014CEFB3E00D51C52 /* buttonbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D774CE14CEFB3E00D51C52 /* buttonbg~iphone.png */; };
 		78D7AA7913BE12C7009495DA /* ConversionTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78D7AA7713BE12C6009495DA /* ConversionTableViewController.m */; };
 		78D7AA7A13BE12C7009495DA /* ConversionTableViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */; };
 		78F75BC813AD3BBA00C7B3CF /* UIExpandingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F75BC313AD3BBA00C7B3CF /* UIExpandingTextView.m */; };
 		78F75BC913AD3BBA00C7B3CF /* UIExpandingTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F75BC513AD3BBA00C7B3CF /* UIExpandingTextViewInternal.m */; };
 		78F75BCA13AD3BBA00C7B3CF /* UIInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F75BC713AD3BBA00C7B3CF /* UIInputToolbar.m */; };
-		78F75BD413AD3EF200C7B3CF /* buttonbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F75BCE13AD3EF100C7B3CF /* buttonbg~iphone.png */; };
 		78F75BD613AD3EF200C7B3CF /* textbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F75BD013AD3EF100C7B3CF /* textbg@2x~iphone.png */; };
 		78F75BD713AD3EF200C7B3CF /* textbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F75BD113AD3EF100C7B3CF /* textbg~iphone.png */; };
 		78F75BD813AD3EF200C7B3CF /* toolbarbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F75BD213AD3EF100C7B3CF /* toolbarbg@2x~iphone.png */; };
@@ -113,8 +118,6 @@
 		78090CF714A4798700AB0D66 /* ProfileCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileCellView.xib; sourceTree = "<group>"; };
 		78090D0014A499CE00AB0D66 /* device_iPhone@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "device_iPhone@2x~iphone.png"; sourceTree = "<group>"; };
 		78090D0114A499CE00AB0D66 /* device_iPhone~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "device_iPhone~iphone.png"; sourceTree = "<group>"; };
-		78125A121424CD5B0062BBD8 /* chat@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat@2x~iphone.png"; sourceTree = "<group>"; };
-		78125A131424CD5B0062BBD8 /* chat~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~iphone.png"; sourceTree = "<group>"; };
 		7816A7471423C4DC00818601 /* app_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_btn.png; sourceTree = "<group>"; };
 		7819824B14C45D3C007EA029 /* btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn.png; sourceTree = "<group>"; };
 		7833E95413C5B20A00FE3EDA /* x.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = x.html; sourceTree = "<group>"; };
@@ -124,6 +127,14 @@
 		7856B7AE1358A06100B97BA6 /* EventViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EventViewController.h; sourceTree = "<group>"; };
 		7856B7AF1358A06100B97BA6 /* EventViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EventViewController.m; sourceTree = "<group>"; };
 		7856B7B01358A06200B97BA6 /* EventViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EventViewController.xib; sourceTree = "<group>"; };
+		785EAABC14D045250063E702 /* backbtn@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backbtn@2x~iphone.png"; sourceTree = "<group>"; };
+		785EAABD14D045250063E702 /* backbtn~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backbtn~iphone.png"; sourceTree = "<group>"; };
+		785EAABE14D045250063E702 /* close_settingbtn@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close_settingbtn@2x~iphone.png"; sourceTree = "<group>"; };
+		785EAABF14D045260063E702 /* close_settingbtn~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close_settingbtn~iphone.png"; sourceTree = "<group>"; };
+		785EAAC414D046E70063E702 /* signoutbtn@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signoutbtn@2x~iphone.png"; sourceTree = "<group>"; };
+		785EAAC514D046E70063E702 /* signoutbtn~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signoutbtn~iphone.png"; sourceTree = "<group>"; };
+		785EAAC814D0495B0063E702 /* chat@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat@2x~iphone.png"; sourceTree = "<group>"; };
+		785EAAC914D0495C0063E702 /* chat~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~iphone.png"; sourceTree = "<group>"; };
 		7860596913437CE70092E962 /* MeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeViewController.h; sourceTree = "<group>"; };
 		7860596A13437CE80092E962 /* MeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController.m; sourceTree = "<group>"; };
 		7860596B13437CE80092E962 /* MeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MeViewController.xib; sourceTree = "<group>"; };
@@ -141,6 +152,8 @@
 		7867EBCA149FCB18002F401C /* UIButton+StyledButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIButton+StyledButton.m"; path = "../UIButton+StyledButton.m"; sourceTree = "<group>"; };
 		786DE65914A4596C00477E39 /* Identity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Identity.h; sourceTree = "<group>"; };
 		786DE65A14A4596C00477E39 /* Identity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Identity.m; sourceTree = "<group>"; };
+		78741D9414CEFD5200543188 /* navbar_setting@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar_setting@2x~iphone.png"; sourceTree = "<group>"; };
+		78741D9514CEFD5200543188 /* navbar_setting~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar_setting~iphone.png"; sourceTree = "<group>"; };
 		7882BC8D137078A2004F9DBD /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		7882BC90137079A4004F9DBD /* DBUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DBUtil.h; sourceTree = "<group>"; };
 		7882BC91137079A4004F9DBD /* DBUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DBUtil.m; sourceTree = "<group>"; };
@@ -199,11 +212,7 @@
 		78B320FB149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+StyledButton.m"; sourceTree = "<group>"; };
 		78B320FD149FEB5500C87B7F /* CustomUIToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUIToolbar.h; sourceTree = "<group>"; };
 		78B320FE149FEB5500C87B7F /* CustomUIToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomUIToolbar.m; sourceTree = "<group>"; };
-		78B32FB714CEF8BD0081450F /* backbtn@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backbtn@2x~iphone.png"; sourceTree = "<group>"; };
-		78B32FBB14CEF97D0081450F /* backbtn~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backbtn~iphone.png"; sourceTree = "<group>"; };
 		78B53617149E458B00CE9FFF /* navbar_bg~iphone.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "navbar_bg~iphone.jpg"; sourceTree = "<group>"; };
-		78B53619149E46A500CE9FFF /* navbar_setting@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar_setting@2x~iphone.png"; sourceTree = "<group>"; };
-		78B5361A149E46A500CE9FFF /* navbar_setting~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar_setting~iphone.png"; sourceTree = "<group>"; };
 		78B5361F149E48A100CE9FFF /* navbar_bg@2x~iphone.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "navbar_bg@2x~iphone.jpg"; sourceTree = "<group>"; };
 		78BDB2EA13A512B7004561EA /* Comment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Comment.h; sourceTree = "<group>"; };
 		78BDB2EB13A512B7004561EA /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
@@ -219,6 +228,8 @@
 		78D0D65E148F5F5200EA327C /* ConversationCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConversationCellView.m; sourceTree = "<group>"; };
 		78D0D666149131BB00EA327C /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		78D0D667149131BB00EA327C /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		78D774CD14CEFB3E00D51C52 /* buttonbg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buttonbg@2x~iphone.png"; sourceTree = "<group>"; };
+		78D774CE14CEFB3E00D51C52 /* buttonbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buttonbg~iphone.png"; sourceTree = "<group>"; };
 		78D7AA7613BE12C6009495DA /* ConversionTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConversionTableViewController.h; path = exfe.xcodeproj/ConversionTableViewController.h; sourceTree = SOURCE_ROOT; };
 		78D7AA7713BE12C6009495DA /* ConversionTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ConversionTableViewController.m; path = exfe.xcodeproj/ConversionTableViewController.m; sourceTree = SOURCE_ROOT; };
 		78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ConversionTableViewController.xib; path = exfe.xcodeproj/ConversionTableViewController.xib; sourceTree = SOURCE_ROOT; };
@@ -228,7 +239,6 @@
 		78F75BC513AD3BBA00C7B3CF /* UIExpandingTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIExpandingTextViewInternal.m; sourceTree = "<group>"; };
 		78F75BC613AD3BBA00C7B3CF /* UIInputToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIInputToolbar.h; sourceTree = "<group>"; };
 		78F75BC713AD3BBA00C7B3CF /* UIInputToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInputToolbar.m; sourceTree = "<group>"; };
-		78F75BCE13AD3EF100C7B3CF /* buttonbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "buttonbg~iphone.png"; sourceTree = "<group>"; };
 		78F75BD013AD3EF100C7B3CF /* textbg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbg@2x~iphone.png"; sourceTree = "<group>"; };
 		78F75BD113AD3EF100C7B3CF /* textbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbg~iphone.png"; sourceTree = "<group>"; };
 		78F75BD213AD3EF100C7B3CF /* toolbarbg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbarbg@2x~iphone.png"; sourceTree = "<group>"; };
@@ -293,21 +303,26 @@
 				789ECC6D149C9D5800F3B627 /* titlebar@2x~iphone.png */,
 				7816A7471423C4DC00818601 /* app_btn.png */,
 				78F75BE113AFA84300C7B3CF /* arrow.png */,
-				78B32FB714CEF8BD0081450F /* backbtn@2x~iphone.png */,
-				78B32FBB14CEF97D0081450F /* backbtn~iphone.png */,
-				78F75BCE13AD3EF100C7B3CF /* buttonbg~iphone.png */,
-				78B53619149E46A500CE9FFF /* navbar_setting@2x~iphone.png */,
-				78B5361A149E46A500CE9FFF /* navbar_setting~iphone.png */,
+				78741D9414CEFD5200543188 /* navbar_setting@2x~iphone.png */,
+				78741D9514CEFD5200543188 /* navbar_setting~iphone.png */,
+				78D774CD14CEFB3E00D51C52 /* buttonbg@2x~iphone.png */,
+				78D774CE14CEFB3E00D51C52 /* buttonbg~iphone.png */,
+				785EAABC14D045250063E702 /* backbtn@2x~iphone.png */,
+				785EAABD14D045250063E702 /* backbtn~iphone.png */,
+				785EAABE14D045250063E702 /* close_settingbtn@2x~iphone.png */,
+				785EAABF14D045260063E702 /* close_settingbtn~iphone.png */,
 				78B53617149E458B00CE9FFF /* navbar_bg~iphone.jpg */,
 				78B5361F149E48A100CE9FFF /* navbar_bg@2x~iphone.jpg */,
 				78090D0014A499CE00AB0D66 /* device_iPhone@2x~iphone.png */,
 				78090D0114A499CE00AB0D66 /* device_iPhone~iphone.png */,
-				78125A121424CD5B0062BBD8 /* chat@2x~iphone.png */,
-				78125A131424CD5B0062BBD8 /* chat~iphone.png */,
 				78F75BD013AD3EF100C7B3CF /* textbg@2x~iphone.png */,
 				78F75BD113AD3EF100C7B3CF /* textbg~iphone.png */,
 				78F75BD213AD3EF100C7B3CF /* toolbarbg@2x~iphone.png */,
 				78F75BD313AD3EF100C7B3CF /* toolbarbg~iphone.png */,
+				785EAAC414D046E70063E702 /* signoutbtn@2x~iphone.png */,
+				785EAAC514D046E70063E702 /* signoutbtn~iphone.png */,
+				785EAAC814D0495B0063E702 /* chat@2x~iphone.png */,
+				785EAAC914D0495C0063E702 /* chat~iphone.png */,
 				7882BCCC137458F5004F9DBD /* exfe.db */,
 				78C1D40B1429D30B008131BC /* CrossCellView.xib */,
 				78090CF714A4798700AB0D66 /* ProfileCellView.xib */,
@@ -562,7 +577,6 @@
 				7861AA8413523F9200FA13FA /* LoginViewController.xib in Resources */,
 				7856B7B21358A06200B97BA6 /* EventViewController.xib in Resources */,
 				7882BCCD137458F5004F9DBD /* exfe.db in Resources */,
-				78F75BD413AD3EF200C7B3CF /* buttonbg~iphone.png in Resources */,
 				78F75BD613AD3EF200C7B3CF /* textbg@2x~iphone.png in Resources */,
 				78F75BD713AD3EF200C7B3CF /* textbg~iphone.png in Resources */,
 				78F75BD813AD3EF200C7B3CF /* toolbarbg@2x~iphone.png in Resources */,
@@ -571,15 +585,11 @@
 				78D7AA7A13BE12C7009495DA /* ConversionTableViewController.xib in Resources */,
 				7833E95513C5B20A00FE3EDA /* x.html in Resources */,
 				7816A7481423C4DC00818601 /* app_btn.png in Resources */,
-				78125A141424CD5B0062BBD8 /* chat@2x~iphone.png in Resources */,
-				78125A151424CD5B0062BBD8 /* chat~iphone.png in Resources */,
 				78C1D40C1429D30B008131BC /* CrossCellView.xib in Resources */,
 				78D0D65B148F5EFD00EA327C /* ConversationCellView.xib in Resources */,
 				7864DDEA149B4B9B005DF0BE /* UserSettingViewController.xib in Resources */,
 				789ECC6E149C9D5800F3B627 /* titlebar@2x~iphone.png in Resources */,
 				78B53618149E458B00CE9FFF /* navbar_bg~iphone.jpg in Resources */,
-				78B5361B149E46A600CE9FFF /* navbar_setting@2x~iphone.png in Resources */,
-				78B5361C149E46A600CE9FFF /* navbar_setting~iphone.png in Resources */,
 				78B53620149E48A200CE9FFF /* navbar_bg@2x~iphone.jpg in Resources */,
 				783CF22D149E524000C7D80E /* Icon.png in Resources */,
 				783CF22E149E524000C7D80E /* Icon@2x.png in Resources */,
@@ -589,8 +599,18 @@
 				788C9C0414A87B6800FBEE49 /* default_avatar@2x~iphone.png in Resources */,
 				788C9C0514A87B6800FBEE49 /* default_avatar~iphone.png in Resources */,
 				7819824C14C45D3C007EA029 /* btn.png in Resources */,
-				78B32FB814CEF8BE0081450F /* backbtn@2x~iphone.png in Resources */,
-				78B32FBC14CEF97E0081450F /* backbtn~iphone.png in Resources */,
+				78D774CF14CEFB3E00D51C52 /* buttonbg@2x~iphone.png in Resources */,
+				78D774D014CEFB3E00D51C52 /* buttonbg~iphone.png in Resources */,
+				78741D9614CEFD5200543188 /* navbar_setting@2x~iphone.png in Resources */,
+				78741D9714CEFD5200543188 /* navbar_setting~iphone.png in Resources */,
+				785EAAC014D045260063E702 /* backbtn@2x~iphone.png in Resources */,
+				785EAAC114D045260063E702 /* backbtn~iphone.png in Resources */,
+				785EAAC214D045260063E702 /* close_settingbtn@2x~iphone.png in Resources */,
+				785EAAC314D045260063E702 /* close_settingbtn~iphone.png in Resources */,
+				785EAAC614D046E70063E702 /* signoutbtn@2x~iphone.png in Resources */,
+				785EAAC714D046E70063E702 /* signoutbtn~iphone.png in Resources */,
+				785EAACA14D0495E0063E702 /* chat@2x~iphone.png in Resources */,
+				785EAACB14D0495E0063E702 /* chat~iphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

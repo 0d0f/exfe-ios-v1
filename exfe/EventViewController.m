@@ -58,16 +58,37 @@ const int INVITATION_MAYBE=0;
     
     interceptLinks=NO;
     
+    NSString *backbtnimgpath = [[NSBundle mainBundle] pathForResource:@"backbtn" ofType:@"png"];
+    UIImage *backbtnimg = [UIImage imageWithContentsOfFile:backbtnimgpath];
+	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+	[button setBackgroundImage:backbtnimg forState:UIControlStateNormal];
+    [button setTitle:@" Back" forState:UIControlStateNormal];
+//    CGRect fr = [[button titleLabel] frame];
+//    fr.origin.x = 0;
+//    [[button titleLabel] setFrame:fr];
+    
+    button.titleLabel.font  = [UIFont boldSystemFontOfSize:12.0f];
+    [button setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
+
+    button.frame = CGRectMake(0, 0, backbtnimg.size.width, backbtnimg.size.height);
+    
+	[button addTarget:self action:@selector(pushback) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *customBarItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+	self.navigationItem.leftBarButtonItem = customBarItem;
+    [customBarItem release];
+    
     NSString *chatimgpath = [[NSBundle mainBundle] pathForResource:@"chat" ofType:@"png"];
     UIImage *chatimg = [UIImage imageWithContentsOfFile:chatimgpath];
-    
-    
-    barButtonItem = [[UIBarButtonItem alloc]
-                     initWithImage:chatimg style:UIBarButtonItemStylePlain 
-                     target:self
-                     action:@selector(toconversation)];
+    UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [chatButton setTitle:@"Chat" forState:UIControlStateNormal];
+    [chatButton setImage:chatimg forState:UIControlStateNormal];
+    chatButton.frame = CGRectMake(0, 0, chatimg.size.width, chatimg.size.height);
+    [chatButton addTarget:self action:@selector(toconversation) forControlEvents:UIControlEventTouchUpInside];
+
+    barButtonItem = [[UIBarButtonItem alloc] initWithCustomView:chatButton];
     
 	self.navigationItem.rightBarButtonItem = barButtonItem;
+    [barButtonItem release];
     
     CGRect frame = CGRectMake(0, 0,400 , 44);
     UILabel *label = [[[UILabel alloc] initWithFrame:frame] autorelease];

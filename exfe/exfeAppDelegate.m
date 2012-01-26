@@ -196,7 +196,7 @@
     [dbu emptyDBCache];
     NSArray *viewControllers = self.navigationController.viewControllers;
     RootViewController *rootViewController = [viewControllers objectAtIndex:0];
-
+    [rootViewController performSelector:@selector(initUI) withObject:NO];
     [self.navigationController dismissModalViewControllerAnimated:YES];
     [rootViewController performSelector:@selector(LoadUserEvents:) withObject:NO];
 

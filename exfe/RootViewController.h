@@ -37,5 +37,6 @@
 - (void)ShowSettingView;
 - (void)emptyView;
 - (void)pushback;
+- (void)initUI;
 - (Cross*)getEventByCrossId:(int)cross_id;
 @end

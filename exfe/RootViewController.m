@@ -27,31 +27,9 @@
 {
     [super viewDidLoad];
     reload=YES;
-    NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
-
-    //self.navigationController.title=uname;
-    [self.navigationController navigationBar].topItem.title=uname;
-    NSString *settingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"navbar_setting" ofType:@"png"];
-    UIImage *settingbtnimg = [UIImage imageWithContentsOfFile:settingbtnimgpath];
+    [self initUI];
     
-    UIButton *settingButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
-    [settingButton addTarget:self action:@selector(ShowSettingView) forControlEvents:UIControlEventTouchUpInside];
-    settingButton.frame = (CGRect) {
-        .size.width = 33,
-        .size.height = 29,
-    };
-    [[settingButton layer] setCornerRadius:5.0f];
-    [[settingButton layer] setBorderWidth:1.0f];
-    [[settingButton layer] setBorderColor:[UIColor blackColor].CGColor];
-
-    barButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
-
-    //TOFIX: Add leftbutton for fill space, otherwise the custom title can't align center.
-//    [self.navigationController navigationBar].topItem.leftBarButtonItem=barButtonItem;
-    [self.navigationController navigationBar].topItem.rightBarButtonItem=barButtonItem;    
-
-    self.navigationItem.backBarButtonItem = [UIBarButtonItem styledBackBarButtonItemWithTarget:self selector:@selector(pushback)];
+    NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     
     if ([[self.navigationController navigationBar] respondsToSelector:@selector (setBackgroundImage:forBarMetrics:)]) {  // iOS 5
         UIImage *toolBarIMG = [UIImage imageNamed: @"navbar_bg.jpg"];  
@@ -61,14 +39,36 @@
     if(events==nil)
     {
         [self LoadUserEventsFromDB];
-//        DBUtil *dbu=[DBUtil sharedManager];
-//        events=[dbu getRecentEventObj];
     }
     NSString *apikey=[[NSUserDefaults standardUserDefaults] stringForKey:@"api_key"]; 
     if(uname!=nil && [apikey length]>2 )
     {
         [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
     }
+}
+
+- (void)initUI
+{
+    NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
+    [self.navigationController navigationBar].topItem.title=uname;
+    NSString *settingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"navbar_setting" ofType:@"png"];
+    UIImage *settingbtnimg = [UIImage imageWithContentsOfFile:settingbtnimgpath];
+    
+    UIButton *settingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
+    settingButton.frame = CGRectMake(0, 0, settingbtnimg.size.width, settingbtnimg.size.height);
+    [settingButton addTarget:self action:@selector(ShowSettingView) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *customsettingBarItem = [[UIBarButtonItem alloc] initWithCustomView:settingButton];
+	self.navigationItem.leftBarButtonItem = customsettingBarItem;
+    [customsettingBarItem release];
+    
+    barButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
+    
+    
+    //TOFIX: Add leftbutton for fill space, otherwise the custom title can't align center.
+    
+    [self.navigationController navigationBar].topItem.rightBarButtonItem=barButtonItem;      
 }
 
 - (void) refresh
@@ -475,15 +475,6 @@
         detailViewController.eventid=event.id;
         detailViewController.eventobj=event;
     }
-    
-    NSString *backbtnimgpath = [[NSBundle mainBundle] pathForResource:@"backbtn" ofType:@"png"];
-    UIImage *backbtnimg = [UIImage imageWithContentsOfFile:backbtnimgpath];
-    
-    UIBarButtonItem *backBar = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleDone target:nil action:nil];
-    [backBar setImage:backbtnimg];
-    [self navigationItem].backBarButtonItem=backBar;
-    [backBar release];
-    
     [self.navigationController pushViewController:detailViewController animated:YES];
     
     [detailViewController release]; 	

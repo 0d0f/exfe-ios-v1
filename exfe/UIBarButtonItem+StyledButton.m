@@ -15,7 +15,7 @@
 //    UIImage *image = [UIImage imageNamed:@"buttonbg.png"];
 //    image = [image stretchableImageWithLeftCapWidth:20.0f topCapHeight:20.0f];
     
-    NSString *backbtnimgpath = [[NSBundle mainBundle] pathForResource:@"buttonbg" ofType:@"png"];
+    NSString *backbtnimgpath = [[NSBundle mainBundle] pathForResource:@"backbtn" ofType:@"png"];
     UIImage *backbtnimg = [UIImage imageWithContentsOfFile:backbtnimgpath];
     
     NSString *title = NSLocalizedString(@"Back", nil);

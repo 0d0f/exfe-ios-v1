@@ -68,18 +68,35 @@
     [super viewDidLoad];
 
     UIBarButtonItem *flexibleSpaceLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+//    
+//    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [doneButton addTarget:self action:@selector(Done:) forControlEvents:UIControlEventTouchUpInside];
+//    [doneButton setTitle:@"Close" forState:UIControlStateNormal];
+//    doneButton.frame = (CGRect) {
+//        .size.width = 50,
+//        .size.height = 28,
+//    };
+//    [[doneButton layer] setCornerRadius:5.0f];
+//    [[doneButton layer] setBorderWidth:1.0f];
+//    [[doneButton layer] setBorderColor:[UIColor blackColor].CGColor];
+
+    NSString *closesettingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"close_settingbtn" ofType:@"png"];
+    
+    UIImage *closesettingbtnimg = [UIImage imageWithContentsOfFile:closesettingbtnimgpath];
     
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [doneButton addTarget:self action:@selector(Done:) forControlEvents:UIControlEventTouchUpInside];
     [doneButton setTitle:@"Close" forState:UIControlStateNormal];
-    doneButton.frame = (CGRect) {
-        .size.width = 50,
-        .size.height = 28,
-    };
-    [[doneButton layer] setCornerRadius:5.0f];
-    [[doneButton layer] setBorderWidth:1.0f];
-    [[doneButton layer] setBorderColor:[UIColor blackColor].CGColor];
+    doneButton.titleLabel.font         = [UIFont boldSystemFontOfSize:12.0f];
+    [doneButton setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
+//    doneButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
+    doneButton.titleEdgeInsets         = UIEdgeInsetsMake(0, 2, 0, 2);
+    doneButton.contentStretch          = CGRectMake(0.5, 0.5, 0, 0);
+    doneButton.contentMode             = UIViewContentModeScaleToFill;
 
+    [doneButton setBackgroundImage:closesettingbtnimg forState:UIControlStateNormal];
+    doneButton.frame = CGRectMake(0, 0, closesettingbtnimg.size.width, closesettingbtnimg.size.height);
+    [doneButton addTarget:self action:@selector(Done:) forControlEvents:UIControlEventTouchUpInside];
+    
     [toolbar setItems:[NSArray arrayWithObjects:flexibleSpaceLeft, [[[UIBarButtonItem alloc] initWithCustomView:doneButton] autorelease], nil]];
     
     [flexibleSpaceLeft release];
@@ -304,31 +321,26 @@
         footerView  = [[UIView alloc] init];
         
         //create the button
-        
+        NSString *signoutbtnimgpath = [[NSBundle mainBundle] pathForResource:@"signoutbtn" ofType:@"png"];
+        UIImage *signbtnimg = [UIImage imageWithContentsOfFile:signoutbtnimgpath];
+
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setTitle:@"Sign Out" forState:UIControlStateNormal];
-        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18]];
-        [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [button setFrame:CGRectMake(200, 10, 100, 40)];
-        [[button layer] setCornerRadius:5.0f];
-        [[button layer] setBorderWidth:1.0f];
-        [[button layer] setBorderColor:[UIColor blackColor].CGColor];
+        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18]]; 
+        [button setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
+        [button setBackgroundImage:signbtnimg forState:UIControlStateNormal];
+        [button setFrame:CGRectMake(200, 10, 100, 40)];  
+        
+//        [[button layer] setCornerRadius:5.0f];
+//        [[button layer] setBorderWidth:1.0f];
+//        [[button layer] setBorderColor:[UIColor blackColor].CGColor];
+//        [[button layer] setShadowRadius:1];
+//        [[button layer] setShadowOpacity:0.5];
+//        [[button layer] setShadowOffset:CGSizeMake(2.0f, 2.0f)];
+
         [button addTarget:self action:@selector(Logout:) forControlEvents:UIControlEventTouchUpInside];
-
-
-//        
-//        UIButton *button = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//        [button setFrame:CGRectMake(200, 10, 100, 40)];
-//        [[button layer] setCornerRadius:1.0f];
-//
-//        [button setTitle:@"Sign Out" forState:UIControlStateNormal];
-//        [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18]];
-////        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//        
-//        //set action of the button
-//        [button addTarget:self action:@selector(Logout:) forControlEvents:UIControlEventTouchDown];
-        //add the button to the view
         [footerView addSubview:button];
+//        [button release];
     }
     
     //return the view for the footer
