@@ -16,7 +16,7 @@
                BlueprintIdentifier = "788C4206133FA3D000AAA425"
                BuildableName = "EXFE.app"
                BlueprintName = "EXFE"
-               ReferencedContainer = "container:exfe.xcodeproj">
+               ReferencedContainer = "container:EXFE.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -34,7 +34,7 @@
                BlueprintIdentifier = "788C422A133FA3D100AAA425"
                BuildableName = "EXFETests.octest"
                BlueprintName = "EXFETests"
-               ReferencedContainer = "container:exfe.xcodeproj">
+               ReferencedContainer = "container:EXFE.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -44,7 +44,7 @@
             BlueprintIdentifier = "788C4206133FA3D000AAA425"
             BuildableName = "EXFE.app"
             BlueprintName = "EXFE"
-            ReferencedContainer = "container:exfe.xcodeproj">
+            ReferencedContainer = "container:EXFE.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -64,7 +64,7 @@
             BlueprintIdentifier = "788C4206133FA3D000AAA425"
             BuildableName = "EXFE.app"
             BlueprintName = "EXFE"
-            ReferencedContainer = "container:exfe.xcodeproj">
+            ReferencedContainer = "container:EXFE.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -84,7 +84,7 @@
             BlueprintIdentifier = "788C4206133FA3D000AAA425"
             BuildableName = "EXFE.app"
             BlueprintName = "EXFE"
-            ReferencedContainer = "container:exfe.xcodeproj">
+            ReferencedContainer = "container:EXFE.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

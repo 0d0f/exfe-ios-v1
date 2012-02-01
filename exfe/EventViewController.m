@@ -359,7 +359,8 @@ const int INVITATION_MAYBE=0;
 //            float latitude = 35.4634;
 //            float longitude = 9.43425;
             int zoom = 13;
-            NSString *stringURL = [NSString stringWithFormat:@"http://maps.google.com/maps?q=%@&z=%d", [q stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding], zoom];
+//            NSString *stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?saddr=Current Location&daddr=%@", q]
+            NSString *stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@", q]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 //            NSString *stringURL = [NSString stringWithFormat:@"http://maps.google.com/maps?q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
             NSURL *url = [NSURL URLWithString:stringURL];
             [[UIApplication sharedApplication] openURL:url];
