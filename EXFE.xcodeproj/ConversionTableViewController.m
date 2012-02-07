@@ -182,7 +182,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    static NSString *MyIdentifier = @"tblCrossCellView";
+    static NSString *MyIdentifier = @"tblConversationCellView";
 
     ConversationCellView *cell = (ConversationCellView *)[tableView dequeueReusableCellWithIdentifier:MyIdentifier];
     if(cell == nil) {

@@ -226,6 +226,9 @@
     if(lastUpdateTime==nil)
         lastUpdateTime=@"0000-00-00 00:00:00";
 
+    //TOFIX:temp test hack
+    
+    lastUpdateTime=@"2012-02-06 00:00:00";
     CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
     
     

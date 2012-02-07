@@ -11,6 +11,7 @@
 #import "Comment.h"
 #import "Invitation.h"
 #import "User.h"
+#import "Activity.h"
 #import "NSObject+SBJson.h"
 
 @implementation DBUtil
@@ -701,10 +702,138 @@ static sqlite3 *database;
     }
     sqlite3_finalize(stm);
 }
+- (void) updateActivityWithobj:(NSDictionary*)dict action:(NSString*)action  cross_id:(int)cross_id
+//- (void) updateActivityWithAction:(NSString*)action data:(NSString*)data time:(NSString*)time by_id:(int)by_id to_id:(int)to_id cross_id:(int)cross_id log_id:(int)log_id
+{
+    Activity *activity=[Activity initWithDict:dict action:action cross_id:cross_id];
+	NSString *dbpath=[DBUtil DBPath];
+	NSFileManager *fileManager=[NSFileManager defaultManager];
+	BOOL success=[fileManager fileExistsAtPath:dbpath];
+	[fileManager release];
+	if(!success)
+	{
+		return;
+	} 
+    sqlite3_stmt *stm=nil;
+    
+    const char *sql = "insert or replace into activity (log_id, by_id, to_id, cross_id,by_name,by_avatar,to_name,to_avatar, time, action, data) values(?,?,?,?,?,?,?,?,?,?,?)";
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        sqlite3_bind_int(stm, 1, activity.log_id);  
+        sqlite3_bind_int(stm, 2, activity.by_id);  
+        sqlite3_bind_int(stm, 3, activity.to_id);  
+        sqlite3_bind_int(stm, 4, activity.cross_id);  
+        sqlite3_bind_text(stm,5, [activity.by_name UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,6, [activity.by_avatar UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,7, [activity.to_name UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,8, [activity.to_avatar UTF8String], -1, SQLITE_TRANSIENT);
+        
+        sqlite3_bind_text(stm,9, [activity.time UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,10, [activity.action UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,11, [activity.data UTF8String], -1, SQLITE_TRANSIENT);
 
+        if(sqlite3_step(stm)== SQLITE_DONE)
+        {
+        }
+        else 
+        {
+            NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+        }
+    }
+    sqlite3_finalize(stm);
+}
+
+- (NSMutableArray*) getRecentActivityFromLogid:(int)log_id start:(int)start num:(int)num
+{
+    const char *sql="select log_id, by_id, to_id, cross_id, time, action, data, by_name, by_avatar, to_name, to_avatar,title from activity a, crosses c where a.cross_id=c.id and log_id>=? order by time desc limit ?,?;";
+    NSMutableArray *activitylist=[[NSMutableArray alloc] initWithCapacity:num];
+    
+    NSString *sqldbpath=[DBUtil DBPath];
+	NSFileManager *fileManager=[NSFileManager defaultManager];
+	BOOL success=[fileManager fileExistsAtPath:sqldbpath];
+	[fileManager release];
+	if(!success)
+	{
+		return 0;
+	} 
+	sqlite3_stmt *stm=nil;
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        sqlite3_bind_int(stm, 1, log_id);  
+        sqlite3_bind_int(stm, 2, start);  
+        sqlite3_bind_int(stm, 3, num );  
+        
+        while(sqlite3_step(stm)== SQLITE_ROW)
+        {   
+            Activity *activity=[Activity alloc];
+
+            int log_id=sqlite3_column_int(stm, 0);
+            int by_id=sqlite3_column_int(stm, 1);
+            int to_id=sqlite3_column_int(stm, 2);
+            int cross_id=sqlite3_column_int(stm, 3);
+            NSString *time=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 4)];
+
+            char *action=(char*)sqlite3_column_text(stm, 5);
+            if(action != nil)
+                activity.action=[NSString stringWithUTF8String:action];
+
+            char *data=(char*)sqlite3_column_text(stm, 6);
+            if(data != nil)
+                activity.data=[NSString stringWithUTF8String:data];
+            char *by_name=(char*)sqlite3_column_text(stm, 7);
+            if(by_name != nil)
+                activity.by_name=[NSString stringWithUTF8String:by_name];
+            
+            char *by_avatar=(char*)sqlite3_column_text(stm, 8);
+            if(by_avatar!=nil)
+                activity.by_avatar=[NSString stringWithUTF8String:by_avatar];
+
+            char *to_name=(char*)sqlite3_column_text(stm, 9);
+            if(to_name!=nil)
+                activity.to_name=[NSString stringWithUTF8String:to_name];
+
+            char *to_avatar=(char*)sqlite3_column_text(stm, 10);
+            if(to_avatar!=nil)
+                activity.to_avatar=[NSString stringWithUTF8String:to_avatar];
+
+            char *title=(char*)sqlite3_column_text(stm, 11);
+            if(title!=nil)
+                activity.title=[NSString stringWithUTF8String:title];
+
+            activity.log_id=log_id;
+            activity.by_id=by_id;
+            activity.to_id=to_id;
+            activity.cross_id=cross_id;
+            activity.time=time;
+
+            [activitylist addObject:activity];
+        }
+    }
+    else 
+    {
+        NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+    }            
+    
+    sqlite3_finalize(stm);
+    for (int i=0 ; i<[activitylist count] ; i++)
+    {
+        Activity *activity=[activitylist objectAtIndex:i];
+        if (activity.by_name == nil )
+        {
+            NSLog(@"by_id:%u",activity.by_id);
+            User *user=[self getUserWithid:activity.by_id];
+            if (user !=nil && user.name != nil)
+            {
+                activity.by_name=user.name;
+                activity.by_avatar=user.avatar_file_name;
+            }
+            
+        }
+    }
+    return activitylist;
+}
 - (void) updateUserobjWithid:(int)uid user:(NSDictionary*)userobj
 {
-    
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
@@ -754,7 +883,7 @@ static sqlite3 *database;
 	[fileManager release];
 	if(!success)
 	{
-		return 0;
+		return nil;
 	} 
 	sqlite3_stmt *stm=nil;
     User *user=[[User alloc]init];
@@ -873,7 +1002,47 @@ static sqlite3 *database;
     sqlite3_finalize(stm);
 	return LastUpdateTime;      
 }
+- (Cross*)getCrossById:(int)cross_id {
+    const char *sql="SELECT id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,flag,time_type from crosses where id=?";
 
+    NSString *dbpath=[DBUtil DBPath];
+	NSFileManager *fileManager=[NSFileManager defaultManager];
+	BOOL success=[fileManager fileExistsAtPath:dbpath];
+	[fileManager release];
+	if(!success)
+	{
+		return 0;
+	} 
+	sqlite3_stmt *stm=nil;
+    Cross *cross;
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        sqlite3_bind_int(stm, 1, cross_id);  
+        while(sqlite3_step(stm)== SQLITE_ROW)
+        {
+            cross=[[[Cross alloc]init] autorelease];
+            cross.id=sqlite3_column_int(stm, 0);
+            cross.title=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 1)];
+            cross.description=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 2)];
+            cross.code=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 3)];
+            cross.begin_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 4)];
+            cross.end_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 5)];
+            cross.duration=sqlite3_column_int(stm, 6);
+            if((char*)sqlite3_column_text(stm, 7)!=nil)
+                cross.place_line1=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 7)];
+            if((char*)sqlite3_column_text(stm, 8)!=nil)
+                cross.place_line2=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 8)];
+            cross.creator_id=sqlite3_column_int(stm, 9);
+            cross.created_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 10)];
+            cross.updated_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 11)];
+            cross.state=sqlite3_column_int(stm, 12);
+            cross.flag = sqlite3_column_int(stm, 13);
+            cross.time_type = sqlite3_column_int(stm, 14);
+        }
+    }
+    sqlite3_finalize(stm);
+    return cross;
+}
 - (void)dealloc
 {
     sqlite3_close(database); 

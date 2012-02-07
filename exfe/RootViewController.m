@@ -11,12 +11,14 @@
 #import "EventViewController.h"
 #import "exfeAppDelegate.h"
 #import "UserSettingViewController.h"
+#import "ActivityViewController.h"
 #import "APIHandler.h"
 #import "JSON/SBJson.h"
 #import "DBUtil.h"
 #import "ImgCache.h"
 #import "UIButton+StyledButton.h"
 #import "UIBarButtonItem+StyledButton.h"
+
 
 
 @implementation RootViewController
@@ -58,16 +60,16 @@
     [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
     settingButton.frame = CGRectMake(0, 0, settingbtnimg.size.width, settingbtnimg.size.height);
     [settingButton addTarget:self action:@selector(ShowSettingView) forControlEvents:UIControlEventTouchUpInside];
-    
-//    UIBarButtonItem *customsettingBarItem = [[UIBarButtonItem alloc] initWithCustomView:settingButton];
-//	self.navigationItem.leftBarButtonItem = customsettingBarItem;
-//    [customsettingBarItem release];
-//    
     barButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
     
-//    UIBarButtonItem *flexibleSpaceLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-
     [self.navigationController navigationBar].topItem.rightBarButtonItem=barButtonItem;      
+    
+    UIButton *activeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [activeButton setImage:settingbtnimg forState:UIControlStateNormal];
+    activeButton.frame = CGRectMake(0, 0, settingbtnimg.size.width, settingbtnimg.size.height);
+    [activeButton addTarget:self action:@selector(ShowActiveView) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController navigationBar].topItem.leftBarButtonItem =[[[UIBarButtonItem alloc] initWithCustomView:activeButton]autorelease];
+    
 }
 
 - (void) refresh
@@ -130,7 +132,11 @@
                 id conversation=[updateobj objectForKey:@"conversation"];
                 NSArray *confirmed=[updateobj objectForKey:@"confirmed"];
                 NSArray *declined=[updateobj objectForKey:@"declined"];
+                NSArray *interested=[updateobj objectForKey:@"interested"];
+                
                 NSArray *change=[updateobj objectForKey:@"change"];
+                NSArray *addexfee=[updateobj objectForKey:@"addexfee"];
+                
                 
                 int cross_id=[[updateobj objectForKey:@"cross_id"] intValue];
                 if([conversation isKindOfClass:[NSArray class]])
@@ -155,6 +161,8 @@
                                     [dict setObject:[conversationobj objectForKey:@"time"] forKey:@"updated_at"];
                                     [objs addObject:dict];
                                     [dict release];
+                                    
+                                    [dbu updateActivityWithobj:conversationobj action:@"conversation" cross_id:cross_id ];
                                 }
                             }
                             NSDate *update_datetime = [dateFormat dateFromString:[conversationobj objectForKey:@"time"]]; 
@@ -195,7 +203,8 @@
                                 [dict setObject:[confirmedobj objectForKey:@"time"] forKey:@"updated_at"];
                                 [dbu updateInvitationWithCrossId:cross_id invitation:dict];
                                 [dbu setCrossStatusWithCrossId:cross_id status:1];
-
+                                [confirmedobj setValue:@"1" forKey:@"data"];
+                                [dbu updateActivityWithobj:confirmedobj action:@"confirmed" cross_id:cross_id];
                                 [dict release];
                             }
                         }
@@ -203,6 +212,7 @@
                         lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
                     }
                 }
+                
                 if([declined isKindOfClass:[NSArray class]])
                 {
                     for(int idx=[declined count]-1;idx>=0;idx--)
@@ -222,22 +232,71 @@
 
                                 [dict setObject:[declinedobj objectForKey:@"user_id"] forKey:@"user_id"];
                                 [dict setObject:@"2" forKey:@"state"];
+                                if([meta objectForKey:@"provider"]==nil)
+                                    [dict setObject:@""  forKey:@"provider"];
+                                else
+                                    [dict setObject:[meta objectForKey:@"provider"]  forKey:@"provider"];
+                                
+                                [dict setObject:[identity objectForKey:@"name"]  forKey:@"name"];
+                                [dict setObject:[identity objectForKey:@"avatar_file_name"]  forKey:@"avatar_file_name"];
+                                
+                                [dict setObject:[declinedobj objectForKey:@"time"] forKey:@"updated_at"];
+                                [dbu updateInvitationWithCrossId:cross_id invitation:dict];
+                                [dbu setCrossStatusWithCrossId:cross_id status:1];
+
+                                [dict release];
+                                [declinedobj setValue:@"2" forKey:@"data"];
+                                [dbu updateActivityWithobj:declinedobj action:@"declined" cross_id:cross_id];
+
+                                NSDate *update_datetime = [dateFormat dateFromString:[declinedobj objectForKey:@"time"]]; 
+                                lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
+                            }
+                        }
+                    }
+                }
+                if([interested isKindOfClass:[NSArray class]])
+                {
+                    for(int idx=[interested count]-1;idx>=0;idx--)
+                    {
+                        NSDictionary *interestedobj=[interested objectAtIndex:idx];
+                        id meta=[[interestedobj objectForKey:@"meta"] JSONValue];
+                        NSDictionary *identity=[interestedobj objectForKey:@"identity"];
+                        if([meta isKindOfClass: [NSDictionary class]])
+                        {
+                            NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
+                            
+                            id invitation_id = [meta objectForKey:@"id"];
+                            if(invitation_id!=nil)
+                            {
+                                [dict setObject:invitation_id forKey:@"invitation_id"];
+                                [dict setObject:[interestedobj objectForKey:@"to_id"] forKey:@"identity_id"];
+                                
+                                [dict setObject:[interestedobj objectForKey:@"user_id"] forKey:@"user_id"];
+                                [dict setObject:@"2" forKey:@"state"];
                                 [dict setObject:[identity objectForKey:@"name"]  forKey:@"name"];
                                 if([meta objectForKey:@"provider"]==nil)
                                     [dict setObject:@""  forKey:@"provider"];
                                 else
                                     [dict setObject:[meta objectForKey:@"provider"]  forKey:@"provider"];
                                 [dict setObject:[identity objectForKey:@"avatar_file_name"]  forKey:@"avatar_file_name"];
-                                [dict setObject:[declinedobj objectForKey:@"time"] forKey:@"updated_at"];
+                                [dict setObject:[interestedobj objectForKey:@"time"] forKey:@"updated_at"];
                                 [dbu updateInvitationWithCrossId:cross_id invitation:dict];
-                                [dbu setCrossStatusWithCrossId:cross_id status:1];
-
+                                [dbu setCrossStatusWithCrossId:cross_id status:3];
+                                
                                 [dict release];
-                                NSDate *update_datetime = [dateFormat dateFromString:[declinedobj objectForKey:@"time"]]; 
+                                [interestedobj setValue:@"3" forKey:@"data"];
+                                [dbu updateActivityWithobj:interestedobj action:@"interested" cross_id:cross_id];
+                                
+                                NSDate *update_datetime = [dateFormat dateFromString:[interestedobj objectForKey:@"time"]]; 
                                 lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
                             }
                         }
-                    }
+                    }                    
+                }
+
+                if([addexfee isKindOfClass:[NSArray class]])
+                {
+                    
                 }
                 if([change isKindOfClass:[NSDictionary class]])
                 {
@@ -247,6 +306,7 @@
                     lastUpdateTime_datetime=[changeupdatetime laterDate:lastUpdateTime_datetime];
 
                 }
+                
                 for (NSString *key in (NSDictionary*)updateobj)
                 {
                     NSLog(@"%@",key);
@@ -500,6 +560,18 @@
     UserSettingViewController *settingview=[[UserSettingViewController alloc] initWithNibName:@"UserSettingViewController" bundle:nil];
     [self presentModalViewController:settingview animated:YES];
 }
+- (void)ShowActiveView
+{
+   ActivityViewController *activeview=[[ActivityViewController alloc] initWithNibName:@"ActivityViewController" bundle:nil];
+    DBUtil *dbu=[DBUtil sharedManager];
+    NSMutableArray *activityList=[dbu getRecentActivityFromLogid:0 start:0 num:200];
+    activeview.activityList = activityList;
+    [self.navigationController pushViewController:activeview animated:YES];
+    [self.navigationController navigationBar].backItem.title=@"crosses";
+//    self.navigationItem
+//    [self presentViewController:activeview animated:YES completion:^{return;}];
+    
+ }
 
 - (void)viewDidUnload
 {

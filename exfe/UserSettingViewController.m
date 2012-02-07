@@ -68,17 +68,6 @@
     [super viewDidLoad];
 
     UIBarButtonItem *flexibleSpaceLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-//    
-//    UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [doneButton addTarget:self action:@selector(Done:) forControlEvents:UIControlEventTouchUpInside];
-//    [doneButton setTitle:@"Close" forState:UIControlStateNormal];
-//    doneButton.frame = (CGRect) {
-//        .size.width = 50,
-//        .size.height = 28,
-//    };
-//    [[doneButton layer] setCornerRadius:5.0f];
-//    [[doneButton layer] setBorderWidth:1.0f];
-//    [[doneButton layer] setBorderColor:[UIColor blackColor].CGColor];
 
     NSString *closesettingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"close_settingbtn" ofType:@"png"];
     
@@ -88,7 +77,7 @@
     [doneButton setTitle:@"Close" forState:UIControlStateNormal];
     doneButton.titleLabel.font         = [UIFont boldSystemFontOfSize:12.0f];
     [doneButton setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
-//    doneButton.titleLabel.shadowOffset = CGSizeMake(0, -1);
+
     doneButton.titleEdgeInsets         = UIEdgeInsetsMake(0, 2, 0, 2);
     doneButton.contentStretch          = CGRectMake(0.5, 0.5, 0, 0);
     doneButton.contentMode             = UIViewContentModeScaleToFill;
@@ -136,10 +125,13 @@
                 for(int i=0;i<[identities count];i++)
                 {
                     Identity* useridentity=[Identity initWithDict:[identities objectAtIndex:i]];
+                    if(useridentity.status==3)
+                    {
                     if ([useridentity.provider isEqualToString:@"iOSAPN"])
                         [devices_section addObject:useridentity];    
                     else
                         [identities_section addObject:useridentity];
+                    }
                 }
                 if([identities_section count]>0)
                     [identitiesData addObject:identities_section];
@@ -157,7 +149,6 @@
                 [self LoadData:user];
             });
             }
-
         }
     });
     dispatch_release(fetchdataQueue);        
@@ -169,6 +160,8 @@
     {
         NSDictionary* userdict=(NSDictionary*)user;
         NSString* atatar_file_name= [userdict objectForKey:@"avatar_file_name"];
+        if(atatar_file_name == nil || [atatar_file_name isEqualToString:@""])
+            atatar_file_name = @"default.png";
         if(atatar_file_name)
         {
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);

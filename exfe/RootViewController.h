@@ -35,6 +35,7 @@
 - (void)UpdateDBWithEventDicts:(NSArray*)events isnew:(BOOL)isnew;
 - (void)refresh;
 - (void)ShowSettingView;
+- (void)ShowActiveView;
 - (void)emptyView;
 - (void)pushback;
 - (void)initUI;
