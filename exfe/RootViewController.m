@@ -52,7 +52,11 @@
 - (void)initUI
 {
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
-    [self.navigationController navigationBar].topItem.title=uname;
+    if(uname!=nil)
+        [self.navigationController navigationBar].topItem.title=uname;
+
+    NSLog(@"uname:%@",uname);
+    
     NSString *settingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"navbar_setting" ofType:@"png"];
     UIImage *settingbtnimg = [UIImage imageWithContentsOfFile:settingbtnimgpath];
     
@@ -69,7 +73,7 @@
     activeButton.frame = CGRectMake(0, 0, settingbtnimg.size.width, settingbtnimg.size.height);
     [activeButton addTarget:self action:@selector(ShowActiveView) forControlEvents:UIControlEventTouchUpInside];
     [self.navigationController navigationBar].topItem.leftBarButtonItem =[[[UIBarButtonItem alloc] initWithCustomView:activeButton]autorelease];
-    
+    [[self.navigationController navigationBar] setNeedsDisplay];
 }
 
 - (void) refresh
@@ -133,10 +137,8 @@
                 NSArray *confirmed=[updateobj objectForKey:@"confirmed"];
                 NSArray *declined=[updateobj objectForKey:@"declined"];
                 NSArray *interested=[updateobj objectForKey:@"interested"];
-                
                 NSArray *change=[updateobj objectForKey:@"change"];
                 NSArray *addexfee=[updateobj objectForKey:@"addexfee"];
-                
                 
                 int cross_id=[[updateobj objectForKey:@"cross_id"] intValue];
                 if([conversation isKindOfClass:[NSArray class]])
@@ -167,7 +169,6 @@
                             }
                             NSDate *update_datetime = [dateFormat dateFromString:[conversationobj objectForKey:@"time"]]; 
                             lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
-
                         }
                         if([objs count]>0)
                         {
@@ -485,9 +486,6 @@
         }
         NSString *result=[dateFormat stringFromDate:time_datetime]; 
         
-//        ccc
-//        if([time length]==10)
-//            time=[time substringWithRange:NSMakeRange(5,5)];
         [cell setLabelTime:result];
         [dateFormat release];
     }
@@ -505,7 +503,7 @@
         dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
         
         dispatch_async(imgQueue, ^{
-            NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+            NSString* imgName = user.avatar_file_name;//[user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
             NSString *imgurl = [ImgCache getImgUrl:imgName];
             
             UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];

@@ -313,7 +313,6 @@
 			children = (
 				7833E95413C5B20A00FE3EDA /* x.html */,
 				7819824B14C45D3C007EA029 /* btn.png */,
-				783CF22B149E523F00C7D80E /* Icon.png */,
 				783CF22C149E523F00C7D80E /* Icon@2x.png */,
 				788C9C0214A87B6800FBEE49 /* default_avatar@2x~iphone.png */,
 				788C9C0314A87B6800FBEE49 /* default_avatar~iphone.png */,
@@ -322,6 +321,7 @@
 				787EB8D714D15FB1007D157D /* map.png */,
 				78F75BE113AFA84300C7B3CF /* arrow.png */,
 				78D774CD14CEFB3E00D51C52 /* buttonbg@2x~iphone.png */,
+				783CF22B149E523F00C7D80E /* Icon.png */,
 				78D774CE14CEFB3E00D51C52 /* buttonbg~iphone.png */,
 				785EAABC14D045250063E702 /* backbtn@2x~iphone.png */,
 				785EAABD14D045250063E702 /* backbtn~iphone.png */,

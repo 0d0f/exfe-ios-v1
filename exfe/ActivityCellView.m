@@ -31,14 +31,41 @@
     cellActionMsg.text=_text;
 }
 - (void)setLabelTime:(NSString *)_text {
-    cellTime.text=_text;
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    
+    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *time_datetime = [dateFormat dateFromString:_text]; 
+    [dateFormat setDateFormat:@"HH:mm MM-dd"];
+    cellTime.text=[dateFormat stringFromDate:time_datetime]; 
+    [dateFormat release];
 }
 - (void)setAvartar:(UIImage*)_img {
     cellAvatar.image=_img;
 }
+- (void)setByTitle:(NSString *)_title {
+    cellByTitle.text=_title;
+}
 
-- (void)setCellModel:(int)type {
+- (void)setCellHeightWithMsgHeight:(int)height { 
     
+    
+    CGRect rect=self.frame;
+    rect.size.height=66-21+height;
+    [self setFrame:rect];
+    
+    CGRect msgrect=cellActionMsg.frame;
+    float yoffset=height-msgrect.size.height;
+    msgrect.size.height=height;
+    msgrect.origin.y=cellCrossTitle.frame.size.height+cellCrossTitle.frame.origin.y+2;
+    [cellActionMsg setFrame:msgrect];
+
+    CGRect byrect=cellByTitle.frame;
+    byrect.origin.y+=yoffset;
+    [cellByTitle setFrame:byrect];
+    
+    CGRect timerect=cellTime.frame;
+    timerect.origin.y+=yoffset;
+    [cellTime setFrame:timerect];
 }
 
 @end

@@ -7,12 +7,13 @@
 //
 
 #import "ActivityViewController.h"
-#import "Activity.h"
 #import "ImgCache.h"
 #import "Cross.h"
 #import "EventViewController.h"
 #import "DBUtil.h"
 #import "exfeAppDelegate.h"
+
+#define MSG_LABEL_HEIGHT 15
 
 @implementation ActivityViewController
 @synthesize activityList;
@@ -46,7 +47,7 @@
     label.shadowColor = [UIColor colorWithWhite:0.0 alpha:0];
     label.textAlignment = UITextAlignmentCenter;
     label.textColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1];
-    label.text = @"Activity";
+    label.text = @"Notification";
     self.navigationItem.titleView=label;
     
 
@@ -107,7 +108,17 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 65;
+    Activity *activity=[activityList objectAtIndex:indexPath.row];
+    NSString *msg=[self getMsgWithActivity:activity];
+    CGSize maximumLabelSize = CGSizeMake(296,9999);
+    
+    CGSize expectedLabelSize = [msg sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12]
+                                      constrainedToSize:maximumLabelSize 
+                                          lineBreakMode:UILineBreakModeWordWrap]; 
+    if(expectedLabelSize.height>MSG_LABEL_HEIGHT)
+        return 66-21+expectedLabelSize.height;
+    else 
+        return 66;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -126,7 +137,7 @@
     [detailViewController release]; 	
 //    
 //    [dbu setCrossStatusWithCrossId:event.id status:0];
-    NSLog(@"cross view");
+//    NSLog(@"cross view");
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -139,32 +150,41 @@
         cell = tblCell;
     }
     Activity *activity=[activityList objectAtIndex:indexPath.row];
-    
     [cell setLabelCrossTitle:activity.title];
     [cell setLabelTime:activity.time];
-    NSString *msg=@"";
+    NSString *msg=[self getMsgWithActivity:activity];
+    CGSize maximumLabelSize = CGSizeMake(296,9999);
+    
+    CGSize expectedLabelSize = [msg sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12]
+                               constrainedToSize:maximumLabelSize 
+                                   lineBreakMode:UILineBreakModeWordWrap]; 
+    if(expectedLabelSize.height>MSG_LABEL_HEIGHT)
+        [cell setCellHeightWithMsgHeight:expectedLabelSize.height];
+    [cell setActionMsg:msg];
+
     NSString *avatar=activity.by_avatar;
     if([activity.action isEqualToString:@"conversation"])
     {
-        msg=[NSString stringWithFormat:@"%@: %@",[activity.by_name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],activity.data];
-        [cell setActionMsg:msg];
         avatar=activity.by_avatar;
     }
-    else if([activity.action isEqualToString:@"confirmed"])
+    else if([activity.action isEqualToString:@"confirmed"] || [activity.action isEqualToString:@"interested"] || [activity.action isEqualToString:@"declined"])
     {
         if(activity.to_id==activity.by_id)
-            msg=[NSString stringWithFormat:@"%@: %@",activity.to_name,@"confirmed"];
-        else{
-            msg=[NSString stringWithFormat:@"%@: %@ by %@",activity.to_name,@"confirmed",activity.by_name];
+            avatar=activity.by_avatar;
+        else
             avatar=activity.to_avatar;
-        }
-        [cell setActionMsg:msg];
     }
-//    [cell setLabelText:comment.comment];
-//    [cell setLabelTime:comment.created_at];
+    
+    if(activity.to_id==activity.by_id)
+        [cell setByTitle:@""];
+    else if(activity.by_name!=nil && ![activity.by_name isEqualToString:@""])
+        [cell setByTitle:[@"by " stringByAppendingString:activity.by_name]];
+    else
+        [cell setByTitle:@""];
+    
     dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
     dispatch_async(imgQueue, ^{
-        NSString* imgName = [avatar stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+        NSString* imgName = avatar;//[avatar stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
         NSString *imgurl = [ImgCache getImgUrl:imgName];
         UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
         
@@ -177,6 +197,15 @@
     dispatch_release(imgQueue);        
     return cell;
     
+}
+- (NSString*)getMsgWithActivity:(Activity*)activity
+{
+    NSString *msg=@"";
+    if([activity.action isEqualToString:@"conversation"])
+        msg=[NSString stringWithFormat:@"%@: %@",[activity.by_name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],activity.data];
+    else if([activity.action isEqualToString:@"confirmed"] || [activity.action isEqualToString:@"interested"] || [activity.action isEqualToString:@"declined"])
+        msg=[NSString stringWithFormat:@"%@: %@",activity.to_name,activity.action];
+    return msg;
 }
 
 @end

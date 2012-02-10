@@ -75,7 +75,6 @@ static id sharedManager = nil;
     UIImage *img=[UIImage imageWithContentsOfFile:cachefilename];
     if(img==nil)
     {
-        NSLog(@"fetch url:%@",url);
         NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
         img = [UIImage imageWithData:data];
         [data writeToFile:cachefilename atomically:YES];
@@ -91,6 +90,9 @@ static id sharedManager = nil;
 
 + (NSString *) getImgUrl:(NSString*)imgName
 {
+    if([[imgName substringWithRange:NSMakeRange(0,5)] isEqualToString:@"http:"])
+        return imgName;
+    
     if([imgName isEqualToString:@"default.png"])
         return [NSString stringWithFormat:@"http://img.exfe.com/web/80_80_%@",imgName];
     else

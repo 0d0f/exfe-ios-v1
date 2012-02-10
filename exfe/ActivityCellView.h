@@ -12,12 +12,14 @@
     IBOutlet UIImageView *cellAvatar;
     IBOutlet UILabel *cellCrossTitle;
     IBOutlet UILabel *cellActionMsg;
+    IBOutlet UILabel *cellByTitle;
     IBOutlet UILabel *cellTime;
 }
 - (void)setLabelCrossTitle:(NSString *)_text;
 - (void)setLabelTime:(NSString *)_text;
 - (void)setActionMsg:(NSString *)_text;
+- (void)setByTitle:(NSString *)_title;
 - (void)setAvartar:(UIImage*)_img;
-- (void)setCellModel:(int)type;
+- (void)setCellHeightWithMsgHeight:(int)height;
 
 @end

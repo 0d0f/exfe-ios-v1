@@ -166,7 +166,7 @@
         {
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
             dispatch_async(imgQueue, ^{ 
-                NSString* imgName = [atatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+                NSString* imgName = atatar_file_name;//[atatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
                 NSString *imgurl = [ImgCache getImgUrl:imgName];
                 
                 UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
@@ -261,7 +261,7 @@
         }
         else
         {
-            NSString* imgName = [userIdentity.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+            NSString* imgName = userIdentity.avatar_file_name;//[userIdentity.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
             NSString *imgurl = [ImgCache getImgUrl:imgName];
             UIImage *img = [[ImgCache sharedManager] getImgFrom:imgurl];
             [cell setAvartar:img];

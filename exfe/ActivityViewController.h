@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ActivityCellView.h"
+#import "Activity.h"
 #import "PullRefreshTableViewController.h"
 
 @interface ActivityViewController : UIViewController {
@@ -22,4 +23,5 @@
 @property (retain,nonatomic) NSMutableArray* activityList;
 
 - (IBAction) Done:(id) sender;
+- (NSString*)getMsgWithActivity:(Activity*)activity;
 @end

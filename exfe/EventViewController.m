@@ -247,7 +247,7 @@ const int INVITATION_MAYBE=0;
             {
                 if(![invitation.avatar isEqualToString:@""])
                 {
-                    NSString* imgName = [invitation.avatar stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+                    NSString* imgName = invitation.avatar;//[invitation.avatar stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
                     NSString *imgurl = [ImgCache getImgUrl:imgName];
                     NSString *imgcachename=[ImgCache getImgName:imgurl];
                     
