@@ -167,6 +167,7 @@
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
             dispatch_async(imgQueue, ^{ 
                 NSString* imgName = atatar_file_name;//[atatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+                NSLog(@"user avatar:%@",imgName);
                 NSString *imgurl = [ImgCache getImgUrl:imgName];
                 
                 UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];

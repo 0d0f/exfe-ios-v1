@@ -7,7 +7,6 @@
 //
 #import <QuartzCore/QuartzCore.h>
 #import "RootViewController.h"
-#import "MeViewController.h"
 #import "EventViewController.h"
 #import "exfeAppDelegate.h"
 #import "UserSettingViewController.h"

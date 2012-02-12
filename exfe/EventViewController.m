@@ -18,7 +18,7 @@
 
 const int INVITATION_YES=1;
 const int INVITATION_NO=2;
-const int INVITATION_MAYBE=0;
+const int INVITATION_MAYBE=3;
 
 @implementation EventViewController
 @synthesize event;
@@ -206,7 +206,6 @@ const int INVITATION_MAYBE=0;
         dateString_human=@"Anytime";
         dateString=@"";
     }
-    NSLog(@"dateString: %@", dateString);    
     
     NSString *xpath=[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"x.html"];
     NSString *html=[NSString stringWithContentsOfFile:xpath encoding:NSUTF8StringEncoding error:nil];
@@ -232,9 +231,6 @@ const int INVITATION_MAYBE=0;
 
     NSString *rsvpstatus=@"<a id='x_rsvp_yes' href='http://invitation/#yes' class='x_rsvp_button'>Accept</a><a id='x_rsvp_no' href='http://invitation/#no' class='x_rsvp_button'>Decline</a><a id='x_rsvp_maybe' href='http://invitation/#maybe' class='x_rsvp_button'>interested</a>";
     
-//    <ul class='rsvpButtons ynbtn'><li><a href='http://invitation/#yes' class='yes'>YES</a></li><li><a href='http://invitation/#no' class='no'>NO</a></li><li><a href='http://invitation/#maybe' class='maybe'>Maybe</a></li></ul>
-//    <a id='x_rsvp_change' href='javascript:void(0);' style='display: inline; '>Change?</a>
-    
     NSString *exfeelist=@"";
     NSArray *invitations=[dbu getInvitationWithEventid:self.eventid];
 
@@ -247,7 +243,7 @@ const int INVITATION_MAYBE=0;
             {
                 if(![invitation.avatar isEqualToString:@""])
                 {
-                    NSString* imgName = invitation.avatar;//[invitation.avatar stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+                    NSString* imgName = invitation.avatar;
                     NSString *imgurl = [ImgCache getImgUrl:imgName];
                     NSString *imgcachename=[ImgCache getImgName:imgurl];
                     
@@ -261,12 +257,15 @@ const int INVITATION_MAYBE=0;
             }
             if(invitation.user_id==app.userid)
             {
-                rsvpstatus=@"<a id='x_rsvp_yes' href='http://invitation/#yes' style='display: none;' class='x_rsvp_button'>Accept</a><a id='x_rsvp_no' href='http://invitation/#no' style='display: none;' class='x_rsvp_button'>Decline</a><a id='x_rsvp_maybe' href='http://invitation/#maybe' style='display: none;' class='x_rsvp_button'>interested</a>";
+                if(invitation.state!=0)
+                    rsvpstatus=@"<a id='x_rsvp_yes' href='http://invitation/#yes' style='display: none;' class='x_rsvp_button'>Accept</a><a id='x_rsvp_no' href='http://invitation/#no' style='display: none;' class='x_rsvp_button'>Decline</a><a id='x_rsvp_maybe' href='http://invitation/#maybe' style='display: none;' class='x_rsvp_button'>interested</a>";
 
                 if(invitation.state ==INVITATION_YES)
                     rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Accepted</span>\".</span>                <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
                 else if(invitation.state ==INVITATION_NO)
                     rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Declined</span>\".</span>                <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
+                else if(invitation.state ==INVITATION_MAYBE)
+                    rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Interested</span>\".</span> <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
 
             }
         }
@@ -401,6 +400,10 @@ const int INVITATION_MAYBE=0;
         CGRect crect=conversationview.frame;
         conversationview.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
         CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight);
+        
+//        CGRect tableviewrect=tableView.frame;
+//        
+//        tableView.frame=CGRectMake(tableviewrect.origin.x, tableviewrect.origin.y, tableviewrect.size.width, tableviewrect.size.height-kDefaultToolbarHeight);
         
         self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
         inputToolbar.delegate = self;

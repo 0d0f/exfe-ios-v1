@@ -17,5 +17,6 @@
 - (void)setLabelText:(NSString *)_text;
 - (void)setLabelTime:(NSString *)_text;
 - (void)setAvartar:(UIImage*)_img;
+- (void)setCellHeightWithCommentHeight:(int)height;
 
 @end

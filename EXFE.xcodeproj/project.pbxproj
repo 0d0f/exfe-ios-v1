@@ -30,7 +30,6 @@
 		785EAAC714D046E70063E702 /* signoutbtn~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785EAAC514D046E70063E702 /* signoutbtn~iphone.png */; };
 		785EAACA14D0495E0063E702 /* chat@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785EAAC814D0495B0063E702 /* chat@2x~iphone.png */; };
 		785EAACB14D0495E0063E702 /* chat~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 785EAAC914D0495C0063E702 /* chat~iphone.png */; };
-		7860596C13437CE80092E962 /* MeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7860596A13437CE80092E962 /* MeViewController.m */; };
 		7860596D13437CE80092E962 /* MeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7860596B13437CE80092E962 /* MeViewController.xib */; };
 		7861AA8313523F9200FA13FA /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7861AA8113523F9200FA13FA /* LoginViewController.m */; };
 		7861AA8413523F9200FA13FA /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7861AA8213523F9200FA13FA /* LoginViewController.xib */; };
@@ -146,8 +145,6 @@
 		785EAAC514D046E70063E702 /* signoutbtn~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "signoutbtn~iphone.png"; sourceTree = "<group>"; };
 		785EAAC814D0495B0063E702 /* chat@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat@2x~iphone.png"; sourceTree = "<group>"; };
 		785EAAC914D0495C0063E702 /* chat~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "chat~iphone.png"; sourceTree = "<group>"; };
-		7860596913437CE70092E962 /* MeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeViewController.h; sourceTree = "<group>"; };
-		7860596A13437CE80092E962 /* MeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeViewController.m; sourceTree = "<group>"; };
 		7860596B13437CE80092E962 /* MeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MeViewController.xib; sourceTree = "<group>"; };
 		7861AA8013523F9100FA13FA /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		7861AA8113523F9200FA13FA /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
@@ -410,8 +407,6 @@
 				788C4221133FA3D000AAA425 /* RootViewController.m */,
 				7861AA8013523F9100FA13FA /* LoginViewController.h */,
 				7861AA8113523F9200FA13FA /* LoginViewController.m */,
-				7860596913437CE70092E962 /* MeViewController.h */,
-				7860596A13437CE80092E962 /* MeViewController.m */,
 				7856B7AE1358A06100B97BA6 /* EventViewController.h */,
 				7856B7AF1358A06100B97BA6 /* EventViewController.m */,
 				78D7AA7613BE12C6009495DA /* ConversionTableViewController.h */,
@@ -676,7 +671,6 @@
 				788C4219133FA3D000AAA425 /* main.m in Sources */,
 				788C421C133FA3D000AAA425 /* exfeAppDelegate.m in Sources */,
 				788C4222133FA3D000AAA425 /* RootViewController.m in Sources */,
-				7860596C13437CE80092E962 /* MeViewController.m in Sources */,
 				7861AA8313523F9200FA13FA /* LoginViewController.m in Sources */,
 				7861AAE61354225E00FA13FA /* APIHandler.m in Sources */,
 				7856B7B11358A06200B97BA6 /* EventViewController.m in Sources */,

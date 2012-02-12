@@ -19,6 +19,7 @@
 #define CELL_CONTENT_MARGIN 10.0f
 #define CELL_IMAGE_WIDTH 40.0f
 #define CELL_IMAGE_HEIGHT 40.0f
+#define COMMENT_LABEL_HEIGHT 18
 
 
 @implementation ConversionTableViewController
@@ -176,6 +177,13 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    Comment *comment=[comments objectAtIndex:indexPath.row];
+    CGSize maximumLabelSize = CGSizeMake(296,9999);
+    
+    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeWordWrap]; 
+    if(expectedLabelSize.height>COMMENT_LABEL_HEIGHT)
+        return 44-18+expectedLabelSize.height;
+
     return 44;
 }
 
@@ -194,6 +202,14 @@
 
     [cell setLabelText:comment.comment];
     [cell setLabelTime:comment.created_at];
+    
+    
+    CGSize maximumLabelSize = CGSizeMake(296,9999);
+    
+    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeWordWrap]; 
+//    if(expectedLabelSize.height>COMMENT_LABEL_HEIGHT)
+        [cell setCellHeightWithCommentHeight:expectedLabelSize.height];
+
     dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
         dispatch_async(imgQueue, ^{
             NSString* imgName =user.avatar_file_name;// [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 

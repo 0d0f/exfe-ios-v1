@@ -37,5 +37,21 @@
 {
     cellAvatar.image=_img;
 }
+- (void)setCellHeightWithCommentHeight:(int)height
+{
+    CGRect rect=self.frame;
+    rect.size.height=44-18-1+height;
+    [self setFrame:rect];
+    
+    CGRect commentrect=cellText.frame;
+    commentrect.size.height=height;
+    commentrect.origin.y=1;
+    [cellText setFrame:commentrect];
+    
+    CGRect timerect=cellTime.frame;
+    timerect.origin.y=rect.size.height-18;
 
+    [cellTime setFrame:timerect];
+    
+}
 @end

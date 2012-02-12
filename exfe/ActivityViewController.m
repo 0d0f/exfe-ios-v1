@@ -135,9 +135,6 @@
     [app.navigationController pushViewController:detailViewController animated:YES];
     
     [detailViewController release]; 	
-//    
-//    [dbu setCrossStatusWithCrossId:event.id status:0];
-//    NSLog(@"cross view");
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
