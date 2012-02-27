@@ -27,6 +27,7 @@
 
 - (void) updateEventobjWithid:(int)eventid event:(NSDictionary*)eventobj isnew:(BOOL)newflag;
 - (void) updateCommentobjWithid:(int)eventid event:(NSArray*)commentdict;
+- (void) updateConversationWithid:(int)cross_id event:(NSDictionary*)conversationobj;
 - (void) updateInvitationobjWithid:(int)eventid event:(NSArray*)invitationdict;
 - (void) updateUserobjWithid:(int)uid user:(NSDictionary*)userobj;
 - (void) updateInvitationWithCrossId:(int)cross_id invitation:(NSDictionary*)invitationdict;

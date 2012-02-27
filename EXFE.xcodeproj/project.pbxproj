@@ -59,6 +59,14 @@
 		788C423B133FA3D100AAA425 /* exfeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 788C423A133FA3D100AAA425 /* exfeTests.m */; };
 		788C9C0414A87B6800FBEE49 /* default_avatar@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 788C9C0214A87B6800FBEE49 /* default_avatar@2x~iphone.png */; };
 		788C9C0514A87B6800FBEE49 /* default_avatar~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 788C9C0314A87B6800FBEE49 /* default_avatar~iphone.png */; };
+		78922E0814E91D9A000E834E /* notification@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78922E0614E91D98000E834E /* notification@2x~iphone.png */; };
+		78922E0B14E91DDE000E834E /* notification~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78922E0A14E91DDD000E834E /* notification~iphone.png */; };
+		78922E0E14E92116000E834E /* notification_hl@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78922E0C14E92115000E834E /* notification_hl@2x~iphone.png */; };
+		78922E0F14E92116000E834E /* notification_hl~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78922E0D14E92115000E834E /* notification_hl~iphone.png */; };
+		78922E1614E981CC000E834E /* backx@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78922E1414E981C4000E834E /* backx@2x~iphone.png */; };
+		78922E1714E981CC000E834E /* backx~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78922E1514E981C9000E834E /* backx~iphone.png */; };
+		78922E1914ED1446000E834E /* NotificationCrossCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78922E1814ED143F000E834E /* NotificationCrossCellView.xib */; };
+		78922E1C14ED1514000E834E /* NotificationCrossCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78922E1B14ED1513000E834E /* NotificationCrossCellView.m */; };
 		7894122A13A2AEC2005B41F7 /* Cross.m in Sources */ = {isa = PBXBuildFile; fileRef = 7894122913A2AEC2005B41F7 /* Cross.m */; };
 		78978B1C14DCE17B003C76A1 /* Activity.m in Sources */ = {isa = PBXBuildFile; fileRef = 78978B1B14DCE17B003C76A1 /* Activity.m */; };
 		789ECC6E149C9D5800F3B627 /* titlebar@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 789ECC6D149C9D5800F3B627 /* titlebar@2x~iphone.png */; };
@@ -74,6 +82,7 @@
 		78A2B94B13C4B2DD00032F61 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B93D13C4B2DD00032F61 /* SBJsonTokeniser.m */; };
 		78A2B94C13C4B2DD00032F61 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B93F13C4B2DD00032F61 /* SBJsonUTF8Stream.m */; };
 		78A2B94D13C4B2DD00032F61 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B94113C4B2DD00032F61 /* SBJsonWriter.m */; };
+		78A6EACB14F36C15000CCD8B /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A6EACA14F36C15000CCD8B /* Util.m */; };
 		78B320FC149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B320FB149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m */; };
 		78B320FF149FEB5500C87B7F /* CustomUIToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B320FE149FEB5500C87B7F /* CustomUIToolbar.m */; };
 		78B53618149E458B00CE9FFF /* navbar_bg~iphone.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 78B53617149E458B00CE9FFF /* navbar_bg~iphone.jpg */; };
@@ -185,6 +194,15 @@
 		788C423A133FA3D100AAA425 /* exfeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = exfeTests.m; sourceTree = "<group>"; };
 		788C9C0214A87B6800FBEE49 /* default_avatar@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar@2x~iphone.png"; sourceTree = "<group>"; };
 		788C9C0314A87B6800FBEE49 /* default_avatar~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar~iphone.png"; sourceTree = "<group>"; };
+		78922E0614E91D98000E834E /* notification@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notification@2x~iphone.png"; sourceTree = "<group>"; };
+		78922E0A14E91DDD000E834E /* notification~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notification~iphone.png"; sourceTree = "<group>"; };
+		78922E0C14E92115000E834E /* notification_hl@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notification_hl@2x~iphone.png"; sourceTree = "<group>"; };
+		78922E0D14E92115000E834E /* notification_hl~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notification_hl~iphone.png"; sourceTree = "<group>"; };
+		78922E1414E981C4000E834E /* backx@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backx@2x~iphone.png"; sourceTree = "<group>"; };
+		78922E1514E981C9000E834E /* backx~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "backx~iphone.png"; sourceTree = "<group>"; };
+		78922E1814ED143F000E834E /* NotificationCrossCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationCrossCellView.xib; sourceTree = "<group>"; };
+		78922E1A14ED1513000E834E /* NotificationCrossCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationCrossCellView.h; sourceTree = "<group>"; };
+		78922E1B14ED1513000E834E /* NotificationCrossCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationCrossCellView.m; sourceTree = "<group>"; };
 		7894122813A2AEC2005B41F7 /* Cross.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cross.h; sourceTree = "<group>"; };
 		7894122913A2AEC2005B41F7 /* Cross.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Cross.m; sourceTree = "<group>"; };
 		78978B1A14DCE17B003C76A1 /* Activity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Activity.h; sourceTree = "<group>"; };
@@ -215,6 +233,8 @@
 		78A2B93F13C4B2DD00032F61 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
 		78A2B94013C4B2DD00032F61 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		78A2B94113C4B2DD00032F61 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		78A6EAC914F36C14000CCD8B /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
+		78A6EACA14F36C15000CCD8B /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 		78B320FA149FD9E500C87B7F /* UIBarButtonItem+StyledButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+StyledButton.h"; sourceTree = "<group>"; };
 		78B320FB149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+StyledButton.m"; sourceTree = "<group>"; };
 		78B320FD149FEB5500C87B7F /* CustomUIToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUIToolbar.h; sourceTree = "<group>"; };
@@ -301,6 +321,8 @@
 				78D0D65E148F5F5200EA327C /* ConversationCellView.m */,
 				782861BA14DE153100AC9B01 /* ActivityCellView.h */,
 				782B253F14DD8283007020D9 /* ActivityCellView.m */,
+				78922E1A14ED1513000E834E /* NotificationCrossCellView.h */,
+				78922E1B14ED1513000E834E /* NotificationCrossCellView.m */,
 			);
 			name = TableViewCell;
 			sourceTree = "<group>";
@@ -338,10 +360,17 @@
 				785EAAC514D046E70063E702 /* signoutbtn~iphone.png */,
 				785EAAC814D0495B0063E702 /* chat@2x~iphone.png */,
 				785EAAC914D0495C0063E702 /* chat~iphone.png */,
+				78922E0614E91D98000E834E /* notification@2x~iphone.png */,
+				78922E0A14E91DDD000E834E /* notification~iphone.png */,
+				78922E0C14E92115000E834E /* notification_hl@2x~iphone.png */,
+				78922E0D14E92115000E834E /* notification_hl~iphone.png */,
+				78922E1414E981C4000E834E /* backx@2x~iphone.png */,
+				78922E1514E981C9000E834E /* backx~iphone.png */,
 				7882BCCC137458F5004F9DBD /* exfe.db */,
 				78C1D40B1429D30B008131BC /* CrossCellView.xib */,
 				78090CF714A4798700AB0D66 /* ProfileCellView.xib */,
 				782B254114DD9D97007020D9 /* ActivityCellView.xib */,
+				78922E1814ED143F000E834E /* NotificationCrossCellView.xib */,
 				78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */,
 				78ED97ED14D8EC32001E655F /* ActivityViewController.xib */,
 				78D0D65A148F5EFD00EA327C /* ConversationCellView.xib */,
@@ -437,6 +466,8 @@
 				78F75BE613B1089600C7B3CF /* ImgCache.m */,
 				7882BC90137079A4004F9DBD /* DBUtil.h */,
 				7882BC91137079A4004F9DBD /* DBUtil.m */,
+				78A6EAC914F36C14000CCD8B /* Util.h */,
+				78A6EACA14F36C15000CCD8B /* Util.m */,
 				7861AA67135230A400FA13FA /* resource */,
 				788C4212133FA3D000AAA425 /* Supporting Files */,
 			);
@@ -633,6 +664,13 @@
 				78ED97DE14D861B1001E655F /* navbar_setting~iphone.png in Resources */,
 				78ED97EF14D8EC32001E655F /* ActivityViewController.xib in Resources */,
 				782B254214DD9D97007020D9 /* ActivityCellView.xib in Resources */,
+				78922E0814E91D9A000E834E /* notification@2x~iphone.png in Resources */,
+				78922E0B14E91DDE000E834E /* notification~iphone.png in Resources */,
+				78922E0E14E92116000E834E /* notification_hl@2x~iphone.png in Resources */,
+				78922E0F14E92116000E834E /* notification_hl~iphone.png in Resources */,
+				78922E1614E981CC000E834E /* backx@2x~iphone.png in Resources */,
+				78922E1714E981CC000E834E /* backx~iphone.png in Resources */,
+				78922E1914ED1446000E834E /* NotificationCrossCellView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -710,6 +748,8 @@
 				78978B1C14DCE17B003C76A1 /* Activity.m in Sources */,
 				782B254014DD8283007020D9 /* ActivityCellView.m in Sources */,
 				7803E21314DE5361008B76AD /* UIButton+StyledButton.m in Sources */,
+				78922E1C14ED1514000E834E /* NotificationCrossCellView.m in Sources */,
+				78A6EACB14F36C15000CCD8B /* Util.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -782,8 +822,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "82932C2A-D366-49E8-8E7E-9866CC01FEDD";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "82932C2A-D366-49E8-8E7E-9866CC01FEDD";
+				PROVISIONING_PROFILE = "9540DE0B-FE7D-4CFA-B1E2-14E3F95740C3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9540DE0B-FE7D-4CFA-B1E2-14E3F95740C3";
 				SDKROOT = iphoneos;
 			};
 			name = "ad hoc";
@@ -806,8 +846,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "exfe/EXFE-Info.plist";
 				PRODUCT_NAME = EXFE;
-				PROVISIONING_PROFILE = "82932C2A-D366-49E8-8E7E-9866CC01FEDD";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "82932C2A-D366-49E8-8E7E-9866CC01FEDD";
+				PROVISIONING_PROFILE = "9540DE0B-FE7D-4CFA-B1E2-14E3F95740C3";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9540DE0B-FE7D-4CFA-B1E2-14E3F95740C3";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

@@ -10,18 +10,24 @@
 #import "PullRefreshTableViewController.h"
 #import "ConversationCellView.h"
 #import "UIInputToolbar.h"
+#import "Comment.h"
+#import "User.h"
 
 @interface ConversionTableViewController : PullRefreshTableViewController 
 {
     int eventid;
     NSMutableArray *comments;
-    
+    UIInputToolbar *inputToolbar;
+    UITextField* placeholder;
+
     IBOutlet ConversationCellView *tblCell;
 }
 @property int eventid;
 @property (retain,nonatomic) NSMutableArray* comments;
+@property (retain,nonatomic) UIInputToolbar* inputToolbar;
+@property (retain,nonatomic) UITextField* placeholder;
 
 - (BOOL)postComment:(NSString*)inputtext;
-- (void)refreshAndHideKeyboard:(UIInputToolbar*)inputToolbar;
-
+- (void)refreshAndHideKeyboard;//:(UIInputToolbar*)inputToolbar placeholder:(UITextField*) placeholder;
+- (void)UpdateCommentObjects:(Comment*) comment;
 @end

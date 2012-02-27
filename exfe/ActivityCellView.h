@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface ActivityCellView : UITableViewCell{
     IBOutlet UIImageView *cellAvatar;
@@ -20,6 +21,11 @@
 - (void)setActionMsg:(NSString *)_text;
 - (void)setByTitle:(NSString *)_title;
 - (void)setAvartar:(UIImage*)_img;
-- (void)setCellHeightWithMsgHeight:(int)height;
+//- (void)setCellHeightWithMsgHeight:(int)height;
+- (void)setModel:(int)type height:(int)height;
+- (void)setMsgHeight:(int) height;
+- (void)hiddenBylineWithMsgHeight:(int)height;
+- (void)showBylineWithMsgHeight:(int)height;
+
 
 @end

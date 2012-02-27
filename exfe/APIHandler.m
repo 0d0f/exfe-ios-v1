@@ -35,13 +35,13 @@
 
 + (NSString*)URL_API_ROOT {
 //	return @"http://exfeapi.dlol.us/v1";    
-	return @"http://api.exfe.com/v1";        
-//    return @"http://api.local.exfe.com/v1";        
+//	return @"http://api.exfe.com/v1";        
+    return @"http://api.local.exfe.com/v1";        
 }
 + (NSString*)URL_API_DOMAIN {
 //	return @"http://exfeapi.dlol.us";    
-    return @"http://api.exfe.com";
-//    return @"http://api.local.exfe.com";    
+//    return @"http://api.exfe.com";
+    return @"http://api.local.exfe.com";    
 }
 
 - (NSString*)sentRSVPWith:(int)eventid rsvp:(NSString*)rsvp
@@ -61,7 +61,7 @@
     
     NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[APIHandler URL_API_ROOT],@"users/login"]]];
-    
+    NSLog(@"%@",[NSString stringWithFormat:@"%@/%@",[APIHandler URL_API_ROOT],@"users/login"]);
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -126,8 +126,6 @@
     
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
 
-//    DBUtil *dbu=[DBUtil sharedManager];
-//    NSString *lastUpdateTime=[dbu getLastEventUpdateTime];
     NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
 
     NSError *error = nil;
@@ -140,7 +138,6 @@
         apiurl=[NSString stringWithFormat:@"%@/users/%i/x?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],app.userid,[(NSString *)dateurlString autorelease] ,api_key];
     }
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
-    NSLog(@"api: %@",apiurl);
     [request setHTTPShouldHandleCookies:NO];
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
     if (error)
@@ -148,22 +145,7 @@
         NSLog(@"%@",error);
     }
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-//    NSString *saved_lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
-//
-//    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-//    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//    NSDate *lastUpdateTime_datetime = [dateFormat dateFromString:saved_lastUpdateTime]; 
-//
-//    NSDate *update_datetime = [dateFormat dateFromString:lastUpdateTime]; 
-//    
-//
-//    lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
-
-//    [[NSUserDefaults standardUserDefaults] setObject:[dateFormat stringFromDate:lastUpdateTime_datetime]  forKey:@"lastupdatetime"];
-//    [[NSUserDefaults standardUserDefaults] synchronize];
-//    [dateFormat release];
     [pool release];
-//    [lastUpdateTime release];
     return responseString;
 }
 
@@ -228,7 +210,7 @@
 
     //TOFIX:temp test hack
     
-//    lastUpdateTime=@"2012-02-06 00:00:00";
+//    lastUpdateTime=@"2012-02-22 16:46:13";
     CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
     
     

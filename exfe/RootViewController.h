@@ -21,8 +21,11 @@
     IBOutlet UITableView *tableview;
     NSMutableArray* events;
     BOOL reload;
+    BOOL notificationHint;
+    BOOL uiInit;
     NSTimer *timer;
     IBOutlet CrossCellView *tblCell;
+    UIButton *activeButton;
     
 }
 
@@ -40,4 +43,6 @@
 - (void)pushback;
 - (void)initUI;
 - (Cross*)getEventByCrossId:(int)cross_id;
+- (void)setNotificationButton:(BOOL)status;
+- (void)defaultChanged:(NSNotification *)notif;
 @end

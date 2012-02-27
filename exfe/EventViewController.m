@@ -63,7 +63,7 @@ const int INVITATION_MAYBE=3;
 	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
 	[button setBackgroundImage:backbtnimg forState:UIControlStateNormal];
     [button setTitle:@" Back" forState:UIControlStateNormal];
-    
+
     button.titleLabel.font  = [UIFont boldSystemFontOfSize:12.0f];
     [button setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
 
@@ -111,6 +111,8 @@ const int INVITATION_MAYBE=3;
         dispatch_async(dispatch_get_main_queue(), ^{
             [webview loadHTMLString:html baseURL:baseURL];
             conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
+            conversionViewController.placeholder=placeholder;
+
             CGRect crect=conversionViewController.view.frame;
             conversionViewController.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
             DBUtil *dbu=[DBUtil sharedManager];
@@ -128,6 +130,8 @@ const int INVITATION_MAYBE=3;
 - (void)loadConversationData
 {
             conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
+            conversionViewController.placeholder=placeholder;
+    
             CGRect crect=conversionViewController.view.frame;
             conversionViewController.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
             DBUtil *dbu=[DBUtil sharedManager];
@@ -359,7 +363,7 @@ const int INVITATION_MAYBE=3;
 //            float longitude = 9.43425;
             int zoom = 13;
 //            NSString *stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?saddr=Current Location&daddr=%@", q]
-            NSString *stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@", q]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            NSString *stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@&z=%d", q,zoom] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 //            NSString *stringURL = [NSString stringWithFormat:@"http://maps.google.com/maps?q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
             NSURL *url = [NSURL URLWithString:stringURL];
             [[UIApplication sharedApplication] openURL:url];
@@ -401,13 +405,10 @@ const int INVITATION_MAYBE=3;
         conversationview.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
         CGRect toolbarframe=CGRectMake(0, screenFrame.size.height-kDefaultToolbarHeight, screenFrame.size.width, kDefaultToolbarHeight);
         
-//        CGRect tableviewrect=tableView.frame;
-//        
-//        tableView.frame=CGRectMake(tableviewrect.origin.x, tableviewrect.origin.y, tableviewrect.size.width, tableviewrect.size.height-kDefaultToolbarHeight);
-        
         self.inputToolbar = [[UIInputToolbar alloc] initWithFrame:toolbarframe];
         inputToolbar.delegate = self;
         [self.view addSubview:self.inputToolbar];
+        conversionViewController.inputToolbar=inputToolbar;
     }
     else
     {
@@ -459,10 +460,12 @@ const int INVITATION_MAYBE=3;
         dispatch_async(dispatch_get_main_queue(), ^{
             if(result==true)
             {
-                [conversionViewController refreshAndHideKeyboard:inputToolbar];
+                [conversionViewController refreshAndHideKeyboard];
+                //[conversionViewController refreshAndHideKeyboard:inputToolbar placeholder:placeholder];
             }
             else
             {
+                
                 [inputToolbar becomeFirstResponder];
                 [inputToolbar setInputEnabled:YES];
                 NSLog(@"show error alert");
@@ -505,6 +508,7 @@ const int INVITATION_MAYBE=3;
 
 - (void)keyboardWillHide:(NSNotification *)notification 
 {
+    NSLog(@"hidden keyboard..");
     /* Move the toolbar back to bottom of the screen */
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.3];
@@ -520,7 +524,7 @@ const int INVITATION_MAYBE=3;
     keyboardIsVisible = NO;
 }
 
--(void)pushback
+- (void)pushback
 {
     [self.navigationController popViewControllerAnimated:YES];
 }

@@ -128,7 +128,7 @@ static sqlite3 *database;
         }
         else 
         {
-            NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+            NSAssert1(0, @"Error while empty data. '%s'", sqlite3_errmsg(database));
         }
     }
     sqlite3_finalize(stm);     
@@ -162,6 +162,7 @@ static sqlite3 *database;
 }
 - (void) updateInvitationWithCrossId:(int)cross_id invitation:(NSDictionary*)invitationdict
 {
+    @synchronized(self) {
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
@@ -211,11 +212,14 @@ static sqlite3 *database;
         }
     }
     sqlite3_finalize(stm);     
+    }
 //    [self setCrossStatusWithCrossId:cross_id status:1];
  
 }
 - (NSDate*) updateCrossWithCrossId:(int)cross_id change:(NSDictionary*)changes lastupdatetime:(NSDate*)lastUpdateTime_datetime
 {
+    @synchronized(self) {
+    NSLog(@"update cross");
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
@@ -288,7 +292,8 @@ static sqlite3 *database;
         }
     }
     [dateFormat release];
-    sqlite3_finalize(stm);     
+    sqlite3_finalize(stm);   
+    }
 //    [self setCrossStatusWithCrossId:cross_id status:1];
 
     return lastUpdateTime_datetime;
@@ -296,6 +301,7 @@ static sqlite3 *database;
 
 - (void) updateInvitationobjWithid:(int)eventid event:(NSArray*)invitationdict
 {
+    @synchronized(self) {
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
@@ -337,7 +343,8 @@ static sqlite3 *database;
         }
     }
     
-    sqlite3_finalize(stm);     
+    sqlite3_finalize(stm);   
+    }
 }
 - (NSArray*) getCommentWithEventid:(int)eventid
 {
@@ -481,6 +488,7 @@ static sqlite3 *database;
 }
 - (void) updateEventWithid:(int)eventid event:(NSString*)eventjson
 {
+    @synchronized(self) {
 	NSString *_dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:_dbpath];
@@ -504,6 +512,7 @@ static sqlite3 *database;
 			}
 		}
 		sqlite3_finalize(stm);
+    }
 }
 
 - (NSArray*) getInvitationWithEventid:(int)eventid
@@ -549,6 +558,7 @@ static sqlite3 *database;
 }
 - (void) setCrossStatusWithCrossId:(int)cross_id status:(int)status
 {
+    @synchronized(self) {
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
@@ -573,11 +583,58 @@ static sqlite3 *database;
         }            
 
     }
+    }
     
     
 }
+- (void) updateConversationWithid:(int)cross_id event:(NSDictionary*)conversationobj
+{
+    @synchronized(self) {
+        NSString *dbpath=[DBUtil DBPath];
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        BOOL success=[fileManager fileExistsAtPath:dbpath];
+        [fileManager release];
+        if(!success)
+        {
+            return;
+        } 
+        sqlite3_stmt *stm=nil;
+        const char *sql = "insert or replace into comments (id,eventid,comment,user_id,userjson,created_at,updated_at) values(?,?,?,?,?,?,?)";
+//        for(int i=0;i<[commentdict count];i++)
+//        {
+//            Comment *commentobj=[Comment initWithDict:[commentdict objectAtIndex:i] EventID:eventid];
+//            if(![commentobj.comment isEqualToString:@""])
+//                if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+//                {
+//                    sqlite3_bind_int(stm, 1,commentobj.id ); 
+//                    sqlite3_bind_int(stm, 2, eventid); 
+//                    sqlite3_bind_text(stm,3,[commentobj.comment UTF8String], -1, SQLITE_TRANSIENT);
+//                    sqlite3_bind_int(stm,4, commentobj.user_id);
+//                    sqlite3_bind_text(stm,5,[commentobj.userjson UTF8String], -1, SQLITE_TRANSIENT);
+//                    sqlite3_bind_text(stm,6,[commentobj.created_at UTF8String], -1, SQLITE_TRANSIENT);
+//                    sqlite3_bind_text(stm,7,[commentobj.updated_at UTF8String], -1, SQLITE_TRANSIENT);
+//                    if(sqlite3_step(stm)== SQLITE_DONE)
+//                    {
+//                        
+//                    }
+//                    else 
+//                    {
+//                        NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+//                    }            
+//                    
+//                    
+//                }
+//                else 
+//                {
+//                    NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+//                }
+//        }
+        sqlite3_finalize(stm); 
+    }    
+}
 - (void) updateCommentobjWithid:(int)eventid event:(NSArray*)commentdict
 {
+    @synchronized(self) {
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
@@ -618,12 +675,12 @@ static sqlite3 *database;
     }
     }
     sqlite3_finalize(stm); 
-//    [self setCrossStatusWithCrossId:eventid status:1];
+    }
 }
 
 - (void) updateEventobjWithid:(int)eventid event:(NSDictionary*)eventobj isnew:(BOOL)newflag
 {
-    
+    @synchronized(self) {
     Cross *evento=[Cross initWithDict:eventobj];
     if( !evento.state == 1)
         return;
@@ -674,10 +731,12 @@ static sqlite3 *database;
     {
         NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
     }
-    sqlite3_finalize(stm);    
+    sqlite3_finalize(stm);  
+    }
 }
 - (void) updateEventicalWithid:(int)eventid  identifier:(NSString*) eventIdentifier
 {
+    @synchronized(self) {
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
@@ -701,10 +760,12 @@ static sqlite3 *database;
         }
     }
     sqlite3_finalize(stm);
+    }
 }
 - (void) updateActivityWithobj:(NSDictionary*)dict action:(NSString*)action  cross_id:(int)cross_id
-//- (void) updateActivityWithAction:(NSString*)action data:(NSString*)data time:(NSString*)time by_id:(int)by_id to_id:(int)to_id cross_id:(int)cross_id log_id:(int)log_id
 {
+    @synchronized(self) {
+        NSLog(@"action:%@",action);
     Activity *activity=[Activity initWithDict:dict action:action cross_id:cross_id];
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
@@ -716,9 +777,11 @@ static sqlite3 *database;
 	} 
     sqlite3_stmt *stm=nil;
     
-    const char *sql = "insert or replace into activity (log_id, by_id, to_id, cross_id,by_name,by_avatar,to_name,to_avatar, time, action, data) values(?,?,?,?,?,?,?,?,?,?,?)";
+    const char *sql = "insert or replace into activity (log_id, by_id, to_id, cross_id,by_name,by_avatar,to_name,to_avatar, time, action, withmsg,invitationmsg,data,to_identities) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
     {
+        if(activity.data==nil)
+            activity.data=@"";
         sqlite3_bind_int(stm, 1, activity.log_id);  
         sqlite3_bind_int(stm, 2, activity.by_id);  
         sqlite3_bind_int(stm, 3, activity.to_id);  
@@ -730,7 +793,10 @@ static sqlite3 *database;
         
         sqlite3_bind_text(stm,9, [activity.time UTF8String], -1, SQLITE_TRANSIENT);
         sqlite3_bind_text(stm,10, [activity.action UTF8String], -1, SQLITE_TRANSIENT);
-        sqlite3_bind_text(stm,11, [activity.data UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,11, [activity.withmsg UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,12, [activity.invitationmsg UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,13, [activity.data UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,14, [[activity.to_identities JSONRepresentation] UTF8String], -1, SQLITE_TRANSIENT);
 
         if(sqlite3_step(stm)== SQLITE_DONE)
         {
@@ -740,12 +806,17 @@ static sqlite3 *database;
             NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
         }
     }
+    else 
+    {
+        NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+    }
     sqlite3_finalize(stm);
+    }
 }
 
 - (NSMutableArray*) getRecentActivityFromLogid:(int)log_id start:(int)start num:(int)num
 {
-    const char *sql="select log_id, by_id, to_id, cross_id, time, action, data, by_name, by_avatar, to_name, to_avatar,title from activity a, crosses c where a.cross_id=c.id and log_id>=? order by time desc limit ?,?;";
+    const char *sql="select log_id, by_id, to_id, cross_id, `time`, action, data, by_name, by_avatar, to_name, to_avatar,title,withmsg,invitationmsg,c.begin_at,c.place_line1,c.time_type,c.place_line2,to_identities from activity a, crosses c where a.cross_id=c.id and log_id>=? order by time desc limit ?,?;";
     NSMutableArray *activitylist=[[NSMutableArray alloc] initWithCapacity:num];
     
     NSString *sqldbpath=[DBUtil DBPath];
@@ -771,7 +842,10 @@ static sqlite3 *database;
             int by_id=sqlite3_column_int(stm, 1);
             int to_id=sqlite3_column_int(stm, 2);
             int cross_id=sqlite3_column_int(stm, 3);
-            NSString *time=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 4)];
+
+            char *time=(char*)sqlite3_column_text(stm, 4);
+            if(time!=nil)
+                activity.time=[NSString stringWithUTF8String:time];
 
             char *action=(char*)sqlite3_column_text(stm, 5);
             if(action != nil)
@@ -800,18 +874,48 @@ static sqlite3 *database;
             if(title!=nil)
                 activity.title=[NSString stringWithUTF8String:title];
 
+            char *withmsg=(char*)sqlite3_column_text(stm, 12);
+            if(withmsg!=nil)
+                activity.withmsg=[NSString stringWithUTF8String:withmsg];
+
+            char *invitationmsg=(char*)sqlite3_column_text(stm, 13);
+            if(invitationmsg!=nil)
+                activity.invitationmsg=[NSString stringWithUTF8String:invitationmsg];
+
+            char *begin_at=(char*)sqlite3_column_text(stm, 14);
+            if(begin_at!=nil)
+                activity.begin_at =[NSString stringWithUTF8String:begin_at];
+            
+            char *place_line1=(char*)sqlite3_column_text(stm, 15);
+            if(place_line1!=nil)
+                activity.place_line1 =[NSString stringWithUTF8String:place_line1];
+            int time_type=sqlite3_column_int(stm, 16);
+            char *place_line2=(char*)sqlite3_column_text(stm, 17);
+            if(place_line2!=nil)
+            {
+                NSString *place_line2_str =[NSString stringWithUTF8String:place_line2];
+                if(![place_line2_str isEqualToString:@""])
+                    activity.place_line1=[NSString stringWithFormat:@"%@ (%@)",activity.place_line1,place_line2_str];
+            }
+            char *to_identities=(char*)sqlite3_column_text(stm, 18);
+            if(to_identities!=nil)
+            {
+                activity.to_identities=[[NSString stringWithUTF8String:to_identities] JSONValue];
+            }
             activity.log_id=log_id;
             activity.by_id=by_id;
             activity.to_id=to_id;
             activity.cross_id=cross_id;
-            activity.time=time;
-
+            
+            activity.begin_at=[Util getTimeStr:time_type time:activity.begin_at];
+            
+            activity.time_type=time_type;
             [activitylist addObject:activity];
         }
     }
     else 
     {
-        NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+        NSAssert1(0, @"Error while select data. '%s'", sqlite3_errmsg(database));
     }            
     
     sqlite3_finalize(stm);
@@ -834,6 +938,7 @@ static sqlite3 *database;
 }
 - (void) updateUserobjWithid:(int)uid user:(NSDictionary*)userobj
 {
+    @synchronized(self) {
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
@@ -871,7 +976,8 @@ static sqlite3 *database;
             NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
         }
     
-    sqlite3_finalize(stm);     
+    sqlite3_finalize(stm);  
+    }
 }
 
 - (User*) getUserWithid:(int)userid

@@ -10,5 +10,6 @@
 
 @interface UIBarButtonItem (StyledButton)
 + (UIBarButtonItem *)styledBackBarButtonItemWithTarget:(id)target selector:(SEL)selector;
++ (UIBarButtonItem *)styledBackXButtonItemWithTarget:(id)target selector:(SEL)selector;
 
 @end

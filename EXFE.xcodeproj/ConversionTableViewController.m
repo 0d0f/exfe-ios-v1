@@ -7,8 +7,6 @@
 //
 
 #import "ConversionTableViewController.h"
-#import "Comment.h"
-#import "User.h"
 #import "ImgCache.h"
 #import "APIHandler.h"
 #import "DBUtil.h"
@@ -25,6 +23,8 @@
 @implementation ConversionTableViewController
 @synthesize eventid;
 @synthesize comments;
+@synthesize placeholder;
+@synthesize inputToolbar;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -91,10 +91,12 @@
 }
 - (void)refresh
 {
-    [self refreshAndHideKeyboard:nil];
+    [self refreshAndHideKeyboard];
+    //[self refreshAndHideKeyboard:nil placeholder:nil];
 }
 
-- (void)refreshAndHideKeyboard:(UIInputToolbar*)inputToolbar
+//- (void)refreshAndHideKeyboard:(UIInputToolbar*)inputToolbar placeholder:(UITextField*) placeholder
+- (void)refreshAndHideKeyboard
 {
     dispatch_queue_t refreshQueue = dispatch_queue_create("refreshconversation thread", NULL);
     dispatch_async(refreshQueue, ^{
@@ -109,7 +111,6 @@
         id code=[[[responseString JSONValue] objectForKey:@"meta"] objectForKey:@"code"];
         if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
         {
-            
             NSArray *arr=[[[responseString JSONValue] objectForKey:@"response"] objectForKey:@"conversations"];
             [dbu updateCommentobjWithid:eventid event:arr];
             for(int i=0;i<[arr count];i++)
@@ -117,7 +118,8 @@
                 Comment *commentobj=[Comment initWithDict:[arr objectAtIndex:i] EventID:eventid];
                 if(commentobj!=nil)
                 {
-                    [comments insertObject:commentobj atIndex:i];
+                    //[comments insertObject:commentobj atIndex:i];
+                    [self UpdateCommentObjects:commentobj];
                 }
             }
             if([arr count]>0)
@@ -135,7 +137,9 @@
             [self stopLoading];
             if(inputToolbar!=nil)
             {
-                [inputToolbar becomeFirstResponder];
+                NSLog(@"===hidden keyboard");
+                if(placeholder!=nil)
+                    [placeholder resignFirstResponder];
                 [inputToolbar setInputEnabled:YES];
                 [inputToolbar hidekeyboard];
             }
@@ -178,9 +182,9 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Comment *comment=[comments objectAtIndex:indexPath.row];
-    CGSize maximumLabelSize = CGSizeMake(296,9999);
+    CGSize maximumLabelSize = CGSizeMake(246,9999);
     
-    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeWordWrap]; 
+    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap]; 
     if(expectedLabelSize.height>COMMENT_LABEL_HEIGHT)
         return 44-18+expectedLabelSize.height;
 
@@ -197,6 +201,7 @@
         [[NSBundle mainBundle] loadNibNamed:@"ConversationCellView" owner:self options:nil];
         cell = tblCell;
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     Comment *comment=[comments objectAtIndex:indexPath.row];
     User *user=[User initWithDict:[comment.userjson JSONValue]];
 
@@ -204,9 +209,9 @@
     [cell setLabelTime:comment.created_at];
     
     
-    CGSize maximumLabelSize = CGSizeMake(296,9999);
+    CGSize maximumLabelSize = CGSizeMake(246,9999);
     
-    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeWordWrap]; 
+    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap]; 
 //    if(expectedLabelSize.height>COMMENT_LABEL_HEIGHT)
         [cell setCellHeightWithCommentHeight:expectedLabelSize.height];
 
@@ -225,6 +230,21 @@
     dispatch_release(imgQueue);        
     return cell;
 
+}
+- (void)UpdateCommentObjects:(Comment*) comment
+{
+    for (int i=0;i<[comments count];i++)
+    {
+        Comment *_comment=[comments objectAtIndex:i];
+        if(_comment.id==comment.id)
+        {
+            [comments replaceObjectAtIndex:i withObject:comment];
+            return;
+        }
+
+    }
+
+    [comments insertObject:comment atIndex:0];
 }
 /*
 // Override to support conditional editing of the table view.
@@ -269,14 +289,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     [detailViewController release];
-     */
+    if(placeholder!=nil)
+        [placeholder resignFirstResponder];
+    [inputToolbar setInputEnabled:YES];
+    [inputToolbar hidekeyboard];
+    
 }
 
 

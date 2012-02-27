@@ -36,6 +36,9 @@
 - (void)setAvartar:(UIImage*)_img
 {
     cellAvatar.image=_img;
+    cellAvatar.layer.cornerRadius = 5.0;
+    cellAvatar.layer.masksToBounds = YES;
+
 }
 - (void)setCellHeightWithCommentHeight:(int)height
 {
