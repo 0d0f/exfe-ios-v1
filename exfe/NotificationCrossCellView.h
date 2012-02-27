@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuartzCore/QuartzCore.h>
 
 @interface NotificationCrossCellView : UITableViewCell{
     IBOutlet UIImageView *cellAvatar;
@@ -23,6 +24,7 @@
 - (void)setInvitationMsg:(NSString *)_text;
 - (void)setExfee:(NSString *)_text;
 - (void)setLabelTime:(NSString *)_text;
+- (void)setAvartar:(UIImage*)_img;
 
 
 //- (void)setActionMsg:(NSString *)_text;

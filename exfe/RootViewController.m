@@ -146,7 +146,7 @@
                 NSDictionary *updateobj=[updatelist objectAtIndex:i];
                 int by_user_id=[[[updateobj objectForKey:@"by_identity"] objectForKey:@"user_id"] intValue];
                 if(by_user_id==app.userid)
-                    break;
+                    continue;
                 if([[updateobj objectForKey:@"action"] isEqualToString:@"conversation"])
                 {
                     id meta=[[updateobj objectForKey:@"meta"] JSONValue];
@@ -164,10 +164,9 @@
                             [dict setObject:[updateobj objectForKey:@"time"] forKey:@"updated_at"];
                             [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
 
-                            [dict release];
-//                            [dbu updateCommentobjWithid:<#(int)#> event:<#(NSArray *)#>
-//                            [dbu updateCommentobjWithid:[[updateobj objectForKey:@"x_id"] intValue] event:dict];   
+                            [dbu updateConversationWithid:[[updateobj objectForKey:@"x_id"] intValue] cross:dict];
                             
+                            [dict release];
                             [dbu setCrossStatusWithCrossId:[[updateobj objectForKey:@"x_id"] intValue] status:1];
 
                             [dbu updateActivityWithobj:updateobj action:@"conversation" cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
@@ -200,6 +199,7 @@
                     [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
 
                     [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                    [dict release];
                 }
                 else if([[updateobj objectForKey:@"action"] isEqualToString:@"confirmed"] || [[updateobj objectForKey:@"action"] isEqualToString:@"declined"] || [[updateobj objectForKey:@"action"] isEqualToString:@"interested"])
                 {
@@ -210,10 +210,9 @@
 
                     [dict setObject:[updateobj objectForKey:@"by_identity"] forKey:@"by_identity"];
                     [dict setObject:[updateobj objectForKey:@"time"] forKey:@"time"];
-                    [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
                     [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
-
                     [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                    [dict release];
 
                 }
                 else if([[updateobj objectForKey:@"action"] isEqualToString:@"title"] || [[updateobj objectForKey:@"action"] isEqualToString:@"begin_at"]|| [[updateobj objectForKey:@"action"] isEqualToString:@"place"]|| [[updateobj objectForKey:@"action"] isEqualToString:@"description"])
@@ -232,7 +231,22 @@
                     if([updateobj objectForKey:@"x_time_type"]!=nil)
                         [dict setObject:[updateobj objectForKey:@"x_time_type"]  forKey:@"x_time_type"];
 
+                    [dict setObject:[updateobj objectForKey:@"x_id"] forKey:@"id"];
+                    [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
+                    [dict setObject:[updateobj objectForKey:@"x_description"] forKey:@"description"];
+                    [dict setObject:[updateobj objectForKey:@"x_begin_at"] forKey:@"begin_at"];
+                    [dict setObject:[updateobj objectForKey:@"time"] forKey:@"updated_at"];
+                    
+                    [dict setObject:[updateobj objectForKey:@"x_time_type"] forKey:@"time_type"];
+                    
+                    [dict setObject:[[updateobj objectForKey:@"x_host_identity"] objectForKey:@"id"] forKey:@"host_id"];
+
+                    [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"line1"] forKey:@"place_line1"];
+                    [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"line2"] forKey:@"place_line2"];
+                    [dict setObject:[NSNumber numberWithInt:1] forKey:@"state"];
+                    [dbu updateEventobjWithid:[[updateobj objectForKey:@"x_id"] intValue] event:dict isnew:YES];
                     [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                    [dict release];
                 }
 //                id conversation=[updateobj objectForKey:@"conversation"];
 //                NSArray *confirmed=[updateobj objectForKey:@"confirmed"];

@@ -201,6 +201,7 @@
 
         [(ActivityCellView *)cell setLabelCrossTitle:activity.title];
         BOOL ismyaction=NO;
+
         if([activity.to_identities isKindOfClass:[NSArray class]]) {
             for (int i=0;i<[activity.to_identities count];i++) {
                 NSDictionary *exfee=(NSDictionary*)[activity.to_identities objectAtIndex:i];
@@ -209,6 +210,7 @@
                     ismyaction=YES;
             }
         }
+        
         if(ismyaction==NO)
             [(ActivityCellView *)cell setByTitle:[@"by " stringByAppendingString:activity.by_name]];
         else
@@ -230,7 +232,12 @@
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if(image!=nil && ![image isEqual:[NSNull null]])
-                [(ActivityCellView *)cell setAvartar:image];
+            {
+                if([cell isKindOfClass:[ActivityCellView class]])
+                    [(ActivityCellView*)cell setAvartar:image];
+                else if([cell isKindOfClass:[NotificationCrossCellView class]])
+                    [(NotificationCrossCellView*)cell setAvartar:image];
+            }
         });
     });
     
@@ -260,7 +267,6 @@
             else if([exfees count]>1)
                 msg = [msg stringByAppendingFormat:@"are %@",activity.action];
         }
-//        msg=[NSString stringWithFormat:@"%@: %@",activity.to_name,activity.action];
     }
     else if([activity.action isEqualToString:@"addexfee"]) {
         NSArray *exfees=activity.to_identities ;
@@ -338,7 +344,8 @@
     }
     if([exfees count]-count>=1)
         msg = [msg stringByAppendingFormat:@"and %d others ",[exfees count]-count];
-
+    if(![msg isEqualToString:@""])
+        msg = [NSString stringWithFormat:@"with %@",msg];
     return msg;
 }
 

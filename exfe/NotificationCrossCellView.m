@@ -36,15 +36,13 @@
 - (void)setExfee:(NSString *)_text {
     cellexfee.text=_text;
 }
-
+- (void)setAvartar:(UIImage*)_img{
+    cellAvatar.image=_img;
+    cellAvatar.layer.cornerRadius = 5.0;
+    cellAvatar.layer.masksToBounds = YES;
+}
 - (void)setLabelTime:(NSString *)_text {
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    
-    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate *time_datetime = [dateFormat dateFromString:_text]; 
-    [dateFormat setDateFormat:@"HH:mm MM-dd"];
-    cellTime.text=[dateFormat stringFromDate:time_datetime]; 
-    [dateFormat release];
+    cellTime.text=_text;
 }
 
 

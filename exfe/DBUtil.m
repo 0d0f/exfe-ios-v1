@@ -438,16 +438,19 @@ static sqlite3 *database;
             eventobj.id=sqlite3_column_int(stm, 0);
             eventobj.title=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 1)];
             eventobj.description=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 2)];
-            eventobj.code=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 3)];
+            if((char*)sqlite3_column_text(stm, 3)!=nil)
+                eventobj.code=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 3)];
             eventobj.begin_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 4)];
-            eventobj.end_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 5)];
+            if((char*)sqlite3_column_text(stm, 5)!=nil)
+                eventobj.end_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 5)];
             eventobj.duration=sqlite3_column_int(stm, 6);
             if((char*)sqlite3_column_text(stm, 7)!=nil)
                 eventobj.place_line1=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 7)];
             if((char*)sqlite3_column_text(stm, 8)!=nil)
                 eventobj.place_line2=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 8)];
             eventobj.creator_id=sqlite3_column_int(stm, 9);
-            eventobj.created_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 10)];
+            if((char*)sqlite3_column_text(stm, 10)!=nil)
+                eventobj.created_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 10)];
             eventobj.updated_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 11)];
             eventobj.state=sqlite3_column_int(stm, 12);
             eventobj.flag = sqlite3_column_int(stm, 13);
@@ -486,34 +489,34 @@ static sqlite3 *database;
 		sqlite3_finalize(stm);
 	return eventjson;    
 }
-- (void) updateEventWithid:(int)eventid event:(NSString*)eventjson
-{
-    @synchronized(self) {
-	NSString *_dbpath=[DBUtil DBPath];
-	NSFileManager *fileManager=[NSFileManager defaultManager];
-	BOOL success=[fileManager fileExistsAtPath:_dbpath];
-	[fileManager release];
-	if(!success)
-	{
-		return ;
-	} 
-        sqlite3_stmt *stm=nil;
-		const char *sql = "insert or replace into eventobject (eventid,eventjson) values(?,?)";
-		if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
-		{
-            sqlite3_bind_int(stm, 1, eventid);  
-			sqlite3_bind_text(stm,2, [eventjson UTF8String], -1, SQLITE_TRANSIENT);
-			if(sqlite3_step(stm)== SQLITE_DONE)
-			{
-			}
-			else 
-            {
-				NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-			}
-		}
-		sqlite3_finalize(stm);
-    }
-}
+//- (void) updateEventWithid:(int)eventid event:(NSString*)eventjson
+//{
+//    @synchronized(self) {
+//	NSString *_dbpath=[DBUtil DBPath];
+//	NSFileManager *fileManager=[NSFileManager defaultManager];
+//	BOOL success=[fileManager fileExistsAtPath:_dbpath];
+//	[fileManager release];
+//	if(!success)
+//	{
+//		return ;
+//	} 
+//        sqlite3_stmt *stm=nil;
+//		const char *sql = "insert or replace into eventobject (eventid,eventjson) values(?,?)";
+//		if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+//		{
+//            sqlite3_bind_int(stm, 1, eventid);  
+//			sqlite3_bind_text(stm,2, [eventjson UTF8String], -1, SQLITE_TRANSIENT);
+//			if(sqlite3_step(stm)== SQLITE_DONE)
+//			{
+//			}
+//			else 
+//            {
+//				NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+//			}
+//		}
+//		sqlite3_finalize(stm);
+//    }
+//}
 
 - (NSArray*) getInvitationWithEventid:(int)eventid
 {
@@ -587,7 +590,7 @@ static sqlite3 *database;
     
     
 }
-- (void) updateConversationWithid:(int)cross_id event:(NSDictionary*)conversationobj
+- (void) updateConversationWithid:(int)cross_id cross:(NSDictionary*)conversationobj
 {
     @synchronized(self) {
         NSString *dbpath=[DBUtil DBPath];
@@ -600,35 +603,31 @@ static sqlite3 *database;
         } 
         sqlite3_stmt *stm=nil;
         const char *sql = "insert or replace into comments (id,eventid,comment,user_id,userjson,created_at,updated_at) values(?,?,?,?,?,?,?)";
-//        for(int i=0;i<[commentdict count];i++)
-//        {
-//            Comment *commentobj=[Comment initWithDict:[commentdict objectAtIndex:i] EventID:eventid];
-//            if(![commentobj.comment isEqualToString:@""])
-//                if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
-//                {
-//                    sqlite3_bind_int(stm, 1,commentobj.id ); 
-//                    sqlite3_bind_int(stm, 2, eventid); 
-//                    sqlite3_bind_text(stm,3,[commentobj.comment UTF8String], -1, SQLITE_TRANSIENT);
-//                    sqlite3_bind_int(stm,4, commentobj.user_id);
-//                    sqlite3_bind_text(stm,5,[commentobj.userjson UTF8String], -1, SQLITE_TRANSIENT);
-//                    sqlite3_bind_text(stm,6,[commentobj.created_at UTF8String], -1, SQLITE_TRANSIENT);
-//                    sqlite3_bind_text(stm,7,[commentobj.updated_at UTF8String], -1, SQLITE_TRANSIENT);
-//                    if(sqlite3_step(stm)== SQLITE_DONE)
-//                    {
-//                        
-//                    }
-//                    else 
-//                    {
-//                        NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-//                    }            
-//                    
-//                    
-//                }
-//                else 
-//                {
-//                    NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-//                }
-//        }
+        Comment *commentobj=[Comment initWithDict:conversationobj EventID:cross_id];
+        if(![commentobj.comment isEqualToString:@""])
+        if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+        {
+            sqlite3_bind_int(stm, 1,commentobj.id ); 
+            sqlite3_bind_int(stm, 2, cross_id); 
+            sqlite3_bind_text(stm,3,[commentobj.comment UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_int(stm,4, commentobj.user_id);
+            sqlite3_bind_text(stm,5,[commentobj.userjson UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(stm,6,[commentobj.created_at UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(stm,7,[commentobj.updated_at UTF8String], -1, SQLITE_TRANSIENT);
+            if(sqlite3_step(stm)== SQLITE_DONE)
+            {
+                
+            }
+            else 
+            {
+                NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+            }            
+                    
+                    
+        }
+        else {
+                    NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+        }
         sqlite3_finalize(stm); 
     }    
 }
@@ -1130,17 +1129,23 @@ static sqlite3 *database;
             cross.id=sqlite3_column_int(stm, 0);
             cross.title=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 1)];
             cross.description=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 2)];
-            cross.code=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 3)];
-            cross.begin_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 4)];
-            cross.end_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 5)];
+            if((char*)sqlite3_column_text(stm, 3)!=nil)
+                cross.code=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 3)];
+            
+            if((char*)sqlite3_column_text(stm, 4)!=nil)
+                cross.begin_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 4)];
+            if((char*)sqlite3_column_text(stm, 5)!=nil) 
+                cross.end_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 5)];
             cross.duration=sqlite3_column_int(stm, 6);
             if((char*)sqlite3_column_text(stm, 7)!=nil)
                 cross.place_line1=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 7)];
             if((char*)sqlite3_column_text(stm, 8)!=nil)
                 cross.place_line2=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 8)];
             cross.creator_id=sqlite3_column_int(stm, 9);
-            cross.created_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 10)];
-            cross.updated_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 11)];
+            if((char*)sqlite3_column_text(stm, 10)!=nil)    
+                cross.created_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 10)];
+            if((char*)sqlite3_column_text(stm, 11)!=nil)
+                cross.updated_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 11)];
             cross.state=sqlite3_column_int(stm, 12);
             cross.flag = sqlite3_column_int(stm, 13);
             cross.time_type = sqlite3_column_int(stm, 14);

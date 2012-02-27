@@ -116,16 +116,16 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "No"
+         shouldBeEnabled = "Yes"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/DBUtil.m"
-         timestampString = "351944772.555128"
+         timestampString = "352049259.656065"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "687"
-         endingLineNumber = "687"
+         startingLineNumber = "686"
+         endingLineNumber = "686"
          landmarkName = "-updateEventobjWithid:event:isnew:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -135,26 +135,12 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/APIHandler.m"
-         timestampString = "351067872.728158"
+         timestampString = "352027214.911366"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "156"
-         endingLineNumber = "156"
+         startingLineNumber = "153"
+         endingLineNumber = "153"
          landmarkName = "-regDeviceToken:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "exfe/APIHandler.m"
-         timestampString = "348463535.433881"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "58"
-         endingLineNumber = "58"
-         landmarkName = "-checkUserLoginByUsername:withPassword:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -261,11 +247,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/APIHandler.m"
-         timestampString = "351067872.728158"
+         timestampString = "352027214.911366"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "175"
-         endingLineNumber = "175"
+         startingLineNumber = "172"
+         endingLineNumber = "172"
          landmarkName = "-regDeviceToken:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -275,11 +261,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/APIHandler.m"
-         timestampString = "351067872.728158"
+         timestampString = "352027214.911366"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "177"
-         endingLineNumber = "177"
+         startingLineNumber = "174"
+         endingLineNumber = "174"
          landmarkName = "-regDeviceToken:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -485,11 +471,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe.xcodeproj/ConversionTableViewController.m"
-         timestampString = "350820722.197744"
+         timestampString = "352033355.477824"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "292"
-         endingLineNumber = "292"
+         startingLineNumber = "290"
+         endingLineNumber = "290"
          landmarkName = "-tableView:didSelectRowAtIndexPath:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -513,11 +499,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/ActivityViewController.m"
-         timestampString = "352023497.614329"
+         timestampString = "352031240.065103"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "266"
-         endingLineNumber = "266"
+         startingLineNumber = "272"
+         endingLineNumber = "272"
          landmarkName = "-getMsgWithActivity:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -527,11 +513,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/ActivityViewController.m"
-         timestampString = "352023497.614329"
+         timestampString = "352031240.065103"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "248"
-         endingLineNumber = "248"
+         startingLineNumber = "255"
+         endingLineNumber = "255"
          landmarkName = "-getMsgWithActivity:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -541,11 +527,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/ActivityViewController.m"
-         timestampString = "352023497.614329"
+         timestampString = "352031240.065103"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "258"
-         endingLineNumber = "258"
+         startingLineNumber = "265"
+         endingLineNumber = "265"
          landmarkName = "-getMsgWithActivity:"
          landmarkType = "5">
       </FileBreakpoint>
@@ -554,13 +540,27 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "exfe/RootViewController.m"
-         timestampString = "352012164.752676"
+         filePath = "exfe/ActivityViewController.m"
+         timestampString = "352029268.848714"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "221"
-         endingLineNumber = "221"
-         landmarkName = "-LoadUpdate"
+         startingLineNumber = "160"
+         endingLineNumber = "160"
+         landmarkName = "-tableView:cellForRowAtIndexPath:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/ActivityViewController.m"
+         timestampString = "352031240.065103"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "416"
+         endingLineNumber = "416"
+         landmarkName = "-formattedDateRelativeToNow:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -569,12 +569,12 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/DBUtil.m"
-         timestampString = "352012350.422278"
+         timestampString = "352049259.656065"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "770"
-         endingLineNumber = "770"
-         landmarkName = "-updateActivityWithobj:action:cross_id:"
+         startingLineNumber = "606"
+         endingLineNumber = "606"
+         landmarkName = "-updateConversationWithid:cross:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -582,13 +582,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "exfe/Activity.m"
-         timestampString = "352012355.055854"
+         filePath = "exfe/DBUtil.m"
+         timestampString = "352049259.656065"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "47"
-         endingLineNumber = "47"
-         landmarkName = "+initWithDict:action:cross_id:"
+         startingLineNumber = "596"
+         endingLineNumber = "596"
+         landmarkName = "-updateConversationWithid:cross:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -596,13 +596,111 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "exfe/Activity.m"
-         timestampString = "352012484.185274"
+         filePath = "exfe/APIHandler.m"
+         timestampString = "352033350.997823"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "72"
-         endingLineNumber = "72"
-         landmarkName = "+initWithDict:action:cross_id:"
+         startingLineNumber = "108"
+         endingLineNumber = "108"
+         landmarkName = "-getPostsWith:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/DBUtil.m"
+         timestampString = "352049259.656065"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "646"
+         endingLineNumber = "646"
+         landmarkName = "-updateCommentobjWithid:event:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/DBUtil.m"
+         timestampString = "352049259.656065"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "649"
+         endingLineNumber = "649"
+         landmarkName = "-updateCommentobjWithid:event:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/Cross.m"
+         timestampString = "352045120.764957"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "32"
+         endingLineNumber = "32"
+         landmarkName = "+initWithDict:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/DBUtil.m"
+         timestampString = "352049259.656065"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "683"
+         endingLineNumber = "683"
+         landmarkName = "-updateEventobjWithid:event:isnew:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/RootViewController.m"
+         timestampString = "352049669.082182"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "246"
+         endingLineNumber = "246"
+         landmarkName = "-LoadUpdate"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/Cross.m"
+         timestampString = "352048109.613663"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "102"
+         endingLineNumber = "102"
+         landmarkName = "+initWithDict:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/DBUtil.m"
+         timestampString = "352049013.003259"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "420"
+         endingLineNumber = "420"
+         landmarkName = "-getRecentEventObj"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

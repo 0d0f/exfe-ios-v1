@@ -118,7 +118,6 @@
                 Comment *commentobj=[Comment initWithDict:[arr objectAtIndex:i] EventID:eventid];
                 if(commentobj!=nil)
                 {
-                    //[comments insertObject:commentobj atIndex:i];
                     [self UpdateCommentObjects:commentobj];
                 }
             }
@@ -137,7 +136,6 @@
             [self stopLoading];
             if(inputToolbar!=nil)
             {
-                NSLog(@"===hidden keyboard");
                 if(placeholder!=nil)
                     [placeholder resignFirstResponder];
                 [inputToolbar setInputEnabled:YES];

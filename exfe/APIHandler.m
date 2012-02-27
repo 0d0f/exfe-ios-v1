@@ -40,8 +40,8 @@
 }
 + (NSString*)URL_API_DOMAIN {
 //	return @"http://exfeapi.dlol.us";    
-//    return @"http://api.exfe.com";
-    return @"http://api.local.exfe.com";    
+    return @"http://api.exfe.com";
+//    return @"http://api.local.exfe.com";    
 }
 
 - (NSString*)sentRSVPWith:(int)eventid rsvp:(NSString*)rsvp
@@ -54,11 +54,8 @@
 }
 - (NSString*)checkUserLoginByUsername:(NSString*)email withPassword:(NSString*)passwd
 {
-
     NSString *post =[[NSString alloc] initWithFormat:@"user=%@&password=%@",email,passwd];
-    
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
-    
     NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[APIHandler URL_API_ROOT],@"users/login"]]];
     NSLog(@"%@",[NSString stringWithFormat:@"%@/%@",[APIHandler URL_API_ROOT],@"users/login"]);
@@ -210,7 +207,7 @@
 
     //TOFIX:temp test hack
     
-//    lastUpdateTime=@"2012-02-22 16:46:13";
+    lastUpdateTime=@"2012-02-20 16:46:13";
     CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
     
     

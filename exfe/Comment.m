@@ -35,8 +35,8 @@
     comment.id = [[dict objectForKey:@"id"] integerValue];
     comment.eventid=eid;
 
-    if([dict objectForKey:@"content"]!=[NSNull null])
-        comment.comment = [dict objectForKey:@"content"];
+    if([dict objectForKey:@"message"]!=[NSNull null])
+        comment.comment = [dict objectForKey:@"message"];
     else
         comment.comment = @"";
 
