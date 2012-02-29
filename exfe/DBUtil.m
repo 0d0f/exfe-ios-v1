@@ -44,29 +44,7 @@ static sqlite3 *database;
 	{
 		return;
 	} 
-    sqlite3_stmt *stm=nil;
-    const char *sql = "select time_type from crosses where id=1;";
-    int result=sqlite3_prepare_v2(database, sql, -1, &stm, NULL);
-    if(result==SQLITE_OK)
-    {
-    }
-    else
-    {
-        const char *upgradesql = "ALTER TABLE  `crosses` ADD  `time_type` INT NOT NULL DEFAULT  '0';";
-        if(sqlite3_prepare_v2(database, upgradesql, -1, &stm, NULL)==SQLITE_OK)
-        {
-            if(sqlite3_step(stm)== SQLITE_DONE)
-            {
-                
-            }
-            else 
-            {
-                NSAssert1(0, @"Error while upgrade db. '%s'", sqlite3_errmsg(database));
-            }
-        }
-
-    }
-    sqlite3_finalize(stm);     
+//    sqlite3_finalize(stm);     
 }
 - (void) emptyDBData
 {
@@ -454,7 +432,8 @@ static sqlite3 *database;
             eventobj.updated_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 11)];
             eventobj.state=sqlite3_column_int(stm, 12);
             eventobj.flag = sqlite3_column_int(stm, 13);
-            eventobj.time_type = sqlite3_column_int(stm, 14);
+            if((char*)sqlite3_column_text(stm, 14)!=nil)
+                eventobj.time_type = [NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 14)];
             [eventlist addObject:eventobj];
         }
     }
@@ -714,7 +693,7 @@ static sqlite3 *database;
             sqlite3_bind_int(stm,14, 1);
         else
             sqlite3_bind_int(stm,14, 0);
-        sqlite3_bind_int(stm,15, evento.time_type);
+        sqlite3_bind_text(stm,15, [evento.time_type UTF8String], -1, SQLITE_TRANSIENT);
         
         if(sqlite3_step(stm)== SQLITE_DONE)
         {
@@ -888,7 +867,11 @@ static sqlite3 *database;
             char *place_line1=(char*)sqlite3_column_text(stm, 15);
             if(place_line1!=nil)
                 activity.place_line1 =[NSString stringWithUTF8String:place_line1];
-            int time_type=sqlite3_column_int(stm, 16);
+            
+            char *time_type=(char*)sqlite3_column_text(stm, 16);
+            if(time_type!=nil)
+                activity.time_type =[NSString stringWithUTF8String:time_type];
+            
             char *place_line2=(char*)sqlite3_column_text(stm, 17);
             if(place_line2!=nil)
             {
@@ -906,9 +889,9 @@ static sqlite3 *database;
             activity.to_id=to_id;
             activity.cross_id=cross_id;
             
-            activity.begin_at=[Util getTimeStr:time_type time:activity.begin_at];
+//            activity.begin_at=[Util getTimeStr:time_type time:activity.begin_at];
             
-            activity.time_type=time_type;
+//            activity.time_type=time_type;
             [activitylist addObject:activity];
         }
     }
@@ -1148,7 +1131,8 @@ static sqlite3 *database;
                 cross.updated_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 11)];
             cross.state=sqlite3_column_int(stm, 12);
             cross.flag = sqlite3_column_int(stm, 13);
-            cross.time_type = sqlite3_column_int(stm, 14);
+            if((char*)sqlite3_column_text(stm, 14)!=nil)
+                cross.time_type=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 14)];
         }
     }
     sqlite3_finalize(stm);

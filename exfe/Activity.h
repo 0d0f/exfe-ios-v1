@@ -25,7 +25,7 @@
     NSString *action;
     NSString *data;
     NSString *title;
-    NSInteger time_type;
+    NSString *time_type;
     NSString *begin_at;
     NSString *place_line1;
     NSString *invitationmsg;
@@ -35,7 +35,7 @@
 @property NSInteger log_id;
 @property NSInteger by_id;
 @property NSInteger to_id;
-@property NSInteger time_type;
+@property (retain,nonatomic) NSString* time_type;
 @property (retain,nonatomic) NSString* by_name;
 @property (retain,nonatomic) NSString* by_avatar;
 @property (retain,nonatomic) NSString* to_name;

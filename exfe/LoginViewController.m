@@ -61,10 +61,11 @@
             exfeAppDelegate *app=(exfeAppDelegate *)[[UIApplication sharedApplication] delegate];
             app.api_key=[userdict objectForKey:@"auth_token"];
             app.userid=[[userdict objectForKey:@"userid"] intValue];
-            app.username=[textUsername text];
+            app.username=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"];
                 
-            self.navigationController.title=app.username;
-            
+
+//            self.navigationController.title=app.username;
+            [self.navigationController navigationBar].topItem.title=app.username;
             app.meViewReload=YES;
             [self.delegate loginViewControllerDidFinish:self];
             [activityIndicatorview stopAnimating]; 

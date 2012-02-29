@@ -35,4 +35,7 @@
     }
     return result_timestr;
 }
++ (NSString*) getLongLocalTimeStr:(int)time_type time:(NSString*)utc_timestr{
+    return @"";
+}
 @end

@@ -95,10 +95,10 @@
     else
         event.flag = 0;
 
-    if([dict objectForKey:@"time_type"]!=[NSNull null])
-        event.time_type = [[dict objectForKey:@"time_type"] integerValue];
+    if([dict objectForKey:@"time_type"]!=nil)
+        event.time_type = [dict objectForKey:@"time_type"] ;
     else
-        event.time_type = 0;
+        event.time_type = @"";
     return event;
 }
 - (void)dealloc

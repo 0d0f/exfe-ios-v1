@@ -153,9 +153,21 @@
             [(NotificationCrossCellView *)cell setCrossDetail:activity.data];
             [(NotificationCrossCellView *)cell setInvitationMsg:[NSString stringWithFormat:@"Invitation from %@",activity.by_name]];
             [(NotificationCrossCellView *)cell setWithMsg:[self getWithMsg:activity]];
-            NSString *x_str=activity.begin_at;
+            NSLog(@"%@",activity.begin_at);
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+            [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+            [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            NSDate *time_datetime = [dateFormat dateFromString:activity.begin_at]; 
+
+            [dateFormat setTimeZone:[NSTimeZone defaultTimeZone]];
+            [dateFormat setDateFormat:@"h:ma ccc, MMM   d"];
+            
+            NSString *begin_at_formatstr=[dateFormat stringFromDate:time_datetime];
+            [dateFormat release];
+
+            NSString *x_str=begin_at_formatstr;
             if (![activity.place_line1 isEqualToString:@""])
-                x_str=[x_str stringByAppendingFormat:@"%@ at %@",activity.begin_at,activity.place_line1];
+                x_str=[x_str stringByAppendingFormat:@"%@ at %@",begin_at_formatstr,activity.place_line1];
             [(NotificationCrossCellView *)cell setCrossDetail:x_str];
             [(NotificationCrossCellView *)cell setLabelTime:[self formattedDateRelativeToNow:activity.time]];
 
@@ -364,6 +376,7 @@
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
     NSDate *date = [dateFormat dateFromString:datestr]; 
     [dateFormat release];
     

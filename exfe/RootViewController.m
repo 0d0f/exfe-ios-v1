@@ -55,7 +55,9 @@
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     if(uname!=nil){
         [self.navigationController navigationBar].topItem.title=uname;
-        [self.navigationController.view setNeedsDisplay];
+        NSLog(@"initui user name :%@",uname);    
+        [[self.navigationController navigationBar] setNeedsDisplay];
+        
     }
 
     NSString *settingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"navbar_setting" ofType:@"png"];
@@ -165,10 +167,8 @@
                             [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
 
                             [dbu updateConversationWithid:[[updateobj objectForKey:@"x_id"] intValue] cross:dict];
-                            
                             [dict release];
                             [dbu setCrossStatusWithCrossId:[[updateobj objectForKey:@"x_id"] intValue] status:1];
-
                             [dbu updateActivityWithobj:updateobj action:@"conversation" cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
                         }
                     }
@@ -665,9 +665,10 @@
     else
     {   
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        
+        [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
         [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
         NSDate *time_datetime = [dateFormat dateFromString:time]; 
+        [dateFormat setTimeZone:[NSTimeZone defaultTimeZone]];
         [dateFormat setDateFormat:@"ha ccc MM-dd"];
         if(event.time_type==2)
         {
@@ -711,7 +712,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"table selected");
     Cross *event=[events objectAtIndex:indexPath.row];
     EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil];
     

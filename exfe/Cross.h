@@ -23,7 +23,7 @@
     NSString* updated_at;
     NSInteger state;
     NSInteger flag;
-    NSInteger time_type;
+    NSString* time_type;
 }
 
 @property NSInteger id;
@@ -40,7 +40,7 @@
 @property (retain,nonatomic) NSString* updated_at;
 @property NSInteger state;
 @property NSInteger flag;
-@property NSInteger time_type;
+@property (retain,nonatomic) NSString* time_type;
 
 + (Cross*)initWithDict:(NSDictionary*)dict;
 @end

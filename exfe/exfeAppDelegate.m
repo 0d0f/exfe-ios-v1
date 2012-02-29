@@ -28,7 +28,6 @@
 {
     [self copyResource];
     meViewReload=NO;
-    
     [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
 
