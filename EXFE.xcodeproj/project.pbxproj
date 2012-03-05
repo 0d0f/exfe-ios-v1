@@ -82,6 +82,8 @@
 		78A2B94B13C4B2DD00032F61 /* SBJsonTokeniser.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B93D13C4B2DD00032F61 /* SBJsonTokeniser.m */; };
 		78A2B94C13C4B2DD00032F61 /* SBJsonUTF8Stream.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B93F13C4B2DD00032F61 /* SBJsonUTF8Stream.m */; };
 		78A2B94D13C4B2DD00032F61 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A2B94113C4B2DD00032F61 /* SBJsonWriter.m */; };
+		78A321981500851C00F1B1DB /* NotificationConversationCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78A321971500851C00F1B1DB /* NotificationConversationCellView.xib */; };
+		78A3219C1500FA2800F1B1DB /* NotificationConversationCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A3219B1500FA2800F1B1DB /* NotificationConversationCellView.m */; };
 		78A6EACB14F36C15000CCD8B /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A6EACA14F36C15000CCD8B /* Util.m */; };
 		78B320FC149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B320FB149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m */; };
 		78B320FF149FEB5500C87B7F /* CustomUIToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B320FE149FEB5500C87B7F /* CustomUIToolbar.m */; };
@@ -233,6 +235,9 @@
 		78A2B93F13C4B2DD00032F61 /* SBJsonUTF8Stream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonUTF8Stream.m; sourceTree = "<group>"; };
 		78A2B94013C4B2DD00032F61 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		78A2B94113C4B2DD00032F61 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		78A321971500851C00F1B1DB /* NotificationConversationCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NotificationConversationCellView.xib; sourceTree = "<group>"; };
+		78A3219A1500FA2800F1B1DB /* NotificationConversationCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationConversationCellView.h; sourceTree = "<group>"; };
+		78A3219B1500FA2800F1B1DB /* NotificationConversationCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationConversationCellView.m; sourceTree = "<group>"; };
 		78A6EAC914F36C14000CCD8B /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		78A6EACA14F36C15000CCD8B /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
 		78B320FA149FD9E500C87B7F /* UIBarButtonItem+StyledButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+StyledButton.h"; sourceTree = "<group>"; };
@@ -323,6 +328,8 @@
 				782B253F14DD8283007020D9 /* ActivityCellView.m */,
 				78922E1A14ED1513000E834E /* NotificationCrossCellView.h */,
 				78922E1B14ED1513000E834E /* NotificationCrossCellView.m */,
+				78A3219A1500FA2800F1B1DB /* NotificationConversationCellView.h */,
+				78A3219B1500FA2800F1B1DB /* NotificationConversationCellView.m */,
 			);
 			name = TableViewCell;
 			sourceTree = "<group>";
@@ -366,14 +373,10 @@
 				78922E0D14E92115000E834E /* notification_hl~iphone.png */,
 				78922E1414E981C4000E834E /* backx@2x~iphone.png */,
 				78922E1514E981C9000E834E /* backx~iphone.png */,
+				78A32199150085A800F1B1DB /* cellview */,
 				7882BCCC137458F5004F9DBD /* exfe.db */,
-				78C1D40B1429D30B008131BC /* CrossCellView.xib */,
-				78090CF714A4798700AB0D66 /* ProfileCellView.xib */,
-				782B254114DD9D97007020D9 /* ActivityCellView.xib */,
-				78922E1814ED143F000E834E /* NotificationCrossCellView.xib */,
 				78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */,
 				78ED97ED14D8EC32001E655F /* ActivityViewController.xib */,
-				78D0D65A148F5EFD00EA327C /* ConversationCellView.xib */,
 				788C421D133FA3D000AAA425 /* MainWindow.xib */,
 				7861AA8213523F9200FA13FA /* LoginViewController.xib */,
 				7856B7B01358A06200B97BA6 /* EventViewController.xib */,
@@ -537,6 +540,19 @@
 			path = JSON;
 			sourceTree = "<group>";
 		};
+		78A32199150085A800F1B1DB /* cellview */ = {
+			isa = PBXGroup;
+			children = (
+				78C1D40B1429D30B008131BC /* CrossCellView.xib */,
+				78090CF714A4798700AB0D66 /* ProfileCellView.xib */,
+				78D0D65A148F5EFD00EA327C /* ConversationCellView.xib */,
+				78A321971500851C00F1B1DB /* NotificationConversationCellView.xib */,
+				782B254114DD9D97007020D9 /* ActivityCellView.xib */,
+				78922E1814ED143F000E834E /* NotificationCrossCellView.xib */,
+			);
+			name = cellview;
+			sourceTree = "<group>";
+		};
 		78F75BC113AD3B9E00C7B3CF /* UIInputToolbar */ = {
 			isa = PBXGroup;
 			children = (
@@ -671,6 +687,7 @@
 				78922E1614E981CC000E834E /* backx@2x~iphone.png in Resources */,
 				78922E1714E981CC000E834E /* backx~iphone.png in Resources */,
 				78922E1914ED1446000E834E /* NotificationCrossCellView.xib in Resources */,
+				78A321981500851C00F1B1DB /* NotificationConversationCellView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -750,6 +767,7 @@
 				7803E21314DE5361008B76AD /* UIButton+StyledButton.m in Sources */,
 				78922E1C14ED1514000E834E /* NotificationCrossCellView.m in Sources */,
 				78A6EACB14F36C15000CCD8B /* Util.m in Sources */,
+				78A3219C1500FA2800F1B1DB /* NotificationConversationCellView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

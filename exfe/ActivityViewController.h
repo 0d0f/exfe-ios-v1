@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ActivityCellView.h"
 #import "NotificationCrossCellView.h"
+#import "NotificationConversationCellView.h"
 
 #import "Activity.h"
 #import "PullRefreshTableViewController.h"

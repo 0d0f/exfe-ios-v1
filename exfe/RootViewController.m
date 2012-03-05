@@ -161,15 +161,18 @@
                             [dict setObject:postid forKey:@"id"];
                             [dict setObject:[updateobj objectForKey:@"message"] forKey:@"message"];
                             [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
-                            [dict setObject:[updateobj objectForKey:@"by_identity"] forKey:@"identity"];
+                            [dict setObject:[updateobj objectForKey:@"by_identity"] forKey:@"by_identity"];
                             [dict setObject:[updateobj objectForKey:@"x_begin_at"] forKey:@"created_at"];
                             [dict setObject:[updateobj objectForKey:@"time"] forKey:@"updated_at"];
                             [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
+                            [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
+                            [dict setObject:[updateobj objectForKey:@"time"] forKey:@"time"];
 
                             [dbu updateConversationWithid:[[updateobj objectForKey:@"x_id"] intValue] cross:dict];
-                            [dict release];
                             [dbu setCrossStatusWithCrossId:[[updateobj objectForKey:@"x_id"] intValue] status:1];
-                            [dbu updateActivityWithobj:updateobj action:@"conversation" cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                            [dbu updateActivityWithobj:dict action:@"conversation" cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                            [dict release];
+
                         }
                     }
                     NSDate *update_datetime = [dateFormat dateFromString:[updateobj objectForKey:@"time"]]; 
@@ -200,6 +203,7 @@
 
                     [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
                     [dict release];
+                    
                 }
                 else if([[updateobj objectForKey:@"action"] isEqualToString:@"confirmed"] || [[updateobj objectForKey:@"action"] isEqualToString:@"declined"] || [[updateobj objectForKey:@"action"] isEqualToString:@"interested"])
                 {
@@ -209,6 +213,7 @@
                         [dict setObject:[[updateobj objectForKey:@"to_identity"]  JSONRepresentation] forKey:@"to_identities"];
 
                     [dict setObject:[updateobj objectForKey:@"by_identity"] forKey:@"by_identity"];
+                    [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
                     [dict setObject:[updateobj objectForKey:@"time"] forKey:@"time"];
                     [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
                     [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
@@ -232,7 +237,16 @@
                         [dict setObject:[updateobj objectForKey:@"x_time_type"]  forKey:@"x_time_type"];
 
                     [dict setObject:[updateobj objectForKey:@"x_id"] forKey:@"id"];
-                    [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
+                    
+                    if([[updateobj objectForKey:@"action"] isEqualToString:@"title"])
+                    {
+                        if([updateobj objectForKey:@"old_value"] !=nil)
+                            [dict setObject:[updateobj objectForKey:@"old_value"] forKey:@"title"];
+                        else
+                            [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
+                    }
+                    else
+                        [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
                     [dict setObject:[updateobj objectForKey:@"x_description"] forKey:@"description"];
                     [dict setObject:[updateobj objectForKey:@"x_begin_at"] forKey:@"begin_at"];
                     [dict setObject:[updateobj objectForKey:@"time"] forKey:@"updated_at"];
@@ -248,222 +262,10 @@
                     [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
                     [dict release];
                 }
-//                id conversation=[updateobj objectForKey:@"conversation"];
-//                NSArray *confirmed=[updateobj objectForKey:@"confirmed"];
-//                NSArray *declined=[updateobj objectForKey:@"declined"];
-//                NSArray *interested=[updateobj objectForKey:@"interested"];
-//                NSArray *change=[updateobj objectForKey:@"change"];
-//                NSArray *addexfee=[updateobj objectForKey:@"addexfee"];
-//                NSArray *delexfee=[updateobj objectForKey:@"delexfee"];
-//                
-//                int cross_id=[[updateobj objectForKey:@"cross_id"] intValue];
-//                if([conversation isKindOfClass:[NSArray class]])
-//                {
-//                        NSArray *conversations=(NSArray*)conversation;
-//                        NSMutableArray *objs=[[NSMutableArray alloc]initWithCapacity:50];
-//                        for(int idx=[conversations count]-1;idx>=0;idx--)
-//                        {
-//                            NSDictionary *conversationobj=[conversations objectAtIndex:idx];
-//                            id meta=[[conversationobj objectForKey:@"meta"] JSONValue];
-//                            if([meta isKindOfClass: [NSDictionary class]])
-//                            {
-//                                NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
-//
-//                                id postid=[meta objectForKey:@"id"];
-//                                if(postid!=nil)
-//                                {
-//                                    [dict setObject:postid forKey:@"id"];
-//                                    [dict setObject:[conversationobj objectForKey:@"message"] forKey:@"content"];
-//                                    [dict setObject:[conversationobj objectForKey:@"by_identity"] forKey:@"identity"];
-//                                    [dict setObject:[conversationobj objectForKey:@"time"] forKey:@"created_at"];
-//                                    [dict setObject:[conversationobj objectForKey:@"time"] forKey:@"updated_at"];
-//                                    [objs addObject:dict];
-//                                    [dict release];
-//                                    
-//                                    [dbu updateActivityWithobj:conversationobj action:@"conversation" cross_id:cross_id];
-//                                }
-//                            }
-//                            NSDate *update_datetime = [dateFormat dateFromString:[conversationobj objectForKey:@"time"]]; 
-//                            lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
-//                        }
-//                        if([objs count]>0)
-//                        {
-//                            [dbu updateCommentobjWithid:cross_id event:objs];   
-//                            [dbu setCrossStatusWithCrossId:cross_id status:1];
-//                        }
-//                        [objs release];
-//                }
-//                if([confirmed isKindOfClass:[NSArray class]])
-//                {
-//                    for(int idx=[confirmed count]-1;idx>=0;idx--)
-//                    {
-//                        NSDictionary *confirmedobj=[confirmed objectAtIndex:idx];
-//                        id meta=[[confirmedobj objectForKey:@"meta"] JSONValue];
-//                        NSDictionary *identity=[confirmedobj objectForKey:@"identity"];
-//                        if([meta isKindOfClass: [NSDictionary class]])
-//                        {
-//                            NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
-//                            id invitation_id = [meta objectForKey:@"id"];
-//                            if(invitation_id!=nil)
-//                            {
-//                                [dict setObject:invitation_id forKey:@"invitation_id"];
-//                                
-//                                [dict setObject:[confirmedobj objectForKey:@"to_id"] forKey:@"identity_id"];
-//                                [dict setObject:[confirmedobj objectForKey:@"user_id"] forKey:@"user_id"];
-//                                [dict setObject:@"1" forKey:@"state"];
-//                                [dict setObject:[identity objectForKey:@"name"]  forKey:@"name"];
-//                                if([meta objectForKey:@"provider"]==nil)
-//                                    [dict setObject:@""  forKey:@"provider"];
-//                                else
-//                                    [dict setObject:[meta objectForKey:@"provider"]  forKey:@"provider"];
-//                                [dict setObject:[identity objectForKey:@"avatar_file_name"]  forKey:@"avatar_file_name"];
-//                                [dict setObject:[confirmedobj objectForKey:@"time"] forKey:@"updated_at"];
-//                                [dbu updateInvitationWithCrossId:cross_id invitation:dict];
-//                                [dbu setCrossStatusWithCrossId:cross_id status:1];
-//                                [confirmedobj setValue:@"1" forKey:@"data"];
-//                                [dbu updateActivityWithobj:confirmedobj action:@"confirmed" cross_id:cross_id];
-//                                [dict release];
-//                            }
-//                        }
-//                        NSDate *update_datetime = [dateFormat dateFromString:[confirmedobj objectForKey:@"time"]]; 
-//                        lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
-//                    }
-//                }
-//                
-//                if([declined isKindOfClass:[NSArray class]])
-//                {
-//                    for(int idx=[declined count]-1;idx>=0;idx--)
-//                    {
-//                        NSDictionary *declinedobj=[declined objectAtIndex:idx];
-//                        id meta=[[declinedobj objectForKey:@"meta"] JSONValue];
-//                        NSDictionary *identity=[declinedobj objectForKey:@"identity"];
-//                        if([meta isKindOfClass: [NSDictionary class]])
-//                        {
-//                            NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
-//                            
-//                            id invitation_id = [meta objectForKey:@"id"];
-//                            if(invitation_id!=nil)
-//                            {
-//                                [dict setObject:invitation_id forKey:@"invitation_id"];
-//                                [dict setObject:[declinedobj objectForKey:@"to_id"] forKey:@"identity_id"];
-//
-//                                [dict setObject:[declinedobj objectForKey:@"user_id"] forKey:@"user_id"];
-//                                [dict setObject:@"2" forKey:@"state"];
-//                                if([meta objectForKey:@"provider"]==nil)
-//                                    [dict setObject:@""  forKey:@"provider"];
-//                                else
-//                                    [dict setObject:[meta objectForKey:@"provider"]  forKey:@"provider"];
-//                                
-//                                [dict setObject:[identity objectForKey:@"name"]  forKey:@"name"];
-//                                [dict setObject:[identity objectForKey:@"avatar_file_name"]  forKey:@"avatar_file_name"];
-//                                
-//                                [dict setObject:[declinedobj objectForKey:@"time"] forKey:@"updated_at"];
-//                                [dbu updateInvitationWithCrossId:cross_id invitation:dict];
-//                                [dbu setCrossStatusWithCrossId:cross_id status:1];
-//
-//                                [dict release];
-//                                [declinedobj setValue:@"2" forKey:@"data"];
-//                                [dbu updateActivityWithobj:declinedobj action:@"declined" cross_id:cross_id];
-//
-//                                NSDate *update_datetime = [dateFormat dateFromString:[declinedobj objectForKey:@"time"]]; 
-//                                lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
-//                            }
-//                        }
-//                    }
-//                }
-//                if([interested isKindOfClass:[NSArray class]])
-//                {
-//                    for(int idx=[interested count]-1;idx>=0;idx--)
-//                    {
-//                        NSDictionary *interestedobj=[interested objectAtIndex:idx];
-//                        id meta=[[interestedobj objectForKey:@"meta"] JSONValue];
-//                        NSDictionary *identity=[interestedobj objectForKey:@"identity"];
-//                        if([meta isKindOfClass: [NSDictionary class]])
-//                        {
-//                            NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
-//                            
-//                            id invitation_id = [meta objectForKey:@"id"];
-//                            if(invitation_id!=nil)
-//                            {
-//                                [dict setObject:invitation_id forKey:@"invitation_id"];
-//                                [dict setObject:[interestedobj objectForKey:@"to_id"] forKey:@"identity_id"];
-//                                
-//                                [dict setObject:[interestedobj objectForKey:@"user_id"] forKey:@"user_id"];
-//                                [dict setObject:@"2" forKey:@"state"];
-//                                [dict setObject:[identity objectForKey:@"name"]  forKey:@"name"];
-//                                if([meta objectForKey:@"provider"]==nil)
-//                                    [dict setObject:@""  forKey:@"provider"];
-//                                else
-//                                    [dict setObject:[meta objectForKey:@"provider"]  forKey:@"provider"];
-//                                [dict setObject:[identity objectForKey:@"avatar_file_name"]  forKey:@"avatar_file_name"];
-//                                [dict setObject:[interestedobj objectForKey:@"time"] forKey:@"updated_at"];
-//                                [dbu updateInvitationWithCrossId:cross_id invitation:dict];
-//                                [dbu setCrossStatusWithCrossId:cross_id status:3];
-//                                
-//                                [dict release];
-//                                [interestedobj setValue:@"3" forKey:@"data"];
-//                                [dbu updateActivityWithobj:interestedobj action:@"interested" cross_id:cross_id];
-//                                
-//                                NSDate *update_datetime = [dateFormat dateFromString:[interestedobj objectForKey:@"time"]]; 
-//                                lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
-//                            }
-//                        }
-//                    }                    
-//                }
-//
-//                if([addexfee isKindOfClass:[NSArray class]])
-//                {
-//                    NSString *time=@"";
-//                    for(int idx=[addexfee count]-1;idx>=0;idx--)
-//                    {
-//                        NSDictionary *exfeeobj=[addexfee objectAtIndex:idx];
-//                        NSDate *update_datetime = [dateFormat dateFromString:[exfeeobj objectForKey:@"time"]]; 
-//                        time=[exfeeobj objectForKey:@"time"];
-//                        lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
-//                    }
-//                    if([addexfee count]>0) {
-//                        
-//                    NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
-//                        [dict setObject:addexfee forKey:@"data"];
-//                        [dict setObject:time forKey:@"time"];
-//                        [dbu updateActivityWithobj:dict action:@"addexfee" cross_id:cross_id];
-//                    }
-//
-//                }
-//                if([delexfee isKindOfClass:[NSArray class]])
-//                {
-//                    NSString *time=@"";
-//                    for(int idx=[delexfee count]-1;idx>=0;idx--)
-//                    {
-//                        NSDictionary *exfeeobj=[delexfee objectAtIndex:idx];
-//                        NSDate *update_datetime = [dateFormat dateFromString:[exfeeobj objectForKey:@"time"]]; 
-//                        time=[exfeeobj objectForKey:@"time"];
-//                        //                        if(by_user_id!=app.userid)
-//                        //                        {
-//                        //                            NSLog(@"%@",exfeeobj);
-//                        //                        }
-//                        //                        [exfeeobj objectForKey:@""]
-//                        lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
-//                    }
-//                    if([delexfee count]>0) {
-//                        
-//                        NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
-//                        [dict setObject:delexfee forKey:@"data"];
-//                        [dict setObject:time forKey:@"time"];
-//                        [dbu updateActivityWithobj:dict action:@"delexfee" cross_id:cross_id];
-//                    }
-//                    
-//                }                
-//                if([change isKindOfClass:[NSDictionary class]])
-//                {
-//                    NSDate* changeupdatetime=[dbu updateCrossWithCrossId:cross_id change:(NSDictionary*)change lastupdatetime:lastUpdateTime_datetime] ;
-//                    [dbu setCrossStatusWithCrossId:cross_id status:1];
-//
-//                    lastUpdateTime_datetime=[changeupdatetime laterDate:lastUpdateTime_datetime];
-//
-//                }
-                
+                NSDate *update_datetime = [dateFormat dateFromString:[updateobj objectForKey:@"time"]]; 
+                lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
             }
+            
         }
         lastUpdateTime = [dateFormat stringFromDate:lastUpdateTime_datetime]; 
         [dateFormat release];

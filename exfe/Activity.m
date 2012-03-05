@@ -91,6 +91,8 @@
     else
         activity.place_line1 = @"";
 
+    activity.time_type=[dict objectForKey:@"x_time_type"];
+
     
     //TODO: use time_type to format timestr.
     activity.action = action;
@@ -134,14 +136,13 @@
                     }
                 }
                 activity.withmsg = withmsg;
-                int time_type=[[dict objectForKey:@"x_time_type"] intValue];
                 NSString *begin_at=@"";
                 if([dict objectForKey:@"x_begin_at"]!=nil)
                     begin_at = [dict objectForKey:@"x_begin_at"];
                 else
                     begin_at = @"";
-
-                activity.begin_at=[Util getTimeStr:time_type time:begin_at];
+                activity.begin_at=begin_at;
+//                activity.begin_at=[Util getTimeStr:time_type time:begin_at];
                 activity.action=@"gather";
             }
         }
@@ -158,11 +159,6 @@
     else
         activity.title = @"";
 
-//    if([dict objectForKey:@"by_name"]!=nil)
-//        activity.by_name = [dict objectForKey:@"by_name"];
-//    else
-//        activity.by_name = @"";
-    
     if([dict objectForKey:@"to_name"]!=nil)
         activity.to_name = [dict objectForKey:@"to_name"];
     else

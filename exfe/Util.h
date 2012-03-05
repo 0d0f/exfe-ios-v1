@@ -12,5 +12,6 @@
     
 }
 + (NSString*) getTimeStr:(int)time_type time:(NSString*)timestr;
-+ (NSString*) getLongLocalTimeStr:(int)time_type time:(NSString*)utc_timestr;
++ (NSString*) getLongLocalTimeStrWithTimetype:(NSString*)time_type time:(NSString*)utc_timestr;
++ (UIColor*) getHighlightColor;
 @end

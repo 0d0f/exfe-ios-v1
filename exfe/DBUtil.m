@@ -755,7 +755,7 @@ static sqlite3 *database;
 	} 
     sqlite3_stmt *stm=nil;
     
-    const char *sql = "insert or replace into activity (log_id, by_id, to_id, cross_id,by_name,by_avatar,to_name,to_avatar, time, action, withmsg,invitationmsg,data,to_identities) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    const char *sql = "insert or replace into activity (log_id, by_id, to_id, cross_id,by_name,by_avatar,to_name,to_avatar, time, action, withmsg,invitationmsg,data,to_identities,title) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
     {
         if(activity.data==nil)
@@ -775,6 +775,7 @@ static sqlite3 *database;
         sqlite3_bind_text(stm,12, [activity.invitationmsg UTF8String], -1, SQLITE_TRANSIENT);
         sqlite3_bind_text(stm,13, [activity.data UTF8String], -1, SQLITE_TRANSIENT);
         sqlite3_bind_text(stm,14, [[activity.to_identities JSONRepresentation] UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,15, [activity.title UTF8String], -1, SQLITE_TRANSIENT);
 
         if(sqlite3_step(stm)== SQLITE_DONE)
         {
@@ -794,7 +795,7 @@ static sqlite3 *database;
 
 - (NSMutableArray*) getRecentActivityFromLogid:(int)log_id start:(int)start num:(int)num
 {
-    const char *sql="select log_id, by_id, to_id, cross_id, `time`, action, data, by_name, by_avatar, to_name, to_avatar,title,withmsg,invitationmsg,c.begin_at,c.place_line1,c.time_type,c.place_line2,to_identities from activity a, crosses c where a.cross_id=c.id and log_id>=? order by time desc limit ?,?;";
+    const char *sql="select log_id, by_id, to_id, cross_id, `time`, action, data, by_name, by_avatar, to_name, to_avatar,a.title,withmsg,invitationmsg,c.begin_at,c.place_line1,c.time_type,c.place_line2,to_identities from activity a, crosses c where a.cross_id=c.id and log_id>=? order by time desc limit ?,100;";
     NSMutableArray *activitylist=[[NSMutableArray alloc] initWithCapacity:num];
     
     NSString *sqldbpath=[DBUtil DBPath];

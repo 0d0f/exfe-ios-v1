@@ -96,7 +96,8 @@
     }
 }
 - (void)hiddenBylineWithMsgHeight:(int)height {
-    [cellByTitle setHidden:YES];
+//    [cellByTitle setHidden:YES];
+    cellByTitle.text=@"";
     CGRect msgrect=cellActionMsg.frame;
     msgrect.size.height=height;
     [cellActionMsg setFrame:msgrect];
@@ -106,5 +107,8 @@
     msgrect.size.height=height;
     [cellActionMsg setFrame:msgrect];
     
+}
+- (void)setChangeHighlightMode{
+    [cellActionMsg setTextColor:[Util getHighlightColor]];
 }
 @end

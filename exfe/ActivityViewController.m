@@ -107,14 +107,17 @@
 {
     Activity *activity=[activityList objectAtIndex:indexPath.row];
     if([activity.action isEqualToString:@"gather"])
-        return 81;
-    CGSize maximumLabelSize = CGSizeMake(255,9999);
-    CGSize expectedLabelSize = [[self getMsgWithActivity:activity] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap];
-    if([activity.action isEqualToString:@"conversation"])
-        return 5+18+18+expectedLabelSize.height+4;
+        return 91;
     else
-        return 5+18+18+expectedLabelSize.height+4;
+        return 73;
+//    CGSize maximumLabelSize = CGSizeMake(255,9999);
+//    CGSize expectedLabelSize = [[self getMsgWithActivity:activity] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap];
+//    if([activity.action isEqualToString:@"conversation"])
+//        return 73;
+//    else
+//        return 5+18+18+expectedLabelSize.height+4;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     DBUtil *dbu=[DBUtil sharedManager];
@@ -131,6 +134,7 @@
     
     [detailViewController release]; 	
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {   
     Activity *activity=[activityList objectAtIndex:indexPath.row];
@@ -153,26 +157,16 @@
             [(NotificationCrossCellView *)cell setCrossDetail:activity.data];
             [(NotificationCrossCellView *)cell setInvitationMsg:[NSString stringWithFormat:@"Invitation from %@",activity.by_name]];
             [(NotificationCrossCellView *)cell setWithMsg:[self getWithMsg:activity]];
-            NSLog(@"%@",activity.begin_at);
-            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-            [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-            [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-            NSDate *time_datetime = [dateFormat dateFromString:activity.begin_at]; 
-
-            [dateFormat setTimeZone:[NSTimeZone defaultTimeZone]];
-            [dateFormat setDateFormat:@"h:ma ccc, MMM   d"];
-            
-            NSString *begin_at_formatstr=[dateFormat stringFromDate:time_datetime];
-            [dateFormat release];
-
-            NSString *x_str=begin_at_formatstr;
+            NSString *x_str=[Util getLongLocalTimeStrWithTimetype:activity.time_type time:activity.begin_at];
             if (![activity.place_line1 isEqualToString:@""])
-                x_str=[x_str stringByAppendingFormat:@"%@ at %@",begin_at_formatstr,activity.place_line1];
+                x_str=[x_str stringByAppendingFormat:@"%@ at %@",x_str,activity.place_line1];
+            
+            if( [x_str isEqualToString:@""] && [activity.place_line1 isEqualToString:@""])
+                x_str=@"Time and Place to be decided.";
+            
             [(NotificationCrossCellView *)cell setCrossDetail:x_str];
             [(NotificationCrossCellView *)cell setLabelTime:[self formattedDateRelativeToNow:activity.time]];
-
         }
-        
     }
     else if([activity.action isEqualToString:@"addexfee"] || [activity.action isEqualToString:@"delexfee"]) {//crosses view
         static NSString *MyIdentifier = @"tblActivityView";
@@ -196,6 +190,27 @@
             if(activity.by_id>0)
                 [(ActivityCellView *)cell setByTitle:[NSString stringWithFormat:@"by %@", activity.by_name]];
         }
+    } else if([activity.action isEqualToString:@"conversation"]){
+        static NSString *MyIdentifier = @"tblConversationView";
+        cell = (NotificationConversationCellView *)[tableView dequeueReusableCellWithIdentifier:MyIdentifier];
+        if(cell == nil) {
+            NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"NotificationConversationCellView" owner:nil options:nil];
+            for (id currentObject in topLevelObjects){
+                if([currentObject isKindOfClass:[UITableViewCell class]]){
+                    cell = (UITableViewCell *) currentObject;
+                    break;
+                }
+            }
+        }
+        [(NotificationConversationCellView *)cell setMsg:[self getMsgWithActivity:activity]];
+        [(NotificationConversationCellView *)cell setLabelTime:[self formattedDateRelativeToNow:activity.time]];
+        
+        [(NotificationConversationCellView *)cell setLabelCrossTitle:activity.title];
+        CGSize maximumLabelSize = CGSizeMake(255,9999);
+        CGSize expectedLabelSize = [[self getMsgWithActivity:activity] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap];
+        [(NotificationConversationCellView *)cell setHeight:expectedLabelSize.height];
+
+
     } else {
         static NSString *MyIdentifier = @"tblActivityView";
         cell = (ActivityCellView *)[tableView dequeueReusableCellWithIdentifier:MyIdentifier];
@@ -210,10 +225,8 @@
         }
         [(ActivityCellView *)cell setActionMsg:[self getMsgWithActivity:activity]];
         [(ActivityCellView *)cell setLabelTime:[self formattedDateRelativeToNow:activity.time]];
-
         [(ActivityCellView *)cell setLabelCrossTitle:activity.title];
         BOOL ismyaction=NO;
-
         if([activity.to_identities isKindOfClass:[NSArray class]]) {
             for (int i=0;i<[activity.to_identities count];i++) {
                 NSDictionary *exfee=(NSDictionary*)[activity.to_identities objectAtIndex:i];
@@ -227,14 +240,12 @@
             [(ActivityCellView *)cell setByTitle:[@"by " stringByAppendingString:activity.by_name]];
         else
             [(ActivityCellView *)cell setByTitle:@""];
-        CGSize maximumLabelSize = CGSizeMake(255,9999);
-        CGSize expectedLabelSize = [[self getMsgWithActivity:activity] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap];
-        [(ActivityCellView *)cell setModel:0 height:expectedLabelSize.height];
-
-        if([activity.action isEqualToString:@"conversation"]) //hidden by line
-            [(ActivityCellView *)cell hiddenBylineWithMsgHeight:expectedLabelSize.height]; 
-        else if([activity.action isEqualToString:@"title"] || [activity.action isEqualToString:@"begin_at"]|| [activity.action isEqualToString:@"place"]|| [activity.action isEqualToString:@"description"])
-            [(ActivityCellView *)cell showBylineWithMsgHeight:expectedLabelSize.height];
+            if([activity.action isEqualToString:@"title"] || [activity.action isEqualToString:@"begin_at"]|| [activity.action isEqualToString:@"place"]|| [activity.action isEqualToString:@"description"])
+        {
+            [(ActivityCellView *)cell setChangeHighlightMode];
+            if(ismyaction==NO)
+                [(ActivityCellView *)cell setByTitle:[@"update by " stringByAppendingString:activity.by_name]];
+        }
     }
     dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
     dispatch_async(imgQueue, ^{
@@ -245,10 +256,12 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             if(image!=nil && ![image isEqual:[NSNull null]])
             {
-                if([cell isKindOfClass:[ActivityCellView class]])
-                    [(ActivityCellView*)cell setAvartar:image];
-                else if([cell isKindOfClass:[NotificationCrossCellView class]])
-                    [(NotificationCrossCellView*)cell setAvartar:image];
+                if([cell isKindOfClass:[UITableViewCell class]])
+                        [(UITableViewCell*)cell setAvartar:image];
+//                if([cell isKindOfClass:[ActivityCellView class]])
+//                    [(ActivityCellView*)cell setAvartar:image];
+//                else if([cell isKindOfClass:[NotificationCrossCellView class]])
+//                    [(NotificationCrossCellView*)cell setAvartar:image];
             }
         });
     });
@@ -327,10 +340,16 @@
             if([placeobj objectForKey:@"line2"]!=nil && ![[placeobj objectForKey:@"line2"] isEqualToString:@""])
                 line2=[placeobj objectForKey:@"line2"];
                 
-            msg=[NSString stringWithFormat:@"new place %@(%@)",line1,line2]; 
+            msg=[NSString stringWithFormat:@"%@(%@)",line1,line2]; 
+        }
+        else if([activity.action isEqualToString:@"begin_at"]){
+            NSArray *arr=[activity.data componentsSeparatedByString:@","];
+            if([arr count]==2)
+                msg=[NSString stringWithFormat:@"%@",[Util getLongLocalTimeStrWithTimetype:[arr objectAtIndex:1]  time:[arr objectAtIndex:0]]]; 
+            
         }
         else
-            msg=[NSString stringWithFormat:@"new %@: %@",activity.action,activity.data]; 
+            msg=[NSString stringWithFormat:@"%@",activity.data]; 
     }
     return msg;
 }
@@ -351,13 +370,8 @@
                 msg = [msg stringByAppendingFormat:@",%@ ",to_name];
             count++;
         }
-        if(count>=2)
-            break;
     }
-    if([exfees count]-count>=1)
-        msg = [msg stringByAppendingFormat:@"and %d others ",[exfees count]-count];
-    if(![msg isEqualToString:@""])
-        msg = [NSString stringWithFormat:@"with %@",msg];
+    msg = [NSString stringWithFormat:@"with other %d: %@ ",count,msg];    
     return msg;
 }
 
