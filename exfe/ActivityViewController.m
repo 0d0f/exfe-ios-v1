@@ -181,11 +181,12 @@
             }            
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
             CGSize maximumLabelSize = CGSizeMake(255,9999);
-            CGSize expectedLabelSize = [[self getMsgWithActivity:activity] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap];
+            CGSize expectedLabelSize = [[self setMsgWithActivity:activity Label:nil] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap];
             [(ActivityCellView *)cell setModel:0 height:expectedLabelSize.height];
             
             [(ActivityCellView *)cell setLabelCrossTitle:activity.title];
-            [(ActivityCellView *)cell setActionMsg:[self getMsgWithActivity:activity]];
+            
+            [self setMsgWithActivity:activity Label:((ActivityCellView *)cell).cellActionMsg];
             [(ActivityCellView *)cell setLabelTime:[self formattedDateRelativeToNow:activity.time]];
             if(activity.by_id>0)
                 [(ActivityCellView *)cell setByTitle:[NSString stringWithFormat:@"by %@", activity.by_name]];
@@ -202,12 +203,12 @@
                 }
             }
         }
-        [(NotificationConversationCellView *)cell setMsg:[self getMsgWithActivity:activity]];
+        [(NotificationConversationCellView *)cell setMsg:[self setMsgWithActivity:activity Label:nil]];
         [(NotificationConversationCellView *)cell setLabelTime:[self formattedDateRelativeToNow:activity.time]];
         
         [(NotificationConversationCellView *)cell setLabelCrossTitle:activity.title];
         CGSize maximumLabelSize = CGSizeMake(255,9999);
-        CGSize expectedLabelSize = [[self getMsgWithActivity:activity] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap];
+        CGSize expectedLabelSize = [[self setMsgWithActivity:activity Label:nil] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap];
         [(NotificationConversationCellView *)cell setHeight:expectedLabelSize.height];
 
 
@@ -223,7 +224,7 @@
                 }
             }
         }
-        [(ActivityCellView *)cell setActionMsg:[self getMsgWithActivity:activity]];
+        [self setMsgWithActivity:activity Label:((ActivityCellView *)cell).cellActionMsg];
         [(ActivityCellView *)cell setLabelTime:[self formattedDateRelativeToNow:activity.time]];
         [(ActivityCellView *)cell setLabelCrossTitle:activity.title];
         BOOL ismyaction=NO;
@@ -240,12 +241,14 @@
             [(ActivityCellView *)cell setByTitle:[@"by " stringByAppendingString:activity.by_name]];
         else
             [(ActivityCellView *)cell setByTitle:@""];
-            if([activity.action isEqualToString:@"title"] || [activity.action isEqualToString:@"begin_at"]|| [activity.action isEqualToString:@"place"]|| [activity.action isEqualToString:@"description"])
+        
+        if([activity.action isEqualToString:@"title"] || [activity.action isEqualToString:@"begin_at"]|| [activity.action isEqualToString:@"place"]|| [activity.action isEqualToString:@"description"])
         {
-            [(ActivityCellView *)cell setChangeHighlightMode];
             if(ismyaction==NO)
                 [(ActivityCellView *)cell setByTitle:[@"update by " stringByAppendingString:activity.by_name]];
         }
+        
+        
     }
     dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
     dispatch_async(imgQueue, ^{
@@ -270,7 +273,8 @@
     return cell;
 }
 
-- (NSString*)getMsgWithActivity:(Activity*)activity
+//- (NSString*)getMsgWithActivity:(Activity*)activity
+- (NSString*)setMsgWithActivity:(Activity*)activity Label:(NIAttributedLabel*)label
 {
     NSString *msg=@"";
     if([activity.action isEqualToString:@"conversation"])
@@ -294,21 +298,31 @@
         }
     }
     else if([activity.action isEqualToString:@"addexfee"]) {
+        NSMutableArray *rangearray=[[NSMutableArray alloc] initWithCapacity:5];
         NSArray *exfees=activity.to_identities ;
         if([exfees count]>0) {
             for (int i=0;i<[exfees count];i++) {
                 NSDictionary *exfee=(NSDictionary*)[exfees objectAtIndex:i];
                 NSString *to_name=[exfee objectForKey:@"name"];
                 if(i==0)
-                    msg = [msg stringByAppendingFormat:@"%@ ",to_name];
+                {
+                    [rangearray addObject:[NSValue valueWithRange:NSMakeRange([msg length], [to_name length])]];
+                    msg = [msg stringByAppendingFormat:@"%@",to_name];
+                }
                 else
-                    msg = [msg stringByAppendingFormat:@",%@ ",to_name];
+                {
+                    [rangearray addObject:[NSValue valueWithRange:NSMakeRange([msg length]+1, [to_name length])]];
+                    msg = [msg stringByAppendingFormat:@",%@",to_name];
+                }
             }
             if([exfees count]==1)
-                msg = [msg stringByAppendingFormat:@"is invited"];
+                msg = [msg stringByAppendingFormat:@" is invited"];
             else if([exfees count]>1)
-                msg = [msg stringByAppendingFormat:@"are invited"];
+                msg = [msg stringByAppendingFormat:@" are invited"];
         }
+        [label setText:msg];
+        for(NSValue *range in rangearray)
+            [label setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12] range:[range rangeValue]];
     }
     else if([activity.action isEqualToString:@"delexfee"])
     {
@@ -327,6 +341,7 @@
             else if([exfees count]>1)
                 msg = [msg stringByAppendingFormat:@"are deleted"];
         }
+        [label setText:msg];
     }
     else if([activity.action isEqualToString:@"title"] || [activity.action isEqualToString:@"begin_at"]|| [activity.action isEqualToString:@"place"]|| [activity.action isEqualToString:@"description"])
     {
@@ -350,6 +365,8 @@
         }
         else
             msg=[NSString stringWithFormat:@"%@",activity.data]; 
+        [label setText:msg];
+        [label setTextColor:[Util getHighlightColor] range:NSMakeRange(0, [msg length])];
     }
     return msg;
 }

@@ -10,6 +10,8 @@
 
 @implementation ActivityCellView
 
+@synthesize cellActionMsg;
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -28,15 +30,10 @@
 }
 
 - (void)setActionMsg:(NSString *)_text {
-    cellActionMsg.text=_text;
+    [cellActionMsg setText:_text];
+    [cellActionMsg setTextColor:[UIColor blueColor] range:NSMakeRange(0,5)];
 }
 - (void)setLabelTime:(NSString *)_text {
-//    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-//    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//    NSDate *time_datetime = [dateFormat dateFromString:_text]; 
-//    [dateFormat setDateFormat:@"HH:mm MM-dd"];
-//    cellTime.text=[dateFormat stringFromDate:time_datetime]; 
-//    [dateFormat release];
     cellTime.text=_text;
 }
 - (void)setAvartar:(UIImage*)_img {
@@ -106,6 +103,9 @@
     CGRect msgrect=cellActionMsg.frame;
     msgrect.size.height=height;
     [cellActionMsg setFrame:msgrect];
+    
+}
+- (void)setAttributedActionMsg:(CFMutableAttributedStringRef *)_text{
     
 }
 - (void)setChangeHighlightMode{

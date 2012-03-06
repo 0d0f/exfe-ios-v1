@@ -526,20 +526,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "exfe/ActivityCellView.m"
-         timestampString = "352307267.065856"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "112"
-         endingLineNumber = "112"
-         landmarkName = "-setChangeHighlightMode"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
          filePath = "exfe/RootViewController.m"
          timestampString = "352634002.856084"
          startingColumnNumber = "9223372036854775807"
@@ -597,26 +583,12 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "exfe/ActivityViewController.m"
-         timestampString = "352633410.17236"
+         timestampString = "352700799.364052"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "194"
-         endingLineNumber = "194"
+         startingLineNumber = "195"
+         endingLineNumber = "195"
          landmarkName = "-tableView:cellForRowAtIndexPath:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "exfe/DBUtil.m"
-         timestampString = "352633675.087275"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "896"
-         endingLineNumber = "896"
-         landmarkName = "-getRecentActivityFromLogid:start:num:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -631,6 +603,20 @@
          startingLineNumber = "246"
          endingLineNumber = "246"
          landmarkName = "-LoadUpdate"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "exfe/TTTAttributedLabel.m"
+         timestampString = "352639902.42932"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "390"
+         endingLineNumber = "390"
+         landmarkName = "-setText:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

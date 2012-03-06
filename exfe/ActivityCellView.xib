@@ -87,7 +87,7 @@
 							<object class="IBUILabel" id="736319766">
 								<reference key="NSNextResponder" ref="963428859"/>
 								<int key="NSvFlags">293</int>
-								<string key="NSFrame">{{57, 28}, {225, 18}}</string>
+								<string key="NSFrame">{{58, 27}, {225, 18}}</string>
 								<reference key="NSSuperview" ref="963428859"/>
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="26526930"/>
@@ -97,7 +97,7 @@
 								<int key="IBUIContentMode">9</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-								<string key="IBUIText">test....test...中文.test....test....test....test...</string>
+								<string key="IBUIText">test....test...中文</string>
 								<object class="NSColor" key="IBUITextColor">
 									<int key="NSColorSpace">1</int>
 									<bytes key="NSRGB">MC4yIDAuMiAwLjIAA</bytes>
@@ -265,9 +265,9 @@
 						<array class="NSMutableArray" key="children">
 							<reference ref="660612066"/>
 							<reference ref="925945215"/>
-							<reference ref="736319766"/>
 							<reference ref="26526930"/>
 							<reference ref="377931983"/>
+							<reference ref="736319766"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -309,6 +309,7 @@
 				<string key="4.CustomClassName">ActivityCellView</string>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="6.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="8.CustomClassName">NIAttributedLabel</string>
 				<string key="8.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
@@ -392,6 +393,25 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">./Classes/ActivityViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NIAttributedLabel</string>
+					<string key="superclassName">UILabel</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<string key="NS.key.0">delegate</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<string key="NS.key.0">delegate</string>
+						<object class="IBToOneOutletInfo" key="NS.object.0">
+							<string key="name">delegate</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">./Classes/NIAttributedLabel.h</string>
 					</object>
 				</object>
 			</array>

@@ -10,7 +10,6 @@
 #import "ActivityCellView.h"
 #import "NotificationCrossCellView.h"
 #import "NotificationConversationCellView.h"
-
 #import "Activity.h"
 #import "PullRefreshTableViewController.h"
 
@@ -26,7 +25,7 @@
 @property (retain,nonatomic) NSMutableArray* activityList;
 
 - (IBAction) Done:(id) sender;
-- (NSString*)getMsgWithActivity:(Activity*)activity;
+- (NSString*)setMsgWithActivity:(Activity*)activity Label:(NIAttributedLabel*)label;
 - (NSString*)getWithMsg:(Activity*)activity;
 - (void)pushback;
 - (NSString *) formattedDateRelativeToNow:(NSString*)datestr;//(NSDate *)date;
