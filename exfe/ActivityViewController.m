@@ -110,12 +110,6 @@
         return 91;
     else
         return 73;
-//    CGSize maximumLabelSize = CGSizeMake(255,9999);
-//    CGSize expectedLabelSize = [[self getMsgWithActivity:activity] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap];
-//    if([activity.action isEqualToString:@"conversation"])
-//        return 73;
-//    else
-//        return 5+18+18+expectedLabelSize.height+4;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -169,7 +163,7 @@
         }
     }
     else if([activity.action isEqualToString:@"addexfee"] || [activity.action isEqualToString:@"delexfee"]) {//crosses view
-        static NSString *MyIdentifier = @"tblActivityView";
+        static NSString *MyIdentifier = @"tblActivityViewaddanddel";
         cell = (ActivityCellView *)[tableView dequeueReusableCellWithIdentifier:MyIdentifier];
         if(cell == nil) {
             NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"ActivityCellView" owner:nil options:nil];
@@ -183,7 +177,6 @@
             CGSize maximumLabelSize = CGSizeMake(255,9999);
             CGSize expectedLabelSize = [[self setMsgWithActivity:activity Label:nil] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap];
             [(ActivityCellView *)cell setModel:0 height:expectedLabelSize.height];
-            
             [(ActivityCellView *)cell setLabelCrossTitle:activity.title];
             
             [self setMsgWithActivity:activity Label:((ActivityCellView *)cell).cellActionMsg];
@@ -203,7 +196,7 @@
                 }
             }
         }
-        [(NotificationConversationCellView *)cell setMsg:[self setMsgWithActivity:activity Label:nil]];
+        [self setMsgWithActivity:activity Label:((NotificationConversationCellView *)cell).cellCrossDetail];
         [(NotificationConversationCellView *)cell setLabelTime:[self formattedDateRelativeToNow:activity.time]];
         
         [(NotificationConversationCellView *)cell setLabelCrossTitle:activity.title];
@@ -273,31 +266,48 @@
     return cell;
 }
 
+#pragma mark - Cell data process
 //- (NSString*)getMsgWithActivity:(Activity*)activity
 - (NSString*)setMsgWithActivity:(Activity*)activity Label:(NIAttributedLabel*)label
 {
     NSString *msg=@"";
-    if([activity.action isEqualToString:@"conversation"])
+    if([activity.action isEqualToString:@"conversation"]) {
         msg=[NSString stringWithFormat:@"%@: %@",[activity.by_name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],activity.data];
-    else if([activity.action isEqualToString:@"confirmed"] || [activity.action isEqualToString:@"interested"] || [activity.action isEqualToString:@"declined"])
-    {
+        [label setText:msg];
+        [label setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12] range:NSMakeRange(0, [[activity.by_name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length])];
+
+    }
+    else if([activity.action isEqualToString:@"confirmed"] || [activity.action isEqualToString:@"interested"] || [activity.action isEqualToString:@"declined"]) {
         NSArray *exfees=activity.to_identities ;
+        NSMutableArray *rangearray=[[NSMutableArray alloc] initWithCapacity:5];
+
         if([exfees count]>0) {
             for (int i=0;i<[exfees count];i++) {
                 NSDictionary *exfee=(NSDictionary*)[exfees objectAtIndex:i];
                 NSString *to_name=[exfee objectForKey:@"name"];
                 if(i==0)
-                    msg = [msg stringByAppendingFormat:@"%@ ",to_name];
-                else
-                    msg = [msg stringByAppendingFormat:@",%@ ",to_name];
+                {
+                    [rangearray addObject:[NSValue valueWithRange:NSMakeRange([msg length], [to_name length])]];
+
+                    msg = [msg stringByAppendingFormat:@"%@",to_name];
+                }
+                else{
+                    [rangearray addObject:[NSValue valueWithRange:NSMakeRange([msg length]+1, [to_name length])]];
+
+                    msg = [msg stringByAppendingFormat:@",%@",to_name];
+                }
             }
             if([exfees count]==1)
-                msg = [msg stringByAppendingFormat:@"is %@",activity.action];
+                msg = [msg stringByAppendingFormat:@" is %@",activity.action];
             else if([exfees count]>1)
-                msg = [msg stringByAppendingFormat:@"are %@",activity.action];
+                msg = [msg stringByAppendingFormat:@" are %@",activity.action];
         }
+        [label setText:msg];
+        for(NSValue *range in rangearray)
+            [label setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12] range:[range rangeValue]];
+
     }
-    else if([activity.action isEqualToString:@"addexfee"]) {
+    else if([activity.action isEqualToString:@"addexfee"] || [activity.action isEqualToString:@"delexfee"]) {
         NSMutableArray *rangearray=[[NSMutableArray alloc] initWithCapacity:5];
         NSArray *exfees=activity.to_identities ;
         if([exfees count]>0) {
@@ -315,33 +325,20 @@
                     msg = [msg stringByAppendingFormat:@",%@",to_name];
                 }
             }
-            if([exfees count]==1)
-                msg = [msg stringByAppendingFormat:@" is invited"];
-            else if([exfees count]>1)
-                msg = [msg stringByAppendingFormat:@" are invited"];
+            if([activity.action isEqualToString:@"addexfee"])
+                if([exfees count]==1)
+                    msg = [msg stringByAppendingFormat:@" is invited"];
+                else if([exfees count]>1)
+                    msg = [msg stringByAppendingFormat:@" are invited"];
+            if([activity.action isEqualToString:@"delexfee"])
+                if([exfees count]==1)
+                    msg = [msg stringByAppendingFormat:@" is deleted"];
+                else if([exfees count]>1)
+                    msg = [msg stringByAppendingFormat:@" are deleted"];
         }
         [label setText:msg];
         for(NSValue *range in rangearray)
             [label setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12] range:[range rangeValue]];
-    }
-    else if([activity.action isEqualToString:@"delexfee"])
-    {
-        NSArray *exfees=activity.to_identities ;
-        if([exfees count]>0) {
-            for (int i=0;i<[exfees count];i++) {
-                NSDictionary *exfee=(NSDictionary*)[exfees objectAtIndex:i];
-                NSString *to_name=[exfee objectForKey:@"name"];
-                if(i==0)
-                    msg = [msg stringByAppendingFormat:@"%@ ",to_name];
-                else
-                    msg = [msg stringByAppendingFormat:@",%@ ",to_name];
-            }
-            if([exfees count]==1)
-                msg = [msg stringByAppendingFormat:@"is deleted"];
-            else if([exfees count]>1)
-                msg = [msg stringByAppendingFormat:@"are deleted"];
-        }
-        [label setText:msg];
     }
     else if([activity.action isEqualToString:@"title"] || [activity.action isEqualToString:@"begin_at"]|| [activity.action isEqualToString:@"place"]|| [activity.action isEqualToString:@"description"])
     {

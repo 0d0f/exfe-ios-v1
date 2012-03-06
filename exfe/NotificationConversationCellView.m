@@ -9,6 +9,7 @@
 #import "NotificationConversationCellView.h"
 
 @implementation NotificationConversationCellView
+@synthesize cellCrossDetail;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

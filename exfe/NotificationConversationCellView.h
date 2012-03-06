@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
-
+#import "NIAttributedLabel.h"
 @interface NotificationConversationCellView : UITableViewCell{
     IBOutlet UIImageView *cellAvatar;
     IBOutlet UILabel *cellCrossTitle;
-    IBOutlet UILabel *cellCrossDetail;
+    IBOutlet NIAttributedLabel *cellCrossDetail;
     IBOutlet UILabel *cellTime;
 }
 
@@ -22,4 +22,5 @@
 - (void)setAvartar:(UIImage*)_img;
 - (void)setHeight:(int)height;
 
+@property (nonatomic,retain) NIAttributedLabel *cellCrossDetail;
 @end
