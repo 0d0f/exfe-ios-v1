@@ -11,6 +11,7 @@
 @implementation ActivityCellView
 
 @synthesize cellActionMsg;
+@synthesize cellByTitle;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

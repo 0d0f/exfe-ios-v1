@@ -17,7 +17,7 @@
     IBOutlet UIImageView *cellAvatar;
     IBOutlet UILabel *cellCrossTitle;
     IBOutlet NIAttributedLabel *cellActionMsg;
-    IBOutlet UILabel *cellByTitle;
+    IBOutlet NIAttributedLabel *cellByTitle;
     IBOutlet UILabel *cellTime;
 }
 - (void)setLabelCrossTitle:(NSString *)_text;
@@ -32,5 +32,6 @@
 - (void)setChangeHighlightMode;
 
 @property (nonatomic,retain) NIAttributedLabel *cellActionMsg;
+@property (nonatomic,retain) NIAttributedLabel *cellByTitle;
 
 @end

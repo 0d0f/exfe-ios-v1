@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "NIAttributedLabel.h"
+
 @interface NotificationConversationCellView : UITableViewCell{
     IBOutlet UIImageView *cellAvatar;
     IBOutlet UILabel *cellCrossTitle;

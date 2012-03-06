@@ -305,6 +305,7 @@
 				<string key="-2.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="19.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="21.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="23.CustomClassName">NIAttributedLabel</string>
 				<string key="23.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 				<string key="4.CustomClassName">ActivityCellView</string>
 				<string key="4.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -324,16 +325,16 @@
 					<string key="className">ActivityCellView</string>
 					<string key="superclassName">UITableViewCell</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
-						<string key="cellActionMsg">UILabel</string>
+						<string key="cellActionMsg">NIAttributedLabel</string>
 						<string key="cellAvatar">UIImageView</string>
-						<string key="cellByTitle">UILabel</string>
+						<string key="cellByTitle">NIAttributedLabel</string>
 						<string key="cellCrossTitle">UILabel</string>
 						<string key="cellTime">UILabel</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="cellActionMsg">
 							<string key="name">cellActionMsg</string>
-							<string key="candidateClassName">UILabel</string>
+							<string key="candidateClassName">NIAttributedLabel</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="cellAvatar">
 							<string key="name">cellAvatar</string>
@@ -341,7 +342,7 @@
 						</object>
 						<object class="IBToOneOutletInfo" key="cellByTitle">
 							<string key="name">cellByTitle</string>
-							<string key="candidateClassName">UILabel</string>
+							<string key="candidateClassName">NIAttributedLabel</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="cellCrossTitle">
 							<string key="name">cellCrossTitle</string>

@@ -149,13 +149,17 @@
             cell.selectionStyle=UITableViewCellSelectionStyleNone;
             [(NotificationCrossCellView *)cell setLabelCrossTitle:activity.title];
             [(NotificationCrossCellView *)cell setCrossDetail:activity.data];
-            [(NotificationCrossCellView *)cell setInvitationMsg:[NSString stringWithFormat:@"Invitation from %@",activity.by_name]];
-            [(NotificationCrossCellView *)cell setWithMsg:[self getWithMsg:activity]];
+            [((NotificationCrossCellView *)cell).cellInvitationMsg setText:[NSString stringWithFormat:@"Invitation from %@",activity.by_name]];
+
+            [((NotificationCrossCellView *)cell).cellInvitationMsg setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12] range:NSMakeRange([@"Invitation from " length], [activity.by_name length])];
+            
+            [self setWithMsg:activity Label:((NotificationCrossCellView *)cell).cellwithMsg];
+//            [(NotificationCrossCellView *)cell setWithMsg:[self getWithMsg:activity]];
+            
             NSString *x_str=[Util getLongLocalTimeStrWithTimetype:activity.time_type time:activity.begin_at];
             if (![activity.place_line1 isEqualToString:@""])
                 x_str=[x_str stringByAppendingFormat:@"%@ at %@",x_str,activity.place_line1];
-            
-            if( [x_str isEqualToString:@""] && [activity.place_line1 isEqualToString:@""])
+            if([x_str isEqualToString:@""] && [activity.place_line1 isEqualToString:@""])
                 x_str=@"Time and Place to be decided.";
             
             [(NotificationCrossCellView *)cell setCrossDetail:x_str];
@@ -231,17 +235,14 @@
         }
         
         if(ismyaction==NO)
-            [(ActivityCellView *)cell setByTitle:[@"by " stringByAppendingString:activity.by_name]];
+        {
+            [((ActivityCellView *)cell).cellByTitle setText:[@"updated by " stringByAppendingString:activity.by_name]];
+            
+            [((ActivityCellView *)cell).cellByTitle setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12] range:NSMakeRange([@"updated by " length],[activity.by_name length])];
+            
+        }
         else
             [(ActivityCellView *)cell setByTitle:@""];
-        
-        if([activity.action isEqualToString:@"title"] || [activity.action isEqualToString:@"begin_at"]|| [activity.action isEqualToString:@"place"]|| [activity.action isEqualToString:@"description"])
-        {
-            if(ismyaction==NO)
-                [(ActivityCellView *)cell setByTitle:[@"update by " stringByAppendingString:activity.by_name]];
-        }
-        
-        
     }
     dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
     dispatch_async(imgQueue, ^{
@@ -293,7 +294,6 @@
                 }
                 else{
                     [rangearray addObject:[NSValue valueWithRange:NSMakeRange([msg length]+1, [to_name length])]];
-
                     msg = [msg stringByAppendingFormat:@",%@",to_name];
                 }
             }
@@ -367,7 +367,9 @@
     }
     return msg;
 }
-- (NSString*)getWithMsg:(Activity*)activity{
+//- (NSString*)getWithMsg:(Activity*)activity{
+- (NSString*)setWithMsg:(Activity*)activity Label:(NIAttributedLabel*)label {
+
     NSString *msg=@"";
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
 
@@ -386,6 +388,8 @@
         }
     }
     msg = [NSString stringWithFormat:@"with other %d: %@ ",count,msg];    
+    [label setText:msg];
+    [label setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12] range:NSMakeRange([@"with other" length],[msg length]-[@"with other" length])];
     return msg;
 }
 

@@ -9,6 +9,8 @@
 #import "NotificationCrossCellView.h"
 
 @implementation NotificationCrossCellView
+@synthesize cellInvitationMsg;
+@synthesize cellwithMsg;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -33,9 +35,9 @@
     cellInvitationMsg.text=_text;
 }
 
-- (void)setExfee:(NSString *)_text {
-    cellexfee.text=_text;
-}
+//- (void)setExfee:(NSString *)_text {
+//    cellexfee.text=_text;
+//}
 - (void)setAvartar:(UIImage*)_img{
     cellAvatar.image=_img;
     cellAvatar.layer.cornerRadius = 5.0;
