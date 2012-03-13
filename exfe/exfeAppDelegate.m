@@ -161,7 +161,11 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    RootViewController *rootViewController = [viewControllers objectAtIndex:0];
 
+    [rootViewController performSelectorInBackground:@selector(refresh) withObject:NO];
+    
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
