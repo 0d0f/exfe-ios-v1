@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-static NSMutableDictionary *imgs;
 
 @interface ImgCache : NSObject {
     NSString *cachepath;    

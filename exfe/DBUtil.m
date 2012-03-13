@@ -28,7 +28,6 @@ static sqlite3 *database;
         database=nil;
         sharedManager = [[self alloc] init];
         NSString *dbpath=[DBUtil DBPath];
-        NSLog(@"dbpath:%@",dbpath);
         sqlite3_open([dbpath UTF8String], &database);  
     }
     }
@@ -138,66 +137,10 @@ static sqlite3 *database;
     }
 	return dbpath;
 }
-- (void) updateInvitationWithCrossId:(int)cross_id invitation:(NSDictionary*)invitationdict
-{
-    @synchronized(self) {
-	NSString *dbpath=[DBUtil DBPath];
-	NSFileManager *fileManager=[NSFileManager defaultManager];
-	BOOL success=[fileManager fileExistsAtPath:dbpath];
-	[fileManager release];
-	if(!success)
-	{
-		return;
-	} 
-    Invitation *invitationobj=[Invitation initWithDict:invitationdict EventID:cross_id];
 
-    sqlite3_stmt *stm=nil;
-    const char *selectsql = "select id from invitations where id=? and updated_at>?;";
-    if(sqlite3_prepare_v2(database, selectsql, -1, &stm, NULL)==SQLITE_OK)
-    {
-        sqlite3_bind_int(stm, 1, invitationobj.id);  
-        sqlite3_bind_text(stm,2,[invitationobj.updated_at UTF8String], -1, SQLITE_TRANSIENT);
-        
-        if(sqlite3_step(stm) != SQLITE_ROW)
-        {
-            const char *sql = "insert or replace into invitations (id,eventid,username,provider,state,avatar_file_name,user_id,identity_id,updated_at) values(?,?,?,?,?,?,?,?,?)";
-            if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
-            {
-                sqlite3_bind_int(stm, 1,invitationobj.id ); 
-                sqlite3_bind_int(stm, 2, cross_id); 
-                sqlite3_bind_text(stm,3,[invitationobj.username UTF8String], -1, SQLITE_TRANSIENT);
-                sqlite3_bind_text(stm,4,[invitationobj.provider UTF8String], -1, SQLITE_TRANSIENT);
-                sqlite3_bind_int(stm,5,invitationobj.state);
-                sqlite3_bind_text(stm,6,[invitationobj.avatar UTF8String], -1, SQLITE_TRANSIENT);
-                sqlite3_bind_int(stm, 7,invitationobj.user_id ); 
-                sqlite3_bind_int(stm, 8,invitationobj.identity_id ); 
-                sqlite3_bind_text(stm,9,[invitationobj.updated_at UTF8String], -1, SQLITE_TRANSIENT);
-                
-                if(sqlite3_step(stm)== SQLITE_DONE)
-                {
-                    
-                }
-                else 
-                {
-                    NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-                }            
-            }
-            else 
-            {
-                NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-            }   
-            
-        }
-    }
-    sqlite3_finalize(stm);     
-    }
-//    [self setCrossStatusWithCrossId:cross_id status:1];
- 
-}
 - (NSDate*) updateCrossWithCrossId:(int)cross_id change:(NSDictionary*)changes lastupdatetime:(NSDate*)lastUpdateTime_datetime
 {
     @synchronized(self) {
-    NSLog(@"update cross");
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
@@ -272,8 +215,6 @@ static sqlite3 *database;
     [dateFormat release];
     sqlite3_finalize(stm);   
     }
-//    [self setCrossStatusWithCrossId:cross_id status:1];
-
     return lastUpdateTime_datetime;
 }
 
@@ -292,7 +233,6 @@ static sqlite3 *database;
     const char *sql = "insert or replace into invitations (id,eventid,username,provider,state,avatar_file_name,identity_id,user_id,updated_at) values(?,?,?,?,?,?,?,?,?)";
     for(int i=0;i<[invitationdict count];i++)
     {
-        
         if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
         {
             Invitation *invitationobj=[Invitation initWithDict:[invitationdict objectAtIndex:i] EventID:eventid];
@@ -306,25 +246,65 @@ static sqlite3 *database;
             sqlite3_bind_int(stm, 8,invitationobj.user_id ); 
             sqlite3_bind_text(stm,9,[invitationobj.updated_at UTF8String], -1, SQLITE_TRANSIENT);
             
-            if(sqlite3_step(stm)== SQLITE_DONE)
-            {
-                
+            if(sqlite3_step(stm)== SQLITE_DONE) {
             }
-            else 
-            {
+            else {
                 NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
             }            
         }
-        else 
-        {
+        else {
             NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
         }
     }
-    
     sqlite3_finalize(stm);   
     }
 }
-- (NSArray*) getCommentWithEventid:(int)eventid
+
+- (void) updateInvitationobjWithCrossid:(int)cross_id identity_id:(NSArray*)to_identities rsvp:(NSString*)rsvp{
+    
+    @synchronized(self) {
+        NSString *dbpath=[DBUtil DBPath];
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        BOOL success=[fileManager fileExistsAtPath:dbpath];
+        [fileManager release];
+        if(!success) {
+            return;
+        } 
+        sqlite3_stmt *stm=nil;
+        const char *sql = "update invitations set state=? where eventid=? and identity_id=?;";
+        for(int i=0;i<[to_identities count];i++)
+        {
+            NSDictionary *to_identity=[to_identities objectAtIndex:i];
+            if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+            {
+                
+                if([rsvp isEqualToString:@"confirmed"] )
+                    sqlite3_bind_int(stm, 1,1); 
+                else if([rsvp isEqualToString:@"declined"] )
+                    sqlite3_bind_int(stm, 1,2); 
+                else if([rsvp isEqualToString:@"interested"] )
+                    sqlite3_bind_int(stm, 1,3); 
+                
+                sqlite3_bind_int(stm, 2, cross_id); 
+                sqlite3_bind_int(stm, 3, [[to_identity objectForKey:@"id"] intValue]); 
+                
+                if(sqlite3_step(stm)== SQLITE_DONE) {
+                }
+                else {
+                    NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+                }            
+            }
+            else {
+                NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+            }            
+            
+        }
+        sqlite3_finalize(stm);   
+    }    
+}
+
+
+- (NSMutableArray*) getCommentWithEventid:(int)eventid
 {
     
     const char *sql="SELECT `id` ,`eventid`,`comment`,`user_id`,`userjson`,`created_at`,`updated_at` from comments where eventid=? order by id desc limit 20;";
@@ -344,7 +324,7 @@ static sqlite3 *database;
         sqlite3_bind_int(stm, 1, eventid);  
 
         while(sqlite3_step(stm)== SQLITE_ROW)
-        {   Comment *commentobj=[[Comment alloc]init];
+        {   Comment *commentobj=[[[Comment alloc]init] autorelease];
             commentobj.id=sqlite3_column_int(stm, 0);
             commentobj.eventid=sqlite3_column_int(stm, 1);
             commentobj.comment =
@@ -363,54 +343,22 @@ static sqlite3 *database;
     sqlite3_finalize(stm);
     return commentlist;    
 }
-//- (NSArray*) getRecentEvent
-//{
-//    const char *sql="SELECT eventjson from eventobject order by eventid desc limit 50;";
-//    NSMutableArray *eventlist=[[NSMutableArray alloc] initWithCapacity:50];
-//
-//    NSString *dbpath=[DBUtil DBPath];
-//	NSFileManager *fileManager=[NSFileManager defaultManager];
-//	BOOL success=[fileManager fileExistsAtPath:dbpath];
-//	[fileManager release];
-//	if(!success)
-//	{
-//		return 0;
-//	} 
-//	sqlite3_stmt *stm=nil;
-//
-//		if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
-//		{
-//			//			sqlite3_bind_int(stm, 1, 1);  
-//			while(sqlite3_step(stm)== SQLITE_ROW)
-//			{
-//				
-//				NSString *eventjson=[NSString stringWithUTF8String:（sqlite3_column_text(stm, 0)];
-//                id eventobj=[eventjson JSONValue];
-//                if (eventobj !=nil)
-//                    [eventlist addObject:eventobj];
-//			}
-//		}
-//		sqlite3_finalize(stm);
-//    return eventlist;
-//}
 - (NSMutableArray*) getRecentEventObj
 {
     const char *sql="SELECT id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,flag,time_type from crosses order by updated_at desc limit 20;";
-    NSMutableArray *eventlist=[[NSMutableArray alloc] initWithCapacity:50];
+    NSMutableArray *eventlist=[[NSMutableArray alloc] initWithCapacity:50] ;
     
     NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
 	BOOL success=[fileManager fileExistsAtPath:dbpath];
 	[fileManager release];
-	if(!success)
-	{
+	if(!success){
 		return 0;
 	} 
 	sqlite3_stmt *stm=nil;
     
     if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
     {
-        //			sqlite3_bind_int(stm, 1, 1);  
         while(sqlite3_step(stm)== SQLITE_ROW)
         {   Cross *eventobj=[[[Cross alloc]init] autorelease];
             eventobj.id=sqlite3_column_int(stm, 0);
@@ -468,34 +416,6 @@ static sqlite3 *database;
 		sqlite3_finalize(stm);
 	return eventjson;    
 }
-//- (void) updateEventWithid:(int)eventid event:(NSString*)eventjson
-//{
-//    @synchronized(self) {
-//	NSString *_dbpath=[DBUtil DBPath];
-//	NSFileManager *fileManager=[NSFileManager defaultManager];
-//	BOOL success=[fileManager fileExistsAtPath:_dbpath];
-//	[fileManager release];
-//	if(!success)
-//	{
-//		return ;
-//	} 
-//        sqlite3_stmt *stm=nil;
-//		const char *sql = "insert or replace into eventobject (eventid,eventjson) values(?,?)";
-//		if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
-//		{
-//            sqlite3_bind_int(stm, 1, eventid);  
-//			sqlite3_bind_text(stm,2, [eventjson UTF8String], -1, SQLITE_TRANSIENT);
-//			if(sqlite3_step(stm)== SQLITE_DONE)
-//			{
-//			}
-//			else 
-//            {
-//				NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-//			}
-//		}
-//		sqlite3_finalize(stm);
-//    }
-//}
 
 - (NSArray*) getInvitationWithEventid:(int)eventid
 {
@@ -517,7 +437,7 @@ static sqlite3 *database;
         
         while(sqlite3_step(stm)== SQLITE_ROW)
         {   
-            Invitation *invitationobj=[[Invitation alloc]init];
+            Invitation *invitationobj=[[[Invitation alloc]init] autorelease];
             invitationobj.id=sqlite3_column_int(stm, 0);
             if((char*)sqlite3_column_text(stm, 1)!=nil)
                 invitationobj.username=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 1)];
@@ -586,6 +506,7 @@ static sqlite3 *database;
         if(![commentobj.comment isEqualToString:@""])
         if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
         {
+
             sqlite3_bind_int(stm, 1,commentobj.id ); 
             sqlite3_bind_int(stm, 2, cross_id); 
             sqlite3_bind_text(stm,3,[commentobj.comment UTF8String], -1, SQLITE_TRANSIENT);
@@ -743,7 +664,6 @@ static sqlite3 *database;
 - (void) updateActivityWithobj:(NSDictionary*)dict action:(NSString*)action  cross_id:(int)cross_id
 {
     @synchronized(self) {
-        NSLog(@"action:%@",action);
     Activity *activity=[Activity initWithDict:dict action:action cross_id:cross_id];
 	NSString *dbpath=[DBUtil DBPath];
 	NSFileManager *fileManager=[NSFileManager defaultManager];
@@ -907,7 +827,6 @@ static sqlite3 *database;
         Activity *activity=[activitylist objectAtIndex:i];
         if (activity.by_name == nil )
         {
-            NSLog(@"by_id:%u",activity.by_id);
             User *user=[self getUserWithid:activity.by_id];
             if (user !=nil && user.name != nil)
             {
@@ -975,7 +894,7 @@ static sqlite3 *database;
 		return nil;
 	} 
 	sqlite3_stmt *stm=nil;
-    User *user=[[User alloc]init];
+    User *user=[[[User alloc]init] autorelease];
     if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
     {
         sqlite3_bind_int(stm, 1, userid);  

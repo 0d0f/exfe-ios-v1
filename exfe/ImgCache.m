@@ -12,6 +12,7 @@
 @implementation ImgCache
 
 static id sharedManager = nil;
+static NSMutableDictionary *imgs;
 
 + (id)sharedManager {
     @synchronized(self)    

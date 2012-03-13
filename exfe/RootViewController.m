@@ -105,7 +105,16 @@
 - (BOOL)LoadUserEventsFromDB
 {
     DBUtil *dbu=[DBUtil sharedManager];
-    events=[dbu getRecentEventObj];
+    NSMutableArray *newevents=[dbu getRecentEventObj];
+    if(newevents!=nil && [newevents count]>0)
+    {
+        [events release];
+        events=nil;
+        events=newevents;
+    }
+    if([newevents count]==0)
+        [newevents release];
+    
     [tableview reloadData];
     return NO;
 }
@@ -126,6 +135,8 @@
     id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
     if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
     {
+        NSMutableArray *updateCrossIDList=[[NSMutableArray alloc] initWithCapacity:10];
+
         NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
 
@@ -133,27 +144,20 @@
         NSDate *lastUpdateTime_datetime = [dateFormat dateFromString:lastUpdateTime]; 
         
         id updateobjs=[jsonobj objectForKey:@"response"];
+        int vaildobjnum=0;
         if([updateobjs isKindOfClass:[NSArray class]])
         {
             NSArray *updatelist=(NSArray*)updateobjs;
             int count=[updatelist count];
-            
-            NSNumber *num=[[NSUserDefaults standardUserDefaults] objectForKey:@"notification_number"];
-
-            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:[num intValue]+count]  forKey:@"notification_number"];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            
-            for(int i=count-1;i>=0;i--)
-            {
+            for(int i=count-1;i>=0;i--) {
+                BOOL isSelf=NO;
                 NSDictionary *updateobj=[updatelist objectAtIndex:i];
                 int by_user_id=[[[updateobj objectForKey:@"by_identity"] objectForKey:@"user_id"] intValue];
-                if(by_user_id==app.userid)
-                    continue;
-                if([[updateobj objectForKey:@"action"] isEqualToString:@"conversation"])
-                {
+                if(by_user_id==app.userid) 
+                    isSelf=YES;
+                if([[updateobj objectForKey:@"action"] isEqualToString:@"conversation"]) {
                     id meta=[[updateobj objectForKey:@"meta"] JSONValue];
-                    if([meta isKindOfClass: [NSDictionary class]])
-                    {
+                    if([meta isKindOfClass: [NSDictionary class]]) {
                         NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
                         id postid=[meta objectForKey:@"id"];
                         if(postid!=nil)
@@ -170,19 +174,17 @@
 
                             [dbu updateConversationWithid:[[updateobj objectForKey:@"x_id"] intValue] cross:dict];
                             [dbu setCrossStatusWithCrossId:[[updateobj objectForKey:@"x_id"] intValue] status:1];
-                            [dbu updateActivityWithobj:dict action:@"conversation" cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                            if(isSelf==NO)
+                                [dbu updateActivityWithobj:dict action:@"conversation" cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                            vaildobjnum=vaildobjnum+1;
                             [dict release];
 
                         }
                     }
-                    NSDate *update_datetime = [dateFormat dateFromString:[updateobj objectForKey:@"time"]]; 
-                    lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
                 }
-                else if([[updateobj objectForKey:@"action"] isEqualToString:@"addexfee"] || [[updateobj objectForKey:@"action"] isEqualToString:@"delexfee"])
-                {
+                else if([[updateobj objectForKey:@"action"] isEqualToString:@"addexfee"] || [[updateobj objectForKey:@"action"] isEqualToString:@"delexfee"]) {
                     NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
                     id to_identity=[updateobj objectForKey:@"to_identity"];
-                    
                     if([to_identity isKindOfClass:[NSArray class]])
                         [dict setObject:[[updateobj objectForKey:@"to_identity"]  JSONRepresentation] forKey:@"to_identities"];
                     [dict setObject:[updateobj objectForKey:@"by_identity"] forKey:@"by_identity"];
@@ -196,14 +198,14 @@
                     }
                     if([updateobj objectForKey:@"x_time_type"]!=nil)
                             [dict setObject:[updateobj objectForKey:@"x_time_type"]  forKey:@"x_time_type"];
-
                     [dict setObject:[updateobj objectForKey:@"time"] forKey:@"time"];
                     [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
                     [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
-
-                    [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                    if(isSelf==NO)
+                        [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
                     [dict release];
-                    
+                    vaildobjnum=vaildobjnum+1;
+                    [updateCrossIDList addObject:[NSNumber numberWithInt:[[updateobj objectForKey:@"x_id"] intValue]]];
                 }
                 else if([[updateobj objectForKey:@"action"] isEqualToString:@"confirmed"] || [[updateobj objectForKey:@"action"] isEqualToString:@"declined"] || [[updateobj objectForKey:@"action"] isEqualToString:@"interested"])
                 {
@@ -216,9 +218,11 @@
                     [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
                     [dict setObject:[updateobj objectForKey:@"time"] forKey:@"time"];
                     [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
-                    [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                    [dbu updateInvitationobjWithCrossid:[[updateobj objectForKey:@"x_id"] intValue] identity_id:to_identity rsvp:[updateobj objectForKey:@"action"]];
+                    if(isSelf==NO)
+                        [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
                     [dict release];
-
+                    vaildobjnum=vaildobjnum+1;
                 }
                 else if([[updateobj objectForKey:@"action"] isEqualToString:@"title"] || [[updateobj objectForKey:@"action"] isEqualToString:@"begin_at"]|| [[updateobj objectForKey:@"action"] isEqualToString:@"place"]|| [[updateobj objectForKey:@"action"] isEqualToString:@"description"])
                 {
@@ -259,22 +263,60 @@
                     [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"line2"] forKey:@"place_line2"];
                     [dict setObject:[NSNumber numberWithInt:1] forKey:@"state"];
                     [dbu updateEventobjWithid:[[updateobj objectForKey:@"x_id"] intValue] event:dict isnew:YES];
-                    [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                    if(isSelf==NO)
+                        [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
                     [dict release];
+                    vaildobjnum=vaildobjnum+1;
                 }
                 NSDate *update_datetime = [dateFormat dateFromString:[updateobj objectForKey:@"time"]]; 
                 lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
             }
-            
         }
         lastUpdateTime = [dateFormat stringFromDate:lastUpdateTime_datetime]; 
         [dateFormat release];
         [[NSUserDefaults standardUserDefaults] setObject:lastUpdateTime  forKey:@"lastupdatetime"];
+        NSNumber *num=[[NSUserDefaults standardUserDefaults] objectForKey:@"notification_number"];
+        if(vaildobjnum>0)
+            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:[num intValue]+vaildobjnum]  forKey:@"notification_number"];
         [[NSUserDefaults standardUserDefaults] synchronize];
+
+        if([updateCrossIDList count] > 0) 
+        {
+            [updateCrossIDList setArray:[[NSSet setWithArray:updateCrossIDList] allObjects]];
+            APIHandler *api=[[APIHandler alloc]init];
+             NSString *responseString = [api getCrossesByIdList: [updateCrossIDList componentsJoinedByString:@","]];
+            [api release];
+
+            //[dbu updateEventobjWithid:[[updateobj objectForKey:@"x_id"] intValue] event:dict isnew:YES];
+            id jsonobj=[responseString JSONValue];
+            id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
+            if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
+            {
+                id updateobjs=[jsonobj objectForKey:@"response"];
+
+                if([updateobjs isKindOfClass:[NSArray class]])
+                {
+                    NSArray *updatelist=(NSArray*)updateobjs;
+                    int count=[updatelist count];
+                    
+                    
+                    for(int i=count-1;i>=0;i--)
+                    {
+                        NSDictionary *updateobj=[updatelist objectAtIndex:i];
+                        [dbu updateEventobjWithid:[[updateobj objectForKey:@"id"] integerValue] event:updateobj isnew:YES];
+                        [dbu updateInvitationobjWithid:[[updateobj objectForKey:@"id"] integerValue] event:[updateobj objectForKey:@"invitations"]];
+                        [dbu updateUserobjWithid:[[[updateobj objectForKey:@"host"] objectForKey:@"id"] integerValue] user:[updateobj objectForKey:@"host"]];
+                    }
+                }   
+            }
+        }
+        
+        [updateCrossIDList release];        
     }
     mapp.networkActivityIndicatorVisible = NO;
+
+
     [self LoadUserEventsFromDB];
-    
     [pool drain];
 }
 - (void)setNotificationButton:(BOOL)status
@@ -340,15 +382,12 @@
     
     UIApplication* mapp = [UIApplication sharedApplication];
     mapp.networkActivityIndicatorVisible = YES;
-    
-    
     if(app.api_key==nil)
         return;
     APIHandler *api=[[APIHandler alloc]init];
     NSString *responseString=[api getUserEvents];
     [api release];
     id jsonobj=[responseString JSONValue];
-
     id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
     if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
     {
@@ -363,7 +402,7 @@
         NSLog(@"error: %@",[[jsonobj objectForKey:@"meta"] objectForKey:@"error"]);
         
     }
-
+    
     mapp.networkActivityIndicatorVisible = NO;
     [self LoadUserEventsFromDB];
     
@@ -453,33 +492,39 @@
     Cross *event=[events objectAtIndex:indexPath.row];
 
     NSString *place=[event.place_line1 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSString *time=[event.begin_at stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-//    NSString *time_str=[time substringWithRange:NSMakeRange(11,8)];
-    if([place isEqualToString:@""]  && ([time isEqualToString:@"0000-00-00 00:00:00"] || event.time_type==3))
+    NSString *begin_at=[event.begin_at stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSArray *arr = [begin_at componentsSeparatedByString:@" "];
+
+    NSString *date=[arr objectAtIndex:0];
+    NSString *time=[arr objectAtIndex:1];
+    
+    if([place isEqualToString:@""] &&([date isEqualToString:@"0000-00-00"] && [time isEqualToString:@"00:00:00"] && [event.time_type isEqualToString:@""]))        
         [cell setCellModel:1];
     else
         [cell setCellModel:2];
 
     [cell setLabelText: [event.title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
     
-    if([time isEqualToString:@"0000-00-00 00:00:00"])
+    if([begin_at isEqualToString:@"0000-00-00 00:00:00"])
         [cell setLabelTime:@""];
     else
     {   
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSDate *time_datetime = [dateFormat dateFromString:time]; 
-        [dateFormat setTimeZone:[NSTimeZone defaultTimeZone]];
-        [dateFormat setDateFormat:@"ha ccc MM-dd"];
-        if(event.time_type==2)
-        {
-            [dateFormat setDateFormat:@"ccc MM-dd"];
-        }
-        NSString *result=[dateFormat stringFromDate:time_datetime]; 
+            NSString *x_str=[Util getLongLocalTimeStrWithTimetype:event.time_type time:begin_at];
+
+//        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+//        [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+//        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//        NSDate *time_datetime = [dateFormat dateFromString:time]; 
+//        [dateFormat setTimeZone:[NSTimeZone defaultTimeZone]];
+//        [dateFormat setDateFormat:@"ha ccc MM-dd"];
+//        if(event.time_type==2)
+//        {
+//            [dateFormat setDateFormat:@"ccc MM-dd"];
+//        }
+//        NSString *result=[dateFormat stringFromDate:time_datetime]; 
         
-        [cell setLabelTime:result];
-        [dateFormat release];
+        [cell setLabelTime:x_str];
+//        [dateFormat release];
     }
     [cell setLabelPlace:place];
 
@@ -531,6 +576,26 @@
     {
         event.flag=0;
         
+        NSNumber *num=[[NSUserDefaults standardUserDefaults] objectForKey:@"notification_number"];
+        if([num intValue]>0)
+        {
+            int newcross=0;
+            for(int i=0;i<[events count];i++)
+            {
+                Cross *cross=[events objectAtIndex:i];
+                if(cross.flag==1)
+                    newcross=newcross+1;
+            }
+            if(newcross==0)
+            {
+                [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:0]  forKey:@"notification_number"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+
+        }
+//        if(newcross==0)
+            
+
         [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
@@ -555,12 +620,21 @@
     NSMutableArray *activityList=[dbu getRecentActivityFromLogid:0 start:0 num:200];
     activeview.activityList = activityList;
     [self.navigationController pushViewController:activeview animated:YES];
-//    [self.navigationController navigationBar].backItem.title=@"crosses";
-//    self.navigationItem
-//    [self presentViewController:activeview animated:YES completion:^{return;}];
+    [self cleanAllCrossStatus];
     
  }
-
+- (void)cleanAllCrossStatus
+{
+    BOOL redraw=NO;
+    for(int i=0;i<[events count];i++)
+        if(((Cross*)[events objectAtIndex:i]).flag==1)
+        {
+            ((Cross*)[events objectAtIndex:i]).flag=0;
+            redraw=YES;
+        }
+    if(redraw==YES)
+        [tableview reloadData];
+}
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -585,8 +659,7 @@
 
 - (void)dealloc
 {
-    [events release];
-//    [eventData release];
+//    [events release];
     [super dealloc];
 }
 

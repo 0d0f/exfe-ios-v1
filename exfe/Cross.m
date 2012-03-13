@@ -112,7 +112,7 @@
    [place_line2 release];
    [created_at release];
    [updated_at release];
-   //[state release];  
+    [time_type release];
    [super dealloc];
 }
 @end

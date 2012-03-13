@@ -452,10 +452,43 @@
 			name = resource;
 			sourceTree = "<group>";
 		};
+		78742860150B52EE002F7D9E /* model */ = {
+			isa = PBXGroup;
+			children = (
+				786DE65914A4596C00477E39 /* Identity.h */,
+				786DE65A14A4596C00477E39 /* Identity.m */,
+				78BDB2F313A773A0004561EA /* User.h */,
+				78BDB2F413A773A0004561EA /* User.m */,
+				78978B1A14DCE17B003C76A1 /* Activity.h */,
+				78978B1B14DCE17B003C76A1 /* Activity.m */,
+				7894122813A2AEC2005B41F7 /* Cross.h */,
+				7894122913A2AEC2005B41F7 /* Cross.m */,
+				78BDB2EA13A512B7004561EA /* Comment.h */,
+				78BDB2EB13A512B7004561EA /* Comment.m */,
+				78BDB2F013A67B2E004561EA /* Invitation.h */,
+				78BDB2F113A67B2F004561EA /* Invitation.m */,
+			);
+			name = model;
+			sourceTree = "<group>";
+		};
+		78742861150B531F002F7D9E /* common */ = {
+			isa = PBXGroup;
+			children = (
+				7861AAE41354225C00FA13FA /* APIHandler.h */,
+				7861AAE51354225D00FA13FA /* APIHandler.m */,
+				78F75BE513B1089600C7B3CF /* ImgCache.h */,
+				78F75BE613B1089600C7B3CF /* ImgCache.m */,
+				7882BC90137079A4004F9DBD /* DBUtil.h */,
+				7882BC91137079A4004F9DBD /* DBUtil.m */,
+				78A6EAC914F36C14000CCD8B /* Util.h */,
+				78A6EACA14F36C15000CCD8B /* Util.m */,
+			);
+			name = common;
+			sourceTree = "<group>";
+		};
 		788C41FC133FA3D000AAA425 = {
 			isa = PBXGroup;
 			children = (
-				78A321A81504DA3400F1B1DB /* CoreText.framework */,
 				788C4211133FA3D000AAA425 /* exfe */,
 				788C4231133FA3D100AAA425 /* exfeTests */,
 				788C420A133FA3D000AAA425 /* Frameworks */,
@@ -475,6 +508,7 @@
 		788C420A133FA3D000AAA425 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				78A321A81504DA3400F1B1DB /* CoreText.framework */,
 				78F75BE313AFA86800C7B3CF /* QuartzCore.framework */,
 				7847F91B138EA8AE00540E8E /* EventKit.framework */,
 				7882BC8D137078A2004F9DBD /* libsqlite3.dylib */,
@@ -492,16 +526,12 @@
 				7803E21214DE5361008B76AD /* UIButton+StyledButton.m */,
 				78B320FA149FD9E500C87B7F /* UIBarButtonItem+StyledButton.h */,
 				78B320FB149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m */,
-				78D0D666149131BB00EA327C /* NSData+Base64.h */,
-				78D0D667149131BB00EA327C /* NSData+Base64.m */,
+				78742860150B52EE002F7D9E /* model */,
 				78A321A11504D0CF00F1B1DB /* lib */,
-				78A2B92813C4B2DD00032F61 /* JSON */,
-				78F75BDE13AFA83700C7B3CF /* PullRefreshTableViewController.h */,
-				78F75BDF13AFA83700C7B3CF /* PullRefreshTableViewController.m */,
-				78F75BC113AD3B9E00C7B3CF /* UIInputToolbar */,
+				78742861150B531F002F7D9E /* common */,
+				78090CF914A47ABB00AB0D66 /* TableViewCell */,
 				788C421A133FA3D000AAA425 /* exfeAppDelegate.h */,
 				788C421B133FA3D000AAA425 /* exfeAppDelegate.m */,
-				78090CF914A47ABB00AB0D66 /* TableViewCell */,
 				788C4220133FA3D000AAA425 /* RootViewController.h */,
 				788C4221133FA3D000AAA425 /* RootViewController.m */,
 				7861AA8013523F9100FA13FA /* LoginViewController.h */,
@@ -518,26 +548,6 @@
 				7867EBBE149F39D5002F401C /* CustomUINavigationBar.m */,
 				78B320FD149FEB5500C87B7F /* CustomUIToolbar.h */,
 				78B320FE149FEB5500C87B7F /* CustomUIToolbar.m */,
-				786DE65914A4596C00477E39 /* Identity.h */,
-				786DE65A14A4596C00477E39 /* Identity.m */,
-				78BDB2F313A773A0004561EA /* User.h */,
-				78BDB2F413A773A0004561EA /* User.m */,
-				78978B1A14DCE17B003C76A1 /* Activity.h */,
-				78978B1B14DCE17B003C76A1 /* Activity.m */,
-				7894122813A2AEC2005B41F7 /* Cross.h */,
-				7894122913A2AEC2005B41F7 /* Cross.m */,
-				78BDB2EA13A512B7004561EA /* Comment.h */,
-				78BDB2EB13A512B7004561EA /* Comment.m */,
-				78BDB2F013A67B2E004561EA /* Invitation.h */,
-				78BDB2F113A67B2F004561EA /* Invitation.m */,
-				7861AAE41354225C00FA13FA /* APIHandler.h */,
-				7861AAE51354225D00FA13FA /* APIHandler.m */,
-				78F75BE513B1089600C7B3CF /* ImgCache.h */,
-				78F75BE613B1089600C7B3CF /* ImgCache.m */,
-				7882BC90137079A4004F9DBD /* DBUtil.h */,
-				7882BC91137079A4004F9DBD /* DBUtil.m */,
-				78A6EAC914F36C14000CCD8B /* Util.h */,
-				78A6EACA14F36C15000CCD8B /* Util.m */,
 				7861AA67135230A400FA13FA /* resource */,
 				788C4212133FA3D000AAA425 /* Supporting Files */,
 			);
@@ -623,6 +633,12 @@
 		78A321A11504D0CF00F1B1DB /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				78D0D666149131BB00EA327C /* NSData+Base64.h */,
+				78D0D667149131BB00EA327C /* NSData+Base64.m */,
+				78F75BDE13AFA83700C7B3CF /* PullRefreshTableViewController.h */,
+				78F75BDF13AFA83700C7B3CF /* PullRefreshTableViewController.m */,
+				78F75BC113AD3B9E00C7B3CF /* UIInputToolbar */,
+				78A2B92813C4B2DD00032F61 /* JSON */,
 				78A321C81505241600F1B1DB /* nimbus */,
 			);
 			name = lib;
@@ -753,7 +769,7 @@
 		788C41FE133FA3D000AAA425 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 788C4201133FA3D000AAA425 /* Build configuration list for PBXProject "EXFE" */;
 			compatibilityVersion = "Xcode 3.2";

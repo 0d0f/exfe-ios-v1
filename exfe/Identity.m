@@ -112,6 +112,7 @@
 {
     [name release];
     [avatar_file_name release]; 
-    [bio release];    
+    [bio release];   
+    [super dealloc];
 }
 @end

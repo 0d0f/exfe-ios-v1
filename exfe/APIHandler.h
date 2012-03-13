@@ -25,6 +25,7 @@
 - (NSString*)getUserEvents;
 - (NSString*)getUpdate;
 - (NSString*)getEventById:(int)eventid;
+- (NSString*) getCrossesByIdList:(NSString*)idlist;
 - (NSString*)AddCommentById:(int)eventid comment:(NSString*)commenttext external_identity:(NSString*)external_identity;
 - (NSString*)getPostsWith:(int)crossid;
 

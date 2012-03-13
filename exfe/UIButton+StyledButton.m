@@ -12,7 +12,7 @@
 
 + (UIButton *)styledButtonWithBackgroundImage:(UIImage *)image font:(UIFont *)font title:(NSString *)title target:(id)target selector:(SEL)selector
 {
-    CGSize textSize = [title sizeWithFont:font];
+//    CGSize textSize = [title sizeWithFont:font];
 //    CGSize buttonSize = CGSizeMake(textSize.width + 20.0f, image.size.width);
     CGSize buttonSize =CGSizeMake(image.size.width, image.size.height);
     UIButton *button = [[[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, buttonSize.width, buttonSize.height)] autorelease];

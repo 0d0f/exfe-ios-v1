@@ -35,8 +35,8 @@
 
 + (NSString*)URL_API_ROOT {
 //	return @"http://exfeapi.dlol.us/v1";    
-//	return @"http://api.exfe.com/v1";        
-    return @"http://api.local.exfe.com/v1";        
+	return @"http://api.exfe.com/v1";        
+//    return @"http://api.local.exfe.com/v1";        
 }
 + (NSString*)URL_API_DOMAIN {
 //	return @"http://exfeapi.dlol.us";    
@@ -56,9 +56,10 @@
 {
     NSString *post =[[NSString alloc] initWithFormat:@"user=%@&password=%@",email,passwd];
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    
+    [post release];
     NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/%@",[APIHandler URL_API_ROOT],@"users/login"]]];
-    NSLog(@"%@",[NSString stringWithFormat:@"%@/%@",[APIHandler URL_API_ROOT],@"users/login"]);
     [request setHTTPMethod:@"POST"];
     [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
@@ -68,7 +69,6 @@
 
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@",responseString);
     return responseString;
 }
 
@@ -82,7 +82,6 @@
     
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@",responseString);
     return responseString;    
 
 }
@@ -105,13 +104,12 @@
     }
     
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
-    NSLog(@"api: %@",apiurl);
     [request setHTTPShouldHandleCookies:NO];
     
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
     if (error)
     {
-        NSLog(@"%@",error);
+//        NSLog(@"%@",error);
     }
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
     return responseString;       
@@ -124,23 +122,19 @@
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
 
     NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
-
     NSError *error = nil;
     NSString *apiurl=nil;
     if(lastUpdateTime==nil)
         apiurl=[NSString stringWithFormat:@"%@/users/%i/x?token=%@",[APIHandler URL_API_ROOT],app.userid,api_key];
-    else
-    {
-        CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
-        apiurl=[NSString stringWithFormat:@"%@/users/%i/x?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],app.userid,[(NSString *)dateurlString autorelease] ,api_key];
+    else {
+        CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );
+        NSString *datestr = [NSString stringWithString: (NSString *)dateurlString];
+        apiurl=[NSString stringWithFormat:@"%@/users/%i/x?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],app.userid,datestr,api_key];
+        CFRelease(dateurlString);
     }
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
     [request setHTTPShouldHandleCookies:NO];
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
-    if (error)
-    {
-        NSLog(@"%@",error);
-    }
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
     [pool release];
     return responseString;
@@ -151,7 +145,6 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
-    NSLog(@"set user token:%@",app.username);
     
     
     CFStringRef devicenameString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)[[UIDevice currentDevice] name],NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
@@ -170,7 +163,6 @@
     [request setHTTPShouldHandleCookies:NO];
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding] autorelease];
-    NSLog(@"response %@",responseString);
     id jsonobj=[responseString JSONValue];
     
     id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
@@ -196,7 +188,6 @@
 {
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     
-    NSLog(@"get User update:%@",app.username);
     [[NSUserDefaults standardUserDefaults] synchronize];
     NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
 
@@ -207,18 +198,16 @@
 
     //TOFIX:temp test hack
     
-//    lastUpdateTime=@"2012-02-20 16:46:13";
+    lastUpdateTime=@"2012-03-12 06:46:13";
     CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
     
     
     NSString *url=[NSString stringWithFormat:@"%@/users/%i/getupdate?updated_since=%@&token=%@&ddid=%@",[APIHandler URL_API_ROOT],app.userid,[(NSString *)dateurlString autorelease],api_key,identity_id];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
-    NSLog(@"%@",url);
     [request setHTTPShouldHandleCookies:NO];
     
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-    NSLog(@"%@",responseString);
     return responseString;    
 }
 - (NSString*)getEventById:(int)eventid
@@ -249,6 +238,16 @@
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
     return responseString;    
+}
+- (NSString*) getCrossesByIdList:(NSString*)idlist
+{
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/x/list?ids=%@?token=%@",[APIHandler URL_API_ROOT],idlist,api_key]]];
+    [request setHTTPShouldHandleCookies:NO];
+    
+    NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
+    NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+    return responseString;    
+    
 }
 - (void)dealloc
 {

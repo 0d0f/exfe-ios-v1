@@ -62,7 +62,6 @@
         [self.navigationController presentModalViewController:loginview animated:YES];
 
     }
-    NSLog(@"start app..%@",launchOptions);
     
     NSDictionary *remoteNotif = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
     if(remoteNotif)
@@ -80,8 +79,6 @@
                                  stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] 
                                 stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    NSLog(@"deviceToken: %@", tokenAsString);
-    NSLog(@"name: %@", [[UIDevice currentDevice] name]);
     APIHandler *api=[[APIHandler alloc]init];
     BOOL reg=[api regDeviceToken:tokenAsString];
     if(reg==YES)

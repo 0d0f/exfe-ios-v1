@@ -30,12 +30,13 @@
 - (void) updateConversationWithid:(int)cross_id cross:(NSDictionary*)conversationobj;
 - (void) updateInvitationobjWithid:(int)eventid event:(NSArray*)invitationdict;
 - (void) updateUserobjWithid:(int)uid user:(NSDictionary*)userobj;
-- (void) updateInvitationWithCrossId:(int)cross_id invitation:(NSDictionary*)invitationdict;
+- (void) updateInvitationobjWithCrossid:(int)cross_id identity_id:(NSArray*)to_identities rsvp:(NSString*)rsvp;
+//- (void) updateInvitationWithCrossId:(int)cross_id invitation:(NSDictionary*)invitationdict;
 - (void) updateActivityWithobj:(NSDictionary*)dict action:(NSString*)action cross_id:(int)cross_id;
 - (NSMutableArray*) getRecentActivityFromLogid:(int)log_id start:(int)start num:(int)num;
 - (NSDate*) updateCrossWithCrossId:(int)cross_id change:(NSDictionary*)changes lastupdatetime:(NSDate*)lastUpdateTime_datetime;
 
-- (NSArray*) getCommentWithEventid:(int)eventid;
+- (NSMutableArray*) getCommentWithEventid:(int)eventid;
 - (NSMutableArray*) getRecentEventObj;
 - (NSArray*) getInvitationWithEventid:(int)eventid;
 - (User*) getUserWithid:(int)userid;

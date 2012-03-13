@@ -35,9 +35,6 @@
     invitation.user_id = [[dict objectForKey:@"user_id"] integerValue];
     invitation.eventid=eid;
     invitation.state=[[dict objectForKey:@"state"] integerValue];
-//    if([dict objectForKey:@"invited_identity"]!=[NSNull null])
-//    {
-//        NSDictionary* iden=[dict objectForKey:@"invited_identity"];
         if([dict objectForKey:@"name"]!=[NSNull null])
             invitation.username=[dict objectForKey:@"name"];
         else
@@ -53,5 +50,14 @@
         invitation.updated_at=[dict objectForKey:@"updated_at"];
 //    }
     return invitation;
+}
+
+- (void)dealloc
+{
+    [username release];
+    [provider release]; 
+    [avatar release];
+    [updated_at release];  
+    [super dealloc];
 }
 @end

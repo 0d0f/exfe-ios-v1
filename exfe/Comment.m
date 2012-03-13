@@ -35,24 +35,33 @@
     comment.id = [[dict objectForKey:@"id"] integerValue];
     comment.eventid=eid;
 
-    if([dict objectForKey:@"message"]!=[NSNull null])
+    if([dict objectForKey:@"message"]!=nil)
         comment.comment = [dict objectForKey:@"message"];
     else
         comment.comment = @"";
 
-    if([dict objectForKey:@"created_at"]!=[NSNull null])
+    if([dict objectForKey:@"created_at"]!=nil)
         comment.created_at = [dict objectForKey:@"created_at"];
     else
         comment.created_at = @"";
 
-    if([dict objectForKey:@"updated_at"]!=[NSNull null])
+    if([dict objectForKey:@"updated_at"]!=nil)
         comment.updated_at = [dict objectForKey:@"updated_at"];
     else
         comment.updated_at = @"";
-    if([dict objectForKey:@"user"]!=[NSNull null])
+    if([dict objectForKey:@"user"]!=nil)
             comment.userjson=[[dict objectForKey:@"identity"] JSONRepresentation];
-    else
-        comment.userjson=@"";
+    else{
+        if([dict objectForKey:@"by_identity"]!=nil)
+            comment.userjson=[[dict objectForKey:@"by_identity"] JSONRepresentation];
+        else
+            if([dict objectForKey:@"identity"]!=nil)
+                comment.userjson=[[dict objectForKey:@"identity"] JSONRepresentation];
+            else
+                comment.userjson=@"";
+        
+        
+    }
 
     return comment;
     

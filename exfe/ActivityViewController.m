@@ -154,7 +154,6 @@
             [((NotificationCrossCellView *)cell).cellInvitationMsg setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12] range:NSMakeRange([@"Invitation from " length], [activity.by_name length])];
             
             [self setWithMsg:activity Label:((NotificationCrossCellView *)cell).cellwithMsg];
-//            [(NotificationCrossCellView *)cell setWithMsg:[self getWithMsg:activity]];
             
             NSString *x_str=[Util getLongLocalTimeStrWithTimetype:activity.time_type time:activity.begin_at];
             if (![activity.place_line1 isEqualToString:@""])
@@ -163,7 +162,7 @@
                 x_str=@"Time and Place to be decided.";
             
             [(NotificationCrossCellView *)cell setCrossDetail:x_str];
-            [(NotificationCrossCellView *)cell setLabelTime:[self formattedDateRelativeToNow:activity.time]];
+            [(NotificationCrossCellView *)cell setLabelTime:[Util formattedDateRelativeToNow:activity.time]];
         }
     }
     else if([activity.action isEqualToString:@"addexfee"] || [activity.action isEqualToString:@"delexfee"]) {//crosses view
@@ -184,7 +183,7 @@
             [(ActivityCellView *)cell setLabelCrossTitle:activity.title];
             
             [self setMsgWithActivity:activity Label:((ActivityCellView *)cell).cellActionMsg];
-            [(ActivityCellView *)cell setLabelTime:[self formattedDateRelativeToNow:activity.time]];
+            [(ActivityCellView *)cell setLabelTime:[Util formattedDateRelativeToNow:activity.time]];
             if(activity.by_id>0)
                 [(ActivityCellView *)cell setByTitle:[NSString stringWithFormat:@"by %@", activity.by_name]];
         }
@@ -201,7 +200,7 @@
             }
         }
         [self setMsgWithActivity:activity Label:((NotificationConversationCellView *)cell).cellCrossDetail];
-        [(NotificationConversationCellView *)cell setLabelTime:[self formattedDateRelativeToNow:activity.time]];
+        [(NotificationConversationCellView *)cell setLabelTime:[Util formattedDateRelativeToNow:activity.time]];
         
         [(NotificationConversationCellView *)cell setLabelCrossTitle:activity.title];
         CGSize maximumLabelSize = CGSizeMake(255,9999);
@@ -222,7 +221,7 @@
             }
         }
         [self setMsgWithActivity:activity Label:((ActivityCellView *)cell).cellActionMsg];
-        [(ActivityCellView *)cell setLabelTime:[self formattedDateRelativeToNow:activity.time]];
+        [(ActivityCellView *)cell setLabelTime:[Util formattedDateRelativeToNow:activity.time]];
         [(ActivityCellView *)cell setLabelCrossTitle:activity.title];
         BOOL ismyaction=NO;
         if([activity.to_identities isKindOfClass:[NSArray class]]) {
@@ -246,19 +245,14 @@
     }
     dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
     dispatch_async(imgQueue, ^{
-        NSString* imgName = avatar;//[avatar stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        NSString* imgName = avatar;
         NSString *imgurl = [ImgCache getImgUrl:imgName];
         UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            if(image!=nil && ![image isEqual:[NSNull null]])
-            {
+            if(image!=nil && ![image isEqual:[NSNull null]]) {
                 if([cell isKindOfClass:[UITableViewCell class]])
                         [(UITableViewCell*)cell setAvartar:image];
-//                if([cell isKindOfClass:[ActivityCellView class]])
-//                    [(ActivityCellView*)cell setAvartar:image];
-//                else if([cell isKindOfClass:[NotificationCrossCellView class]])
-//                    [(NotificationCrossCellView*)cell setAvartar:image];
             }
         });
     });
@@ -398,67 +392,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (NSString *) formattedDateRelativeToNow:(NSString*)datestr
-{
-    const int SECOND = 1;
-    const int MINUTE = 60 * SECOND;
-    const int HOUR = 60 * MINUTE;
-    const int DAY = 24 * HOUR;
-    const int MONTH = 30 * DAY;
-    
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-    [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-    NSDate *date = [dateFormat dateFromString:datestr]; 
-    [dateFormat release];
-    
-    NSDate *now = [NSDate date];
-    NSTimeInterval delta = [date timeIntervalSinceDate:now] * -1.0;
-    
-    NSCalendar *calendar = [NSCalendar currentCalendar];
-    NSUInteger units = (NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit);
-    NSDateComponents *components = [calendar components:units fromDate:date toDate:now options:0];
-    
-    NSString *relativeString;
-    
-    if (delta < 0) {
-        relativeString = @"!n the future!";
-        
-    } else if (delta < 1 * MINUTE) {
-//        relativeString = (components.second == 1) ? @"One second ago" : [NSString stringWithFormat:@"%d seconds ago",components.second];
-        relativeString =[NSString stringWithFormat:@"%ds",components.second];
-        
-    } else if (delta < 2 * MINUTE) {
-//        relativeString =  @"a minute ago";
-        relativeString =  @"1m";
-        
-    } else if (delta < 45 * MINUTE) {
-        relativeString = [NSString stringWithFormat:@"%dm",components.minute];
-        
-    } else if (delta < 90 * MINUTE) {
-//        relativeString = @"an hour ago";
-        relativeString = @"1h";
-        
-    } else if (delta < 24 * HOUR) {
-        relativeString = [NSString stringWithFormat:@"%dh",components.hour];
-        
-    } else if (delta < 48 * HOUR) {
-//        relativeString = @"yesterday";
-        relativeString = @"1d";
-        
-    } else if (delta < 30 * DAY) {
-//        relativeString = [NSString stringWithFormat:@"%d days ago",components.day];
-        relativeString = [NSString stringWithFormat:@"%dd",components.day];
-        
-    } else if (delta < 12 * MONTH) {
-//        relativeString = (components.month <= 1) ? @"one month ago" : [NSString stringWithFormat:@"%d months ago",components.month];
-        relativeString = [NSString stringWithFormat:@"%dm",components.month];
-        
-    } else {
-//        relativeString = (components.year <= 1) ? @"one year ago" : [NSString stringWithFormat:@"%d years ago",components.year];
-        relativeString = [NSString stringWithFormat:@"%dy",components.year];
-    }
-    return relativeString;  
-}
+
 
 @end

@@ -108,17 +108,17 @@ const int INVITATION_MAYBE=3;
     dispatch_queue_t loaddata= dispatch_queue_create("loaddata", NULL);
     dispatch_async(loaddata, ^{
         NSString *html=[self GenerateHtmlWithEvent];
+        [eventobj release];
         dispatch_async(dispatch_get_main_queue(), ^{
             [webview loadHTMLString:html baseURL:baseURL];
             conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
+
             conversionViewController.placeholder=placeholder;
 
             CGRect crect=conversionViewController.view.frame;
             conversionViewController.view.frame=CGRectMake(crect.origin.x, crect.origin.y, crect.size.width, crect.size.height-kDefaultToolbarHeight);
             DBUtil *dbu=[DBUtil sharedManager];
-            NSArray* _comments=[dbu getCommentWithEventid:self.eventid];
-            comments=[NSMutableArray arrayWithArray: _comments];
-            conversionViewController.comments=comments;
+            conversionViewController.comments=[dbu getCommentWithEventid:self.eventid];
             conversionViewController.eventid=eventid;
             [self.view addSubview:conversionViewController.view];
             [conversionViewController.view setHidden:YES];
@@ -179,7 +179,6 @@ const int INVITATION_MAYBE=3;
 
 - (NSString*)GenerateHtmlWithEvent
 {
-    NSLog(@"generate new html...");
     exfeAppDelegate *app=(exfeAppDelegate *)[[UIApplication sharedApplication] delegate];
     
     
@@ -213,8 +212,9 @@ const int INVITATION_MAYBE=3;
     
     NSString *xpath=[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"x.html"];
     NSString *html=[NSString stringWithContentsOfFile:xpath encoding:NSUTF8StringEncoding error:nil];
-    html=[html stringByReplacingOccurrencesOfString:@"{#begin_at_human#}" withString:dateString_human];
-    html=[html stringByReplacingOccurrencesOfString:@"{#begin_at#}" withString:dateString];
+    html=[html stringByReplacingOccurrencesOfString:@"{#begin_at_human#}" withString:[Util formattedDateRelativeToNow:eventobj.begin_at withTimeType:eventobj.time_type]];
+    
+    html=[html stringByReplacingOccurrencesOfString:@"{#begin_at#}" withString:[Util getNormalLocalTimeStrWithTimetype:eventobj.time_type time:eventobj.begin_at]];
     
     
     if([eventobj.place_line1 isEqualToString:@""])
@@ -274,18 +274,19 @@ const int INVITATION_MAYBE=3;
             }
         }
     }    
+    [invitations release];
     html=[html stringByReplacingOccurrencesOfString:@"{#exfee_list#}" withString:exfeelist];
     html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_status#}" withString:rsvpstatus];
 
     NSString *description=[eventobj.description stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
     html=[html stringByReplacingOccurrencesOfString:@"{#description#}" withString:description];
+    
     return html;
 }
 -(bool) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     if (self.interceptLinks && navigationType==UIWebViewNavigationTypeLinkClicked) {
         NSURL *url = request.URL;
-        NSLog(@"url click %@",[url absoluteString]);
         NSArray *chunk=[[url absoluteString] componentsSeparatedByString:@"#"];
         if([chunk count]==2)
         {
@@ -296,7 +297,7 @@ const int INVITATION_MAYBE=3;
                 NSString *responseString=[api sentRSVPWith:self.eventid rsvp:(NSString*)rsvp];
                 
                 [api release];
-
+                
                 NSDictionary *rsvpDict = [responseString JSONValue];
                 id code=[[rsvpDict objectForKey:@"meta"] objectForKey:@"code"];
                 if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
@@ -317,7 +318,6 @@ const int INVITATION_MAYBE=3;
             }
             else if( [[chunk objectAtIndex:0] isEqualToString:@"http://addical/"])
             {
-                NSLog(@"addical");
                 NSString *datestr=[self.event objectForKey:@"begin_at"];
                 NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
                 
@@ -342,14 +342,11 @@ const int INVITATION_MAYBE=3;
                 NSError *err;
                 [eventStore saveEvent:sevent span:EKSpanThisEvent error:&err]; 
                 [dbu updateEventicalWithid:self.eventid identifier:sevent.eventIdentifier];
-                NSLog(@"identifier:%@",sevent.eventIdentifier);
-                
             }
             else if( [[chunk objectAtIndex:0] isEqualToString:@"http://changersvp/"])
             {
                 NSString* scriptstr=@"document.getElementById('x_rsvp_msg').style.display='none';document.getElementById('x_rsvp_change').style.display='none';document.getElementById('x_rsvp_yes').style.display='block';document.getElementById('x_rsvp_no').style.display='block';document.getElementById('x_rsvp_maybe').style.display='block';";
                 NSString *rsvp =[webview stringByEvaluatingJavaScriptFromString:scriptstr];  
-                NSLog(@"changersvp:%@",rsvp);
             }
         }
         else if( [[chunk objectAtIndex:0] isEqualToString:@"http://showmap/"])
@@ -359,12 +356,8 @@ const int INVITATION_MAYBE=3;
                 q =[NSString stringWithFormat:@"%@",eventobj.place_line2];
             else
                 q =[NSString stringWithFormat:@"%@",eventobj.place_line1];
-//            float latitude = 35.4634;
-//            float longitude = 9.43425;
             int zoom = 13;
-//            NSString *stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?saddr=Current Location&daddr=%@", q]
             NSString *stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@&z=%d", q,zoom] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-//            NSString *stringURL = [NSString stringWithFormat:@"http://maps.google.com/maps?q=%@@%1.6f,%1.6f&z=%d", title, latitude, longitude, zoom];
             NSURL *url = [NSURL URLWithString:stringURL];
             [[UIApplication sharedApplication] openURL:url];
             
@@ -419,7 +412,6 @@ const int INVITATION_MAYBE=3;
 }
 - (void)refresh
 {
-    NSLog(@"refresh");
     CGRect frame = CGRectMake(0.0, 0.0, 25.0, 25.0);  
     UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc] initWithFrame:frame];  
     [loading sizeToFit];  
@@ -439,13 +431,13 @@ const int INVITATION_MAYBE=3;
     APIHandler *api=[[APIHandler alloc]init];
     NSString* eventjson=[api getEventById:self.eventid];
     [api release];
+
     if( [eventjson JSONValue]!=nil)
     {
         DBUtil *dbu=[DBUtil sharedManager];
         [dbu updateEventobjWithid:self.eventid event:self.event isnew:NO];
-//        [self updateEventView];  
     }
-    self.navigationItem.rightBarButtonItem = barButtonItem;
+//    self.navigationItem.rightBarButtonItem = barButtonItem;
 }
 
 -(void)inputButtonPressed:(NSString *)inputText
@@ -468,7 +460,6 @@ const int INVITATION_MAYBE=3;
                 
                 [inputToolbar becomeFirstResponder];
                 [inputToolbar setInputEnabled:YES];
-                NSLog(@"show error alert");
             }
         });
     });
@@ -484,7 +475,6 @@ const int INVITATION_MAYBE=3;
 
 - (void)keyboardWillShow:(NSNotification *)notification 
 {
-    NSLog(@"show keyboard");
     CGRect keyboardEndFrame;
     
     [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&keyboardEndFrame];
@@ -508,7 +498,6 @@ const int INVITATION_MAYBE=3;
 
 - (void)keyboardWillHide:(NSNotification *)notification 
 {
-    NSLog(@"hidden keyboard..");
     /* Move the toolbar back to bottom of the screen */
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:0.3];

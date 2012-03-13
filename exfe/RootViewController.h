@@ -45,4 +45,6 @@
 - (Cross*)getEventByCrossId:(int)cross_id;
 - (void)setNotificationButton:(BOOL)status;
 - (void)defaultChanged:(NSNotification *)notif;
+- (void)newcrossChanged:(NSNotification *)notif;
+- (void)cleanAllCrossStatus;
 @end

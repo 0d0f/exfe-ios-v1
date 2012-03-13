@@ -104,8 +104,6 @@
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         APIHandler *api=[[APIHandler alloc]init];
         NSString *responseString=[api getPostsWith:eventid];
-        NSLog(@"conversation:%@",responseString);
-        
         DBUtil *dbu=[DBUtil sharedManager];
         
         id code=[[[responseString JSONValue] objectForKey:@"meta"] objectForKey:@"code"];
@@ -191,9 +189,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     static NSString *MyIdentifier = @"tblConversationCellView";
-
     ConversationCellView *cell = (ConversationCellView *)[tableView dequeueReusableCellWithIdentifier:MyIdentifier];
     if(cell == nil) {
         [[NSBundle mainBundle] loadNibNamed:@"ConversationCellView" owner:self options:nil];
@@ -204,7 +200,7 @@
     User *user=[User initWithDict:[comment.userjson JSONValue]];
 
     [cell setLabelText:comment.comment];
-    [cell setLabelTime:comment.created_at];
+    [cell setLabelTime:[Util getNormalLocalTimeStrWithTimetype:@"" time:comment.updated_at]];
     
     
     CGSize maximumLabelSize = CGSizeMake(246,9999);
@@ -215,7 +211,7 @@
 
     dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
         dispatch_async(imgQueue, ^{
-            NSString* imgName =user.avatar_file_name;// [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+            NSString* imgName =user.avatar_file_name;
             NSString *imgurl = [ImgCache getImgUrl:imgName];
             UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
             

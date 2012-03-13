@@ -28,6 +28,6 @@
 - (NSString*)setMsgWithActivity:(Activity*)activity Label:(NIAttributedLabel*)label;
 - (NSString*)setWithMsg:(Activity*)activity Label:(NIAttributedLabel*)label;
 - (void)pushback;
-- (NSString *) formattedDateRelativeToNow:(NSString*)datestr;//(NSDate *)date;
+//- (NSString *) formattedDateRelativeToNow:(NSString*)datestr;//(NSDate *)date;
 
 @end
