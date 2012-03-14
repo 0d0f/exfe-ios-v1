@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SBJson.h"
 #import "Cross.h"
 #import "Comment.h"
 #import "Invitation.h"

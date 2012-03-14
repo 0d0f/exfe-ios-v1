@@ -14,9 +14,13 @@
 		78090D0314A499D000AB0D66 /* device_iPhone~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78090D0114A499CE00AB0D66 /* device_iPhone~iphone.png */; };
 		7816A7481423C4DC00818601 /* app_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7816A7471423C4DC00818601 /* app_btn.png */; };
 		7819824C14C45D3C007EA029 /* btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7819824B14C45D3C007EA029 /* btn.png */; };
+		7821861D15106D5800FFD92D /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7821861515106D5800FFD92D /* calendar.png */; };
+		7821861E15106D5800FFD92D /* clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 7821861615106D5800FFD92D /* clock.png */; };
+		7821862115106D5800FFD92D /* profile_bkg.png in Resources */ = {isa = PBXBuildFile; fileRef = 7821861915106D5800FFD92D /* profile_bkg.png */; };
+		7821862315106D5800FFD92D /* x.html in Resources */ = {isa = PBXBuildFile; fileRef = 7821861B15106D5800FFD92D /* x.html */; };
 		782B254014DD8283007020D9 /* ActivityCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 782B253F14DD8283007020D9 /* ActivityCellView.m */; };
 		782B254214DD9D97007020D9 /* ActivityCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 782B254114DD9D97007020D9 /* ActivityCellView.xib */; };
-		7833E95513C5B20A00FE3EDA /* x.html in Resources */ = {isa = PBXBuildFile; fileRef = 7833E95413C5B20A00FE3EDA /* x.html */; };
+		7833E95513C5B20A00FE3EDA /* x_0.html in Resources */ = {isa = PBXBuildFile; fileRef = 7833E95413C5B20A00FE3EDA /* x_0.html */; };
 		783CF22D149E524000C7D80E /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 783CF22B149E523F00C7D80E /* Icon.png */; };
 		783CF22E149E524000C7D80E /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 783CF22C149E523F00C7D80E /* Icon@2x.png */; };
 		7847F91C138EA8AE00540E8E /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7847F91B138EA8AE00540E8E /* EventKit.framework */; };
@@ -157,10 +161,14 @@
 		78090D0114A499CE00AB0D66 /* device_iPhone~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "device_iPhone~iphone.png"; sourceTree = "<group>"; };
 		7816A7471423C4DC00818601 /* app_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_btn.png; sourceTree = "<group>"; };
 		7819824B14C45D3C007EA029 /* btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btn.png; sourceTree = "<group>"; };
+		7821861515106D5800FFD92D /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = calendar.png; sourceTree = "<group>"; };
+		7821861615106D5800FFD92D /* clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clock.png; sourceTree = "<group>"; };
+		7821861915106D5800FFD92D /* profile_bkg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile_bkg.png; sourceTree = "<group>"; };
+		7821861B15106D5800FFD92D /* x.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = x.html; sourceTree = "<group>"; };
 		782861BA14DE153100AC9B01 /* ActivityCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActivityCellView.h; sourceTree = "<group>"; };
 		782B253F14DD8283007020D9 /* ActivityCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActivityCellView.m; sourceTree = "<group>"; };
 		782B254114DD9D97007020D9 /* ActivityCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ActivityCellView.xib; sourceTree = "<group>"; };
-		7833E95413C5B20A00FE3EDA /* x.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = x.html; sourceTree = "<group>"; };
+		7833E95413C5B20A00FE3EDA /* x_0.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = x_0.html; sourceTree = "<group>"; };
 		783CF22B149E523F00C7D80E /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		783CF22C149E523F00C7D80E /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		7847F91B138EA8AE00540E8E /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
@@ -399,10 +407,22 @@
 			name = TableViewCell;
 			sourceTree = "<group>";
 		};
+		7821861315106D5800FFD92D /* img */ = {
+			isa = PBXGroup;
+			children = (
+				7821861515106D5800FFD92D /* calendar.png */,
+				7821861615106D5800FFD92D /* clock.png */,
+				7821861915106D5800FFD92D /* profile_bkg.png */,
+			);
+			path = img;
+			sourceTree = "<group>";
+		};
 		7861AA67135230A400FA13FA /* resource */ = {
 			isa = PBXGroup;
 			children = (
-				7833E95413C5B20A00FE3EDA /* x.html */,
+				7833E95413C5B20A00FE3EDA /* x_0.html */,
+				7821861315106D5800FFD92D /* img */,
+				7821861B15106D5800FFD92D /* x.html */,
 				7819824B14C45D3C007EA029 /* btn.png */,
 				783CF22C149E523F00C7D80E /* Icon@2x.png */,
 				788C9C0214A87B6800FBEE49 /* default_avatar@2x~iphone.png */,
@@ -807,7 +827,7 @@
 				78F75BD913AD3EF200C7B3CF /* toolbarbg~iphone.png in Resources */,
 				78F75BE213AFA84300C7B3CF /* arrow.png in Resources */,
 				78D7AA7A13BE12C7009495DA /* ConversionTableViewController.xib in Resources */,
-				7833E95513C5B20A00FE3EDA /* x.html in Resources */,
+				7833E95513C5B20A00FE3EDA /* x_0.html in Resources */,
 				7816A7481423C4DC00818601 /* app_btn.png in Resources */,
 				78C1D40C1429D30B008131BC /* CrossCellView.xib in Resources */,
 				78D0D65B148F5EFD00EA327C /* ConversationCellView.xib in Resources */,
@@ -846,6 +866,10 @@
 				78922E1714E981CC000E834E /* backx~iphone.png in Resources */,
 				78922E1914ED1446000E834E /* NotificationCrossCellView.xib in Resources */,
 				78A321981500851C00F1B1DB /* NotificationConversationCellView.xib in Resources */,
+				7821861D15106D5800FFD92D /* calendar.png in Resources */,
+				7821861E15106D5800FFD92D /* clock.png in Resources */,
+				7821862115106D5800FFD92D /* profile_bkg.png in Resources */,
+				7821862315106D5800FFD92D /* x.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -55,8 +55,16 @@ const int INVITATION_MAYBE=3;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     interceptLinks=NO;
+    if ([[webview subviews] count] > 0) {
+        // hide the shadows
+        for (UIView* shadowView in [[[webview subviews] objectAtIndex:0] subviews]) {
+            [shadowView setHidden:YES];
+        }
+        // show the content
+        [[[[[webview subviews] objectAtIndex:0] subviews] lastObject] setHidden:NO];
+    }
+    webview.backgroundColor = [UIColor whiteColor];
     
     NSString *backbtnimgpath = [[NSBundle mainBundle] pathForResource:@"backbtn" ofType:@"png"];
     UIImage *backbtnimg = [UIImage imageWithContentsOfFile:backbtnimgpath];
@@ -104,6 +112,7 @@ const int INVITATION_MAYBE=3;
     keyboardIsVisible = NO;
     placeholder=[[UITextField alloc]init];
     [self.view addSubview:placeholder];
+    [placeholder release];
 
     dispatch_queue_t loaddata= dispatch_queue_create("loaddata", NULL);
     dispatch_async(loaddata, ^{
@@ -248,34 +257,38 @@ const int INVITATION_MAYBE=3;
                 if(![invitation.avatar isEqualToString:@""])
                 {
                     NSString* imgName = invitation.avatar;
+                    
                     NSString *imgurl = [ImgCache getImgUrl:imgName];
                     NSString *imgcachename=[ImgCache getImgName:imgurl];
                     
                     if(invitation.state ==INVITATION_YES)
                     {
-                        exfeelist=[exfeelist stringByAppendingFormat:@"<img src='images/%@'>",imgcachename];
+                        exfeelist=[exfeelist stringByAppendingFormat:@"<li id='avatar_%d'><img alt='' width='40px' height='40px' src='images/%@' /></li>",invitation.identity_id,imgcachename];
                     }
                     else
-                        exfeelist=[exfeelist stringByAppendingFormat:@"<img class='rsvp_no'src='images/%@'>",imgcachename];
+                        exfeelist=[exfeelist stringByAppendingFormat:@"<li id='avatar_%d' class='opacity'><img alt='' width='40px' height='40px' src='images/%@' />",invitation.identity_id,imgcachename];
+                    
                 }
             }
             if(invitation.user_id==app.userid)
             {
                 if(invitation.state!=0)
-                    rsvpstatus=@"<a id='x_rsvp_yes' href='http://invitation/#yes' style='display: none;' class='x_rsvp_button'>Accept</a><a id='x_rsvp_no' href='http://invitation/#no' style='display: none;' class='x_rsvp_button'>Decline</a><a id='x_rsvp_maybe' href='http://invitation/#maybe' style='display: none;' class='x_rsvp_button'>interested</a>";
+                    rsvpstatus=@"<ol class='clearfix'><li class='ui-btn accept-btn' data-rsvp='1'>Accept</li><li class='ui-btn declined-btn' data-rsvp='2'>Declined</li><li class='interested-btn' data-rsvp='3'>Interested</li></ol>";
+                    //@"<a id='x_rsvp_yes' href='http://invitation/#yes' style='display: none;' class='x_rsvp_button'>Accept</a><a id='x_rsvp_no' href='http://invitation/#no' style='display: none;' class='x_rsvp_button'>Decline</a><a id='x_rsvp_maybe' href='http://invitation/#maybe' style='display: none;' class='x_rsvp_button'>interested</a>";
 
-                if(invitation.state ==INVITATION_YES)
-                    rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Accepted</span>\".</span>                <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
-                else if(invitation.state ==INVITATION_NO)
-                    rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Declined</span>\".</span>                <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
-                else if(invitation.state ==INVITATION_MAYBE)
-                    rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Interested</span>\".</span> <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
+//                if(invitation.state ==INVITATION_YES)
+//                    rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Accepted</span>\".</span>                <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
+//                else if(invitation.state ==INVITATION_NO)
+//                    rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Declined</span>\".</span>                <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
+//                else if(invitation.state ==INVITATION_MAYBE)
+//                    rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Interested</span>\".</span> <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
 
             }
         }
     }    
     [invitations release];
     html=[html stringByReplacingOccurrencesOfString:@"{#exfee_list#}" withString:exfeelist];
+    NSLog(@"exfeelist:%@",exfeelist);
     html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_status#}" withString:rsvpstatus];
 
     NSString *description=[eventobj.description stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
@@ -285,6 +298,18 @@ const int INVITATION_MAYBE=3;
 }
 -(bool) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
+    NSString *requestString = [[request URL] absoluteString];
+    NSLog(@"%@",requestString);
+    if ([requestString hasPrefix:@"js-frame:"]) {
+        NSArray *components = [requestString componentsSeparatedByString:@":"];
+        
+        NSString *function = (NSString*)[components objectAtIndex:1];
+		int callbackId = [((NSString*)[components objectAtIndex:2]) intValue];
+        NSString *argsAsString = [(NSString*)[components objectAtIndex:3] 
+                                  stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        [self handleCall:function callbackId:callbackId args:[argsAsString JSONValue]];
+    }
+    
     if (self.interceptLinks && navigationType==UIWebViewNavigationTypeLinkClicked) {
         NSURL *url = request.URL;
         NSArray *chunk=[[url absoluteString] componentsSeparatedByString:@"#"];
@@ -337,7 +362,7 @@ const int INVITATION_MAYBE=3;
                 sevent.startDate =  sdate;//[[NSDate alloc] init];
                 sevent.endDate   = [[NSDate alloc] initWithTimeInterval:600 sinceDate:sevent.startDate];
                 sevent.location =[self.event objectForKey:@"venue"];
-                
+                NSLog(@"%@",sevent.eventIdentifier);
                 [sevent setCalendar:[eventStore defaultCalendarForNewEvents]];
                 NSError *err;
                 [eventStore saveEvent:sevent span:EKSpanThisEvent error:&err]; 
@@ -372,6 +397,68 @@ const int INVITATION_MAYBE=3;
     }
     
 }
+- (void)returnResult:(int)callbackId args:(id)arg;
+{
+//    NSString *resultArrayString = [arg JSONRepresentation];    
+//    {"invitations":[{"identity_id":"11","invitation_id":"268","user_id":42,"avatar_file_name":"http://www.gravatar.com/avatar/e461fe2d48746288ffef676def2f6e82?d=http%3A%2F%2Fimg.exfe.com%2F9%2Faa%2F80_80_9aa40bcf6b39a65d55e028e0e4896829.png","name":"huo ju ","bio":"","updated_at":"2012-02-27 09:46:22","state":2,"external_username":"hj@exfe.com","provider":"email","external_identity":"hj@exfe.com"}]}
+    NSMutableDictionary* invitation=[[arg objectForKey:@"invitations"] objectAtIndex:0];
+    if([[invitation objectForKey:@"state"] intValue]==1)
+        [invitation setObject:@"Accepted" forKey:@"state_str"];
+    else if([[invitation objectForKey:@"state"] intValue]==2)
+        [invitation setObject:@"Declined" forKey:@"state_str"];
+    else if([[invitation objectForKey:@"state"] intValue]==3)
+        [invitation setObject:@"Interested" forKey:@"state_str"];
+        
+    NSString *result=[[[arg objectForKey:@"invitations"] objectAtIndex:0] JSONRepresentation] ;
+    [webview stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"NativeBridge.resultForCallback(%d,%@);",callbackId,result]];
+}
+
+- (void)handleCall:(NSString*)functionName callbackId:(int)callbackId args:(NSArray*)args
+{
+    if ([functionName isEqualToString:@"rsvp"]) {
+        int rsvp_int=[[args objectAtIndex:0] intValue];
+        NSString* rsvp=@"";
+        if(rsvp_int==1)
+            rsvp=@"yes";
+        else if(rsvp_int==2)
+            rsvp=@"no";
+        else if(rsvp_int==3)
+            rsvp=@"maybe";
+        
+        APIHandler *api=[[APIHandler alloc]init];
+        NSString *responseString=[api sentRSVPWith:self.eventid rsvp:(NSString*)rsvp];
+        
+        [api release];
+        
+        NSDictionary *rsvpDict = [responseString JSONValue];
+        id code=[[rsvpDict objectForKey:@"meta"] objectForKey:@"code"];
+        if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
+        {
+            DBUtil *dbu=[DBUtil sharedManager];
+            
+            [dbu updateInvitationobjWithid:self.eventid event:(NSArray*)[[rsvpDict objectForKey:@"response"] objectForKey:@"invitations"]];
+        }
+
+        [self returnResult:callbackId args:[rsvpDict objectForKey:@"response"] ];
+        
+    } else if ([functionName isEqualToString:@"prompt"]) {
+        
+        if ([args count]!=1) {
+            NSLog(@"prompt wait exactly one argument!");
+            return;
+        }
+        
+        NSString *message = (NSString*)[args objectAtIndex:0];
+        
+//        alertCallbackId = callbackId;
+        UIAlertView *alert=[[[UIAlertView alloc] initWithTitle:nil message:message delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ok", nil] autorelease];
+        [alert show];
+        
+    } else {
+        NSLog(@"Unimplemented method '%@'",functionName);
+    }
+}
+
 - (void)viewDidUnload
 {
     [super viewDidUnload];

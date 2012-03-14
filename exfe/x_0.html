@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
+            <title>Exfe</title>
+            
+            <style>
+                body { color: #696969; font-family: Verdana,"Lucida Grande",LucidaSansUnicode,Helvetica,Arial,sans-serif; font-size: 13px; }
+                *{padding:0; margin:0; border:0;}
+                .exfer{margin:10px}.exfer h3 {color: #0591af; font-size: 24px; font-weight: normal;margin:5px 0 0 0; line-height:32px; }
+                .exfer .exfee {margin-top: 10px}
+                .exfer ul.ynbtn {margin: 15px 0 0 0 ; height: 31px ; list-style:none}
+                .exfer ul.ynbtn li {width: 90px; float: left; margin:3px 10px 3px 0;}
+                .exfer ul.ynbtn li a {width: 90px; height: 31px; color: white; text-align: center; display: block; font-size: 20px; font-family: "helvetica"; line-height: 32px; text-decoration: none}
+                .exfer ul.ynbtn li a.yes {background:url("app_btn.png") no-repeat left top;}
+                .exfer ul.ynbtn li a.no {background:url("app_btn.png") no-repeat -100px top;}
+                .exfer ul.ynbtn li a:hover.yes {background:url("app_btn.png") no-repeat left -40px;}
+                .exfer ul.ynbtn li a:hover.no {background:url("app_btn.png") no-repeat -100px -40px;}
+                
+                .exfer ul.ynbtn li a.maybe {background: none; color: #838383; text-decoration: underline; font-size: 18px; text-align: center; width:70px;}
+                
+                .x_rsvp_button {
+                    width: 90px;
+                    height: 31px;
+                    text-align: center;
+                    display: block;
+                    font-size: 20px;
+                    line-height: 32px;
+                    float: left;
+                }
+
+                
+                #x_rsvp_yes {
+                    background: url("app_btn.png") no-repeat left top;
+                    color: #E6E6E6;
+                    text-decoration: none;
+                }
+                
+                #x_rsvp_no {
+                    background: url("app_btn.png") no-repeat -100px top;
+                    color: #E6E6E6;
+                    text-decoration: none;
+                }
+          
+                #x_rsvp_maybe {
+                    background: none;
+                    color: #666666;
+                    text-decoration: underline;
+                    font-size: 18px;
+                    line-height: 24px;
+                    width:70px;
+                    text-align: center;
+                }
+                
+                .exfel .description p { font-size: 14px; line-height: 18px; margin: 5px 0 0 0 ; }
+                .exfer h2 { color: #0591AF; font-family: Verdana; font-size: 28px; font-weight: normal;margin:10px 0 0 0; line-height:32px; }
+                
+                #exfee_list .rsvp_no { opacity: 0.4;margin:20px 0 0 0 }
+                #exfee_list img{ padding: 0 4px 0 0; width:40px; height:40px;}  
+                </style>
+            <meta name="csrf-param" content="authenticity_token"/>
+            <meta name="csrf-token" content="ESgBBnW/Z3J74vGN8JohSmk34FVihP6WGAYVYs6T1jo="/>
+    </head>
+    <body>
+        
+        <div class='exfer'>
+            <h3 class='tm'>{#begin_at_human#}</h3>
+            <p class='tm'>{#begin_at#}</p>
+            <h3 id="place">{#place_line1#}<a href="http://showmap/"><img style="display:{#map_display}" src="map.png"></a></h3>
+            <div id="place_lines">
+                <p class='tm'>{#place_line2#}</p>
+                <p class='tm'></p>
+            </div>
+            
+            <div id="exfee_list">
+                {#exfee_list#}
+            </div>
+            
+            <h2>{#title#}</h2>
+            <div class='exfel'>
+                <div class='description' id='cross_description'>
+                    <p>
+                    {#description#}
+                    </p>
+                </div>
+            </div>
+            {#rsvp_status#}
+        </div>
+    </body>
+</html>

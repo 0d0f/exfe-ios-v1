@@ -595,6 +595,9 @@
         }
 //        if(newcross==0)
             
+//        myWebView = [[MyWebViewController alloc] init];
+//        myWebView.delegate = self;
+//        [myWebView preLoadView];
 
         [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     }

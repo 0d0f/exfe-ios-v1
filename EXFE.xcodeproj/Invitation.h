@@ -19,6 +19,7 @@
     NSInteger state;
     NSString* avatar;
     NSString* updated_at;
+    NSInteger attrib;
     
 }
 @property NSInteger id;
@@ -30,6 +31,7 @@
 @property NSInteger state;
 @property (retain,nonatomic) NSString* avatar;
 @property (retain,nonatomic) NSString* updated_at;
+@property NSInteger attrib;
 
 + (Invitation*)initWithDict:(NSDictionary*)dict EventID:(NSInteger)eid;
 

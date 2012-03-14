@@ -194,10 +194,7 @@ static sqlite3 *database;
                             {
                                 NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
                             }            
-
                         }
-
-                        
                     }
                     else 
                     {
@@ -230,7 +227,7 @@ static sqlite3 *database;
 		return;
 	} 
     sqlite3_stmt *stm=nil;
-    const char *sql = "insert or replace into invitations (id,eventid,username,provider,state,avatar_file_name,identity_id,user_id,updated_at) values(?,?,?,?,?,?,?,?,?)";
+    const char *sql = "insert or replace into invitations (id,cross_id,username,provider,state,avatar_file_name,identity_id,user_id,updated_at,attrib) values(?,?,?,?,?,?,?,?,?,?)";
     for(int i=0;i<[invitationdict count];i++)
     {
         if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
@@ -245,6 +242,7 @@ static sqlite3 *database;
             sqlite3_bind_int(stm, 7,invitationobj.identity_id ); 
             sqlite3_bind_int(stm, 8,invitationobj.user_id ); 
             sqlite3_bind_text(stm,9,[invitationobj.updated_at UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_int(stm,10,invitationobj.attrib);
             
             if(sqlite3_step(stm)== SQLITE_DONE) {
             }
@@ -271,7 +269,7 @@ static sqlite3 *database;
             return;
         } 
         sqlite3_stmt *stm=nil;
-        const char *sql = "update invitations set state=? where eventid=? and identity_id=?;";
+        const char *sql = "update invitations set state=? where cross_id=? and identity_id=?;";
         for(int i=0;i<[to_identities count];i++)
         {
             NSDictionary *to_identity=[to_identities objectAtIndex:i];
@@ -419,7 +417,7 @@ static sqlite3 *database;
 
 - (NSArray*) getInvitationWithEventid:(int)eventid
 {
-    const char *sql="SELECT `id` ,`username`,`provider`,`state`,`avatar_file_name`,`identity_id`,`user_id` from invitations where eventid=? order by id ;";
+    const char *sql="SELECT `id` ,`username`,`provider`,`state`,`avatar_file_name`,`identity_id`,`user_id`,`attrib` from invitations where cross_id=? order by id ;";
     NSMutableArray *invitationlist=[[NSMutableArray alloc] initWithCapacity:50];
     
     NSString *sqldbpath=[DBUtil DBPath];
@@ -447,6 +445,7 @@ static sqlite3 *database;
             invitationobj.avatar=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 4)];
             invitationobj.identity_id=sqlite3_column_int(stm, 5);
             invitationobj.user_id=sqlite3_column_int(stm, 6);
+            invitationobj.attrib=sqlite3_column_int(stm, 7);
             [invitationlist addObject:invitationobj];
         }
     }
