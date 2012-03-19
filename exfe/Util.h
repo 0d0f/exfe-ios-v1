@@ -18,4 +18,5 @@
 + (NSString *) formattedLongDateRelativeToNow:(NSString*)datestr;
 + (NSString *) formattedDateRelativeToNow:(NSString*)datestr withTimeType:(NSString*)time_type;
 + (UIColor*) getHighlightColor;
++ (NSString*) getBackgroundLink:(NSString*)imgname;
 @end

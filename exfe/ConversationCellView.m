@@ -9,6 +9,8 @@
 #import "ConversationCellView.h"
 
 @implementation ConversationCellView
+@synthesize cellText;
+
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -43,16 +45,17 @@
 - (void)setCellHeightWithCommentHeight:(int)height
 {
     CGRect rect=self.frame;
-    rect.size.height=44-18-1+height;
+    rect.size.height=15+height;
     [self setFrame:rect];
     
     CGRect commentrect=cellText.frame;
     commentrect.size.height=height;
-    commentrect.origin.y=1;
+    commentrect.origin.y=8;
     [cellText setFrame:commentrect];
     
     CGRect timerect=cellTime.frame;
-    timerect.origin.y=rect.size.height-18;
+    timerect.origin.y=height+15-8-14;
+    //height+15-8;
 
     [cellTime setFrame:timerect];
     

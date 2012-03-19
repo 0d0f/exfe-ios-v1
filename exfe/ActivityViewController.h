@@ -27,6 +27,7 @@
 - (IBAction) Done:(id) sender;
 - (NSString*)setMsgWithActivity:(Activity*)activity Label:(NIAttributedLabel*)label;
 - (NSString*)setWithMsg:(Activity*)activity Label:(NIAttributedLabel*)label;
+- (NSString*)string:(NSString *)sourceString reducedToWidth:(CGFloat)width withFont:(UIFont *)font;
 - (void)pushback;
 //- (NSString *) formattedDateRelativeToNow:(NSString*)datestr;//(NSDate *)date;
 

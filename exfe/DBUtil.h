@@ -39,6 +39,7 @@
 - (NSMutableArray*) getCommentWithEventid:(int)eventid;
 - (NSMutableArray*) getRecentEventObj;
 - (NSArray*) getInvitationWithEventid:(int)eventid;
+- (int)getConfirmNumByCrossId:(int)cross_id;
 - (User*) getUserWithid:(int)userid;
 - (NSString*) getLastEventUpdateTime;
 - (NSString*) getLastCommentUpdateTimeWith:(int)eventid;

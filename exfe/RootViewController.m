@@ -85,8 +85,6 @@
 
 - (void) refresh
 {
-    @synchronized(self) {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];  
     NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
     if(lastUpdateTime==nil)
         [self LoadUserEvents:NO]; 
@@ -97,9 +95,6 @@
     }
     
     [self stopLoading];
-
-    [pool drain];   
-    }
 }
 
 - (BOOL)LoadUserEventsFromDB
@@ -108,8 +103,11 @@
     NSMutableArray *newevents=[dbu getRecentEventObj];
     if(newevents!=nil && [newevents count]>0)
     {
-        [events release];
-        events=nil;
+        if(events!=nil)
+        {
+            [events release];
+            events=nil;
+        }
         events=newevents;
     }
     if([newevents count]==0)
@@ -120,8 +118,6 @@
 }
 - (void)LoadUpdate
 {
-    NSLog(@"load user update");
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     UIApplication* mapp = [UIApplication sharedApplication];
     mapp.networkActivityIndicatorVisible = YES;
@@ -133,6 +129,8 @@
     DBUtil *dbu=[DBUtil sharedManager];
     id jsonobj=[responseString JSONValue];
     id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
+    [responseString release];
+    
     if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
     {
         NSMutableArray *updateCrossIDList=[[NSMutableArray alloc] initWithCapacity:10];
@@ -177,9 +175,8 @@
                             if(isSelf==NO)
                                 [dbu updateActivityWithobj:dict action:@"conversation" cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
                             vaildobjnum=vaildobjnum+1;
-                            [dict release];
-
                         }
+                        [dict release];
                     }
                 }
                 else if([[updateobj objectForKey:@"action"] isEqualToString:@"addexfee"] || [[updateobj objectForKey:@"action"] isEqualToString:@"delexfee"]) {
@@ -195,6 +192,17 @@
 
                         if([[updateobj objectForKey:@"x_place"] objectForKey:@"line2"])
                             [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"line2"] forKey:@"place_line2"];
+
+                        if([[updateobj objectForKey:@"x_place"] objectForKey:@"provider"])
+                            [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"provider"] forKey:@"place_provider"];
+                        if([[updateobj objectForKey:@"x_place"] objectForKey:@"external_id"])
+                            [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"external_id"] forKey:@"place_external_id"];
+
+                        if([[updateobj objectForKey:@"x_place"] objectForKey:@"lng"])
+                            [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"lng"] forKey:@"place_lng"];
+
+                        if([[updateobj objectForKey:@"x_place"] objectForKey:@"lat"])
+                            [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"lat"] forKey:@"place_lat"];
                     }
                     if([updateobj objectForKey:@"x_time_type"]!=nil)
                             [dict setObject:[updateobj objectForKey:@"x_time_type"]  forKey:@"x_time_type"];
@@ -261,6 +269,13 @@
 
                     [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"line1"] forKey:@"place_line1"];
                     [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"line2"] forKey:@"place_line2"];
+                    [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"provider"] forKey:@"place_provider"];
+                    [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"external_id"] forKey:@"place_external_id"];
+                    [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"lng"] forKey:@"place_lng"];
+                    [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"lat"] forKey:@"place_lat"];
+                    [dict setObject:[updateobj objectForKey:@"x_background"] forKey:@"background"];
+
+                    
                     [dict setObject:[NSNumber numberWithInt:1] forKey:@"state"];
                     [dbu updateEventobjWithid:[[updateobj objectForKey:@"x_id"] intValue] event:dict isnew:YES];
                     if(isSelf==NO)
@@ -286,9 +301,8 @@
             APIHandler *api=[[APIHandler alloc]init];
              NSString *responseString = [api getCrossesByIdList: [updateCrossIDList componentsJoinedByString:@","]];
             [api release];
-
-            //[dbu updateEventobjWithid:[[updateobj objectForKey:@"x_id"] intValue] event:dict isnew:YES];
             id jsonobj=[responseString JSONValue];
+            [responseString release];
             id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
             if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
             {
@@ -314,10 +328,7 @@
         [updateCrossIDList release];        
     }
     mapp.networkActivityIndicatorVisible = NO;
-
-
     [self LoadUserEventsFromDB];
-    [pool drain];
 }
 - (void)setNotificationButton:(BOOL)status
 {
@@ -376,8 +387,6 @@
 
 - (void)LoadUserEvents:(BOOL)isnew
 {
-    NSLog(@"load user events");
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     
     UIApplication* mapp = [UIApplication sharedApplication];
@@ -389,6 +398,8 @@
     [api release];
     id jsonobj=[responseString JSONValue];
     id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
+    [responseString release];
+
     if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
     {
         id crosses=[[jsonobj objectForKey:@"response"] objectForKey:@"crosses"];
@@ -402,11 +413,8 @@
         NSLog(@"error: %@",[[jsonobj objectForKey:@"meta"] objectForKey:@"error"]);
         
     }
-    
     mapp.networkActivityIndicatorVisible = NO;
     [self LoadUserEventsFromDB];
-    
-    //getLastEventUpdateTime
     NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
 
     if(isnew==NO && lastUpdateTime == nil)
@@ -416,9 +424,6 @@
         [[NSUserDefaults standardUserDefaults] setObject:lastUpdateTime  forKey:@"lastupdatetime"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    
-    [pool drain];
-    
 }
 - (void)UpdateDBWithEventDicts:(NSArray*)_events isnew:(BOOL)isnew
 {
@@ -426,8 +431,17 @@
     DBUtil *dbu=[DBUtil sharedManager];
     for(int i=0;i<[_events count];i++)
     {
-        NSDictionary* eventdict=(NSDictionary*)[_events objectAtIndex:i];
-        
+        NSMutableDictionary* eventdict=[[_events objectAtIndex:i] mutableCopy];
+        id place=[eventdict objectForKey:@"place"];
+        if(place !=nil && [place isKindOfClass:[NSDictionary class]])
+        {
+            [eventdict setObject:[((NSDictionary*)place) objectForKey:@"line1"] forKey:@"place_line1"];
+            [eventdict setObject:[((NSDictionary*)place) objectForKey:@"line2"] forKey:@"place_line2"];   
+            [eventdict setObject:[((NSDictionary*)place) objectForKey:@"external_id"] forKey:@"place_external_id"];   
+            [eventdict setObject:[((NSDictionary*)place) objectForKey:@"provider"] forKey:@"place_provider"];   
+            [eventdict setObject:[((NSDictionary*)place) objectForKey:@"lng"] forKey:@"place_lng"];   
+            [eventdict setObject:[((NSDictionary*)place) objectForKey:@"lat"] forKey:@"place_lat"];   
+        }
         [dbu updateEventobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:eventdict isnew:isnew];
         [dbu updateCommentobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"conversations"]];
         [dbu updateInvitationobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"invitations"]];
@@ -476,7 +490,7 @@
     NSString *time=[event.begin_at substringToIndex:10];
 
     if([place isEqualToString:@""]  && [time isEqualToString:@"0000-00-00"])
-        return 44;
+        return 49;
 
     return 61;
 }
@@ -509,22 +523,8 @@
         [cell setLabelTime:@""];
     else
     {   
-            NSString *x_str=[Util getLongLocalTimeStrWithTimetype:event.time_type time:begin_at];
-
-//        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-//        [dateFormat setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
-//        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//        NSDate *time_datetime = [dateFormat dateFromString:time]; 
-//        [dateFormat setTimeZone:[NSTimeZone defaultTimeZone]];
-//        [dateFormat setDateFormat:@"ha ccc MM-dd"];
-//        if(event.time_type==2)
-//        {
-//            [dateFormat setDateFormat:@"ccc MM-dd"];
-//        }
-//        NSString *result=[dateFormat stringFromDate:time_datetime]; 
-        
+        NSString *x_str=[Util getLongLocalTimeStrWithTimetype:event.time_type time:begin_at];
         [cell setLabelTime:x_str];
-//        [dateFormat release];
     }
     [cell setLabelPlace:place];
 
@@ -555,7 +555,6 @@
     }    
     return cell;
 }
-
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -593,12 +592,6 @@
             }
 
         }
-//        if(newcross==0)
-            
-//        myWebView = [[MyWebViewController alloc] init];
-//        myWebView.delegate = self;
-//        [myWebView preLoadView];
-
         [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     }
 }

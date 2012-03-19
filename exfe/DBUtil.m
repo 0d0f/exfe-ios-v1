@@ -133,6 +133,8 @@ static sqlite3 *database;
 		
 	}
 	dbpath=[writableDBPath copy];
+        NSLog(@"dbpath:%@",dbpath);
+
     }
     }
 	return dbpath;
@@ -227,7 +229,7 @@ static sqlite3 *database;
 		return;
 	} 
     sqlite3_stmt *stm=nil;
-    const char *sql = "insert or replace into invitations (id,cross_id,username,provider,state,avatar_file_name,identity_id,user_id,updated_at,attrib) values(?,?,?,?,?,?,?,?,?,?)";
+    const char *sql = "insert or replace into invitations (id,cross_id,username,provider,state,avatar_file_name,identity_id,user_id,updated_at,withnum,ishost) values(?,?,?,?,?,?,?,?,?,?,?)";
     for(int i=0;i<[invitationdict count];i++)
     {
         if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
@@ -242,7 +244,8 @@ static sqlite3 *database;
             sqlite3_bind_int(stm, 7,invitationobj.identity_id ); 
             sqlite3_bind_int(stm, 8,invitationobj.user_id ); 
             sqlite3_bind_text(stm,9,[invitationobj.updated_at UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_int(stm,10,invitationobj.attrib);
+            sqlite3_bind_int(stm,10,invitationobj.withnum);
+            sqlite3_bind_int(stm,11,invitationobj.ishost);
             
             if(sqlite3_step(stm)== SQLITE_DONE) {
             }
@@ -343,7 +346,7 @@ static sqlite3 *database;
 }
 - (NSMutableArray*) getRecentEventObj
 {
-    const char *sql="SELECT id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,flag,time_type from crosses order by updated_at desc limit 20;";
+    const char *sql="SELECT id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,flag,time_type,place_provider,place_external_id,place_lng,place_lat,background from crosses order by updated_at desc limit 20;";
     NSMutableArray *eventlist=[[NSMutableArray alloc] initWithCapacity:50] ;
     
     NSString *dbpath=[DBUtil DBPath];
@@ -372,6 +375,7 @@ static sqlite3 *database;
                 eventobj.place_line1=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 7)];
             if((char*)sqlite3_column_text(stm, 8)!=nil)
                 eventobj.place_line2=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 8)];
+            
             eventobj.creator_id=sqlite3_column_int(stm, 9);
             if((char*)sqlite3_column_text(stm, 10)!=nil)
                 eventobj.created_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 10)];
@@ -380,6 +384,20 @@ static sqlite3 *database;
             eventobj.flag = sqlite3_column_int(stm, 13);
             if((char*)sqlite3_column_text(stm, 14)!=nil)
                 eventobj.time_type = [NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 14)];
+            
+            if((char*)sqlite3_column_text(stm, 15)!=nil)
+                eventobj.place_provider=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 15)];
+
+            if((char*)sqlite3_column_text(stm, 16)!=nil)
+                eventobj.place_external_id=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 16)];
+            if((char*)sqlite3_column_text(stm, 17)!=nil)
+                eventobj.place_lng = [NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 17)];
+            if((char*)sqlite3_column_text(stm, 18)!=nil)
+                eventobj.place_lat = [NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 18)];
+
+            if((char*)sqlite3_column_text(stm, 19)!=nil)
+                eventobj.background = [NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 19)];
+
             [eventlist addObject:eventobj];
         }
     }
@@ -417,7 +435,7 @@ static sqlite3 *database;
 
 - (NSArray*) getInvitationWithEventid:(int)eventid
 {
-    const char *sql="SELECT `id` ,`username`,`provider`,`state`,`avatar_file_name`,`identity_id`,`user_id`,`attrib` from invitations where cross_id=? order by id ;";
+    const char *sql="SELECT `id` ,`username`,`provider`,`state`,`avatar_file_name`,`identity_id`,`user_id`,`withnum`,`ishost` from invitations where cross_id=? order by id ;";
     NSMutableArray *invitationlist=[[NSMutableArray alloc] initWithCapacity:50];
     
     NSString *sqldbpath=[DBUtil DBPath];
@@ -445,7 +463,8 @@ static sqlite3 *database;
             invitationobj.avatar=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 4)];
             invitationobj.identity_id=sqlite3_column_int(stm, 5);
             invitationobj.user_id=sqlite3_column_int(stm, 6);
-            invitationobj.attrib=sqlite3_column_int(stm, 7);
+            invitationobj.withnum=sqlite3_column_int(stm, 7);
+            invitationobj.ishost= sqlite3_column_int(stm, 8);
             [invitationlist addObject:invitationobj];
         }
     }
@@ -591,7 +610,7 @@ static sqlite3 *database;
 		return;
 	} 
     sqlite3_stmt *stm=nil;
-    const char *sql = "insert or replace into crosses (id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,flag,time_type) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    const char *sql = "insert or replace into crosses (id,title,description,code,begin_at,end_at,duration,place_line1,place_line2,creator_id,created_at,updated_at,state,flag,time_type,place_provider,place_external_id,place_lng,place_lat,background ) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     
 
     if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
@@ -614,6 +633,11 @@ static sqlite3 *database;
         else
             sqlite3_bind_int(stm,14, 0);
         sqlite3_bind_text(stm,15, [evento.time_type UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,16, [evento.place_provider UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,17, [evento.place_external_id UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,18, [evento.place_lng UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,19, [evento.place_lat UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,20, [evento.background UTF8String], -1, SQLITE_TRANSIENT);
         
         if(sqlite3_step(stm)== SQLITE_DONE)
         {
@@ -664,51 +688,51 @@ static sqlite3 *database;
 {
     @synchronized(self) {
     Activity *activity=[Activity initWithDict:dict action:action cross_id:cross_id];
-	NSString *dbpath=[DBUtil DBPath];
-	NSFileManager *fileManager=[NSFileManager defaultManager];
-	BOOL success=[fileManager fileExistsAtPath:dbpath];
-	[fileManager release];
-	if(!success)
-	{
-		return;
-	} 
-    sqlite3_stmt *stm=nil;
-    
-    const char *sql = "insert or replace into activity (log_id, by_id, to_id, cross_id,by_name,by_avatar,to_name,to_avatar, time, action, withmsg,invitationmsg,data,to_identities,title) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
-    {
-        if(activity.data==nil)
-            activity.data=@"";
-        sqlite3_bind_int(stm, 1, activity.log_id);  
-        sqlite3_bind_int(stm, 2, activity.by_id);  
-        sqlite3_bind_int(stm, 3, activity.to_id);  
-        sqlite3_bind_int(stm, 4, activity.cross_id);  
-        sqlite3_bind_text(stm,5, [activity.by_name UTF8String], -1, SQLITE_TRANSIENT);
-        sqlite3_bind_text(stm,6, [activity.by_avatar UTF8String], -1, SQLITE_TRANSIENT);
-        sqlite3_bind_text(stm,7, [activity.to_name UTF8String], -1, SQLITE_TRANSIENT);
-        sqlite3_bind_text(stm,8, [activity.to_avatar UTF8String], -1, SQLITE_TRANSIENT);
-        
-        sqlite3_bind_text(stm,9, [activity.time UTF8String], -1, SQLITE_TRANSIENT);
-        sqlite3_bind_text(stm,10, [activity.action UTF8String], -1, SQLITE_TRANSIENT);
-        sqlite3_bind_text(stm,11, [activity.withmsg UTF8String], -1, SQLITE_TRANSIENT);
-        sqlite3_bind_text(stm,12, [activity.invitationmsg UTF8String], -1, SQLITE_TRANSIENT);
-        sqlite3_bind_text(stm,13, [activity.data UTF8String], -1, SQLITE_TRANSIENT);
-        sqlite3_bind_text(stm,14, [[activity.to_identities JSONRepresentation] UTF8String], -1, SQLITE_TRANSIENT);
-        sqlite3_bind_text(stm,15, [activity.title UTF8String], -1, SQLITE_TRANSIENT);
-
-        if(sqlite3_step(stm)== SQLITE_DONE)
-        {
-        }
-        else 
-        {
-            NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-        }
-    }
-    else 
-    {
-        NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-    }
-    sqlite3_finalize(stm);
+//	NSString *dbpath=[DBUtil DBPath];
+//	NSFileManager *fileManager=[NSFileManager defaultManager];
+//	BOOL success=[fileManager fileExistsAtPath:dbpath];
+//	[fileManager release];
+//	if(!success)
+//	{
+//		return;
+//	} 
+//    sqlite3_stmt *stm=nil;
+//    
+//    const char *sql = "insert or replace into activity (log_id, by_id, to_id, cross_id,by_name,by_avatar,to_name,to_avatar, time, action, withmsg,invitationmsg,data,to_identities,title) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+//    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+//    {
+//        if(activity.data==nil)
+//            activity.data=@"";
+//        sqlite3_bind_int(stm, 1, activity.log_id);  
+//        sqlite3_bind_int(stm, 2, activity.by_id);  
+//        sqlite3_bind_int(stm, 3, activity.to_id);  
+//        sqlite3_bind_int(stm, 4, activity.cross_id);  
+//        sqlite3_bind_text(stm,5, [activity.by_name UTF8String], -1, SQLITE_TRANSIENT);
+//        sqlite3_bind_text(stm,6, [activity.by_avatar UTF8String], -1, SQLITE_TRANSIENT);
+//        sqlite3_bind_text(stm,7, [activity.to_name UTF8String], -1, SQLITE_TRANSIENT);
+//        sqlite3_bind_text(stm,8, [activity.to_avatar UTF8String], -1, SQLITE_TRANSIENT);
+//        
+//        sqlite3_bind_text(stm,9, [activity.time UTF8String], -1, SQLITE_TRANSIENT);
+//        sqlite3_bind_text(stm,10, [activity.action UTF8String], -1, SQLITE_TRANSIENT);
+//        sqlite3_bind_text(stm,11, [activity.withmsg UTF8String], -1, SQLITE_TRANSIENT);
+//        sqlite3_bind_text(stm,12, [activity.invitationmsg UTF8String], -1, SQLITE_TRANSIENT);
+//        sqlite3_bind_text(stm,13, [activity.data UTF8String], -1, SQLITE_TRANSIENT);
+//        sqlite3_bind_text(stm,14, [[activity.to_identities JSONRepresentation] UTF8String], -1, SQLITE_TRANSIENT);
+//        sqlite3_bind_text(stm,15, [activity.title UTF8String], -1, SQLITE_TRANSIENT);
+//
+//        if(sqlite3_step(stm)== SQLITE_DONE)
+//        {
+//        }
+//        else 
+//        {
+//            NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+//        }
+//    }
+//    else 
+//    {
+//        NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+//    }
+//    sqlite3_finalize(stm);
     }
 }
 
@@ -1056,6 +1080,33 @@ static sqlite3 *database;
     }
     sqlite3_finalize(stm);
     return cross;
+}
+
+- (int)getConfirmNumByCrossId:(int)cross_id
+{
+    const char *sql="SELECT count(id) from invitations where cross_id=? and state=1;";
+    
+    NSString *dbpath=[DBUtil DBPath];
+	NSFileManager *fileManager=[NSFileManager defaultManager];
+	BOOL success=[fileManager fileExistsAtPath:dbpath];
+	[fileManager release];
+	if(!success)
+	{
+		return 0;
+	} 
+	sqlite3_stmt *stm=nil;
+    int confirmed_num;
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        sqlite3_bind_int(stm, 1, cross_id);  
+        while(sqlite3_step(stm)== SQLITE_ROW)
+        {
+            confirmed_num=sqlite3_column_int(stm, 0);
+
+        }
+    }
+    sqlite3_finalize(stm);
+    return confirmed_num;    
 }
 - (void)dealloc
 {

@@ -39,6 +39,8 @@ const int INVITATION_MAYBE=3;
 - (void)dealloc
 {
     [placeholder release];
+    [event release];
+//    [eventobj release];
     [super dealloc];
 }
 
@@ -156,8 +158,6 @@ const int INVITATION_MAYBE=3;
 - (void)viewWillAppear:(BOOL)animated 
 {
 	[super viewWillAppear:animated];
-
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
@@ -189,10 +189,7 @@ const int INVITATION_MAYBE=3;
 - (NSString*)GenerateHtmlWithEvent
 {
     exfeAppDelegate *app=(exfeAppDelegate *)[[UIApplication sharedApplication] delegate];
-    
-    
     DBUtil *dbu=[DBUtil sharedManager];
-   
     NSDate *theDate = nil;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -223,35 +220,67 @@ const int INVITATION_MAYBE=3;
     NSString *html=[NSString stringWithContentsOfFile:xpath encoding:NSUTF8StringEncoding error:nil];
     html=[html stringByReplacingOccurrencesOfString:@"{#begin_at_human#}" withString:[Util formattedDateRelativeToNow:eventobj.begin_at withTimeType:eventobj.time_type]];
     
-    html=[html stringByReplacingOccurrencesOfString:@"{#begin_at#}" withString:[Util getNormalLocalTimeStrWithTimetype:eventobj.time_type time:eventobj.begin_at]];
+    html=[html stringByReplacingOccurrencesOfString:@"{#begin_at#}" withString:[Util getLongLocalTimeStrWithTimetype:eventobj.time_type time:eventobj.begin_at]];
     
+    if([eventobj.begin_at isEqualToString:@"0000-00-00 00:00:00"]&& [eventobj.time_type isEqualToString:@""])
+    {
+        html=[html stringByReplacingOccurrencesOfString:@"{#hidden_calendar#}" withString:@"hidden"];
+        html=[html stringByReplacingOccurrencesOfString:@"{#show_detail_time#}" withString:@"display:none"];
+    }
+    else
+        html=[html stringByReplacingOccurrencesOfString:@"{#show_detail_time#}" withString:@"display:block"];
+    
+    
+    NSString *mapimg=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/staticmap?center=%@,%@&markers=size:mid|color:blue|%@,%@&zoom=13&size=130x75&sensor=false",eventobj.place_lat,eventobj.place_lng,eventobj.place_lat,eventobj.place_lng];
+
     
     if([eventobj.place_line1 isEqualToString:@""])
     {
-        html=[html stringByReplacingOccurrencesOfString:@"{#place_line1#}" withString:@"Any Place"];
         html=[html stringByReplacingOccurrencesOfString:@"{#place_line2#}" withString:@""];
-        html=[html stringByReplacingOccurrencesOfString:@"{#map_display}" withString:@"none"];
+        html=[html stringByReplacingOccurrencesOfString:@"{#map_display}" withString:@"none"]
+        ;
+        if(!([eventobj.place_lat intValue]==0  && [eventobj.place_lng intValue]==0)){
+            html=[html stringByReplacingOccurrencesOfString:@"{#map_img_url#}" withString:mapimg];
+            html=[html stringByReplacingOccurrencesOfString:@"{#show_map_img#}" withString:@"display:block"];
+            html=[html stringByReplacingOccurrencesOfString:@"{#place_line1#}" withString:@"Somewhere"];
+        }
+        else {
+            html=[html stringByReplacingOccurrencesOfString:@"{#place_line1#}" withString:@"Any Place"];
+            html=[html stringByReplacingOccurrencesOfString:@"{#show_map_img#}" withString:@"display:none"];
+            html=[html stringByReplacingOccurrencesOfString:@"{#nomap#}" withString:@"nomap"];
+
+        }
     }
     else
     {
         html=[html stringByReplacingOccurrencesOfString:@"{#place_line1#}" withString:eventobj.place_line1];
         html=[html stringByReplacingOccurrencesOfString:@"{#map_display}" withString:@"inline"];
-
+        if(!([eventobj.place_lat intValue]==0  && [eventobj.place_lng intValue]==0)) {
+            html=[html stringByReplacingOccurrencesOfString:@"{#map_img_url#}" withString:mapimg];
+            html=[html stringByReplacingOccurrencesOfString:@"{#show_map_img#}" withString:@"display:block"];
+        }
+        else{
+            html=[html stringByReplacingOccurrencesOfString:@"{#show_map_img#}" withString:@"display:none"];
+            html=[html stringByReplacingOccurrencesOfString:@"{#nomap#}" withString:@"nomap"];
+        }
+        
         NSString *place_line2=[eventobj.place_line2 stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
         html=[html stringByReplacingOccurrencesOfString:@"{#place_line2#}" withString:place_line2];
     }
     html=[html stringByReplacingOccurrencesOfString:@"{#title#}" withString:eventobj.title];
+    if(eventobj.background!=nil)
+        html=[html stringByReplacingOccurrencesOfString:@"{#background_img#}" withString:[Util getBackgroundLink:eventobj.background]];
 
-    NSString *rsvpstatus=@"<a id='x_rsvp_yes' href='http://invitation/#yes' class='x_rsvp_button'>Accept</a><a id='x_rsvp_no' href='http://invitation/#no' class='x_rsvp_button'>Decline</a><a id='x_rsvp_maybe' href='http://invitation/#maybe' class='x_rsvp_button'>interested</a>";
-    
     NSString *exfeelist=@"";
     NSArray *invitations=[dbu getInvitationWithEventid:self.eventid];
-
+    int confirmed_num=0;
     if(invitations !=nil&&[invitations count]>0)
     {
         for (int i=0;i<[invitations count];i++)
         {
             Invitation *invitation=[invitations objectAtIndex:i];
+            if(invitation.state==INVITATION_YES)
+                confirmed_num++;
             if(![invitation.avatar isEqualToString:@""])
             {
                 if(![invitation.avatar isEqualToString:@""])
@@ -261,87 +290,79 @@ const int INVITATION_MAYBE=3;
                     NSString *imgurl = [ImgCache getImgUrl:imgName];
                     NSString *imgcachename=[ImgCache getImgName:imgurl];
                     
+                    NSString *host=@"";
+                    NSString *withnum=@"";
+                    
+                    if(invitation.ishost==YES)
+                        host=@"<span class='rt'>H</span>";
+                    if(invitation.withnum>0)
+                        withnum=[NSString stringWithFormat:@"<span class='lt'>%d</span>",invitation.withnum];
+                    
                     if(invitation.state ==INVITATION_YES)
                     {
-                        exfeelist=[exfeelist stringByAppendingFormat:@"<li id='avatar_%d'><img alt='' width='40px' height='40px' src='images/%@' /></li>",invitation.identity_id,imgcachename];
+                        
+                        exfeelist=[exfeelist stringByAppendingFormat:@"<li id='avatar_%d'><img alt='' width='40px' height='40px' src='images/%@' />%@%@</li>",invitation.identity_id,imgcachename,host,withnum];
+                        
+                        
+                        
                     }
                     else
-                        exfeelist=[exfeelist stringByAppendingFormat:@"<li id='avatar_%d' class='opacity'><img alt='' width='40px' height='40px' src='images/%@' />",invitation.identity_id,imgcachename];
+                        exfeelist=[exfeelist stringByAppendingFormat:@"<li id='avatar_%d' class='opacity'><img alt='' width='40px' height='40px' src='images/%@' />%@%@</li>",invitation.identity_id,imgcachename,host,withnum];
                     
                 }
             }
             if(invitation.user_id==app.userid)
             {
-                if(invitation.state!=0)
-                    rsvpstatus=@"<ol class='clearfix'><li class='ui-btn accept-btn' data-rsvp='1'>Accept</li><li class='ui-btn declined-btn' data-rsvp='2'>Declined</li><li class='interested-btn' data-rsvp='3'>Interested</li></ol>";
-                    //@"<a id='x_rsvp_yes' href='http://invitation/#yes' style='display: none;' class='x_rsvp_button'>Accept</a><a id='x_rsvp_no' href='http://invitation/#no' style='display: none;' class='x_rsvp_button'>Decline</a><a id='x_rsvp_maybe' href='http://invitation/#maybe' style='display: none;' class='x_rsvp_button'>interested</a>";
-
-//                if(invitation.state ==INVITATION_YES)
-//                    rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Accepted</span>\".</span>                <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
-//                else if(invitation.state ==INVITATION_NO)
-//                    rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Declined</span>\".</span>                <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
-//                else if(invitation.state ==INVITATION_MAYBE)
-//                    rsvpstatus=[rsvpstatus stringByAppendingString:@"<span id='x_rsvp_msg'>Your RSVP is \"<span id='x_rsvp_status'>Interested</span>\".</span> <a id='x_rsvp_change' href='http://changersvp/#1' style='display: inline;'>Change?</a>"];
-
+                if(invitation.state ==INVITATION_YES || invitation.state ==INVITATION_NO || invitation.state ==INVITATION_MAYBE)
+                {
+                    html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_btn_show#}" withString:@"style='display:none'"];
+                    if(invitation.state ==INVITATION_YES)
+                        html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_opt_text#}" withString:@"Accept"];
+                    else if(invitation.state ==INVITATION_NO)
+                        html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_opt_text#}" withString:@"Declined"];
+                    else if(invitation.state ==INVITATION_MAYBE)
+                        html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_opt_text#}" withString:@"Interested"];
+                    html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_opt_show#}" withString:@"style='display:block'"];
+                }
+                else {
+                    html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_opt_show#}" withString:@"style='display:none'"];
+                }
             }
         }
     }    
+    
+    html=[html stringByReplacingOccurrencesOfString:@"{#confirmed_num#}" withString:[NSString stringWithFormat:@"%d",confirmed_num]];
+    html=[html stringByReplacingOccurrencesOfString:@"{#all_num#}" withString:[NSString stringWithFormat:@"%d",[invitations count]]];
+    
     [invitations release];
     html=[html stringByReplacingOccurrencesOfString:@"{#exfee_list#}" withString:exfeelist];
     NSLog(@"exfeelist:%@",exfeelist);
-    html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_status#}" withString:rsvpstatus];
-
     NSString *description=[eventobj.description stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
     html=[html stringByReplacingOccurrencesOfString:@"{#description#}" withString:description];
-    
     return html;
 }
 -(bool) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    NSString *requestString = [[request URL] absoluteString];
-    NSLog(@"%@",requestString);
-    if ([requestString hasPrefix:@"js-frame:"]) {
-        NSArray *components = [requestString componentsSeparatedByString:@":"];
-        
-        NSString *function = (NSString*)[components objectAtIndex:1];
-		int callbackId = [((NSString*)[components objectAtIndex:2]) intValue];
-        NSString *argsAsString = [(NSString*)[components objectAtIndex:3] 
+    if (interceptLinks)
+    {
+        NSString *requestString = [[request URL] absoluteString];
+        if ([requestString hasPrefix:@"js-frame:"]) {
+            NSArray *components = [requestString componentsSeparatedByString:@":"];
+            NSString *function = (NSString*)[components objectAtIndex:1];
+            int callbackId = [((NSString*)[components objectAtIndex:2]) intValue];
+            NSString *argsAsString = [(NSString*)[components objectAtIndex:3] 
                                   stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-        [self handleCall:function callbackId:callbackId args:[argsAsString JSONValue]];
+            [self handleCall:function callbackId:callbackId args:[argsAsString JSONValue]];
+        }
     }
     
-    if (self.interceptLinks && navigationType==UIWebViewNavigationTypeLinkClicked) {
+    if (interceptLinks && navigationType==UIWebViewNavigationTypeLinkClicked) {
         NSURL *url = request.URL;
         NSArray *chunk=[[url absoluteString] componentsSeparatedByString:@"#"];
         if([chunk count]==2)
         {
-            if( [[chunk objectAtIndex:0] isEqualToString:@"http://invitation/"])
-            {
-                NSString *rsvp=[chunk objectAtIndex:1];
-                APIHandler *api=[[APIHandler alloc]init];
-                NSString *responseString=[api sentRSVPWith:self.eventid rsvp:(NSString*)rsvp];
-                
-                [api release];
-                
-                NSDictionary *rsvpDict = [responseString JSONValue];
-                id code=[[rsvpDict objectForKey:@"meta"] objectForKey:@"code"];
-                if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
-                {
-                DBUtil *dbu=[DBUtil sharedManager];
-                    
-                [dbu updateInvitationobjWithid:self.eventid event:(NSArray*)[[rsvpDict objectForKey:@"response"] objectForKey:@"invitations"]];
-                
-                NSString *html=[self GenerateHtmlWithEvent];
-                
-                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES); 
-                NSString *documentsDirectory = [paths objectAtIndex:0]; 
-                
-                NSURL *baseURL = [NSURL fileURLWithPath:documentsDirectory];
-                [webview loadHTMLString:html baseURL:baseURL];
-                }
-                
-            }
-            else if( [[chunk objectAtIndex:0] isEqualToString:@"http://addical/"])
+
+            if( [[chunk objectAtIndex:0] isEqualToString:@"http://addical/"])
             {
                 NSString *datestr=[self.event objectForKey:@"begin_at"];
                 NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
@@ -368,11 +389,6 @@ const int INVITATION_MAYBE=3;
                 [eventStore saveEvent:sevent span:EKSpanThisEvent error:&err]; 
                 [dbu updateEventicalWithid:self.eventid identifier:sevent.eventIdentifier];
             }
-            else if( [[chunk objectAtIndex:0] isEqualToString:@"http://changersvp/"])
-            {
-                NSString* scriptstr=@"document.getElementById('x_rsvp_msg').style.display='none';document.getElementById('x_rsvp_change').style.display='none';document.getElementById('x_rsvp_yes').style.display='block';document.getElementById('x_rsvp_no').style.display='block';document.getElementById('x_rsvp_maybe').style.display='block';";
-                NSString *rsvp =[webview stringByEvaluatingJavaScriptFromString:scriptstr];  
-            }
         }
         else if( [[chunk objectAtIndex:0] isEqualToString:@"http://showmap/"])
         {
@@ -382,7 +398,10 @@ const int INVITATION_MAYBE=3;
             else
                 q =[NSString stringWithFormat:@"%@",eventobj.place_line1];
             int zoom = 13;
+            
             NSString *stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@&z=%d", q,zoom] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            if([eventobj.place_lat intValue]>0 && [eventobj.place_lng intValue]>0)
+                stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@@%@,%@&z=%d", q,eventobj.place_lat,eventobj.place_lng,zoom] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
             NSURL *url = [NSURL URLWithString:stringURL];
             [[UIApplication sharedApplication] openURL:url];
             
@@ -392,15 +411,13 @@ const int INVITATION_MAYBE=3;
     //No need to intercept the initial request to fill the WebView
     else {
         NSLog(@"interceptLinks");
-        self.interceptLinks = YES;
+        interceptLinks = YES;
         return YES;
     }
     
 }
 - (void)returnResult:(int)callbackId args:(id)arg;
 {
-//    NSString *resultArrayString = [arg JSONRepresentation];    
-//    {"invitations":[{"identity_id":"11","invitation_id":"268","user_id":42,"avatar_file_name":"http://www.gravatar.com/avatar/e461fe2d48746288ffef676def2f6e82?d=http%3A%2F%2Fimg.exfe.com%2F9%2Faa%2F80_80_9aa40bcf6b39a65d55e028e0e4896829.png","name":"huo ju ","bio":"","updated_at":"2012-02-27 09:46:22","state":2,"external_username":"hj@exfe.com","provider":"email","external_identity":"hj@exfe.com"}]}
     NSMutableDictionary* invitation=[[arg objectForKey:@"invitations"] objectAtIndex:0];
     if([[invitation objectForKey:@"state"] intValue]==1)
         [invitation setObject:@"Accepted" forKey:@"state_str"];
@@ -408,7 +425,7 @@ const int INVITATION_MAYBE=3;
         [invitation setObject:@"Declined" forKey:@"state_str"];
     else if([[invitation objectForKey:@"state"] intValue]==3)
         [invitation setObject:@"Interested" forKey:@"state_str"];
-        
+    [invitation setObject:[arg objectForKey:@"confirmed_num"] forKey:@"confirmed_num"];
     NSString *result=[[[arg objectForKey:@"invitations"] objectAtIndex:0] JSONRepresentation] ;
     [webview stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"NativeBridge.resultForCallback(%d,%@);",callbackId,result]];
 }
@@ -431,15 +448,26 @@ const int INVITATION_MAYBE=3;
         [api release];
         
         NSDictionary *rsvpDict = [responseString JSONValue];
+        [responseString release];
+         
         id code=[[rsvpDict objectForKey:@"meta"] objectForKey:@"code"];
         if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
         {
             DBUtil *dbu=[DBUtil sharedManager];
             
             [dbu updateInvitationobjWithid:self.eventid event:(NSArray*)[[rsvpDict objectForKey:@"response"] objectForKey:@"invitations"]];
+            int confirmnum=[dbu getConfirmNumByCrossId:self.eventid];
+            NSMutableDictionary *response=[[rsvpDict objectForKey:@"response"] mutableCopy];
+            [response setObject:[NSNumber numberWithInt:confirmnum] forKey:@"confirmed_num"];
+            [self returnResult:callbackId args:response];
+            [response release];
+             
         }
+        else {
+            [self returnResult:callbackId args:@"{}"];
+        }
+        
 
-        [self returnResult:callbackId args:[rsvpDict objectForKey:@"response"] ];
         
     } else if ([functionName isEqualToString:@"prompt"]) {
         

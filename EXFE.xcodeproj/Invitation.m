@@ -18,7 +18,8 @@
 @synthesize state;
 @synthesize avatar;
 @synthesize updated_at;
-@synthesize attrib;
+@synthesize withnum;
+@synthesize ishost;
 
 - (id)init
 {
@@ -49,7 +50,8 @@
         invitation.provider=[dict objectForKey:@"provider"];
         invitation.identity_id=[[dict objectForKey:@"identity_id"] integerValue];
         invitation.updated_at=[dict objectForKey:@"updated_at"];
-        invitation.attrib=[[dict objectForKey:@"attrib"] integerValue];
+        invitation.withnum=[[dict objectForKey:@"withnum"] integerValue];
+        invitation.ishost=[[dict objectForKey:@"ishost"] boolValue];
     
 //    }
     return invitation;

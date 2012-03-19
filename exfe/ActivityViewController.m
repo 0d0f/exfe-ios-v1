@@ -203,8 +203,11 @@
         [(NotificationConversationCellView *)cell setLabelTime:[Util formattedDateRelativeToNow:activity.time]];
         
         [(NotificationConversationCellView *)cell setLabelCrossTitle:activity.title];
-        CGSize maximumLabelSize = CGSizeMake(255,9999);
+        CGSize maximumLabelSize = CGSizeMake(225,50);
         CGSize expectedLabelSize = [[self setMsgWithActivity:activity Label:nil] sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap];
+
+//        if(expectedLabelSize.height>36)
+//            [(NotificationConversationCellView *)cell setHeight:36];
         [(NotificationConversationCellView *)cell setHeight:expectedLabelSize.height];
 
 
@@ -268,7 +271,16 @@
     NSString *msg=@"";
     if([activity.action isEqualToString:@"conversation"]) {
         msg=[NSString stringWithFormat:@"%@: %@",[activity.by_name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]],activity.data];
-        [label setText:msg];
+
+        NSString *newstr=[self string:msg reducedToWidth:225 withFont:[UIFont fontWithName:@"Helvetica" size:12]];
+        if([msg length]>[newstr length]*2)
+        {
+            NSString *r=[[msg substringWithRange:NSMakeRange(0, [newstr length]*2-5)] stringByAppendingString:@"..."];
+            [label setText:r];
+        }
+        else {
+            [label setText:msg];
+        }
         [label setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12] range:NSMakeRange(0, [[activity.by_name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length])];
 
     }
@@ -361,7 +373,7 @@
     }
     return msg;
 }
-//- (NSString*)getWithMsg:(Activity*)activity{
+
 - (NSString*)setWithMsg:(Activity*)activity Label:(NIAttributedLabel*)label {
 
     NSString *msg=@"";
@@ -385,6 +397,31 @@
     [label setText:msg];
     [label setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12] range:NSMakeRange([@"with other" length],[msg length]-[@"with other" length])];
     return msg;
+}
+
+- (NSString *)string:(NSString *)sourceString reducedToWidth:(CGFloat)width withFont:(UIFont *)font {
+    
+    if ([sourceString sizeWithFont:font].width <= width)
+        return sourceString;
+    
+    NSMutableString *string = [NSMutableString string];
+    
+    for (NSInteger i = 0; i < [sourceString length]; i++) {
+        
+        [string appendString:[sourceString substringWithRange:NSMakeRange(i, 1)]];
+        
+        if ([string sizeWithFont:font].width > width) {
+            
+            if ([string length] == 1)
+                return nil;
+            
+            [string deleteCharactersInRange:NSMakeRange(i, 1)];
+            
+            break;
+        }
+    }
+    
+    return string;
 }
 
 - (void)pushback

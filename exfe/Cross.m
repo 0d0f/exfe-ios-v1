@@ -14,12 +14,18 @@
 @synthesize id;
 @synthesize title;
 @synthesize description;
+@synthesize background;
 @synthesize code;
 @synthesize begin_at;
 @synthesize end_at;
 @synthesize duration;
 @synthesize place_line1;
 @synthesize place_line2;
+@synthesize place_provider;
+@synthesize place_external_id;
+@synthesize place_lng;
+@synthesize place_lat;
+
 @synthesize creator_id;
 @synthesize created_at;
 @synthesize updated_at;
@@ -41,6 +47,11 @@
         event.description = [dict objectForKey:@"description"];
     else
         event.description = @"";
+
+    if([dict objectForKey:@"background"]!=[NSNull null])
+        event.background = [dict objectForKey:@"background"];
+    else
+        event.background = @"";
 
     if([dict objectForKey:@"code"]!=[NSNull null])
         event.code = [dict objectForKey:@"code"];
@@ -72,6 +83,25 @@
     else
         event.place_line2 = @"";
 
+    if([dict objectForKey:@"place_provider"]!=nil)
+        event.place_provider = [dict objectForKey:@"place_provider"];
+    else
+        event.place_provider = @"";
+    
+    if([dict objectForKey:@"place_external_id"]!=nil)
+        event.place_external_id = [dict objectForKey:@"place_external_id"];
+    else
+        event.place_external_id = @"";
+
+    if([dict objectForKey:@"place_lng"]!=nil)
+        event.place_lng = [dict objectForKey:@"place_lng"];
+    else
+        event.place_lng = @"0.0";
+    
+    if([dict objectForKey:@"place_lat"]!=nil)
+        event.place_lat = [dict objectForKey:@"place_lat"];
+    else
+        event.place_lat = @"0.0";
     
     event.creator_id = [[dict objectForKey:@"host_id"] integerValue];
 
@@ -103,16 +133,21 @@
 }
 - (void)dealloc
 {
-   [title release];
-   [description release];
-   [code release];
-   [begin_at release];
-   [end_at release];
-   [place_line1 release];
-   [place_line2 release];
-   [created_at release];
-   [updated_at release];
+    [title release];
+    [description release];
+    [background release];
+    [code release];
+    [begin_at release];
+    [end_at release];
+    [place_line1 release];
+    [place_line2 release];
+    [place_provider release];
+    [place_external_id release];
+    [place_lng release];
+    [place_lat release];
+    [created_at release];
+    [updated_at release];
     [time_type release];
-   [super dealloc];
+    [super dealloc];
 }
 @end

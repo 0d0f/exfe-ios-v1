@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
+#import "NIAttributedLabel.h"
 
 @interface ConversationCellView : UITableViewCell {
-    IBOutlet UILabel *cellText;
+    IBOutlet NIAttributedLabel *cellText;
     IBOutlet UILabel *cellTime;
     IBOutlet UIImageView *cellAvatar;
 }
@@ -20,4 +21,5 @@
 - (void)setAvartar:(UIImage*)_img;
 - (void)setCellHeightWithCommentHeight:(int)height;
 
+@property (nonatomic,retain) NIAttributedLabel *cellText;
 @end

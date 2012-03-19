@@ -13,10 +13,6 @@
 #import "NSObject+SBJson.h"
 
 #define FONT_SIZE 14.0f
-#define CELL_CONTENT_WIDTH 320.0f
-#define CELL_CONTENT_MARGIN 10.0f
-#define CELL_IMAGE_WIDTH 40.0f
-#define CELL_IMAGE_HEIGHT 40.0f
 #define COMMENT_LABEL_HEIGHT 18
 
 
@@ -101,7 +97,6 @@
     dispatch_queue_t refreshQueue = dispatch_queue_create("refreshconversation thread", NULL);
     dispatch_async(refreshQueue, ^{
         BOOL reload=FALSE;
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         APIHandler *api=[[APIHandler alloc]init];
         NSString *responseString=[api getPostsWith:eventid];
         DBUtil *dbu=[DBUtil sharedManager];
@@ -122,8 +117,8 @@
             if([arr count]>0)
                 reload=TRUE;
         }
+        [responseString release];
         [api release];
-        [pool drain];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if(reload)
@@ -146,8 +141,6 @@
 }
 - (BOOL)postComment:(NSString*)inputtext
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
     APIHandler *api=[[APIHandler alloc]init];
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     NSString *commentjson=[api AddCommentById:eventid comment:inputtext external_identity:uname];
@@ -158,8 +151,6 @@
     }
     [commentjson release];
     [api release]; 
-    [pool drain];
-    //[NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
     return success;
 }
 
@@ -180,11 +171,11 @@
     Comment *comment=[comments objectAtIndex:indexPath.row];
     CGSize maximumLabelSize = CGSizeMake(246,9999);
     
-    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap]; 
+    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:FONT_SIZE] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap]; 
     if(expectedLabelSize.height>COMMENT_LABEL_HEIGHT)
-        return 44-18+expectedLabelSize.height;
+        return expectedLabelSize.height+15;
 
-    return 44;
+    return 35;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -198,16 +189,16 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     Comment *comment=[comments objectAtIndex:indexPath.row];
     User *user=[User initWithDict:[comment.userjson JSONValue]];
-
-    [cell setLabelText:comment.comment];
-    [cell setLabelTime:[Util getNormalLocalTimeStrWithTimetype:@"" time:comment.updated_at]];
+    [cell.cellText setText:[NSString stringWithFormat:@"%@:%@",user.name,comment.comment]];
+    [cell.cellText setFont:[UIFont fontWithName:@"Helvetica-Bold" size:14] range:NSMakeRange(0, [user.name length])];
     
+    [cell setLabelTime:[Util formattedDateRelativeToNow:comment.updated_at]];
     
     CGSize maximumLabelSize = CGSizeMake(246,9999);
     
-    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap]; 
-//    if(expectedLabelSize.height>COMMENT_LABEL_HEIGHT)
-        [cell setCellHeightWithCommentHeight:expectedLabelSize.height];
+    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:FONT_SIZE] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap]; 
+    
+    [cell setCellHeightWithCommentHeight:expectedLabelSize.height];
 
     dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
         dispatch_async(imgQueue, ^{

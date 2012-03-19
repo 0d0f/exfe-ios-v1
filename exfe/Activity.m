@@ -71,14 +71,6 @@
     activity.cross_id = cross_id;
     if([dict objectForKey:@"data"]!=nil)
         activity.data = [dict objectForKey:@"data"];
-//    else
-//    {
-//        if([dict objectForKey:@"new_value"]!=nil)
-//            activity.data =[dict objectForKey:@"new_value"];
-//        else
-//            activity.data = @"";
-//    }
-
     
     if([dict objectForKey:@"time"]!=nil)
         activity.time = [dict objectForKey:@"time"];
@@ -93,8 +85,6 @@
 
     activity.time_type=[dict objectForKey:@"x_time_type"];
 
-    
-    //TODO: use time_type to format timestr.
     activity.action = action;
     
     if([action isEqualToString:@"conversation"])
@@ -142,16 +132,11 @@
                 else
                     begin_at = @"";
                 activity.begin_at=begin_at;
-//                activity.begin_at=[Util getTimeStr:time_type time:begin_at];
                 activity.action=@"gather";
             }
         }
     } else {
     
-//        if([dict objectForKey:@"data"]!=nil)
-//            activity.data = [dict objectForKey:@"data"];
-//        else
-//            activity.data = @"";
     }
     
     if([dict objectForKey:@"title"]!=nil)
@@ -191,4 +176,26 @@
     
     return activity;    
 }
+
+- (void)dealloc
+{
+    [by_name release];
+    [by_avatar release];
+    
+    [to_name release];
+    [to_avatar release];
+    [to_identities release];
+    
+    [time release];
+    [action release];
+    [data release];
+    [title release];
+    [time_type release];
+    [begin_at release];
+    [place_line1 release];
+    [invitationmsg release];
+    [withmsg release];
+    [super dealloc];
+}
+
 @end
