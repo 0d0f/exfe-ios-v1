@@ -85,6 +85,11 @@ static sqlite3 *database;
     {
         sqlite3_step(stm);
     }
+    sql = "delete from activity;";
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        sqlite3_step(stm);
+    }
     sqlite3_finalize(stm);       
 }
 - (void) emptyDBCache
@@ -688,51 +693,51 @@ static sqlite3 *database;
 {
     @synchronized(self) {
     Activity *activity=[Activity initWithDict:dict action:action cross_id:cross_id];
-//	NSString *dbpath=[DBUtil DBPath];
-//	NSFileManager *fileManager=[NSFileManager defaultManager];
-//	BOOL success=[fileManager fileExistsAtPath:dbpath];
-//	[fileManager release];
-//	if(!success)
-//	{
-//		return;
-//	} 
-//    sqlite3_stmt *stm=nil;
-//    
-//    const char *sql = "insert or replace into activity (log_id, by_id, to_id, cross_id,by_name,by_avatar,to_name,to_avatar, time, action, withmsg,invitationmsg,data,to_identities,title) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-//    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
-//    {
-//        if(activity.data==nil)
-//            activity.data=@"";
-//        sqlite3_bind_int(stm, 1, activity.log_id);  
-//        sqlite3_bind_int(stm, 2, activity.by_id);  
-//        sqlite3_bind_int(stm, 3, activity.to_id);  
-//        sqlite3_bind_int(stm, 4, activity.cross_id);  
-//        sqlite3_bind_text(stm,5, [activity.by_name UTF8String], -1, SQLITE_TRANSIENT);
-//        sqlite3_bind_text(stm,6, [activity.by_avatar UTF8String], -1, SQLITE_TRANSIENT);
-//        sqlite3_bind_text(stm,7, [activity.to_name UTF8String], -1, SQLITE_TRANSIENT);
-//        sqlite3_bind_text(stm,8, [activity.to_avatar UTF8String], -1, SQLITE_TRANSIENT);
-//        
-//        sqlite3_bind_text(stm,9, [activity.time UTF8String], -1, SQLITE_TRANSIENT);
-//        sqlite3_bind_text(stm,10, [activity.action UTF8String], -1, SQLITE_TRANSIENT);
-//        sqlite3_bind_text(stm,11, [activity.withmsg UTF8String], -1, SQLITE_TRANSIENT);
-//        sqlite3_bind_text(stm,12, [activity.invitationmsg UTF8String], -1, SQLITE_TRANSIENT);
-//        sqlite3_bind_text(stm,13, [activity.data UTF8String], -1, SQLITE_TRANSIENT);
-//        sqlite3_bind_text(stm,14, [[activity.to_identities JSONRepresentation] UTF8String], -1, SQLITE_TRANSIENT);
-//        sqlite3_bind_text(stm,15, [activity.title UTF8String], -1, SQLITE_TRANSIENT);
-//
-//        if(sqlite3_step(stm)== SQLITE_DONE)
-//        {
-//        }
-//        else 
-//        {
-//            NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-//        }
-//    }
-//    else 
-//    {
-//        NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-//    }
-//    sqlite3_finalize(stm);
+	NSString *dbpath=[DBUtil DBPath];
+	NSFileManager *fileManager=[NSFileManager defaultManager];
+	BOOL success=[fileManager fileExistsAtPath:dbpath];
+	[fileManager release];
+	if(!success)
+	{
+		return;
+	} 
+    sqlite3_stmt *stm=nil;
+    
+    const char *sql = "insert or replace into activity (log_id, by_id, to_id, cross_id,by_name,by_avatar,to_name,to_avatar, time, action, withmsg,invitationmsg,data,to_identities,title) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+    {
+        if(activity.data==nil)
+            activity.data=@"";
+        sqlite3_bind_int(stm, 1, activity.log_id);  
+        sqlite3_bind_int(stm, 2, activity.by_id);  
+        sqlite3_bind_int(stm, 3, activity.to_id);  
+        sqlite3_bind_int(stm, 4, activity.cross_id);  
+        sqlite3_bind_text(stm,5, [activity.by_name UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,6, [activity.by_avatar UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,7, [activity.to_name UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,8, [activity.to_avatar UTF8String], -1, SQLITE_TRANSIENT);
+        
+        sqlite3_bind_text(stm,9, [activity.time UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,10, [activity.action UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,11, [activity.withmsg UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,12, [activity.invitationmsg UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,13, [activity.data UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,14, [[activity.to_identities JSONRepresentation] UTF8String], -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stm,15, [activity.title UTF8String], -1, SQLITE_TRANSIENT);
+
+        if(sqlite3_step(stm)== SQLITE_DONE)
+        {
+        }
+        else 
+        {
+            NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+        }
+    }
+    else 
+    {
+        NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+    }
+    sqlite3_finalize(stm);
     }
 }
 

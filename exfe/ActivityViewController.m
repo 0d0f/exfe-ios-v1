@@ -311,6 +311,7 @@
         [label setText:msg];
         for(NSValue *range in rangearray)
             [label setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12] range:[range rangeValue]];
+        [rangearray release];
 
     }
     else if([activity.action isEqualToString:@"addexfee"] || [activity.action isEqualToString:@"delexfee"]) {
@@ -345,6 +346,7 @@
         [label setText:msg];
         for(NSValue *range in rangearray)
             [label setFont:[UIFont fontWithName:@"Helvetica-Bold" size:12] range:[range rangeValue]];
+        [rangearray release];
     }
     else if([activity.action isEqualToString:@"title"] || [activity.action isEqualToString:@"begin_at"]|| [activity.action isEqualToString:@"place"]|| [activity.action isEqualToString:@"description"])
     {

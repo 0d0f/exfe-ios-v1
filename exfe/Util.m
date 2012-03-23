@@ -250,6 +250,6 @@
 }
 + (NSString*) getBackgroundLink:(NSString*)imgname
 {
-    return [NSString stringWithFormat:@"http://localimg.exfe.com/xbgimage/%@_ios.jpg",imgname];
+    return [NSString stringWithFormat:@"http://img.exfe.com/xbgimage/%@_ios.jpg",imgname];
 }
 @end

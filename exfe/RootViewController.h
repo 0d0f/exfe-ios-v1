@@ -10,9 +10,9 @@
 #import "PullRefreshTableViewController.h"
 #import "CrossCellView.h"
 #import "Cross.h"
+#import "MBProgressHUD.h"
 
-@interface RootViewController : PullRefreshTableViewController{
-//UIViewController {
+@interface RootViewController : PullRefreshTableViewController <MBProgressHUDDelegate> {
 	IBOutlet UIWebView *webview;
     BOOL interceptLinks;
     NSMutableData *responseData;
@@ -37,6 +37,7 @@
 - (void)LoadUpdate;
 - (void)UpdateDBWithEventDicts:(NSArray*)events isnew:(BOOL)isnew;
 - (void)refresh;
+- (void)refreshWithprogress:(BOOL)show;
 - (void)ShowSettingView;
 - (void)ShowActiveView;
 - (void)emptyView;

@@ -107,23 +107,22 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-//    activityIndicatorview = [[UIActivityIndicatorView alloc] 
-//                             initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-//    
-//    activityIndicatorview.frame = CGRectMake(self.view.bounds.size.width / 2.0f - activityIndicatorview.frame.size.width /2.0f, self.view.bounds.size.height / 2.0f - activityIndicatorview.frame.size.height /2.0f, activityIndicatorview.frame.size.width, activityIndicatorview.frame.size.height);
-//    [activityIndicatorview setBackgroundColor:[UIColor blackColor]];
-//    [activityIndicatorview setAlpha:0.8]; 
-//
-//    [self.view addSubview:activityIndicatorview];  
-//    [activityIndicatorview startAnimating];   
+    [activityIndicatorview setHidden:YES];   
     
-    //then add to the view
-
-//    self.view.frame.size.height/2-80/2
-//    self.view.frame.size.width/2 -80/2   
-
     
-    // Do any additional setup after loading the view from its nib.
+    NSString *signoutbtnimgpath = [[NSBundle mainBundle] pathForResource:@"signoutbtn" ofType:@"png"];
+    UIImage *signbtnimg = [UIImage imageWithContentsOfFile:signoutbtnimgpath];
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:@"Sign In" forState:UIControlStateNormal];
+    [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18]]; 
+    [button setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
+    [button setBackgroundImage:signbtnimg forState:UIControlStateNormal];
+    [button setFrame:CGRectMake(110, 191, 100, 40)];  
+    
+    [button addTarget:self action:@selector(LoginButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:button];
+    
 }
 
 - (void)viewDidUnload

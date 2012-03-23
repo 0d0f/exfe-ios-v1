@@ -40,7 +40,6 @@ const int INVITATION_MAYBE=3;
 {
     [placeholder release];
     [event release];
-//    [eventobj release];
     [super dealloc];
 }
 
@@ -288,7 +287,7 @@ const int INVITATION_MAYBE=3;
                     NSString* imgName = invitation.avatar;
                     
                     NSString *imgurl = [ImgCache getImgUrl:imgName];
-                    NSString *imgcachename=[ImgCache getImgName:imgurl];
+//                    NSString *imgcachename=[ImgCache getImgName:imgurl];
                     
                     NSString *host=@"";
                     NSString *withnum=@"";
@@ -301,13 +300,13 @@ const int INVITATION_MAYBE=3;
                     if(invitation.state ==INVITATION_YES)
                     {
                         
-                        exfeelist=[exfeelist stringByAppendingFormat:@"<li id='avatar_%d'><img alt='' width='40px' height='40px' src='images/%@' />%@%@</li>",invitation.identity_id,imgcachename,host,withnum];
+                        exfeelist=[exfeelist stringByAppendingFormat:@"<li id='avatar_%d'><img alt='' width='40px' height='40px' src='%@' />%@%@</li>",invitation.identity_id,imgurl,host,withnum];
                         
                         
                         
                     }
                     else
-                        exfeelist=[exfeelist stringByAppendingFormat:@"<li id='avatar_%d' class='opacity'><img alt='' width='40px' height='40px' src='images/%@' />%@%@</li>",invitation.identity_id,imgcachename,host,withnum];
+                        exfeelist=[exfeelist stringByAppendingFormat:@"<li id='avatar_%d' class='opacity'><img alt='' width='40px' height='40px' src='%@' />%@%@</li>",invitation.identity_id,imgurl,host,withnum];
                     
                 }
             }
@@ -630,7 +629,12 @@ const int INVITATION_MAYBE=3;
 
 - (void)pushback
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (webview.loading)
+        [webview stopLoading];
+    webview.delegate = nil;
+    [self.navigationController popToRootViewControllerAnimated:YES];
+
+    
 }
 
 @end

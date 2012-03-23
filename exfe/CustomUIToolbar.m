@@ -10,7 +10,7 @@
 
 @implementation CustomUIToolbar
 - (void)drawRect:(CGRect)rect {
-    UIImage *img = [UIImage imageNamed:@"navbar_bg.jpg"];
+    UIImage *img = [UIImage imageNamed:@"toolbarbg.png"];
     [img drawInRect:rect];
 }
 @end

@@ -36,10 +36,17 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)dealloc
+{
+    [identitiesData release];
+    [super dealloc];
+}
+
 #pragma mark - View lifecycle
 
 - (IBAction) Logout:(id) sender
 {
+    NSString *token=[[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"] copy];
     
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"username"];
     [[NSUserDefaults standardUserDefaults] setObject:nil forKey:@"api_key"];
@@ -59,6 +66,15 @@
     NSArray *viewControllers = app.navigationController.viewControllers;
     RootViewController *rootViewController = [viewControllers objectAtIndex:0];
     [rootViewController emptyView];
+    
+    APIHandler *api=[[APIHandler alloc]init];
+    NSString *responseString=[api disconnectDeviceToken:token];
+    NSLog(@"responseString:%@",responseString);
+    [token release];
+//    NSDictionary *profileDict = [responseString JSONValue];
+    [api release];
+    [responseString release];
+
     
     [app logoutViewControllerDidFinish:self];
 
@@ -95,11 +111,37 @@
     if(my_identities && my_users)
     {
         NSMutableArray* sections=[NSKeyedUnarchiver unarchiveObjectWithData:my_identities];
-        NSMutableArray* identities=[sections objectAtIndex:0];
-        Identity* identity=[identities objectAtIndex:0];
+//        NSMutableArray* identities=[sections objectAtIndex:0];
+//        Identity* identity=[identities objectAtIndex:0];
         NSDictionary* user=[NSKeyedUnarchiver unarchiveObjectWithData:my_users];
         identitiesData= [sections retain];
         [self LoadData:user];
+    }
+    else {
+        
+        identitiesData=[[NSMutableArray alloc] initWithCapacity:2];
+//        id identities = [response objectForKey:@"identities"];
+        NSMutableArray* identities_section=[[NSMutableArray alloc] initWithCapacity:10];
+        NSMutableArray* devices_section=[[NSMutableArray alloc] initWithCapacity:5];
+//        for(int i=0;i<[identities count];i++)
+//        {
+//            Identity* useridentity=[Identity initWithDict:[identities objectAtIndex:i]];
+//            if(useridentity.status==3)
+//            {
+//                if ([useridentity.provider isEqualToString:@"iOSAPN"])
+//                    [devices_section addObject:useridentity];    
+//                else
+//                    [identities_section addObject:useridentity];
+//            }
+//        }
+//        if([identities_section count]>0)
+            [identitiesData addObject:identities_section];
+//        if([devices_section count]>0)
+            [identitiesData addObject:devices_section];
+//        id user = [response objectForKey:@"user"];
+        [devices_section release];
+        [identities_section release];
+        [tabview reloadData];
     }
     dispatch_queue_t fetchdataQueue = dispatch_queue_create("fetchdata thread", NULL);
     
@@ -107,17 +149,17 @@
         APIHandler *api=[[APIHandler alloc]init];
         NSString *responseString=[api getProfile];
         NSDictionary *profileDict = [responseString JSONValue];
+        [api release];
+        [responseString release];
         id code=[[profileDict objectForKey:@"meta"] objectForKey:@"code"];
         if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
         {
             id response=[profileDict objectForKey:@"response"];
             if([response isKindOfClass:[NSDictionary class]])
             {
-                
                 if(identitiesData != nil)
                     [identitiesData release];
-                
-                    identitiesData=[[NSMutableArray alloc] initWithCapacity:2];
+                identitiesData=[[NSMutableArray alloc] initWithCapacity:2];
                 id identities = [response objectForKey:@"identities"];
                 NSMutableArray* identities_section=[[NSMutableArray alloc] initWithCapacity:10];
                 NSMutableArray* devices_section=[[NSMutableArray alloc] initWithCapacity:5];
@@ -136,8 +178,9 @@
                     [identitiesData addObject:identities_section];
                 if([devices_section count]>0)
                     [identitiesData addObject:devices_section];
-                
                 id user = [response objectForKey:@"user"];
+                [devices_section release];
+                [identities_section release];
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSData *encodedidentitydata =[NSKeyedArchiver archivedDataWithRootObject:identitiesData];
                 [[NSUserDefaults standardUserDefaults] setObject:encodedidentitydata  forKey:@"my_identities"];
@@ -200,7 +243,6 @@
     [[NSUserDefaults standardUserDefaults] synchronize];
     if(uname!=nil && [apikey length]>2 && [uidstr intValue]>0)
     {
-
     }
     else
     {
@@ -323,16 +365,8 @@
         [button setBackgroundImage:signbtnimg forState:UIControlStateNormal];
         [button setFrame:CGRectMake(200, 10, 100, 40)];  
         
-//        [[button layer] setCornerRadius:5.0f];
-//        [[button layer] setBorderWidth:1.0f];
-//        [[button layer] setBorderColor:[UIColor blackColor].CGColor];
-//        [[button layer] setShadowRadius:1];
-//        [[button layer] setShadowOpacity:0.5];
-//        [[button layer] setShadowOffset:CGSizeMake(2.0f, 2.0f)];
-
         [button addTarget:self action:@selector(Logout:) forControlEvents:UIControlEventTouchUpInside];
         [footerView addSubview:button];
-//        [button release];
     }
     
     //return the view for the footer

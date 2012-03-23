@@ -21,9 +21,10 @@
 + (NSString*)URL_API_ROOT;
 + (NSString*)URL_API_DOMAIN;
 - (NSString*)checkUserLoginByUsername:(NSString*)email withPassword:(NSString*)passwd;
+- (NSString*)disconnectDeviceToken:(NSString*)device_token;
 - (NSString*)getProfile;
 - (NSString*)getUserEvents;
-- (NSString*)getUpdate;
+- (NSString*)getUpdate:(BOOL)ignore_time;
 - (NSString*)getEventById:(int)eventid;
 - (NSString*) getCrossesByIdList:(NSString*)idlist;
 - (NSString*)AddCommentById:(int)eventid comment:(NSString*)commenttext external_identity:(NSString*)external_identity;

@@ -19,7 +19,8 @@
     NSInteger state;
     NSString* avatar;
     NSString* updated_at;
-    NSInteger attrib;
+    NSInteger withnum;
+    BOOL ishost;
     
 }
 @property NSInteger id;
@@ -31,7 +32,8 @@
 @property NSInteger state;
 @property (retain,nonatomic) NSString* avatar;
 @property (retain,nonatomic) NSString* updated_at;
-@property NSInteger attrib;
+@property NSInteger withnum;
+@property BOOL ishost;
 
 + (Invitation*)initWithDict:(NSDictionary*)dict EventID:(NSInteger)eid;
 

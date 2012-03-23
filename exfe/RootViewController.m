@@ -34,11 +34,6 @@
     
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     
-    if ([[self.navigationController navigationBar] respondsToSelector:@selector (setBackgroundImage:forBarMetrics:)]) {  // iOS 5
-        UIImage *toolBarIMG = [UIImage imageNamed: @"navbar_bg.jpg"];  
-        [[self.navigationController navigationBar] setBackgroundImage:toolBarIMG forBarMetrics:0];
-    }
-
     if(events==nil)
     {
         [self LoadUserEventsFromDB];
@@ -46,7 +41,7 @@
     NSString *apikey=[[NSUserDefaults standardUserDefaults] stringForKey:@"api_key"]; 
     if(uname!=nil && [apikey length]>2 )
     {
-        [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
+        [self refreshWithprogress:NO];
     }
 }
 
@@ -55,14 +50,11 @@
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     if(uname!=nil){
         [self.navigationController navigationBar].topItem.title=uname;
-        NSLog(@"initui user name :%@",uname);    
         [[self.navigationController navigationBar] setNeedsDisplay];
-        
     }
 
     NSString *settingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"navbar_setting" ofType:@"png"];
     UIImage *settingbtnimg = [UIImage imageWithContentsOfFile:settingbtnimgpath];
-    
     
     UIButton *settingButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
@@ -81,20 +73,48 @@
         [[self.navigationController navigationBar] setNeedsDisplay];
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(defaultChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
-}
-
-- (void) refresh
-{
-    NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
-    if(lastUpdateTime==nil)
-        [self LoadUserEvents:NO]; 
-    else
-    {
-        [self LoadUserEvents:YES]; 
-        [self LoadUpdate];
-    }
     
-    [self stopLoading];
+}
+- (void)refresh
+{
+    [self refreshWithprogress:NO];
+}
+- (void)refreshWithprogress:(BOOL)show
+{
+    UIApplication* mapp = [UIApplication sharedApplication];
+    mapp.networkActivityIndicatorVisible = YES;
+
+    MBProgressHUD *hud = nil;
+    if(show==YES)
+    {
+        hud=[MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+        hud.labelText = @"Loading";
+    }
+
+    dispatch_queue_t refreshQueue = dispatch_queue_create("refresh cross thread", NULL);
+    dispatch_async(refreshQueue, ^{
+
+        NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
+        if(lastUpdateTime==nil)
+        {
+            [self LoadUserEvents:NO]; 
+            [self LoadUpdate:YES]; //YES: ignore timestamp
+        }
+        else
+        {
+            [self LoadUserEvents:YES]; 
+            [self LoadUpdate:NO];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self stopLoading];
+            [tableview reloadData];
+            mapp.networkActivityIndicatorVisible = NO;
+            if(show==YES)
+                [MBProgressHUD hideHUDForView:self.navigationController.view animated:YES];
+        });
+    });
+    
+    
 }
 
 - (BOOL)LoadUserEventsFromDB
@@ -113,18 +133,16 @@
     if([newevents count]==0)
         [newevents release];
     
-    [tableview reloadData];
+//    [tableview reloadData];
     return NO;
 }
-- (void)LoadUpdate
+- (void)LoadUpdate:(BOOL)ignore_time
 {
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
-    UIApplication* mapp = [UIApplication sharedApplication];
-    mapp.networkActivityIndicatorVisible = YES;
     if(app.api_key==nil)
         return;
     APIHandler *api=[[APIHandler alloc]init];
-    NSString *responseString=[api getUpdate];
+    NSString *responseString=[api getUpdate:ignore_time];
     [api release];
     DBUtil *dbu=[DBUtil sharedManager];
     id jsonobj=[responseString JSONValue];
@@ -327,7 +345,7 @@
         
         [updateCrossIDList release];        
     }
-    mapp.networkActivityIndicatorVisible = NO;
+//    mapp.networkActivityIndicatorVisible = NO;
     [self LoadUserEventsFromDB];
 }
 - (void)setNotificationButton:(BOOL)status
@@ -389,8 +407,8 @@
 {
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     
-    UIApplication* mapp = [UIApplication sharedApplication];
-    mapp.networkActivityIndicatorVisible = YES;
+//    UIApplication* mapp = [UIApplication sharedApplication];
+//    mapp.networkActivityIndicatorVisible = YES;
     if(app.api_key==nil)
         return;
     APIHandler *api=[[APIHandler alloc]init];
@@ -413,7 +431,7 @@
         NSLog(@"error: %@",[[jsonobj objectForKey:@"meta"] objectForKey:@"error"]);
         
     }
-    mapp.networkActivityIndicatorVisible = NO;
+//    mapp.networkActivityIndicatorVisible = NO;
     [self LoadUserEventsFromDB];
     NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
 
@@ -559,7 +577,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Cross *event=[events objectAtIndex:indexPath.row];
-    EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil];
+    EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil] ;
     
     if(event!=nil)
     {
@@ -567,7 +585,6 @@
         detailViewController.eventobj=event;
     }
     [self.navigationController pushViewController:detailViewController animated:YES];
-    
     [detailViewController release]; 	
     DBUtil *dbu=[DBUtil sharedManager];
     [dbu setCrossStatusWithCrossId:event.id status:0];
@@ -638,7 +655,7 @@
 
 -(void)pushback
 {
-    [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (Cross*)getEventByCrossId:(int)cross_id
@@ -655,9 +672,9 @@
 
 - (void)dealloc
 {
-//    [events release];
     [super dealloc];
 }
+
 
 @end
 
