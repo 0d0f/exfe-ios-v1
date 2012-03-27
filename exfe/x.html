@@ -1,90 +1,434 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-    <head>
-        <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
-            <title>Exfe</title>
-            
-            <style>
-                body { color: #696969; font-family: Verdana,"Lucida Grande",LucidaSansUnicode,Helvetica,Arial,sans-serif; font-size: 13px; }
-                *{padding:0; margin:0; border:0;}
-                .exfer{margin:10px}.exfer h3 {color: #0591af; font-size: 24px; font-weight: normal;margin:5px 0 0 0; line-height:32px; }
-                .exfer .exfee {margin-top: 10px}
-                .exfer ul.ynbtn {margin: 15px 0 0 0 ; height: 31px ; list-style:none}
-                .exfer ul.ynbtn li {width: 90px; float: left; margin:3px 10px 3px 0;}
-                .exfer ul.ynbtn li a {width: 90px; height: 31px; color: white; text-align: center; display: block; font-size: 20px; font-family: "helvetica"; line-height: 32px; text-decoration: none}
-                .exfer ul.ynbtn li a.yes {background:url("app_btn.png") no-repeat left top;}
-                .exfer ul.ynbtn li a.no {background:url("app_btn.png") no-repeat -100px top;}
-                .exfer ul.ynbtn li a:hover.yes {background:url("app_btn.png") no-repeat left -40px;}
-                .exfer ul.ynbtn li a:hover.no {background:url("app_btn.png") no-repeat -100px -40px;}
-                
-                .exfer ul.ynbtn li a.maybe {background: none; color: #838383; text-decoration: underline; font-size: 18px; text-align: center; width:70px;}
-                
-                .x_rsvp_button {
-                    width: 90px;
-                    height: 31px;
-                    text-align: center;
-                    display: block;
-                    font-size: 20px;
-                    line-height: 32px;
-                    float: left;
-                }
 
-                
-                #x_rsvp_yes {
-                    background: url("app_btn.png") no-repeat left top;
-                    color: #E6E6E6;
-                    text-decoration: none;
-                }
-                
-                #x_rsvp_no {
-                    background: url("app_btn.png") no-repeat -100px top;
-                    color: #E6E6E6;
-                    text-decoration: none;
-                }
-          
-                #x_rsvp_maybe {
-                    background: none;
-                    color: #666666;
-                    text-decoration: underline;
-                    font-size: 18px;
-                    line-height: 24px;
-                    width:70px;
-                    text-align: center;
-                }
-                
-                .exfel .description p { font-size: 14px; line-height: 18px; margin: 5px 0 0 0 ; }
-                .exfer h2 { color: #0591AF; font-family: Verdana; font-size: 28px; font-weight: normal;margin:10px 0 0 0; line-height:32px; }
-                
-                #exfee_list .rsvp_no { opacity: 0.4;margin:20px 0 0 0 }
-                #exfee_list img{ padding: 0 4px 0 0; width:40px; height:40px;}  
-                </style>
-            <meta name="csrf-param" content="authenticity_token"/>
-            <meta name="csrf-token" content="ESgBBnW/Z3J74vGN8JohSmk34FVihP6WGAYVYs6T1jo="/>
-    </head>
-    <body>
-        
-        <div class='exfer'>
-            <h3 class='tm'>{#begin_at_human#}</h3>
-            <p class='tm'>{#begin_at#}</p>
-            <h3 id="place">{#place_line1#}<a href="http://showmap/"><img style="display:{#map_display}" src="map.png"></a></h3>
-            <div id="place_lines">
-                <p class='tm'>{#place_line2#}</p>
-                <p class='tm'></p>
-            </div>
-            
-            <div id="exfee_list">
-                {#exfee_list#}
-            </div>
-            
-            <h2>{#title#}</h2>
-            <div class='exfel'>
-                <div class='description' id='cross_description'>
-                    <p>
-                    {#description#}
-                    </p>
-                </div>
-            </div>
-            {#rsvp_status#}
+<head>
+  <meta charset="utf-8">
+  <title>EXFE</title>
+  <meta name="description" content="">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+  <style>
+      article, aside, details, figcaption, figure, footer, header, hgroup, nav, section { display: block; }
+      audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; }
+      audio:not([controls]) { display: none; }
+      [hidden] { display: none; }
+      
+      html { font-size: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+      body { margin: 0; font-size: 13px; line-height: 1.231; background:#F4F4F4; }
+      h1, h2, h3, h4, h5, h6, p { margin: 0; padding: 0;}
+      
+      ul, ol { margin: 0; padding: 0; }
+      nav ul, nav ol { list-style: none; list-style-image: none; margin: 0; padding: 0; }
+      img { border: 0; -ms-interpolation-mode: bicubic; vertical-align: middle; }
+      
+      .hidden { display: none !important; visibility: hidden; }
+      .visuallyhidden { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
+      .visuallyhidden.focusable:active, .visuallyhidden.focusable:focus { clip: auto; height: auto; margin: 0; overflow: visible; position: static; width: auto; }
+      .invisible { visibility: hidden; }
+      .clearfix:before, .clearfix:after { content: ""; display: table; }
+      .clearfix:after { clear: both; }
+      .clearfix { *zoom: 1; }
+      
+      #container {
+          /*border: 1px solid #555;*/
+          max-width: 320px;
+          margin: 0 auto;
+          font-family: Helvetica,HelveticaNeue,"Helvetica Neue",Arial,sans-serif;
+          /*padding: 0 10px;*/
+          background: url(img/bkg.png) no-repeat #F4F4F4;
+      }
+      
+      #container > header {
+          height: 44px;
+          padding: 0 10px;
+      }
+      
+      nav a {
+          display: inline-block;
+          text-decoration: none;
+          text-indent: -9999px;
+          margin-top: 5px;
+      }
+
+      #main {
+          background: url({#background_img#}) no-repeat rgba(244, 244, 244, 0.6);
+          background-size: 320px 336px;
+         /* margin-top: -20px; padding-top:20px;*/
+          padding-top: 67px;
+      }
+      
+      #cross {
+          padding: 0 10px;
+      }
+      
+      .title {
+          padding-top: 10px;
+          padding-bottom: 14px;
+          font-size: 18px;
+          line-height: 25px;
+          color: #191919;
+          text-shadow: 0 1px 1px #FEFFFE;
+      }
+      
+      .operate {
+          font-size: 14px;
+          line-height: 28px;
+          font-weight: bold;
+          height: 30px;
+          margin-bottom: 12px;
+      }
+      
+      .operate ol, .users ol {
+          list-style-type: none;
+      }
+      .operate ol li, .users ol li {
+          float: left;
+      }
+      
+      .operate ol li {
+          height: 30px;
+          text-align: center;
+          cursor: pointer;
+          border-radius: 2px;
+      }
+      
+      .operate ol li.ui-btn {
+          width: 32%;
+          margin-right: 5%;
+      }
+      
+      .accept-btn {
+          text-shadow: 0 1px 1px #FEFFFE;
+          box-shadow: 2px 2px 3px 0.25px rgba(0, 0, 0, 0.25);
+          background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#D5E7F0), to(#1F78A5));
+          background-image: -webkit-linear-gradient(top, #D5E7F0, #1F78A5);
+      }
+      
+      .declined-btn {
+          color: #E6E6E6;
+          text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.33);
+          box-shadow: 2px 2px 3px 0.25px rgba(0, 0, 0, 0.25);
+          background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#EAEAEA), to(#919191));
+          background-image: -webkit-linear-gradient(top, #EAEAEA, #919191);
+      }
+      
+      .interested-btn {
+          color: #7F7F7F;
+          text-decoration: underline;
+      }
+      .dateplace .opt-btn {
+          height: 30px;
+          position: absolute;
+          right: 30px;
+          top: 0;
+          color: #4C4C4C;
+          width: 32%;
+          height: 26px;
+          text-align: center;
+          font-size: 14px;
+          line-height: 28px;
+          font-weight: bold;
+          border: 2px solid #1175A5;
+          border-radius: 5px;
+          display: none;
+          cursor: pointer;
+      }
+      
+      .dateplace {
+          position: relative;
+          margin-bottom: 13px;
+      }
+      
+      .dateplace h2 {
+          /*margin-top: 12px;*/
+          font-size: 18px;
+          font-weight: normal;
+          line-height: 24px;
+          color: #1175A5;
+      }
+      
+      .date {
+          margin-bottom: 12px;
+      }
+      
+      .date > div {
+          height: 15px;
+      }
+      .date .clock {
+          display: inline-block;
+          text-indent: 18px;
+          font-size: 12px;
+          line-height: 18px;
+          color: #191919;
+          background: url("clock.png") no-repeat left center;
+      }
+      
+      .date .calendar {
+          cursor: pointer;
+          vertical-align: middle;
+          height: 15px;
+          width: 15px;
+          display: inline-block;
+          background: url("calendar.png") no-repeat left center;
+      }
+      
+      .place {
+          float: left;
+          width: 50%;
+      }
+      
+      .place h2 {
+          height: 48px;
+          overflow: hidden;
+      }
+      
+      .place p {
+          font-size: 12px;
+          line-height: 18px;
+          color: #424242;
+      }
+      .nomap {
+          width: 100%;
+      }
+      
+      .nomap h2 {
+          width: 50%;
+      }
+      
+      .map {
+          margin-top: 20px;
+          margin-right: 10px;
+          float: right;
+          width: 43%;
+          height: 75px;
+          /*background: #555;*/
+      }      
+      .exfee {
+          clear: both;
+          overflow: hidden;
+      }
+      
+      .statistic {
+          text-align: right;
+      }
+      
+      .users {
+          width: 82%;
+          float: left;
+      }
+      
+      .users ol li {
+          position: relative;
+          width: 40px;
+          height: 40px;
+          margin-right: 1.6%;
+          margin-bottom: 1.6%;
+      }
+      
+      .users ol li img {
+          border-radius: 2px;
+      }
+      
+      .users ol li span {
+          display: block;
+          position: absolute;
+          color: #EAEAEA;
+          font-size: 8px;
+          font-weight: bold;
+          background-color: #1175A5;
+          letter-spacing: 1px;
+          text-indent: 1px;
+      }
+      
+      .users ol li span.rt {
+          right: 0;
+          top: 0;
+      }
+      .users ol li span.lt {
+          left: 0;
+          top: 0;
+      }
+      
+      .users ol li.opacity {
+          opacity: 0.4;
+          /*-moz-opacity: 0.4;
+           filter:alpha(opacity=4);*/
+      }
+      
+      .statistic {
+          float: right;
+          font-size: 12px;
+          line-height: 12px;
+          color: #7F7F7F;
+      }
+      
+      .statistic .confirmed {
+          font-size: 18px;
+          line-height: 24px;
+          color: #1175A5;
+      }
+      
+      .description {
+          /*border: 1px solid #E5E6E6;*/
+          padding-bottom: 10px;
+          margin-top: 20px;
+          color: #424242;
+      }
+      
+      .description p {
+          /*word-wrap: ;*/
+      }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="main" role="main">
+      <section id="cross">
+        <h1 class="title">{#title#}</h1>
+          <div class="operate " id="rsvp_btns" {#rsvp_btn_show#}>
+          <ol class="clearfix">
+            <li class="ui-btn accept-btn" data-rsvp="1" onclick="opt_rsvp(1);">Accept</li>
+            <li class="ui-btn declined-btn" data-rsvp="2" onclick="opt_rsvp(2);">Declined</li>
+            <li class="interested-btn" data-rsvp="3" onclick="opt_rsvp(3);">Interested</li>
+          </ol>
         </div>
-    </body>
+        
+        <div class="dateplace clearfix">
+          <div class="date">
+            <h2>{#begin_at_human#}</h2>
+              <div style="{#show_detail_time#}">
+              <span>{#begin_at#}</span>
+              <a class="calendar {#hidden_calendar#}" style="display:none" href="#calendar"></a>
+            </div>
+          </div>
+<div id="change_rsvp" class="opt-btn" {#rsvp_opt_show#} onclick="change_rsvp();">{#rsvp_opt_text#} </div>
+          
+          <div class="place {#nomap#}" >
+            <h2>{#place_line1#}</h2>
+            <p>{#place_line2#}</p>
+          </div>
+
+          <!-- 地图: center=lat,lnt&markers=size:mid%7Ccolor:blue%7Clat,lnt -->
+          <div class="map" style="{#show_map_img#}">
+            <a href="http://showmap/"><img src="{#map_img_url#}"></a>
+          </div>
+        </div>
+        
+        <div class="exfee">
+          <div class="users">
+            <ol class="clearfix">
+                {#exfee_list#}
+              <!--li>
+                <img alt="" width="40px" height="40px" src="img/u1.png" />
+                <span class="rt">H</span>
+              </li>
+              <li>
+                <img alt="" width="40px" height="40px" src="img/u1.png" />
+                <span class="lt">2</span>
+              </li>
+              <li><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
+              <li><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
+              <li><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
+              <li class="opacity"><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
+              <li>
+                <img alt="" width="40px" height="40px" src="img/u1.png" />
+                <span class="rt">H</span>
+              </li>
+              <li>
+                <img alt="" width="40px" height="40px" src="img/u1.png" />
+                <span class="lt">2</span>
+              </li>
+              <li><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
+              <li><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
+              <li><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
+              <li class="opacity"><img alt="" width="40px" height="40px" src="img/u1.png" /></li-->
+            </ol>
+          </div>
+
+          <div class="statistic">
+            <div>
+                <span id="confirmed_num" class="confirmed">{#confirmed_num#}</span>
+              /
+              <span>{#all_num#}</span>
+            </div>
+            confirmed
+          </div>
+        </div>
+
+        <div class="description">
+          <p>{#description#}</p>
+        </div>
+      </section>
+    </div>
+    <footer>
+    </footer>
+  </div> <!--! end of #container -->
+  <script>
+      var NativeBridge = {
+          callbacksCount : 1,
+          callbacks : {},
+          
+          // Automatically called by native layer when a result is available
+          resultForCallback : function resultForCallback(callbackId, resultArray) {
+              try {
+                  var callback = NativeBridge.callbacks[callbackId];
+                  if (!callback) return;
+                  
+                  callback.call(null,resultArray);
+              } catch(e) {alert(e)}
+          },
+          
+          // Use this in javascript to request native objective-c code
+          // functionName : string (I think the name is explicit :p)
+          // args : array of arguments
+          // callback : function with n-arguments that is going to be called when the native code returned
+          call : function call(functionName, args, callback) {
+              var hasCallback = callback && typeof callback == "function";
+              var callbackId = hasCallback ? NativeBridge.callbacksCount++ : 0;
+              
+              if (hasCallback)
+              NativeBridge.callbacks[callbackId] = callback;
+              
+              var iframe = document.createElement("IFRAME");
+              iframe.setAttribute("src", "js-frame:" + functionName + ":" + callbackId+ ":" + encodeURIComponent(JSON.stringify(args)));
+              document.documentElement.appendChild(iframe);
+              iframe.parentNode.removeChild(iframe);
+              iframe = null;
+          }
+      };
+
+      function display(id, type) {
+          document.getElementById(id).style.display = type === 'hide' ? 'none' : 'block';
+      }
+      
+      function changeHtml(id, content) {
+          document.getElementById(id).innerHTML = content;
+      }
+      
+      function change_rsvp() {
+          display('change_rsvp', 'hide');
+          display('rsvp_btns', 'show');
+      }
+      
+      function opacity(id, type) {
+          document.getElementById(id).setAttribute('class', type ? '' : 'opacity');
+      }
+      
+      function opt_rsvp_callback(args) {
+          
+          changeHtml('change_rsvp',args.state_str);
+          display('rsvp_btns', 'hide');
+          display('change_rsvp', 'show');
+          opacity("avatar_"+args.identity_id, args.state == 1 ? 1 : 0);
+          document.getElementById('confirmed_num').innerHTML=args.confirmed_num;
+      }
+      
+        function opt_rsvp (e) {
+            NativeBridge.call('rsvp', [e],opt_rsvp_callback);
+        }
+  </script>
+</body>
 </html>

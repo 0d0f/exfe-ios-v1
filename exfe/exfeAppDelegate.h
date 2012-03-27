@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "LoginViewController.h"
-#import "MeViewController.h"
 #import "UserSettingViewController.h"
 #import "CustomUINavigationBar.h"
 

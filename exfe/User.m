@@ -55,9 +55,10 @@
 
 - (void)dealloc
 {
-   [name release];
-   [avatar_file_name release]; 
-   [email release];
-   [bio release];    
+    [name release];
+    [avatar_file_name release]; 
+    [email release];
+    [bio release];  
+    [super dealloc];
 }
 @end

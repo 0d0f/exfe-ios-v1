@@ -7,16 +7,17 @@
 //
 #import <QuartzCore/QuartzCore.h>
 #import "RootViewController.h"
-#import "MeViewController.h"
 #import "EventViewController.h"
 #import "exfeAppDelegate.h"
 #import "UserSettingViewController.h"
+#import "ActivityViewController.h"
 #import "APIHandler.h"
 #import "JSON/SBJson.h"
 #import "DBUtil.h"
 #import "ImgCache.h"
 #import "UIButton+StyledButton.h"
 #import "UIBarButtonItem+StyledButton.h"
+
 
 
 @implementation RootViewController
@@ -27,15 +28,12 @@
 {
     [super viewDidLoad];
     reload=YES;
+    uiInit=true;
     [self initUI];
+    uiInit=false;
     
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     
-    if ([[self.navigationController navigationBar] respondsToSelector:@selector (setBackgroundImage:forBarMetrics:)]) {  // iOS 5
-        UIImage *toolBarIMG = [UIImage imageNamed: @"navbar_bg.jpg"];  
-        [[self.navigationController navigationBar] setBackgroundImage:toolBarIMG forBarMetrics:0];
-    }
-
     if(events==nil)
     {
         [self LoadUserEventsFromDB];
@@ -43,14 +41,18 @@
     NSString *apikey=[[NSUserDefaults standardUserDefaults] stringForKey:@"api_key"]; 
     if(uname!=nil && [apikey length]>2 )
     {
-        [NSThread detachNewThreadSelector:@selector(refresh) toTarget:self withObject:nil];
+        [self refreshWithprogress:NO];
     }
 }
 
 - (void)initUI
 {
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
-    [self.navigationController navigationBar].topItem.title=uname;
+    if(uname!=nil){
+        [self.navigationController navigationBar].topItem.title=uname;
+        [[self.navigationController navigationBar] setNeedsDisplay];
+    }
+
     NSString *settingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"navbar_setting" ofType:@"png"];
     UIImage *settingbtnimg = [UIImage imageWithContentsOfFile:settingbtnimgpath];
     
@@ -58,61 +60,99 @@
     [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
     settingButton.frame = CGRectMake(0, 0, settingbtnimg.size.width, settingbtnimg.size.height);
     [settingButton addTarget:self action:@selector(ShowSettingView) forControlEvents:UIControlEventTouchUpInside];
-    
-//    UIBarButtonItem *customsettingBarItem = [[UIBarButtonItem alloc] initWithCustomView:settingButton];
-//	self.navigationItem.leftBarButtonItem = customsettingBarItem;
-//    [customsettingBarItem release];
-//    
     barButtonItem = [[[UIBarButtonItem alloc] initWithCustomView:settingButton] autorelease];
     
-//    UIBarButtonItem *flexibleSpaceLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-
     [self.navigationController navigationBar].topItem.rightBarButtonItem=barButtonItem;      
-}
-
-- (void) refresh
-{
-    @synchronized(self) {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];  
-    NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
-    if(lastUpdateTime==nil)
-        [self LoadUserEvents:NO]; 
-    else
+    notificationHint=false;
+    if(activeButton==nil)
     {
-        [self LoadUserEvents:YES]; 
-        [self LoadUpdate];
+        activeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [activeButton addTarget:self action:@selector(ShowActiveView) forControlEvents:UIControlEventTouchUpInside];
+        [self.navigationController navigationBar].topItem.leftBarButtonItem =[[[UIBarButtonItem alloc] initWithCustomView:activeButton]autorelease];
+        [self setNotificationButton:false];
+        [[self.navigationController navigationBar] setNeedsDisplay];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(defaultChanged:) name:NSUserDefaultsDidChangeNotification object:nil];
     
-    [self stopLoading];
+}
+- (void)refresh
+{
+    [self refreshWithprogress:NO];
+}
+- (void)refreshWithprogress:(BOOL)show
+{
+    UIApplication* mapp = [UIApplication sharedApplication];
+    mapp.networkActivityIndicatorVisible = YES;
 
-    [pool drain];   
+    MBProgressHUD *hud = nil;
+    if(show==YES)
+    {
+        hud=[MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+        hud.labelText = @"Loading";
     }
+
+    dispatch_queue_t refreshQueue = dispatch_queue_create("refresh cross thread", NULL);
+    dispatch_async(refreshQueue, ^{
+
+        NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
+        if(lastUpdateTime==nil)
+        {
+            [self LoadUserEvents:NO]; 
+            [self LoadUpdate:YES]; //YES: ignore timestamp
+        }
+        else
+        {
+            [self LoadUserEvents:YES]; 
+            [self LoadUpdate:NO];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self stopLoading];
+            [tableview reloadData];
+            mapp.networkActivityIndicatorVisible = NO;
+            if(show==YES)
+                [MBProgressHUD hideHUDForView:self.navigationController.view animated:YES];
+        });
+    });
+    
+    
 }
 
 - (BOOL)LoadUserEventsFromDB
 {
     DBUtil *dbu=[DBUtil sharedManager];
-    events=[dbu getRecentEventObj];
-    [tableview reloadData];
+    NSMutableArray *newevents=[dbu getRecentEventObj];
+    if(newevents!=nil && [newevents count]>0)
+    {
+        if(events!=nil)
+        {
+            [events release];
+            events=nil;
+        }
+        events=newevents;
+    }
+    if([newevents count]==0)
+        [newevents release];
+    
+//    [tableview reloadData];
     return NO;
 }
-- (void)LoadUpdate
+- (void)LoadUpdate:(BOOL)ignore_time
 {
-    NSLog(@"load user update");
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
-    UIApplication* mapp = [UIApplication sharedApplication];
-    mapp.networkActivityIndicatorVisible = YES;
     if(app.api_key==nil)
         return;
     APIHandler *api=[[APIHandler alloc]init];
-    NSString *responseString=[api getUpdate];
+    NSString *responseString=[api getUpdate:ignore_time];
     [api release];
     DBUtil *dbu=[DBUtil sharedManager];
     id jsonobj=[responseString JSONValue];
     id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
+    [responseString release];
+    
     if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
     {
+        NSMutableArray *updateCrossIDList=[[NSMutableArray alloc] initWithCapacity:10];
+
         NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
 
@@ -120,152 +160,235 @@
         NSDate *lastUpdateTime_datetime = [dateFormat dateFromString:lastUpdateTime]; 
         
         id updateobjs=[jsonobj objectForKey:@"response"];
+        int vaildobjnum=0;
         if([updateobjs isKindOfClass:[NSArray class]])
         {
             NSArray *updatelist=(NSArray*)updateobjs;
             int count=[updatelist count];
-            for(int i=count-1;i>=0;i--)
-            {
+            for(int i=count-1;i>=0;i--) {
+                BOOL isSelf=NO;
                 NSDictionary *updateobj=[updatelist objectAtIndex:i];
-                id conversation=[updateobj objectForKey:@"conversation"];
-                NSArray *confirmed=[updateobj objectForKey:@"confirmed"];
-                NSArray *declined=[updateobj objectForKey:@"declined"];
-                NSArray *change=[updateobj objectForKey:@"change"];
-                
-                int cross_id=[[updateobj objectForKey:@"cross_id"] intValue];
-                if([conversation isKindOfClass:[NSArray class]])
-                {
-                        NSArray *conversations=(NSArray*)conversation;
-                        NSMutableArray *objs=[[NSMutableArray alloc]initWithCapacity:50];
-                        for(int idx=[conversations count]-1;idx>=0;idx--)
+                int by_user_id=[[[updateobj objectForKey:@"by_identity"] objectForKey:@"user_id"] intValue];
+                if(by_user_id==app.userid) 
+                    isSelf=YES;
+                if([[updateobj objectForKey:@"action"] isEqualToString:@"conversation"]) {
+                    id meta=[[updateobj objectForKey:@"meta"] JSONValue];
+                    if([meta isKindOfClass: [NSDictionary class]]) {
+                        NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
+                        id postid=[meta objectForKey:@"id"];
+                        if(postid!=nil)
                         {
-                            NSDictionary *conversationobj=[conversations objectAtIndex:idx];
-                            id meta=[[conversationobj objectForKey:@"meta"] JSONValue];
-                            if([meta isKindOfClass: [NSDictionary class]])
-                            {
-                                NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
+                            [dict setObject:postid forKey:@"id"];
+                            [dict setObject:[updateobj objectForKey:@"message"] forKey:@"message"];
+                            [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
+                            [dict setObject:[updateobj objectForKey:@"by_identity"] forKey:@"by_identity"];
+                            [dict setObject:[updateobj objectForKey:@"x_begin_at"] forKey:@"created_at"];
+                            [dict setObject:[updateobj objectForKey:@"time"] forKey:@"updated_at"];
+                            [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
+                            [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
+                            [dict setObject:[updateobj objectForKey:@"time"] forKey:@"time"];
 
-                                id postid=[meta objectForKey:@"id"];
-                                if(postid!=nil)
-                                {
-                                    [dict setObject:postid forKey:@"id"];
-                                    [dict setObject:[conversationobj objectForKey:@"message"] forKey:@"content"];
-                                    [dict setObject:[conversationobj objectForKey:@"identity"] forKey:@"identity"];
-                                    [dict setObject:[conversationobj objectForKey:@"time"] forKey:@"created_at"];
-                                    [dict setObject:[conversationobj objectForKey:@"time"] forKey:@"updated_at"];
-                                    [objs addObject:dict];
-                                    [dict release];
-                                }
-                            }
-                            NSDate *update_datetime = [dateFormat dateFromString:[conversationobj objectForKey:@"time"]]; 
-                            lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
-
+                            [dbu updateConversationWithid:[[updateobj objectForKey:@"x_id"] intValue] cross:dict];
+                            [dbu setCrossStatusWithCrossId:[[updateobj objectForKey:@"x_id"] intValue] status:1];
+                            if(isSelf==NO)
+                                [dbu updateActivityWithobj:dict action:@"conversation" cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                            vaildobjnum=vaildobjnum+1;
                         }
-                        if([objs count]>0)
-                        {
-                            [dbu updateCommentobjWithid:cross_id event:objs];   
-                            [dbu setCrossStatusWithCrossId:cross_id status:1];
-                        }
-                        [objs release];
-                }
-                if([confirmed isKindOfClass:[NSArray class]])
-                {
-                    for(int idx=[confirmed count]-1;idx>=0;idx--)
-                    {
-                        NSDictionary *confirmedobj=[confirmed objectAtIndex:idx];
-                        id meta=[[confirmedobj objectForKey:@"meta"] JSONValue];
-                        NSDictionary *identity=[confirmedobj objectForKey:@"identity"];
-                        if([meta isKindOfClass: [NSDictionary class]])
-                        {
-                            NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
-                            id invitation_id = [meta objectForKey:@"id"];
-                            if(invitation_id!=nil)
-                            {
-                                [dict setObject:invitation_id forKey:@"invitation_id"];
-                                
-                                [dict setObject:[confirmedobj objectForKey:@"to_id"] forKey:@"identity_id"];
-                                [dict setObject:[confirmedobj objectForKey:@"user_id"] forKey:@"user_id"];
-                                [dict setObject:@"1" forKey:@"state"];
-                                [dict setObject:[identity objectForKey:@"name"]  forKey:@"name"];
-                                if([meta objectForKey:@"provider"]==nil)
-                                    [dict setObject:@""  forKey:@"provider"];
-                                else
-                                    [dict setObject:[meta objectForKey:@"provider"]  forKey:@"provider"];
-                                [dict setObject:[identity objectForKey:@"avatar_file_name"]  forKey:@"avatar_file_name"];
-                                [dict setObject:[confirmedobj objectForKey:@"time"] forKey:@"updated_at"];
-                                [dbu updateInvitationWithCrossId:cross_id invitation:dict];
-                                [dbu setCrossStatusWithCrossId:cross_id status:1];
-
-                                [dict release];
-                            }
-                        }
-                        NSDate *update_datetime = [dateFormat dateFromString:[confirmedobj objectForKey:@"time"]]; 
-                        lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
+                        [dict release];
                     }
                 }
-                if([declined isKindOfClass:[NSArray class]])
-                {
-                    for(int idx=[declined count]-1;idx>=0;idx--)
-                    {
-                        NSDictionary *declinedobj=[declined objectAtIndex:idx];
-                        id meta=[[declinedobj objectForKey:@"meta"] JSONValue];
-                        NSDictionary *identity=[declinedobj objectForKey:@"identity"];
-                        if([meta isKindOfClass: [NSDictionary class]])
-                        {
-                            NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
-                            
-                            id invitation_id = [meta objectForKey:@"id"];
-                            if(invitation_id!=nil)
-                            {
-                                [dict setObject:invitation_id forKey:@"invitation_id"];
-                                [dict setObject:[declinedobj objectForKey:@"to_id"] forKey:@"identity_id"];
+                else if([[updateobj objectForKey:@"action"] isEqualToString:@"addexfee"] || [[updateobj objectForKey:@"action"] isEqualToString:@"delexfee"]) {
+                    NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
+                    id to_identity=[updateobj objectForKey:@"to_identity"];
+                    if([to_identity isKindOfClass:[NSArray class]])
+                        [dict setObject:[[updateobj objectForKey:@"to_identity"]  JSONRepresentation] forKey:@"to_identities"];
+                    [dict setObject:[updateobj objectForKey:@"by_identity"] forKey:@"by_identity"];
+                    [dict setObject:[updateobj objectForKey:@"x_begin_at"] forKey:@"x_begin_at"];
+                    if([updateobj objectForKey:@"x_place"]!=nil){
+                        if([[updateobj objectForKey:@"x_place"] objectForKey:@"line1"])
+                            [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"line1"] forKey:@"place_line1"];
 
-                                [dict setObject:[declinedobj objectForKey:@"user_id"] forKey:@"user_id"];
-                                [dict setObject:@"2" forKey:@"state"];
-                                [dict setObject:[identity objectForKey:@"name"]  forKey:@"name"];
-                                if([meta objectForKey:@"provider"]==nil)
-                                    [dict setObject:@""  forKey:@"provider"];
-                                else
-                                    [dict setObject:[meta objectForKey:@"provider"]  forKey:@"provider"];
-                                [dict setObject:[identity objectForKey:@"avatar_file_name"]  forKey:@"avatar_file_name"];
-                                [dict setObject:[declinedobj objectForKey:@"time"] forKey:@"updated_at"];
-                                [dbu updateInvitationWithCrossId:cross_id invitation:dict];
-                                [dbu setCrossStatusWithCrossId:cross_id status:1];
+                        if([[updateobj objectForKey:@"x_place"] objectForKey:@"line2"])
+                            [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"line2"] forKey:@"place_line2"];
 
-                                [dict release];
-                                NSDate *update_datetime = [dateFormat dateFromString:[declinedobj objectForKey:@"time"]]; 
-                                lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
-                            }
-                        }
+                        if([[updateobj objectForKey:@"x_place"] objectForKey:@"provider"])
+                            [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"provider"] forKey:@"place_provider"];
+                        if([[updateobj objectForKey:@"x_place"] objectForKey:@"external_id"])
+                            [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"external_id"] forKey:@"place_external_id"];
+
+                        if([[updateobj objectForKey:@"x_place"] objectForKey:@"lng"])
+                            [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"lng"] forKey:@"place_lng"];
+
+                        if([[updateobj objectForKey:@"x_place"] objectForKey:@"lat"])
+                            [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"lat"] forKey:@"place_lat"];
                     }
+                    if([updateobj objectForKey:@"x_time_type"]!=nil)
+                            [dict setObject:[updateobj objectForKey:@"x_time_type"]  forKey:@"x_time_type"];
+                    [dict setObject:[updateobj objectForKey:@"time"] forKey:@"time"];
+                    [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
+                    [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
+                    if(isSelf==NO)
+                        [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                    [dict release];
+                    vaildobjnum=vaildobjnum+1;
+                    [updateCrossIDList addObject:[NSNumber numberWithInt:[[updateobj objectForKey:@"x_id"] intValue]]];
                 }
-                if([change isKindOfClass:[NSDictionary class]])
+                else if([[updateobj objectForKey:@"action"] isEqualToString:@"confirmed"] || [[updateobj objectForKey:@"action"] isEqualToString:@"declined"] || [[updateobj objectForKey:@"action"] isEqualToString:@"interested"])
                 {
-                    NSDate* changeupdatetime=[dbu updateCrossWithCrossId:cross_id change:(NSDictionary*)change lastupdatetime:lastUpdateTime_datetime] ;
-                    [dbu setCrossStatusWithCrossId:cross_id status:1];
+                    NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
+                    id to_identity=[updateobj objectForKey:@"to_identity"];
+                    if([to_identity isKindOfClass:[NSArray class]])
+                        [dict setObject:[[updateobj objectForKey:@"to_identity"]  JSONRepresentation] forKey:@"to_identities"];
 
-                    lastUpdateTime_datetime=[changeupdatetime laterDate:lastUpdateTime_datetime];
-
+                    [dict setObject:[updateobj objectForKey:@"by_identity"] forKey:@"by_identity"];
+                    [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
+                    [dict setObject:[updateobj objectForKey:@"time"] forKey:@"time"];
+                    [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
+                    [dbu updateInvitationobjWithCrossid:[[updateobj objectForKey:@"x_id"] intValue] identity_id:to_identity rsvp:[updateobj objectForKey:@"action"]];
+                    if(isSelf==NO)
+                        [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                    [dict release];
+                    vaildobjnum=vaildobjnum+1;
                 }
-                for (NSString *key in (NSDictionary*)updateobj)
+                else if([[updateobj objectForKey:@"action"] isEqualToString:@"title"] || [[updateobj objectForKey:@"action"] isEqualToString:@"begin_at"]|| [[updateobj objectForKey:@"action"] isEqualToString:@"place"]|| [[updateobj objectForKey:@"action"] isEqualToString:@"description"])
                 {
-                    NSLog(@"%@",key);
+                    NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
+                    [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
+                    [dict setObject:[updateobj objectForKey:@"by_identity"] forKey:@"by_identity"];
+                    if([[updateobj objectForKey:@"new_value"] isKindOfClass:[NSString class]])
+                        [dict setObject:[updateobj objectForKey:@"new_value"] forKey:@"data"];
+                    else if([updateobj objectForKey:@"new_value"] !=nil)
+                        [dict setObject:[[updateobj objectForKey:@"new_value"]  JSONRepresentation] forKey:@"data"];
+                    
+                    [dict setObject:[updateobj objectForKey:@"time"] forKey:@"time"];
+                    [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
+
+                    if([updateobj objectForKey:@"x_time_type"]!=nil)
+                        [dict setObject:[updateobj objectForKey:@"x_time_type"]  forKey:@"x_time_type"];
+
+                    [dict setObject:[updateobj objectForKey:@"x_id"] forKey:@"id"];
+                    
+                    if([[updateobj objectForKey:@"action"] isEqualToString:@"title"])
+                    {
+                        if([updateobj objectForKey:@"old_value"] !=nil)
+                            [dict setObject:[updateobj objectForKey:@"old_value"] forKey:@"title"];
+                        else
+                            [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
+                    }
+                    else
+                        [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
+                    [dict setObject:[updateobj objectForKey:@"x_description"] forKey:@"description"];
+                    [dict setObject:[updateobj objectForKey:@"x_begin_at"] forKey:@"begin_at"];
+                    [dict setObject:[updateobj objectForKey:@"time"] forKey:@"updated_at"];
+                    
+                    [dict setObject:[updateobj objectForKey:@"x_time_type"] forKey:@"time_type"];
+                    
+                    [dict setObject:[[updateobj objectForKey:@"x_host_identity"] objectForKey:@"id"] forKey:@"host_id"];
+
+                    [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"line1"] forKey:@"place_line1"];
+                    [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"line2"] forKey:@"place_line2"];
+                    [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"provider"] forKey:@"place_provider"];
+                    [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"external_id"] forKey:@"place_external_id"];
+                    [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"lng"] forKey:@"place_lng"];
+                    [dict setObject:[[updateobj objectForKey:@"x_place"] objectForKey:@"lat"] forKey:@"place_lat"];
+                    [dict setObject:[updateobj objectForKey:@"x_background"] forKey:@"background"];
+
+                    
+                    [dict setObject:[NSNumber numberWithInt:1] forKey:@"state"];
+                    [dbu updateEventobjWithid:[[updateobj objectForKey:@"x_id"] intValue] event:dict isnew:YES];
+                    if(isSelf==NO)
+                        [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                    [dict release];
+                    vaildobjnum=vaildobjnum+1;
                 }
-//                NSLog(@"%@",updateobj);
+                NSDate *update_datetime = [dateFormat dateFromString:[updateobj objectForKey:@"time"]]; 
+                lastUpdateTime_datetime=[update_datetime laterDate:lastUpdateTime_datetime];
             }
         }
         lastUpdateTime = [dateFormat stringFromDate:lastUpdateTime_datetime]; 
         [dateFormat release];
         [[NSUserDefaults standardUserDefaults] setObject:lastUpdateTime  forKey:@"lastupdatetime"];
+        NSNumber *num=[[NSUserDefaults standardUserDefaults] objectForKey:@"notification_number"];
+        if(vaildobjnum>0)
+            [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:[num intValue]+vaildobjnum]  forKey:@"notification_number"];
         [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-    mapp.networkActivityIndicatorVisible = NO;
-    [self LoadUserEventsFromDB];
-    
-    [pool drain];    
-    NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
-    NSLog(@"update:%@",lastUpdateTime);
 
+        if([updateCrossIDList count] > 0) 
+        {
+            [updateCrossIDList setArray:[[NSSet setWithArray:updateCrossIDList] allObjects]];
+            APIHandler *api=[[APIHandler alloc]init];
+             NSString *responseString = [api getCrossesByIdList: [updateCrossIDList componentsJoinedByString:@","]];
+            [api release];
+            id jsonobj=[responseString JSONValue];
+            [responseString release];
+            id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
+            if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
+            {
+                id updateobjs=[jsonobj objectForKey:@"response"];
+
+                if([updateobjs isKindOfClass:[NSArray class]])
+                {
+                    NSArray *updatelist=(NSArray*)updateobjs;
+                    int count=[updatelist count];
+                    
+                    
+                    for(int i=count-1;i>=0;i--)
+                    {
+                        NSDictionary *updateobj=[updatelist objectAtIndex:i];
+                        [dbu updateEventobjWithid:[[updateobj objectForKey:@"id"] integerValue] event:updateobj isnew:YES];
+                        [dbu updateInvitationobjWithid:[[updateobj objectForKey:@"id"] integerValue] event:[updateobj objectForKey:@"invitations"]];
+                        [dbu updateUserobjWithid:[[[updateobj objectForKey:@"host"] objectForKey:@"id"] integerValue] user:[updateobj objectForKey:@"host"]];
+                    }
+                }   
+            }
+        }
+        
+        [updateCrossIDList release];        
+    }
+//    mapp.networkActivityIndicatorVisible = NO;
+    [self LoadUserEventsFromDB];
+}
+- (void)setNotificationButton:(BOOL)status
+{
+    if(status==true)
+    {
+        if(notificationHint==false || uiInit==true)
+        {
+        NSString *notificationimgpath = [[NSBundle mainBundle] pathForResource:@"notification_hl" ofType:@"png"];
+        UIImage *notificationbtnimg = [UIImage imageWithContentsOfFile:notificationimgpath];
+        [activeButton setImage:notificationbtnimg forState:UIControlStateNormal];
+        if(uiInit==true)
+            activeButton.frame = CGRectMake(0, 0, notificationbtnimg.size.width, notificationbtnimg.size.height);
+        notificationHint=true;
+        }
+    }
+    else
+    {
+        if(notificationHint==true || uiInit==true)
+        {
+        NSString *notificationimgpath = [[NSBundle mainBundle] pathForResource:@"notification" ofType:@"png"];
+        UIImage *notificationbtnimg = [UIImage imageWithContentsOfFile:notificationimgpath];
+        [activeButton setImage:notificationbtnimg forState:UIControlStateNormal];
+        if(uiInit==true)
+            activeButton.frame = CGRectMake(0, 0, notificationbtnimg.size.width, notificationbtnimg.size.height);
+        notificationHint=false;
+        }
+    }
+    [activeButton setNeedsDisplay];
+    
+}
+- (void)defaultChanged:(NSNotification *)notif
+{
+    id object=[notif object];
+    if([object isKindOfClass:[NSUserDefaults class]])
+    {
+        NSNumber *num=[(NSUserDefaults*)object objectForKey:@"notification_number"];
+        if([num intValue]==0)
+            [self setNotificationButton:false];
+        else
+            [self setNotificationButton:true];
+    }
+    
 }
 - (void)emptyView
 {
@@ -282,22 +405,19 @@
 
 - (void)LoadUserEvents:(BOOL)isnew
 {
-    NSLog(@"load user events");
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
     
-    UIApplication* mapp = [UIApplication sharedApplication];
-    mapp.networkActivityIndicatorVisible = YES;
-    
-    
+//    UIApplication* mapp = [UIApplication sharedApplication];
+//    mapp.networkActivityIndicatorVisible = YES;
     if(app.api_key==nil)
         return;
     APIHandler *api=[[APIHandler alloc]init];
     NSString *responseString=[api getUserEvents];
     [api release];
     id jsonobj=[responseString JSONValue];
-
     id code=[[jsonobj objectForKey:@"meta"] objectForKey:@"code"];
+    [responseString release];
+
     if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
     {
         id crosses=[[jsonobj objectForKey:@"response"] objectForKey:@"crosses"];
@@ -308,14 +428,11 @@
     }
     else
     {
-        NSLog(@"error: %@",[[jsonobj objectForKey:@"meta"] objectForKey:@"error"]);
+//        NSLog(@"error: %@",[[jsonobj objectForKey:@"meta"] objectForKey:@"error"]);
         
     }
-
-    mapp.networkActivityIndicatorVisible = NO;
+//    mapp.networkActivityIndicatorVisible = NO;
     [self LoadUserEventsFromDB];
-    
-    //getLastEventUpdateTime
     NSString *lastUpdateTime=[[NSUserDefaults standardUserDefaults] stringForKey:@"lastupdatetime"]; 
 
     if(isnew==NO && lastUpdateTime == nil)
@@ -325,9 +442,6 @@
         [[NSUserDefaults standardUserDefaults] setObject:lastUpdateTime  forKey:@"lastupdatetime"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
-    
-    [pool drain];
-    
 }
 - (void)UpdateDBWithEventDicts:(NSArray*)_events isnew:(BOOL)isnew
 {
@@ -335,8 +449,17 @@
     DBUtil *dbu=[DBUtil sharedManager];
     for(int i=0;i<[_events count];i++)
     {
-        NSDictionary* eventdict=(NSDictionary*)[_events objectAtIndex:i];
-        
+        NSMutableDictionary* eventdict=[[_events objectAtIndex:i] mutableCopy];
+        id place=[eventdict objectForKey:@"place"];
+        if(place !=nil && [place isKindOfClass:[NSDictionary class]])
+        {
+            [eventdict setObject:[((NSDictionary*)place) objectForKey:@"line1"] forKey:@"place_line1"];
+            [eventdict setObject:[((NSDictionary*)place) objectForKey:@"line2"] forKey:@"place_line2"];   
+            [eventdict setObject:[((NSDictionary*)place) objectForKey:@"external_id"] forKey:@"place_external_id"];   
+            [eventdict setObject:[((NSDictionary*)place) objectForKey:@"provider"] forKey:@"place_provider"];   
+            [eventdict setObject:[((NSDictionary*)place) objectForKey:@"lng"] forKey:@"place_lng"];   
+            [eventdict setObject:[((NSDictionary*)place) objectForKey:@"lat"] forKey:@"place_lat"];   
+        }
         [dbu updateEventobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:eventdict isnew:isnew];
         [dbu updateCommentobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"conversations"]];
         [dbu updateInvitationobjWithid:[[eventdict objectForKey:@"id"] integerValue] event:[eventdict objectForKey:@"invitations"]];
@@ -385,7 +508,7 @@
     NSString *time=[event.begin_at substringToIndex:10];
 
     if([place isEqualToString:@""]  && [time isEqualToString:@"0000-00-00"])
-        return 44;
+        return 49;
 
     return 61;
 }
@@ -401,35 +524,25 @@
     Cross *event=[events objectAtIndex:indexPath.row];
 
     NSString *place=[event.place_line1 stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSString *time=[event.begin_at stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-//    NSString *time_str=[time substringWithRange:NSMakeRange(11,8)];
-    if([place isEqualToString:@""]  && ([time isEqualToString:@"0000-00-00 00:00:00"] || event.time_type==3))
+    NSString *begin_at=[event.begin_at stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSArray *arr = [begin_at componentsSeparatedByString:@" "];
+
+    NSString *date=[arr objectAtIndex:0];
+    NSString *time=[arr objectAtIndex:1];
+    
+    if([place isEqualToString:@""] &&([date isEqualToString:@"0000-00-00"] && [time isEqualToString:@"00:00:00"] && [event.time_type isEqualToString:@""]))        
         [cell setCellModel:1];
     else
         [cell setCellModel:2];
 
     [cell setLabelText: [event.title stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
     
-    if([time isEqualToString:@"0000-00-00 00:00:00"])
+    if([begin_at isEqualToString:@"0000-00-00 00:00:00"])
         [cell setLabelTime:@""];
     else
     {   
-        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-        
-        [dateFormat setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-        NSDate *time_datetime = [dateFormat dateFromString:time]; 
-        [dateFormat setDateFormat:@"ha ccc MM-dd"];
-        if(event.time_type==2)
-        {
-            [dateFormat setDateFormat:@"ccc MM-dd"];
-        }
-        NSString *result=[dateFormat stringFromDate:time_datetime]; 
-        
-//        ccc
-//        if([time length]==10)
-//            time=[time substringWithRange:NSMakeRange(5,5)];
-        [cell setLabelTime:result];
-        [dateFormat release];
+        NSString *x_str=[Util getLongLocalTimeStrWithTimetype:event.time_type time:begin_at];
+        [cell setLabelTime:x_str];
     }
     [cell setLabelPlace:place];
 
@@ -445,7 +558,7 @@
         dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
         
         dispatch_async(imgQueue, ^{
-            NSString* imgName = [user.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+            NSString* imgName = user.avatar_file_name;
             NSString *imgurl = [ImgCache getImgUrl:imgName];
             
             UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
@@ -462,12 +575,10 @@
     return cell;
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"table selected");
     Cross *event=[events objectAtIndex:indexPath.row];
-    EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil];
+    EventViewController *detailViewController=[[EventViewController alloc]initWithNibName:@"EventViewController" bundle:nil] ;
     
     if(event!=nil)
     {
@@ -475,7 +586,6 @@
         detailViewController.eventobj=event;
     }
     [self.navigationController pushViewController:detailViewController animated:YES];
-    
     [detailViewController release]; 	
     DBUtil *dbu=[DBUtil sharedManager];
     [dbu setCrossStatusWithCrossId:event.id status:0];
@@ -483,6 +593,23 @@
     {
         event.flag=0;
         
+        NSNumber *num=[[NSUserDefaults standardUserDefaults] objectForKey:@"notification_number"];
+        if([num intValue]>0)
+        {
+            int newcross=0;
+            for(int i=0;i<[events count];i++)
+            {
+                Cross *cross=[events objectAtIndex:i];
+                if(cross.flag==1)
+                    newcross=newcross+1;
+            }
+            if(newcross==0)
+            {
+                [[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:0]  forKey:@"notification_number"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+
+        }
         [tableView reloadRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
@@ -500,7 +627,28 @@
     UserSettingViewController *settingview=[[UserSettingViewController alloc] initWithNibName:@"UserSettingViewController" bundle:nil];
     [self presentModalViewController:settingview animated:YES];
 }
-
+- (void)ShowActiveView
+{
+   ActivityViewController *activeview=[[ActivityViewController alloc] initWithNibName:@"ActivityViewController" bundle:nil];
+    DBUtil *dbu=[DBUtil sharedManager];
+    NSMutableArray *activityList=[dbu getRecentActivityFromLogid:0 start:0 num:200];
+    activeview.activityList = activityList;
+    [self.navigationController pushViewController:activeview animated:YES];
+    [self cleanAllCrossStatus];
+    
+ }
+- (void)cleanAllCrossStatus
+{
+    BOOL redraw=NO;
+    for(int i=0;i<[events count];i++)
+        if(((Cross*)[events objectAtIndex:i]).flag==1)
+        {
+            ((Cross*)[events objectAtIndex:i]).flag=0;
+            redraw=YES;
+        }
+    if(redraw==YES)
+        [tableview reloadData];
+}
 - (void)viewDidUnload
 {
     [super viewDidUnload];
@@ -508,14 +656,14 @@
 
 -(void)pushback
 {
-    [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (Cross*)getEventByCrossId:(int)cross_id
 {
     for (Cross *event in events)
     {
-        NSLog(@"cross_id:%u",event.id);
+//        NSLog(@"cross_id:%u",event.id);
         if(event.id==cross_id)
             return event;
     }
@@ -525,10 +673,9 @@
 
 - (void)dealloc
 {
-    [events release];
-//    [eventData release];
     [super dealloc];
 }
+
 
 @end
 

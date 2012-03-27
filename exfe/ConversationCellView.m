@@ -9,6 +9,8 @@
 #import "ConversationCellView.h"
 
 @implementation ConversationCellView
+@synthesize cellText;
+
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -36,6 +38,29 @@
 - (void)setAvartar:(UIImage*)_img
 {
     cellAvatar.image=_img;
-}
+    cellAvatar.layer.cornerRadius = 5.0;
+    cellAvatar.layer.masksToBounds = YES;
 
+}
+- (void)setCellHeightWithCommentHeight:(int)height
+{
+    CGRect rect=self.frame;
+    rect.size.height=15+height;
+    [self setFrame:rect];
+    
+    CGRect commentrect=cellText.frame;
+    if(height==15)
+        height=18;
+    commentrect.size.height=height;
+    commentrect.origin.y=8;
+    [cellText setFrame:commentrect];
+    
+//    NSLog(@"%@",NSStringFromCGRect(commentrect));
+    CGRect timerect=cellTime.frame;
+    timerect.origin.y=height+15-8-14;
+    //height+15-8;
+
+    [cellTime setFrame:timerect];
+    
+}
 @end

@@ -40,13 +40,15 @@
 - (void)setAvartar:(UIImage*)_img
 {
     cellAvatar.image=_img;
+    cellAvatar.layer.cornerRadius = 5.0;
+    cellAvatar.layer.masksToBounds = YES;
 }
 - (void)setCellModel:(int)type
 {
     if(type==1) //height = 44
     {
-        [cellAvatar setFrame:CGRectMake(cellAvatar.frame.origin.x, 2, cellAvatar.frame.size.width, cellAvatar.frame.size.height)];
-        [cellText setFrame:CGRectMake(cellText.frame.origin.x,11,cellText.frame.size.width,cellText.frame.size.height)];
+        [cellAvatar setFrame:CGRectMake(cellAvatar.frame.origin.x, 5, cellAvatar.frame.size.width, cellAvatar.frame.size.height)];
+        [cellText setFrame:CGRectMake(cellText.frame.origin.x,13,cellText.frame.size.width,cellText.frame.size.height)];
     }
     else if (type == 2) //height = 61
     {

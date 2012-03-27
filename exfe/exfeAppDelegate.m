@@ -28,13 +28,9 @@
 {
     [self copyResource];
     meViewReload=NO;
-    
     [self.window addSubview:self.navigationController.view];
     [self.window makeKeyAndVisible];
-
-    
     [[NSUserDefaults standardUserDefaults] synchronize];
-    
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     NSString *apikey=[[NSUserDefaults standardUserDefaults] stringForKey:@"api_key"]; 
     NSString *uidstr=[[NSUserDefaults standardUserDefaults] stringForKey:@"userid"]; 
@@ -42,34 +38,32 @@
     [DBUtil sharedManager];
     [DBUtil upgradeDB];
     //check user login
-    if(uname!=nil && [apikey length]>2 && [uidstr intValue]>0)
-    {
+    if(uname!=nil && [apikey length]>2 && [uidstr intValue]>0) {
         self.username=uname;
         self.api_key=apikey;
         self.userid=[uidstr intValue];
         NSString *devicetokenreg=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetokenreg"]; 
+        NSString *devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"]; 
+
+//        NSLog(@"%@",devicetoken);
         
-        if(uname!=nil&& (devicetokenreg==nil || [devicetokenreg isEqualToString:@"YES"]==NO))
-        {
+        if(uname!=nil&& (devicetokenreg==nil || [devicetokenreg isEqualToString:@"YES"]==NO)){
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
         }
         [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
     }
-    else
-    {
+    else {
         LoginViewController *loginview = [[LoginViewController alloc]
                                           initWithNibName:@"LoginViewController" bundle:nil];
         loginview.delegate=self;
         [self.navigationController presentModalViewController:loginview animated:YES];
 
     }
-    NSLog(@"start app..%@",launchOptions);
     
     NSDictionary *remoteNotif = [launchOptions objectForKey: UIApplicationLaunchOptionsRemoteNotificationKey];
     if(remoteNotif)
     {
         [self ReceivePushData:remoteNotif RunOnForeground:FALSE];
-        //[self handleRemoteNotification:application userInfo:remoteNotif];
     }
 
     return YES;
@@ -81,8 +75,6 @@
                                  stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]] 
                                 stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    NSLog(@"deviceToken: %@", tokenAsString);
-    NSLog(@"name: %@", [[UIDevice currentDevice] name]);
     APIHandler *api=[[APIHandler alloc]init];
     BOOL reg=[api regDeviceToken:tokenAsString];
     if(reg==YES)
@@ -113,7 +105,7 @@
             dispatch_async(fetchDataQueue, ^{
                 [rootViewController refresh];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    NSLog(@"load new data complete, push view...");
+//                    NSLog(@"load new data complete, push view...");
                     if (isForeground != TRUE)
                     {
                         Cross *cross=[rootViewController getEventByCrossId:cross_id];
@@ -165,7 +157,11 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     [UIApplication sharedApplication].applicationIconBadgeNumber = 0;
+    NSArray *viewControllers = self.navigationController.viewControllers;
+    RootViewController *rootViewController = [viewControllers objectAtIndex:0];
 
+    [rootViewController performSelectorInBackground:@selector(refresh) withObject:NO];
+    
     /*
      Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
      */
@@ -198,8 +194,19 @@
     RootViewController *rootViewController = [viewControllers objectAtIndex:0];
     [rootViewController performSelector:@selector(initUI) withObject:NO];
     [self.navigationController dismissModalViewControllerAnimated:YES];
-    [rootViewController performSelector:@selector(LoadUserEvents:) withObject:NO];
-
+    
+    [rootViewController refreshWithprogress:YES];
+//    [rootViewController performSelector:@selector(LoadUserEvents:) withObject:NO];
+//    UIApplication* mapp = [UIApplication sharedApplication];
+//    mapp.networkActivityIndicatorVisible = YES;
+//    dispatch_queue_t refreshQueue = dispatch_queue_create("refresh cross thread", NULL);
+//    dispatch_async(refreshQueue, ^{
+//        [rootViewController LoadUserEvents:NO];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [rootViewController.tableView reloadData];
+//            mapp.networkActivityIndicatorVisible = NO;
+//        });
+//    });
 }
 -(void)logoutViewControllerDidFinish:(UserSettingViewController *)UserSettingViewController
 {

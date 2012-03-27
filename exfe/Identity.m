@@ -84,8 +84,6 @@
     [encoder encodeObject:self.external_username forKey:@"external_username"];
     [encoder encodeObject:self.provider forKey:@"provider"];
     [encoder encodeInt:self.status forKey:@"status"];
-    
-    
 
 }
 
@@ -112,6 +110,11 @@
 {
     [name release];
     [avatar_file_name release]; 
-    [bio release];    
+    [bio release];   
+    [created_at release];
+    [external_identity release];
+    [external_username release];
+    [provider release];
+    [super dealloc];
 }
 @end

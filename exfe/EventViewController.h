@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SBJson.h"
 #import "Cross.h"
 #import "Comment.h"
 #import "Invitation.h"
@@ -21,8 +22,6 @@
 #define kKeyboardHeightLandscape 140
 
 @interface EventViewController : UIViewController <UIInputToolbarDelegate> {
-//    UIViewController
-    //IBOutlet UIWebView *conversationview;
     IBOutlet UIWebView *webview;
     IBOutlet UITableView *conversationview;
     IBOutlet UIView *baseview;
@@ -35,11 +34,9 @@
     BOOL interceptLinks;
     UIBarButtonItem *barButtonItem;
     BOOL showeventinfo;
-
     BOOL keyboardIsVisible;
     UIInputToolbar *inputToolbar;
     UITextField* placeholder;
-    
     NSMutableArray *comments;
 
 }
@@ -48,13 +45,11 @@
 @property int eventid;
 @property BOOL interceptLinks;
 @property (nonatomic, retain) UIInputToolbar *inputToolbar;
-
--(void)inputButtonPressed:(NSString *)inputText;
+- (void)inputButtonPressed:(NSString *)inputText;
 - (NSString*)GenerateHtmlWithEvent;
 - (void)refresh;
 - (void)toconversation;
 - (void)LoadEvent;
 - (void)pushback;
 - (void)loadConversationData;
-//- (void)postComment:(NSString*)inputtext;
 @end

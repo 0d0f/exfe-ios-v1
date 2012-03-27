@@ -10,12 +10,10 @@
 
 @implementation CustomUINavigationBar
 - (void)drawRect:(CGRect)rect {
-    UIImage *img = [UIImage imageNamed:@"navbar_bg.jpg"];
-    [img drawInRect:rect];
     
-    
-    CGRect frame = CGRectMake(0, 0,self.frame.size.width , 44);
-    UILabel *label = [[[UILabel alloc] initWithFrame:frame] autorelease];
+    UIImage *image = [UIImage imageNamed:@"navbar_bg.png"];
+	[image drawInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];    
+    UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0,self.frame.size.width , self.frame.size.height)] autorelease];
     label.backgroundColor = [UIColor clearColor];
     label.font = [UIFont boldSystemFontOfSize:20.0];
     label.shadowColor = [UIColor colorWithWhite:0.0 alpha:0];

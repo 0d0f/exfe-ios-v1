@@ -10,9 +10,9 @@
 #import "PullRefreshTableViewController.h"
 #import "CrossCellView.h"
 #import "Cross.h"
+#import "MBProgressHUD.h"
 
-@interface RootViewController : PullRefreshTableViewController{
-//UIViewController {
+@interface RootViewController : PullRefreshTableViewController <MBProgressHUDDelegate> {
 	IBOutlet UIWebView *webview;
     BOOL interceptLinks;
     NSMutableData *responseData;
@@ -21,8 +21,11 @@
     IBOutlet UITableView *tableview;
     NSMutableArray* events;
     BOOL reload;
+    BOOL notificationHint;
+    BOOL uiInit;
     NSTimer *timer;
     IBOutlet CrossCellView *tblCell;
+    UIButton *activeButton;
     
 }
 
@@ -34,9 +37,15 @@
 - (void)LoadUpdate;
 - (void)UpdateDBWithEventDicts:(NSArray*)events isnew:(BOOL)isnew;
 - (void)refresh;
+- (void)refreshWithprogress:(BOOL)show;
 - (void)ShowSettingView;
+- (void)ShowActiveView;
 - (void)emptyView;
 - (void)pushback;
 - (void)initUI;
 - (Cross*)getEventByCrossId:(int)cross_id;
+- (void)setNotificationButton:(BOOL)status;
+- (void)defaultChanged:(NSNotification *)notif;
+- (void)newcrossChanged:(NSNotification *)notif;
+- (void)cleanAllCrossStatus;
 @end
