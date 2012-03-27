@@ -69,7 +69,7 @@
     
     APIHandler *api=[[APIHandler alloc]init];
     NSString *responseString=[api disconnectDeviceToken:token];
-    NSLog(@"responseString:%@",responseString);
+//    NSLog(@"responseString:%@",responseString);
     [token release];
 //    NSDictionary *profileDict = [responseString JSONValue];
     [api release];

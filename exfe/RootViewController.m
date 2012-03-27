@@ -428,7 +428,7 @@
     }
     else
     {
-        NSLog(@"error: %@",[[jsonobj objectForKey:@"meta"] objectForKey:@"error"]);
+//        NSLog(@"error: %@",[[jsonobj objectForKey:@"meta"] objectForKey:@"error"]);
         
     }
 //    mapp.networkActivityIndicatorVisible = NO;
@@ -560,6 +560,7 @@
         dispatch_async(imgQueue, ^{
             NSString* imgName = user.avatar_file_name;
             NSString *imgurl = [ImgCache getImgUrl:imgName];
+            
             UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
             dispatch_async(dispatch_get_main_queue(), ^{
                 if(image!=nil && ![image isEqual:[NSNull null]]) 
@@ -662,7 +663,7 @@
 {
     for (Cross *event in events)
     {
-        NSLog(@"cross_id:%u",event.id);
+//        NSLog(@"cross_id:%u",event.id);
         if(event.id==cross_id)
             return event;
     }

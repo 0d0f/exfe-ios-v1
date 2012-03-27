@@ -10,10 +10,16 @@
 		7803E21314DE5361008B76AD /* UIButton+StyledButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 7803E21214DE5361008B76AD /* UIButton+StyledButton.m */; };
 		78090CF514A4792B00AB0D66 /* ProfileCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 78090CF414A4792B00AB0D66 /* ProfileCellView.m */; };
 		78090CF814A4798700AB0D66 /* ProfileCellView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78090CF714A4798700AB0D66 /* ProfileCellView.xib */; };
-		78090D0214A499D000AB0D66 /* device_iPhone@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78090D0014A499CE00AB0D66 /* device_iPhone@2x~iphone.png */; };
-		78090D0314A499D000AB0D66 /* device_iPhone~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78090D0114A499CE00AB0D66 /* device_iPhone~iphone.png */; };
 		780C5F86151CFEE200F0C91B /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 780C5F84151CFEE200F0C91B /* MBProgressHUD.m */; };
 		780C5F88151CFEE900F0C91B /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 780C5F84151CFEE200F0C91B /* MBProgressHUD.m */; };
+		780C5F8B15203AF900F0C91B /* navbar_bg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 780C5F8915203AF800F0C91B /* navbar_bg~iphone.png */; };
+		780C5F8C15203AF900F0C91B /* navbar_bg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 780C5F8A15203AF800F0C91B /* navbar_bg@2x~iphone.png */; };
+		780C5F931520533D00F0C91B /* toolbarbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 780C5F911520533D00F0C91B /* toolbarbg@2x~iphone.png */; };
+		780C5F941520533D00F0C91B /* toolbarbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 780C5F921520533D00F0C91B /* toolbarbg~iphone.png */; };
+		780C5F9B15206DD300F0C91B /* X_applogin~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 780C5F9915206DD300F0C91B /* X_applogin~iphone.png */; };
+		780C5F9C15206DD300F0C91B /* X_applogin@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 780C5F9A15206DD300F0C91B /* X_applogin@2x~iphone.png */; };
+		780C5FA31520AD7200F0C91B /* device_iPhone@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 780C5FA11520AD6D00F0C91B /* device_iPhone@2x~iphone.png */; };
+		780C5FA41520AD7200F0C91B /* device_iPhone~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 780C5FA21520AD6F00F0C91B /* device_iPhone~iphone.png */; };
 		7816A7481423C4DC00818601 /* app_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7816A7471423C4DC00818601 /* app_btn.png */; };
 		7821861D15106D5800FFD92D /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7821861515106D5800FFD92D /* calendar.png */; };
 		7821861E15106D5800FFD92D /* clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 7821861615106D5800FFD92D /* clock.png */; };
@@ -129,8 +135,6 @@
 		78F75BCA13AD3BBA00C7B3CF /* UIInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F75BC713AD3BBA00C7B3CF /* UIInputToolbar.m */; };
 		78F75BD613AD3EF200C7B3CF /* textbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F75BD013AD3EF100C7B3CF /* textbg@2x~iphone.png */; };
 		78F75BD713AD3EF200C7B3CF /* textbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F75BD113AD3EF100C7B3CF /* textbg~iphone.png */; };
-		78F75BD813AD3EF200C7B3CF /* toolbarbg@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F75BD213AD3EF100C7B3CF /* toolbarbg@2x~iphone.png */; };
-		78F75BD913AD3EF200C7B3CF /* toolbarbg~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F75BD313AD3EF100C7B3CF /* toolbarbg~iphone.png */; };
 		78F75BE013AFA83700C7B3CF /* PullRefreshTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F75BDF13AFA83700C7B3CF /* PullRefreshTableViewController.m */; };
 		78F75BE213AFA84300C7B3CF /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F75BE113AFA84300C7B3CF /* arrow.png */; };
 		78F75BE413AFA86800C7B3CF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F75BE313AFA86800C7B3CF /* QuartzCore.framework */; };
@@ -153,10 +157,16 @@
 		78090CF314A4792B00AB0D66 /* ProfileCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileCellView.h; sourceTree = "<group>"; };
 		78090CF414A4792B00AB0D66 /* ProfileCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileCellView.m; sourceTree = "<group>"; };
 		78090CF714A4798700AB0D66 /* ProfileCellView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileCellView.xib; sourceTree = "<group>"; };
-		78090D0014A499CE00AB0D66 /* device_iPhone@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "device_iPhone@2x~iphone.png"; sourceTree = "<group>"; };
-		78090D0114A499CE00AB0D66 /* device_iPhone~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "device_iPhone~iphone.png"; sourceTree = "<group>"; };
 		780C5F84151CFEE200F0C91B /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		780C5F85151CFEE200F0C91B /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		780C5F8915203AF800F0C91B /* navbar_bg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar_bg~iphone.png"; sourceTree = "<group>"; };
+		780C5F8A15203AF800F0C91B /* navbar_bg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navbar_bg@2x~iphone.png"; sourceTree = "<group>"; };
+		780C5F911520533D00F0C91B /* toolbarbg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbarbg@2x~iphone.png"; sourceTree = "<group>"; };
+		780C5F921520533D00F0C91B /* toolbarbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbarbg~iphone.png"; sourceTree = "<group>"; };
+		780C5F9915206DD300F0C91B /* X_applogin~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "X_applogin~iphone.png"; sourceTree = "<group>"; };
+		780C5F9A15206DD300F0C91B /* X_applogin@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "X_applogin@2x~iphone.png"; sourceTree = "<group>"; };
+		780C5FA11520AD6D00F0C91B /* device_iPhone@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "device_iPhone@2x~iphone.png"; sourceTree = "<group>"; };
+		780C5FA21520AD6F00F0C91B /* device_iPhone~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "device_iPhone~iphone.png"; sourceTree = "<group>"; };
 		7816A7471423C4DC00818601 /* app_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_btn.png; sourceTree = "<group>"; };
 		7821861515106D5800FFD92D /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = calendar.png; sourceTree = "<group>"; };
 		7821861615106D5800FFD92D /* clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clock.png; sourceTree = "<group>"; };
@@ -342,8 +352,6 @@
 		78F75BC713AD3BBA00C7B3CF /* UIInputToolbar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIInputToolbar.m; sourceTree = "<group>"; };
 		78F75BD013AD3EF100C7B3CF /* textbg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbg@2x~iphone.png"; sourceTree = "<group>"; };
 		78F75BD113AD3EF100C7B3CF /* textbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "textbg~iphone.png"; sourceTree = "<group>"; };
-		78F75BD213AD3EF100C7B3CF /* toolbarbg@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbarbg@2x~iphone.png"; sourceTree = "<group>"; };
-		78F75BD313AD3EF100C7B3CF /* toolbarbg~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "toolbarbg~iphone.png"; sourceTree = "<group>"; };
 		78F75BDE13AFA83700C7B3CF /* PullRefreshTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PullRefreshTableViewController.h; sourceTree = "<group>"; };
 		78F75BDF13AFA83700C7B3CF /* PullRefreshTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PullRefreshTableViewController.m; sourceTree = "<group>"; };
 		78F75BE113AFA84300C7B3CF /* arrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow.png; sourceTree = "<group>"; };
@@ -422,6 +430,10 @@
 				78F75BE113AFA84300C7B3CF /* arrow.png */,
 				78D774CD14CEFB3E00D51C52 /* buttonbg@2x~iphone.png */,
 				783CF22B149E523F00C7D80E /* Icon.png */,
+				780C5F8915203AF800F0C91B /* navbar_bg~iphone.png */,
+				780C5F8A15203AF800F0C91B /* navbar_bg@2x~iphone.png */,
+				780C5F911520533D00F0C91B /* toolbarbg@2x~iphone.png */,
+				780C5F921520533D00F0C91B /* toolbarbg~iphone.png */,
 				78D774CE14CEFB3E00D51C52 /* buttonbg~iphone.png */,
 				785EAABC14D045250063E702 /* backbtn@2x~iphone.png */,
 				785EAABD14D045250063E702 /* backbtn~iphone.png */,
@@ -429,22 +441,22 @@
 				78ED97DC14D861B1001E655F /* navbar_setting~iphone.png */,
 				785EAABE14D045250063E702 /* close_settingbtn@2x~iphone.png */,
 				785EAABF14D045260063E702 /* close_settingbtn~iphone.png */,
-				78090D0014A499CE00AB0D66 /* device_iPhone@2x~iphone.png */,
-				78090D0114A499CE00AB0D66 /* device_iPhone~iphone.png */,
 				78F75BD013AD3EF100C7B3CF /* textbg@2x~iphone.png */,
 				78F75BD113AD3EF100C7B3CF /* textbg~iphone.png */,
-				78F75BD213AD3EF100C7B3CF /* toolbarbg@2x~iphone.png */,
-				78F75BD313AD3EF100C7B3CF /* toolbarbg~iphone.png */,
 				785EAAC414D046E70063E702 /* signoutbtn@2x~iphone.png */,
 				785EAAC514D046E70063E702 /* signoutbtn~iphone.png */,
 				785EAAC814D0495B0063E702 /* chat@2x~iphone.png */,
 				785EAAC914D0495C0063E702 /* chat~iphone.png */,
+				780C5FA11520AD6D00F0C91B /* device_iPhone@2x~iphone.png */,
+				780C5FA21520AD6F00F0C91B /* device_iPhone~iphone.png */,
 				78922E0614E91D98000E834E /* notification@2x~iphone.png */,
 				78922E0A14E91DDD000E834E /* notification~iphone.png */,
 				78922E0C14E92115000E834E /* notification_hl@2x~iphone.png */,
 				78922E0D14E92115000E834E /* notification_hl~iphone.png */,
 				78922E1414E981C4000E834E /* backx@2x~iphone.png */,
 				78922E1514E981C9000E834E /* backx~iphone.png */,
+				780C5F9915206DD300F0C91B /* X_applogin~iphone.png */,
+				780C5F9A15206DD300F0C91B /* X_applogin@2x~iphone.png */,
 				78A32199150085A800F1B1DB /* cellview */,
 				7882BCCC137458F5004F9DBD /* exfe.db */,
 				78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */,
@@ -810,8 +822,6 @@
 				7882BCCD137458F5004F9DBD /* exfe.db in Resources */,
 				78F75BD613AD3EF200C7B3CF /* textbg@2x~iphone.png in Resources */,
 				78F75BD713AD3EF200C7B3CF /* textbg~iphone.png in Resources */,
-				78F75BD813AD3EF200C7B3CF /* toolbarbg@2x~iphone.png in Resources */,
-				78F75BD913AD3EF200C7B3CF /* toolbarbg~iphone.png in Resources */,
 				78F75BE213AFA84300C7B3CF /* arrow.png in Resources */,
 				78D7AA7A13BE12C7009495DA /* ConversionTableViewController.xib in Resources */,
 				7816A7481423C4DC00818601 /* app_btn.png in Resources */,
@@ -821,8 +831,6 @@
 				783CF22D149E524000C7D80E /* Icon.png in Resources */,
 				783CF22E149E524000C7D80E /* Icon@2x.png in Resources */,
 				78090CF814A4798700AB0D66 /* ProfileCellView.xib in Resources */,
-				78090D0214A499D000AB0D66 /* device_iPhone@2x~iphone.png in Resources */,
-				78090D0314A499D000AB0D66 /* device_iPhone~iphone.png in Resources */,
 				788C9C0414A87B6800FBEE49 /* default_avatar@2x~iphone.png in Resources */,
 				788C9C0514A87B6800FBEE49 /* default_avatar~iphone.png in Resources */,
 				78D774CF14CEFB3E00D51C52 /* buttonbg@2x~iphone.png in Resources */,
@@ -852,6 +860,14 @@
 				7821861E15106D5800FFD92D /* clock.png in Resources */,
 				7821862115106D5800FFD92D /* profile_bkg.png in Resources */,
 				7821862315106D5800FFD92D /* x.html in Resources */,
+				780C5F8B15203AF900F0C91B /* navbar_bg~iphone.png in Resources */,
+				780C5F8C15203AF900F0C91B /* navbar_bg@2x~iphone.png in Resources */,
+				780C5F931520533D00F0C91B /* toolbarbg@2x~iphone.png in Resources */,
+				780C5F941520533D00F0C91B /* toolbarbg~iphone.png in Resources */,
+				780C5F9B15206DD300F0C91B /* X_applogin~iphone.png in Resources */,
+				780C5F9C15206DD300F0C91B /* X_applogin@2x~iphone.png in Resources */,
+				780C5FA31520AD7200F0C91B /* device_iPhone@2x~iphone.png in Resources */,
+				780C5FA41520AD7200F0C91B /* device_iPhone~iphone.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1048,8 +1064,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "exfe/EXFE-Info.plist";
 				PRODUCT_NAME = EXFE;
-				PROVISIONING_PROFILE = "504CA5E5-A0AB-4952-9DE7-0E90A06A607F";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "504CA5E5-A0AB-4952-9DE7-0E90A06A607F";
+				PROVISIONING_PROFILE = "CA2443E9-B682-44E7-ACA6-AB39CD0EAAF0";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CA2443E9-B682-44E7-ACA6-AB39CD0EAAF0";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1136,8 +1152,8 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "exfe/EXFE-Info.plist";
 				PRODUCT_NAME = EXFE;
-				PROVISIONING_PROFILE = "8A262549-0D43-4086-BE62-46A6D981A888";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "8A262549-0D43-4086-BE62-46A6D981A888";
+				PROVISIONING_PROFILE = "78F89A6D-5A91-476F-BF39-2B5440E0C4D4";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "78F89A6D-5A91-476F-BF39-2B5440E0C4D4";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;

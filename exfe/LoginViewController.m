@@ -118,11 +118,11 @@
     [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18]]; 
     [button setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
     [button setBackgroundImage:signbtnimg forState:UIControlStateNormal];
-    [button setFrame:CGRectMake(110, 191, 100, 40)];  
+    [button setFrame:CGRectMake(121, 171, 116, 36)];  
     
     [button addTarget:self action:@selector(LoginButtonPress:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
-    
+    [textUsername becomeFirstResponder];
 }
 
 - (void)viewDidUnload

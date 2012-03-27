@@ -198,9 +198,11 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     Comment *comment=[comments objectAtIndex:indexPath.row];
     User *user=[User initWithDict:[comment.userjson JSONValue]];
-
+//    NSLog(@"%@",comment.comment);
     [cell setLabelText:comment.comment];
-    [cell setLabelTime:[Util getNormalLocalTimeStrWithTimetype:@"" time:comment.updated_at]];
+    [cell setLabelTime:[Util formattedDateRelativeToNow:comment.updated_at]];
+    
+//    [Util getNormalLocalTimeStrWithTimetype:@"" time:]
     
     
     CGSize maximumLabelSize = CGSizeMake(246,9999);

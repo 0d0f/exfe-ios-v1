@@ -138,7 +138,7 @@ static sqlite3 *database;
 		
 	}
 	dbpath=[writableDBPath copy];
-        NSLog(@"dbpath:%@",dbpath);
+//        NSLog(@"dbpath:%@",dbpath);
 
     }
     }

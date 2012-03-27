@@ -335,7 +335,7 @@ const int INVITATION_MAYBE=3;
     
     [invitations release];
     html=[html stringByReplacingOccurrencesOfString:@"{#exfee_list#}" withString:exfeelist];
-    NSLog(@"exfeelist:%@",exfeelist);
+//    NSLog(@"exfeelist:%@",exfeelist);
     NSString *description=[eventobj.description stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
     html=[html stringByReplacingOccurrencesOfString:@"{#description#}" withString:description];
     return html;
@@ -382,7 +382,7 @@ const int INVITATION_MAYBE=3;
                 sevent.startDate =  sdate;//[[NSDate alloc] init];
                 sevent.endDate   = [[NSDate alloc] initWithTimeInterval:600 sinceDate:sevent.startDate];
                 sevent.location =[self.event objectForKey:@"venue"];
-                NSLog(@"%@",sevent.eventIdentifier);
+//                NSLog(@"%@",sevent.eventIdentifier);
                 [sevent setCalendar:[eventStore defaultCalendarForNewEvents]];
                 NSError *err;
                 [eventStore saveEvent:sevent span:EKSpanThisEvent error:&err]; 
@@ -409,7 +409,7 @@ const int INVITATION_MAYBE=3;
     }
     //No need to intercept the initial request to fill the WebView
     else {
-        NSLog(@"interceptLinks");
+//        NSLog(@"interceptLinks");
         interceptLinks = YES;
         return YES;
     }
@@ -471,7 +471,7 @@ const int INVITATION_MAYBE=3;
     } else if ([functionName isEqualToString:@"prompt"]) {
         
         if ([args count]!=1) {
-            NSLog(@"prompt wait exactly one argument!");
+//            NSLog(@"prompt wait exactly one argument!");
             return;
         }
         

@@ -153,6 +153,7 @@
 
 - (BOOL) regDeviceToken:(NSString*) token
 {
+//    NSLog(@"token:%@",token);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
@@ -164,10 +165,11 @@
     NSString *post =[[NSString alloc] initWithFormat:@"devicetoken=%@&provider=iOSAPN&devicename=%@",token,devicenamestr];
     CFRelease(devicenameString);
     
-    
+//    NSLog(@"%@",post);
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/users/%i/regdevicetoken?token=%@",[APIHandler URL_API_ROOT],app.userid,api_key]]];
+//    NSLog(@"%@",request);
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 
     [request setHTTPMethod:@"POST"];
@@ -280,13 +282,13 @@
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
 
     NSString *post =[[NSString alloc] initWithFormat:@"device_token=%@",device_token];
-    NSLog(@"%@",post);
+//    NSLog(@"%@",post);
     NSData *postData = [post dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
     
     [post release];
     NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
     NSString *url=[NSString stringWithFormat:@"%@/users/%i/logout?token=%@",[APIHandler URL_API_ROOT],app.userid,api_key];
-    NSLog(@"%@",url);
+//    NSLog(@"%@",url);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
     

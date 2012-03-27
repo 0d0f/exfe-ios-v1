@@ -45,7 +45,7 @@
         NSString *devicetokenreg=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetokenreg"]; 
         NSString *devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"]; 
 
-        NSLog(@"%@",devicetoken);
+//        NSLog(@"%@",devicetoken);
         
         if(uname!=nil&& (devicetokenreg==nil || [devicetokenreg isEqualToString:@"YES"]==NO)){
             [[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeBadge ];
@@ -105,7 +105,7 @@
             dispatch_async(fetchDataQueue, ^{
                 [rootViewController refresh];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    NSLog(@"load new data complete, push view...");
+//                    NSLog(@"load new data complete, push view...");
                     if (isForeground != TRUE)
                     {
                         Cross *cross=[rootViewController getEventByCrossId:cross_id];

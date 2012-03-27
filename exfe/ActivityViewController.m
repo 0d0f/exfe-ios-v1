@@ -157,7 +157,9 @@
             
             NSString *x_str=[Util getLongLocalTimeStrWithTimetype:activity.time_type time:activity.begin_at];
             if (![activity.place_line1 isEqualToString:@""])
-                x_str=[x_str stringByAppendingFormat:@"%@ at %@",x_str,activity.place_line1];
+                x_str=[NSString stringWithFormat:@"%@ at %@",x_str,activity.place_line1];
+//                x_str=[x_str stringByAppendingFormat:@"%@ at %@",x_str,activity.place_line1];
+            
             if([x_str isEqualToString:@""] && [activity.place_line1 isEqualToString:@""])
                 x_str=@"Time and Place to be decided.";
             

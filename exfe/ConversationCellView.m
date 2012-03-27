@@ -49,10 +49,13 @@
     [self setFrame:rect];
     
     CGRect commentrect=cellText.frame;
+    if(height==15)
+        height=18;
     commentrect.size.height=height;
     commentrect.origin.y=8;
     [cellText setFrame:commentrect];
     
+//    NSLog(@"%@",NSStringFromCGRect(commentrect));
     CGRect timerect=cellTime.frame;
     timerect.origin.y=height+15-8-14;
     //height+15-8;
