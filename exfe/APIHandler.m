@@ -146,8 +146,6 @@
     [request setHTTPShouldHandleCookies:NO];
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&error];
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-
-////    [pool release];
     return responseString;
 }
 
@@ -218,11 +216,12 @@
         lastUpdateTime=@"0000-00-00 00:00:00";
     //TOFIX:temp test hack
     
-    //lastUpdateTime=@"2012-03-14 13:00:15";
+    lastUpdateTime=@"2012-03-29 07:44:15";
     CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
     
     NSString *datestr = [NSString stringWithString: (NSString *)dateurlString];
     NSString *url=[NSString stringWithFormat:@"%@/users/%i/getupdate?updated_since=%@&token=%@&ddid=%@",[APIHandler URL_API_ROOT],app.userid,datestr,api_key,identity_id];
+    NSLog(@"url:%@",url);
     CFRelease(dateurlString);
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];

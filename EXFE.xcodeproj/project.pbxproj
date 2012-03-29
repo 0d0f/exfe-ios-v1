@@ -139,6 +139,7 @@
 		78F75BE213AFA84300C7B3CF /* arrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 78F75BE113AFA84300C7B3CF /* arrow.png */; };
 		78F75BE413AFA86800C7B3CF /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 78F75BE313AFA86800C7B3CF /* QuartzCore.framework */; };
 		78F75BE713B1089700C7B3CF /* ImgCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 78F75BE613B1089600C7B3CF /* ImgCache.m */; };
+		78FB16341521C15700A3D6BF /* x_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 78FB16331521C15700A3D6BF /* x_background.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -358,6 +359,7 @@
 		78F75BE313AFA86800C7B3CF /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		78F75BE513B1089600C7B3CF /* ImgCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImgCache.h; sourceTree = "<group>"; };
 		78F75BE613B1089600C7B3CF /* ImgCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImgCache.m; sourceTree = "<group>"; };
+		78FB16331521C15700A3D6BF /* x_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x_background.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -422,6 +424,7 @@
 			children = (
 				7821861315106D5800FFD92D /* img */,
 				7821861B15106D5800FFD92D /* x.html */,
+				78FB16331521C15700A3D6BF /* x_background.png */,
 				783CF22C149E523F00C7D80E /* Icon@2x.png */,
 				788C9C0214A87B6800FBEE49 /* default_avatar@2x~iphone.png */,
 				788C9C0314A87B6800FBEE49 /* default_avatar~iphone.png */,
@@ -868,6 +871,7 @@
 				780C5F9C15206DD300F0C91B /* X_applogin@2x~iphone.png in Resources */,
 				780C5FA31520AD7200F0C91B /* device_iPhone@2x~iphone.png in Resources */,
 				780C5FA41520AD7200F0C91B /* device_iPhone~iphone.png in Resources */,
+				78FB16341521C15700A3D6BF /* x_background.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

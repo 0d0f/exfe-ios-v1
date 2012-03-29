@@ -40,6 +40,8 @@ const int INVITATION_MAYBE=3;
 {
     [placeholder release];
     [event release];
+    [eventobj release];
+
     [super dealloc];
 }
 
@@ -118,7 +120,6 @@ const int INVITATION_MAYBE=3;
     dispatch_queue_t loaddata= dispatch_queue_create("loaddata", NULL);
     dispatch_async(loaddata, ^{
         NSString *html=[self GenerateHtmlWithEvent];
-        [eventobj release];
         dispatch_async(dispatch_get_main_queue(), ^{
             [webview loadHTMLString:html baseURL:baseURL];
             conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
@@ -232,7 +233,6 @@ const int INVITATION_MAYBE=3;
     
     NSString *mapimg=[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/staticmap?center=%@,%@&markers=size:mid|color:blue|%@,%@&zoom=13&size=130x75&sensor=false",eventobj.place_lat,eventobj.place_lng,eventobj.place_lat,eventobj.place_lng];
 
-    
     if([eventobj.place_line1 isEqualToString:@""])
     {
         html=[html stringByReplacingOccurrencesOfString:@"{#place_line2#}" withString:@""];
@@ -247,7 +247,6 @@ const int INVITATION_MAYBE=3;
             html=[html stringByReplacingOccurrencesOfString:@"{#place_line1#}" withString:@"Any Place"];
             html=[html stringByReplacingOccurrencesOfString:@"{#show_map_img#}" withString:@"display:none"];
             html=[html stringByReplacingOccurrencesOfString:@"{#nomap#}" withString:@"nomap"];
-
         }
     }
     else
@@ -267,8 +266,11 @@ const int INVITATION_MAYBE=3;
         html=[html stringByReplacingOccurrencesOfString:@"{#place_line2#}" withString:place_line2];
     }
     html=[html stringByReplacingOccurrencesOfString:@"{#title#}" withString:eventobj.title];
-    if(eventobj.background!=nil)
+    if(eventobj.background!=nil && ![eventobj.background isEqualToString:@""])
         html=[html stringByReplacingOccurrencesOfString:@"{#background_img#}" withString:[Util getBackgroundLink:eventobj.background]];
+    else {
+        html=[html stringByReplacingOccurrencesOfString:@"{#background_img#}" withString:@"x_background.png"];
+    }
 
     NSString *exfeelist=@"";
     NSArray *invitations=[dbu getInvitationWithEventid:self.eventid];
@@ -287,8 +289,6 @@ const int INVITATION_MAYBE=3;
                     NSString* imgName = invitation.avatar;
                     
                     NSString *imgurl = [ImgCache getImgUrl:imgName];
-//                    NSString *imgcachename=[ImgCache getImgName:imgurl];
-                    
                     NSString *host=@"";
                     NSString *withnum=@"";
                     
@@ -338,6 +338,7 @@ const int INVITATION_MAYBE=3;
 //    NSLog(@"exfeelist:%@",exfeelist);
     NSString *description=[eventobj.description stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
     html=[html stringByReplacingOccurrencesOfString:@"{#description#}" withString:description];
+
     return html;
 }
 -(bool) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
@@ -399,9 +400,11 @@ const int INVITATION_MAYBE=3;
             int zoom = 13;
             
             NSString *stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@&z=%d", q,zoom] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-            if([eventobj.place_lat intValue]>0 && [eventobj.place_lng intValue]>0)
-                stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@@%@,%@&z=%d", q,eventobj.place_lat,eventobj.place_lng,zoom] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            if(abs([eventobj.place_lat intValue])>0 && abs([eventobj.place_lng intValue])>0)
+                stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@@%@,%@&z=%d",q,eventobj.place_lat,eventobj.place_lng,zoom] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            NSLog(@"url:%@",stringURL);
             NSURL *url = [NSURL URLWithString:stringURL];
+            
             [[UIApplication sharedApplication] openURL:url];
             
         }

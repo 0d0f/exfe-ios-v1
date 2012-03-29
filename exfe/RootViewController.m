@@ -170,7 +170,8 @@
                 NSDictionary *updateobj=[updatelist objectAtIndex:i];
                 int by_user_id=[[[updateobj objectForKey:@"by_identity"] objectForKey:@"user_id"] intValue];
                 if(by_user_id==app.userid) 
-                    isSelf=YES;
+                    if([[updateobj objectForKey:@"action"] isEqualToString:@"conversation"] || [[updateobj objectForKey:@"action"] isEqualToString:@"gather"])
+                            isSelf=YES;
                 if([[updateobj objectForKey:@"action"] isEqualToString:@"conversation"]) {
                     id meta=[[updateobj objectForKey:@"meta"] JSONValue];
                     if([meta isKindOfClass: [NSDictionary class]]) {

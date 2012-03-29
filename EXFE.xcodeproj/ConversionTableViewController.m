@@ -12,12 +12,13 @@
 #import "DBUtil.h"
 #import "NSObject+SBJson.h"
 
-#define FONT_SIZE 14.0f
+#define COMMENT_FONT_SIZE 14.0f
 #define CELL_CONTENT_WIDTH 320.0f
 #define CELL_CONTENT_MARGIN 10.0f
 #define CELL_IMAGE_WIDTH 40.0f
 #define CELL_IMAGE_HEIGHT 40.0f
 #define COMMENT_LABEL_HEIGHT 18
+#define COMMENT_LABEL_WIDTH 255
 
 
 @implementation ConversionTableViewController
@@ -178,13 +179,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     Comment *comment=[comments objectAtIndex:indexPath.row];
-    CGSize maximumLabelSize = CGSizeMake(246,9999);
-    
-    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap]; 
+    CGSize maximumLabelSize = CGSizeMake(COMMENT_LABEL_WIDTH,9999);    
+    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:COMMENT_FONT_SIZE] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeWordWrap]; 
     if(expectedLabelSize.height>COMMENT_LABEL_HEIGHT)
-        return 44-18+expectedLabelSize.height;
-
-    return 44;
+        return 35-COMMENT_LABEL_HEIGHT+expectedLabelSize.height;
+    return 35;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -198,18 +197,12 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     Comment *comment=[comments objectAtIndex:indexPath.row];
     User *user=[User initWithDict:[comment.userjson JSONValue]];
-//    NSLog(@"%@",comment.comment);
     [cell setLabelText:comment.comment];
     [cell setLabelTime:[Util formattedDateRelativeToNow:comment.updated_at]];
+    CGSize maximumLabelSize = CGSizeMake(COMMENT_LABEL_WIDTH,9999);
     
-//    [Util getNormalLocalTimeStrWithTimetype:@"" time:]
-    
-    
-    CGSize maximumLabelSize = CGSizeMake(246,9999);
-    
-    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:12] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeCharacterWrap]; 
-//    if(expectedLabelSize.height>COMMENT_LABEL_HEIGHT)
-        [cell setCellHeightWithCommentHeight:expectedLabelSize.height];
+    CGSize expectedLabelSize = [comment.comment sizeWithFont:[UIFont fontWithName:@"Helvetica" size:COMMENT_FONT_SIZE] constrainedToSize:maximumLabelSize lineBreakMode:UILineBreakModeWordWrap]; 
+    [cell setCellHeightWithCommentHeight:expectedLabelSize.height];
 
     dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
         dispatch_async(imgQueue, ^{

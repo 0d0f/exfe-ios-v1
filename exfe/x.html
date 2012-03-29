@@ -17,7 +17,7 @@
       [hidden] { display: none; }
       
       html { font-size: 100%; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-      body { margin: 0; font-size: 13px; line-height: 1.231; background:#F4F4F4; }
+      body { margin: 0; font-size: 13px; line-height: 1.231; background:#FAFAFA; }
       h1, h2, h3, h4, h5, h6, p { margin: 0; padding: 0;}
       
       ul, ol { margin: 0; padding: 0; }
@@ -38,7 +38,7 @@
           margin: 0 auto;
           font-family: Helvetica,HelveticaNeue,"Helvetica Neue",Arial,sans-serif;
           /*padding: 0 10px;*/
-          background: url(img/bkg.png) no-repeat #F4F4F4;
+          background: url(img/bkg.png) no-repeat #FAFAFA;
       }
       
       #container > header {
@@ -54,7 +54,7 @@
       }
 
       #main {
-          background: url({#background_img#}) no-repeat rgba(244, 244, 244, 0.6);
+          background: url({#background_img#}) no-repeat;
           background-size: 320px 336px;
          /* margin-top: -20px; padding-top:20px;*/
           padding-top: 67px;
@@ -321,30 +321,6 @@
           <div class="users">
             <ol class="clearfix">
                 {#exfee_list#}
-              <!--li>
-                <img alt="" width="40px" height="40px" src="img/u1.png" />
-                <span class="rt">H</span>
-              </li>
-              <li>
-                <img alt="" width="40px" height="40px" src="img/u1.png" />
-                <span class="lt">2</span>
-              </li>
-              <li><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
-              <li><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
-              <li><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
-              <li class="opacity"><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
-              <li>
-                <img alt="" width="40px" height="40px" src="img/u1.png" />
-                <span class="rt">H</span>
-              </li>
-              <li>
-                <img alt="" width="40px" height="40px" src="img/u1.png" />
-                <span class="lt">2</span>
-              </li>
-              <li><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
-              <li><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
-              <li><img alt="" width="40px" height="40px" src="img/u1.png" /></li>
-              <li class="opacity"><img alt="" width="40px" height="40px" src="img/u1.png" /></li-->
             </ol>
           </div>
 
@@ -370,8 +346,6 @@
       var NativeBridge = {
           callbacksCount : 1,
           callbacks : {},
-          
-          // Automatically called by native layer when a result is available
           resultForCallback : function resultForCallback(callbackId, resultArray) {
               try {
                   var callback = NativeBridge.callbacks[callbackId];
@@ -380,11 +354,6 @@
                   callback.call(null,resultArray);
               } catch(e) {alert(e)}
           },
-          
-          // Use this in javascript to request native objective-c code
-          // functionName : string (I think the name is explicit :p)
-          // args : array of arguments
-          // callback : function with n-arguments that is going to be called when the native code returned
           call : function call(functionName, args, callback) {
               var hasCallback = callback && typeof callback == "function";
               var callbackId = hasCallback ? NativeBridge.callbacksCount++ : 0;

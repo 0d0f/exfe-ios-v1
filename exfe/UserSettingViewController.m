@@ -38,7 +38,8 @@
 
 - (void)dealloc
 {
-    [identitiesData release];
+    if(identitiesData != nil)
+        [identitiesData release];
     [super dealloc];
 }
 
@@ -263,7 +264,8 @@
 
 - (IBAction) Done:(id) sender
 {
-    [identitiesData release];
+//    if(identitiesData != nil)
+//        [identitiesData release];
     [self dismissModalViewControllerAnimated:YES];    
 }
 

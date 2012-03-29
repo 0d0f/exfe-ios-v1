@@ -248,6 +248,7 @@
 + (UIColor*) getHighlightColor{
     return [UIColor colorWithRed:17/255.0f green:117/255.0f blue:165/255.0f alpha:1];
 }
+
 + (NSString*) getBackgroundLink:(NSString*)imgname
 {
     return [NSString stringWithFormat:@"http://img.exfe.com/xbgimage/%@_ios.jpg",imgname];
