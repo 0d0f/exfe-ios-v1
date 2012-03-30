@@ -113,8 +113,7 @@
                 [MBProgressHUD hideHUDForView:self.navigationController.view animated:YES];
         });
     });
-    
-    
+    dispatch_release(refreshQueue);            
 }
 
 - (BOOL)LoadUserEventsFromDB

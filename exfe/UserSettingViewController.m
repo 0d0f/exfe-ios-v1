@@ -112,8 +112,6 @@
     if(my_identities && my_users)
     {
         NSMutableArray* sections=[NSKeyedUnarchiver unarchiveObjectWithData:my_identities];
-//        NSMutableArray* identities=[sections objectAtIndex:0];
-//        Identity* identity=[identities objectAtIndex:0];
         NSDictionary* user=[NSKeyedUnarchiver unarchiveObjectWithData:my_users];
         identitiesData= [sections retain];
         [self LoadData:user];
@@ -121,31 +119,15 @@
     else {
         
         identitiesData=[[NSMutableArray alloc] initWithCapacity:2];
-//        id identities = [response objectForKey:@"identities"];
         NSMutableArray* identities_section=[[NSMutableArray alloc] initWithCapacity:10];
         NSMutableArray* devices_section=[[NSMutableArray alloc] initWithCapacity:5];
-//        for(int i=0;i<[identities count];i++)
-//        {
-//            Identity* useridentity=[Identity initWithDict:[identities objectAtIndex:i]];
-//            if(useridentity.status==3)
-//            {
-//                if ([useridentity.provider isEqualToString:@"iOSAPN"])
-//                    [devices_section addObject:useridentity];    
-//                else
-//                    [identities_section addObject:useridentity];
-//            }
-//        }
-//        if([identities_section count]>0)
             [identitiesData addObject:identities_section];
-//        if([devices_section count]>0)
             [identitiesData addObject:devices_section];
-//        id user = [response objectForKey:@"user"];
         [devices_section release];
         [identities_section release];
         [tabview reloadData];
     }
     dispatch_queue_t fetchdataQueue = dispatch_queue_create("fetchdata thread", NULL);
-    
     dispatch_async(fetchdataQueue, ^{
         APIHandler *api=[[APIHandler alloc]init];
         NSString *responseString=[api getProfile];
@@ -153,19 +135,16 @@
         [api release];
         [responseString release];
         id code=[[profileDict objectForKey:@"meta"] objectForKey:@"code"];
-        if([code isKindOfClass:[NSNumber class]] && [code intValue]==200)
-        {
+        if([code isKindOfClass:[NSNumber class]] && [code intValue]==200){
             id response=[profileDict objectForKey:@"response"];
-            if([response isKindOfClass:[NSDictionary class]])
-            {
+            if([response isKindOfClass:[NSDictionary class]]){
                 if(identitiesData != nil)
                     [identitiesData release];
                 identitiesData=[[NSMutableArray alloc] initWithCapacity:2];
                 id identities = [response objectForKey:@"identities"];
                 NSMutableArray* identities_section=[[NSMutableArray alloc] initWithCapacity:10];
                 NSMutableArray* devices_section=[[NSMutableArray alloc] initWithCapacity:5];
-                for(int i=0;i<[identities count];i++)
-                {
+                for(int i=0;i<[identities count];i++) {
                     Identity* useridentity=[Identity initWithDict:[identities objectAtIndex:i]];
                     if(useridentity.status==3)
                     {
@@ -188,7 +167,6 @@
                 NSData *userentitydata =[NSKeyedArchiver archivedDataWithRootObject:user];
                 [[NSUserDefaults standardUserDefaults] setObject:userentitydata  forKey:@"my_users"];
                 [[NSUserDefaults standardUserDefaults] synchronize];
-                
                 [self LoadData:user];
             });
             }
@@ -209,7 +187,7 @@
         {
             dispatch_queue_t imgQueue = dispatch_queue_create("fetchurl thread", NULL);
             dispatch_async(imgQueue, ^{ 
-                NSString* imgName = atatar_file_name;//[atatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
+                NSString* imgName = atatar_file_name; 
                 NSString *imgurl = [ImgCache getImgUrl:imgName];
                 
                 UIImage *image = [[ImgCache sharedManager] getImgFrom:imgurl];
@@ -227,11 +205,6 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-//    self.topItem.titleView = label;
-//    self.
-
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 - (void)viewDidDisappear:(BOOL)animated
 {
