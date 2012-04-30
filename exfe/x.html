@@ -102,7 +102,7 @@
       
       .accept-btn {
           text-shadow: 0 1px 1px #FEFFFE;
-          box-shadow: 2px 2px 3px 0.25px rgba(0, 0, 0, 0.25);
+          box-shadow: 1px 1px 1.5px 0.25px rgba(0, 0, 0, 0.25);
           background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#D5E7F0), to(#1F78A5));
           background-image: -webkit-linear-gradient(top, #D5E7F0, #1F78A5);
       }
@@ -110,7 +110,7 @@
       .declined-btn {
           color: #E6E6E6;
           text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.33);
-          box-shadow: 2px 2px 3px 0.25px rgba(0, 0, 0, 0.25);
+          box-shadow: 1px 1px 1.5px 0.25px rgba(0, 0, 0, 0.25);
           background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#EAEAEA), to(#919191));
           background-image: -webkit-linear-gradient(top, #EAEAEA, #919191);
       }
@@ -181,7 +181,7 @@
       }
       
       .place h2 {
-          height: 48px;
+          max-height: 48px;
           overflow: hidden;
       }
       
@@ -290,7 +290,7 @@
         <h1 class="title">{#title#}</h1>
           <div class="operate " id="rsvp_btns" {#rsvp_btn_show#}>
           <ol class="clearfix">
-            <li class="ui-btn accept-btn" data-rsvp="1" onclick="opt_rsvp(1);">Accept</li>
+            <li class="ui-btn accept-btn" data-rsvp="1" onclick="opt_rsvp(1);">Accepted</li>
             <li class="ui-btn declined-btn" data-rsvp="2" onclick="opt_rsvp(2);">Declined</li>
             <li class="interested-btn" data-rsvp="3" onclick="opt_rsvp(3);">Interested</li>
           </ol>

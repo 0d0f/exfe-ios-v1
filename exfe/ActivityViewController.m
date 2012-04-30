@@ -51,8 +51,7 @@
     label.text = @"Notification";
     self.navigationItem.titleView=label;
     
-    NSString *backbtnimgpath = [[NSBundle mainBundle] pathForResource:@"backx" ofType:@"png"];
-    UIImage *backbtnimg = [UIImage imageWithContentsOfFile:backbtnimgpath];
+    UIImage *backbtnimg =[UIImage imageNamed:@"backx.png"];
 	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
 	[button setBackgroundImage:backbtnimg forState:UIControlStateNormal];
 

@@ -109,10 +109,7 @@
     [super viewDidLoad];
     [activityIndicatorview setHidden:YES];   
     
-    
-    NSString *signoutbtnimgpath = [[NSBundle mainBundle] pathForResource:@"signoutbtn" ofType:@"png"];
-    UIImage *signbtnimg = [UIImage imageWithContentsOfFile:signoutbtnimgpath];
-    
+    UIImage *signbtnimg = [UIImage imageNamed:@"signoutbtn.png"];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button setTitle:@"Sign In" forState:UIControlStateNormal];
     [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18]]; 

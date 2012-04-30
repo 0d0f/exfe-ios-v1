@@ -86,9 +86,7 @@
 
     UIBarButtonItem *flexibleSpaceLeft = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 
-    NSString *closesettingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"close_settingbtn" ofType:@"png"];
-    
-    UIImage *closesettingbtnimg = [UIImage imageWithContentsOfFile:closesettingbtnimgpath];
+    UIImage *closesettingbtnimg = [UIImage imageNamed:@"close_settingbtn.png"];
     
     UIButton *doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [doneButton setTitle:@"Close" forState:UIControlStateNormal];
@@ -328,11 +326,8 @@
     if(footerView == nil) {
         //allocate the view if it doesn't exist yet
         footerView  = [[UIView alloc] init];
-        
         //create the button
-        NSString *signoutbtnimgpath = [[NSBundle mainBundle] pathForResource:@"signoutbtn" ofType:@"png"];
-        UIImage *signbtnimg = [UIImage imageWithContentsOfFile:signoutbtnimgpath];
-
+        UIImage *signbtnimg = [UIImage imageNamed:@"signoutbtn.png"];
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         [button setTitle:@"Sign Out" forState:UIControlStateNormal];
         [button.titleLabel setFont:[UIFont boldSystemFontOfSize:18]]; 

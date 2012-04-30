@@ -140,6 +140,7 @@
         apiurl=[NSString stringWithFormat:@"%@/users/%i/x?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],app.userid,datestr,api_key];
         CFRelease(dateurlString);
     }
+    NSLog(@"api:%@",apiurl);
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 
@@ -216,7 +217,7 @@
         lastUpdateTime=@"0000-00-00 00:00:00";
     //TOFIX:temp test hack
     
-    lastUpdateTime=@"2012-03-29 07:44:15";
+//    lastUpdateTime=@"2012-03-29 07:44:15";
     CFStringRef dateurlString = CFURLCreateStringByAddingPercentEscapes(NULL,(CFStringRef)lastUpdateTime,NULL,(CFStringRef)@"!*'\"();:@&=+$,/?%#[]% ",kCFStringEncodingUTF8 );        
     
     NSString *datestr = [NSString stringWithString: (NSString *)dateurlString];

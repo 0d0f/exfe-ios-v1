@@ -53,9 +53,7 @@
         [[self.navigationController navigationBar] setNeedsDisplay];
     }
 
-    NSString *settingbtnimgpath = [[NSBundle mainBundle] pathForResource:@"navbar_setting" ofType:@"png"];
-    UIImage *settingbtnimg = [UIImage imageWithContentsOfFile:settingbtnimgpath];
-    
+    UIImage *settingbtnimg = [UIImage imageNamed:@"navbar_setting.png"];   
     UIButton *settingButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [settingButton setImage:settingbtnimg forState:UIControlStateNormal];
     settingButton.frame = CGRectMake(0, 0, settingbtnimg.size.width, settingbtnimg.size.height);
@@ -354,8 +352,7 @@
     {
         if(notificationHint==false || uiInit==true)
         {
-        NSString *notificationimgpath = [[NSBundle mainBundle] pathForResource:@"notification_hl" ofType:@"png"];
-        UIImage *notificationbtnimg = [UIImage imageWithContentsOfFile:notificationimgpath];
+        UIImage *notificationbtnimg = [UIImage imageNamed:@"notification_hl.png"];
         [activeButton setImage:notificationbtnimg forState:UIControlStateNormal];
         if(uiInit==true)
             activeButton.frame = CGRectMake(0, 0, notificationbtnimg.size.width, notificationbtnimg.size.height);
@@ -366,12 +363,11 @@
     {
         if(notificationHint==true || uiInit==true)
         {
-        NSString *notificationimgpath = [[NSBundle mainBundle] pathForResource:@"notification" ofType:@"png"];
-        UIImage *notificationbtnimg = [UIImage imageWithContentsOfFile:notificationimgpath];
-        [activeButton setImage:notificationbtnimg forState:UIControlStateNormal];
-        if(uiInit==true)
-            activeButton.frame = CGRectMake(0, 0, notificationbtnimg.size.width, notificationbtnimg.size.height);
-        notificationHint=false;
+            UIImage *notificationbtnimg = [UIImage imageNamed:@"notification.png"];
+            [activeButton setImage:notificationbtnimg forState:UIControlStateNormal];
+            if(uiInit==true)
+                activeButton.frame = CGRectMake(0, 0, notificationbtnimg.size.width, notificationbtnimg.size.height);
+            notificationHint=false;
         }
     }
     [activeButton setNeedsDisplay];

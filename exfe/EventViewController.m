@@ -69,8 +69,7 @@ const int INVITATION_MAYBE=3;
     }
     webview.backgroundColor = [UIColor whiteColor];
     
-    NSString *backbtnimgpath = [[NSBundle mainBundle] pathForResource:@"backbtn" ofType:@"png"];
-    UIImage *backbtnimg = [UIImage imageWithContentsOfFile:backbtnimgpath];
+    UIImage *backbtnimg = [UIImage imageNamed:@"backbtn.png"];
 	UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
 	[button setBackgroundImage:backbtnimg forState:UIControlStateNormal];
     [button setTitle:@" Back" forState:UIControlStateNormal];
@@ -85,8 +84,7 @@ const int INVITATION_MAYBE=3;
 	self.navigationItem.leftBarButtonItem = customBarItem;
     [customBarItem release];
     
-    NSString *chatimgpath = [[NSBundle mainBundle] pathForResource:@"chat" ofType:@"png"];
-    UIImage *chatimg = [UIImage imageWithContentsOfFile:chatimgpath];
+    UIImage *chatimg = [UIImage imageNamed:@"chat.png"];
     UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [chatButton setTitle:@"Chat" forState:UIControlStateNormal];
     [chatButton setImage:chatimg forState:UIControlStateNormal];
@@ -262,7 +260,8 @@ const int INVITATION_MAYBE=3;
             html=[html stringByReplacingOccurrencesOfString:@"{#nomap#}" withString:@"nomap"];
         }
         
-        NSString *place_line2=[eventobj.place_line2 stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
+        NSString *place_line2=[[eventobj.place_line2 componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]] componentsJoinedByString:@"<br/>"];
+
         html=[html stringByReplacingOccurrencesOfString:@"{#place_line2#}" withString:place_line2];
     }
     html=[html stringByReplacingOccurrencesOfString:@"{#title#}" withString:eventobj.title];
