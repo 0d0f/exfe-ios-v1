@@ -35,13 +35,14 @@
 
 + (NSString*)URL_API_ROOT {
 //	return @"http://exfeapi.dlol.us/v1";    
-	return @"https://www.exfe.com/v1";        
-//    return @"http://api.local.exfe.com/v1";        
+//	return @"https://www.exfe.com/v1";        
+    return @"http://api.local.exfe.com/v1";        
 }
+
 + (NSString*)URL_API_DOMAIN {
 //	return @"http://exfeapi.dlol.us";    
-    return @"https://www.exfe.com";
-//    return @"http://api.local.exfe.com";    
+//    return @"https://www.exfe.com";
+    return @"http://api.local.exfe.com";    
 }
 
 - (NSString*)sentRSVPWith:(int)eventid rsvp:(NSString*)rsvp

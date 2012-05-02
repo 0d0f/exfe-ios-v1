@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAuthLoginViewController.h"
 
 @protocol LoginViewControllerDelegate;
-@interface LoginViewController : UIViewController {
+@interface LoginViewController : UIViewController <OAuthLoginViewControllerDelegate> {
      id<LoginViewControllerDelegate> delegate;
     IBOutlet UITextField *textUsername;
     IBOutlet UITextField *textPassword;    
@@ -20,7 +21,10 @@
 @property (nonatomic, assign) id <LoginViewControllerDelegate> delegate;
 
 - (IBAction) LoginButtonPress:(id) sender;
+- (IBAction) TwitterLoginButtonPress:(id) sender;
 - (void) reloadUI;
+- (void) loginSuccessWithUserId:(NSString*)userid username:(NSString*)username token:(NSString*)token;
+
 @end
 
 @protocol LoginViewControllerDelegate

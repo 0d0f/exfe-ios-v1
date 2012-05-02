@@ -429,6 +429,7 @@ const int INVITATION_MAYBE=3;
     [invitation setObject:[arg objectForKey:@"confirmed_num"] forKey:@"confirmed_num"];
     NSString *result=[[[arg objectForKey:@"invitations"] objectAtIndex:0] JSONRepresentation] ;
     [webview stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"NativeBridge.resultForCallback(%d,%@);",callbackId,result]];
+    
 }
 
 - (void)handleCall:(NSString*)functionName callbackId:(int)callbackId args:(NSArray*)args

@@ -196,17 +196,7 @@
     [self.navigationController dismissModalViewControllerAnimated:YES];
     
     [rootViewController refreshWithprogress:YES];
-//    [rootViewController performSelector:@selector(LoadUserEvents:) withObject:NO];
-//    UIApplication* mapp = [UIApplication sharedApplication];
-//    mapp.networkActivityIndicatorVisible = YES;
-//    dispatch_queue_t refreshQueue = dispatch_queue_create("refresh cross thread", NULL);
-//    dispatch_async(refreshQueue, ^{
-//        [rootViewController LoadUserEvents:NO];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [rootViewController.tableView reloadData];
-//            mapp.networkActivityIndicatorVisible = NO;
-//        });
-//    });
+
 }
 -(void)logoutViewControllerDidFinish:(UserSettingViewController *)UserSettingViewController
 {

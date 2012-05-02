@@ -105,8 +105,8 @@
             BOOL gather=NO; // if your id in the exfee list, it's should be display as gather and with msg, if not, show the invitation msg
             for (int i=0;i<[exfees count];i++) {
                 NSDictionary *exfee=(NSDictionary*)[exfees objectAtIndex:i];
-
-                if([[exfee objectForKey:@"user_id"] intValue]!=0 && app.userid==[[exfee objectForKey:@"user_id"] intValue]) {
+                if(![exfee isEqual:[NSNull null]])
+                    if([[exfee objectForKey:@"user_id"] intValue]!=0 && app.userid==[[exfee objectForKey:@"user_id"] intValue]) {
                     [exfees removeObjectAtIndex:i];
                     gather=YES;
                     activity.action=@"gather";

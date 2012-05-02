@@ -99,6 +99,7 @@
 		788C423B133FA3D100AAA425 /* exfeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 788C423A133FA3D100AAA425 /* exfeTests.m */; };
 		788C9C0414A87B6800FBEE49 /* default_avatar@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 788C9C0214A87B6800FBEE49 /* default_avatar@2x~iphone.png */; };
 		788C9C0514A87B6800FBEE49 /* default_avatar~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 788C9C0314A87B6800FBEE49 /* default_avatar~iphone.png */; };
+		7891AF47155189FD007B92D3 /* URLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 7891AF46155189FD007B92D3 /* URLParser.m */; };
 		78922E0814E91D9A000E834E /* notification@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78922E0614E91D98000E834E /* notification@2x~iphone.png */; };
 		78922E0B14E91DDE000E834E /* notification~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78922E0A14E91DDD000E834E /* notification~iphone.png */; };
 		78922E0E14E92116000E834E /* notification_hl@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 78922E0C14E92115000E834E /* notification_hl@2x~iphone.png */; };
@@ -143,6 +144,8 @@
 		78A32213150529A000F1B1DB /* NISDKAvailability.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A3220D1505299F00F1B1DB /* NISDKAvailability.m */; };
 		78A32214150529A000F1B1DB /* NIState.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A3220F1505299F00F1B1DB /* NIState.m */; };
 		78A6EACB14F36C15000CCD8B /* Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 78A6EACA14F36C15000CCD8B /* Util.m */; };
+		78AEE3DA154FD64400371B73 /* OAuthLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 78AEE3D8154FD64400371B73 /* OAuthLoginViewController.m */; };
+		78AEE3DB154FD64400371B73 /* OAuthLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78AEE3D9154FD64400371B73 /* OAuthLoginViewController.xib */; };
 		78B320FC149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B320FB149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m */; };
 		78B320FF149FEB5500C87B7F /* CustomUIToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 78B320FE149FEB5500C87B7F /* CustomUIToolbar.m */; };
 		78BDB2EC13A512B7004561EA /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = 78BDB2EB13A512B7004561EA /* Comment.m */; };
@@ -290,6 +293,8 @@
 		788C423A133FA3D100AAA425 /* exfeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = exfeTests.m; sourceTree = "<group>"; };
 		788C9C0214A87B6800FBEE49 /* default_avatar@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar@2x~iphone.png"; sourceTree = "<group>"; };
 		788C9C0314A87B6800FBEE49 /* default_avatar~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "default_avatar~iphone.png"; sourceTree = "<group>"; };
+		7891AF45155189FD007B92D3 /* URLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = URLParser.h; sourceTree = "<group>"; };
+		7891AF46155189FD007B92D3 /* URLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = URLParser.m; sourceTree = "<group>"; };
 		78922E0614E91D98000E834E /* notification@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notification@2x~iphone.png"; sourceTree = "<group>"; };
 		78922E0A14E91DDD000E834E /* notification~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notification~iphone.png"; sourceTree = "<group>"; };
 		78922E0C14E92115000E834E /* notification_hl@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "notification_hl@2x~iphone.png"; sourceTree = "<group>"; };
@@ -378,6 +383,9 @@
 		78A3220F1505299F00F1B1DB /* NIState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NIState.m; sourceTree = "<group>"; };
 		78A6EAC914F36C14000CCD8B /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
 		78A6EACA14F36C15000CCD8B /* Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Util.m; sourceTree = "<group>"; };
+		78AEE3D7154FD64400371B73 /* OAuthLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthLoginViewController.h; sourceTree = "<group>"; };
+		78AEE3D8154FD64400371B73 /* OAuthLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthLoginViewController.m; sourceTree = "<group>"; };
+		78AEE3D9154FD64400371B73 /* OAuthLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAuthLoginViewController.xib; sourceTree = "<group>"; };
 		78B320FA149FD9E500C87B7F /* UIBarButtonItem+StyledButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIBarButtonItem+StyledButton.h"; sourceTree = "<group>"; };
 		78B320FB149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIBarButtonItem+StyledButton.m"; sourceTree = "<group>"; };
 		78B320FD149FEB5500C87B7F /* CustomUIToolbar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomUIToolbar.h; sourceTree = "<group>"; };
@@ -633,6 +641,7 @@
 		788C4211133FA3D000AAA425 /* exfe */ = {
 			isa = PBXGroup;
 			children = (
+				78AEE3D5154FD5D000371B73 /* oauth */,
 				7803E21114DE5361008B76AD /* UIButton+StyledButton.h */,
 				7803E21214DE5361008B76AD /* UIButton+StyledButton.m */,
 				78B320FA149FD9E500C87B7F /* UIBarButtonItem+StyledButton.h */,
@@ -824,6 +833,18 @@
 			name = attributedlabel;
 			sourceTree = "<group>";
 		};
+		78AEE3D5154FD5D000371B73 /* oauth */ = {
+			isa = PBXGroup;
+			children = (
+				78AEE3D7154FD64400371B73 /* OAuthLoginViewController.h */,
+				78AEE3D8154FD64400371B73 /* OAuthLoginViewController.m */,
+				78AEE3D9154FD64400371B73 /* OAuthLoginViewController.xib */,
+				7891AF45155189FD007B92D3 /* URLParser.h */,
+				7891AF46155189FD007B92D3 /* URLParser.m */,
+			);
+			name = oauth;
+			sourceTree = "<group>";
+		};
 		78F75BC113AD3B9E00C7B3CF /* UIInputToolbar */ = {
 			isa = PBXGroup;
 			children = (
@@ -992,6 +1013,7 @@
 				786E95AB152AFC850053A0D7 /* navbar_setting@2x~ipad.png in Resources */,
 				786E95AC152AFC850053A0D7 /* navbar_setting~ipad.png in Resources */,
 				78383109153C25150047F96B /* x_background.png in Resources */,
+				78AEE3DB154FD64400371B73 /* OAuthLoginViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1091,6 +1113,8 @@
 				78A32213150529A000F1B1DB /* NISDKAvailability.m in Sources */,
 				78A32214150529A000F1B1DB /* NIState.m in Sources */,
 				780C5F88151CFEE900F0C91B /* MBProgressHUD.m in Sources */,
+				78AEE3DA154FD64400371B73 /* OAuthLoginViewController.m in Sources */,
+				7891AF47155189FD007B92D3 /* URLParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -11,7 +11,7 @@
 #import "exfeAppDelegate.h"
 #import "NSObject+SBJson.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "OAuthLoginViewController.h"
 
 @implementation LoginViewController
 @synthesize delegate;
@@ -28,7 +28,29 @@
 {
     
 }
-- (IBAction) LoginButtonPress:(id) sender;
+- (IBAction) TwitterLoginButtonPress:(id) sender
+{
+    OAuthLoginViewController *oauth = [[OAuthLoginViewController alloc] initWithNibName:@"OAuthLoginViewController" bundle:nil];
+    oauth.delegate=self;
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:oauth];
+    [self presentModalViewController:nav animated:YES];        
+    [nav release];
+
+
+    NSLog(@"TwitterLoginButtonPress");
+}
+- (void)OAuthloginViewControllerDidCancel:(UIViewController *)oauthlogin {
+    [self dismissModalViewControllerAnimated:YES];        
+    [oauthlogin release]; 
+    oauthlogin = nil; 
+}
+-(void)OAuthloginViewControllerDidSuccess:(OAuthLoginViewController *)oauthloginViewController userid:(NSString*)userid username:(NSString*)username token:(NSString*)token
+{
+    [self loginSuccessWithUserId:userid username:username token:token];
+}
+
+
+- (IBAction) LoginButtonPress:(id) sender
 {
     textPassword.layer.borderColor=[UIColor colorWithRed:204/255.0f green:204/255.0f blue:204/255.0f alpha:1].CGColor; 
     textUsername.layer.borderColor=[UIColor colorWithRed:204/255.0f green:204/255.0f blue:204/255.0f alpha:1].CGColor; 
@@ -53,25 +75,27 @@
         {
             dispatch_async(dispatch_get_main_queue(), ^{
             NSDictionary *userdict=[logindict objectForKey:@"response"];
-            [[NSUserDefaults standardUserDefaults] setObject:[textUsername text]  forKey:@"username"];
-            [[NSUserDefaults standardUserDefaults] setObject:[userdict objectForKey:@"auth_token"] forKey:@"api_key"];
-            [[NSUserDefaults standardUserDefaults] setObject:[userdict objectForKey:@"userid"]  forKey:@"userid"];
-        
-            [[NSUserDefaults standardUserDefaults] synchronize];
-            exfeAppDelegate *app=(exfeAppDelegate *)[[UIApplication sharedApplication] delegate];
-            app.api_key=[userdict objectForKey:@"auth_token"];
-            app.userid=[[userdict objectForKey:@"userid"] intValue];
-            app.username=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"];
+            [self loginSuccessWithUserId:[userdict objectForKey:@"userid"] username:[textUsername text] token:[userdict objectForKey:@"auth_token"]];
                 
-
-//            self.navigationController.title=app.username;
-            [self.navigationController navigationBar].topItem.title=app.username;
-            app.meViewReload=YES;
-            [self.delegate loginViewControllerDidFinish:self];
-            [activityIndicatorview stopAnimating]; 
-            [activityIndicatorview setHidden:YES];
-            [loginbtn setEnabled:YES];
-            [loginbtn setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
+//            [[self loginSuccessWith: username: token:];
+                
+//            [[NSUserDefaults standardUserDefaults] setObject:[textUsername text]  forKey:@"username"];
+//            [[NSUserDefaults standardUserDefaults] setObject:[userdict objectForKey:@"auth_token"] forKey:@"api_key"];
+//            [[NSUserDefaults standardUserDefaults] setObject:[userdict objectForKey:@"userid"]  forKey:@"userid"];
+//        
+//            [[NSUserDefaults standardUserDefaults] synchronize];
+//            exfeAppDelegate *app=(exfeAppDelegate *)[[UIApplication sharedApplication] delegate];
+//            app.api_key=[userdict objectForKey:@"auth_token"];
+//            app.userid=[[userdict objectForKey:@"userid"] intValue];
+//            app.username=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"];
+//                
+//            [self.navigationController navigationBar].topItem.title=app.username;
+//            app.meViewReload=YES;
+//            [self.delegate loginViewControllerDidFinish:self];
+//            [activityIndicatorview stopAnimating]; 
+//            [activityIndicatorview setHidden:YES];
+//            [loginbtn setEnabled:YES];
+//            [loginbtn setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];
             });
         }
         else
@@ -88,7 +112,26 @@
     });
     dispatch_release(loginQueue);        
 }
-
+- (void) loginSuccessWithUserId:(NSString*)userid username:(NSString*)username token:(NSString*)token
+{
+    [[NSUserDefaults standardUserDefaults] setObject:username  forKey:@"username"];
+    [[NSUserDefaults standardUserDefaults] setObject:token forKey:@"api_key"];
+    [[NSUserDefaults standardUserDefaults] setObject:userid  forKey:@"userid"];
+    
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    exfeAppDelegate *app=(exfeAppDelegate *)[[UIApplication sharedApplication] delegate];
+    app.api_key=token;
+    app.userid=[userid intValue];
+    app.username=username;
+    
+    [self.navigationController navigationBar].topItem.title=app.username;
+    app.meViewReload=YES;
+    [self.delegate loginViewControllerDidFinish:self];
+    [activityIndicatorview stopAnimating]; 
+    [activityIndicatorview setHidden:YES];
+    [loginbtn setEnabled:YES];
+    [loginbtn setTitleColor:[UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1] forState:UIControlStateNormal];    
+}
 - (void)dealloc
 {
     [super dealloc];
