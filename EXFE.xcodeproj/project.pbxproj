@@ -20,6 +20,10 @@
 		780C5F9C15206DD300F0C91B /* X_applogin@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 780C5F9A15206DD300F0C91B /* X_applogin@2x~iphone.png */; };
 		780C5FA31520AD7200F0C91B /* device_iPhone@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 780C5FA11520AD6D00F0C91B /* device_iPhone@2x~iphone.png */; };
 		780C5FA41520AD7200F0C91B /* device_iPhone~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 780C5FA21520AD6F00F0C91B /* device_iPhone~iphone.png */; };
+		7813442A1558F9E50011447A /* twitter~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 781344261558F9E30011447A /* twitter~iphone.png */; };
+		7813442B1558F9E50011447A /* twitter~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 781344271558F9E30011447A /* twitter~ipad.png */; };
+		7813442C1558F9E50011447A /* twitter@2x~iphone.png in Resources */ = {isa = PBXBuildFile; fileRef = 781344281558F9E40011447A /* twitter@2x~iphone.png */; };
+		7813442D1558F9E50011447A /* twitter@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 781344291558F9E40011447A /* twitter@2x~ipad.png */; };
 		7816A7481423C4DC00818601 /* app_btn.png in Resources */ = {isa = PBXBuildFile; fileRef = 7816A7471423C4DC00818601 /* app_btn.png */; };
 		7821861D15106D5800FFD92D /* calendar.png in Resources */ = {isa = PBXBuildFile; fileRef = 7821861515106D5800FFD92D /* calendar.png */; };
 		7821861E15106D5800FFD92D /* clock.png in Resources */ = {isa = PBXBuildFile; fileRef = 7821861615106D5800FFD92D /* clock.png */; };
@@ -201,6 +205,10 @@
 		780C5F9A15206DD300F0C91B /* X_applogin@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "X_applogin@2x~iphone.png"; sourceTree = "<group>"; };
 		780C5FA11520AD6D00F0C91B /* device_iPhone@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "device_iPhone@2x~iphone.png"; sourceTree = "<group>"; };
 		780C5FA21520AD6F00F0C91B /* device_iPhone~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "device_iPhone~iphone.png"; sourceTree = "<group>"; };
+		781344261558F9E30011447A /* twitter~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter~iphone.png"; sourceTree = "<group>"; };
+		781344271558F9E30011447A /* twitter~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter~ipad.png"; sourceTree = "<group>"; };
+		781344281558F9E40011447A /* twitter@2x~iphone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter@2x~iphone.png"; sourceTree = "<group>"; };
+		781344291558F9E40011447A /* twitter@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "twitter@2x~ipad.png"; sourceTree = "<group>"; };
 		7816A7471423C4DC00818601 /* app_btn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = app_btn.png; sourceTree = "<group>"; };
 		7821861515106D5800FFD92D /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = calendar.png; sourceTree = "<group>"; };
 		7821861615106D5800FFD92D /* clock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clock.png; sourceTree = "<group>"; };
@@ -558,6 +566,10 @@
 				780C5F9A15206DD300F0C91B /* X_applogin@2x~iphone.png */,
 				786E95A5152AFBDD0053A0D7 /* X_applogin@2x~ipad.png */,
 				786E95A6152AFBDD0053A0D7 /* X_applogin~ipad.png */,
+				781344261558F9E30011447A /* twitter~iphone.png */,
+				781344271558F9E30011447A /* twitter~ipad.png */,
+				781344281558F9E40011447A /* twitter@2x~iphone.png */,
+				781344291558F9E40011447A /* twitter@2x~ipad.png */,
 				78A32199150085A800F1B1DB /* cellview */,
 				7882BCCC137458F5004F9DBD /* exfe.db */,
 				78D7AA7813BE12C6009495DA /* ConversionTableViewController.xib */,
@@ -641,13 +653,13 @@
 		788C4211133FA3D000AAA425 /* exfe */ = {
 			isa = PBXGroup;
 			children = (
-				78AEE3D5154FD5D000371B73 /* oauth */,
 				7803E21114DE5361008B76AD /* UIButton+StyledButton.h */,
 				7803E21214DE5361008B76AD /* UIButton+StyledButton.m */,
 				78B320FA149FD9E500C87B7F /* UIBarButtonItem+StyledButton.h */,
 				78B320FB149FD9E500C87B7F /* UIBarButtonItem+StyledButton.m */,
 				78742860150B52EE002F7D9E /* model */,
 				78A321A11504D0CF00F1B1DB /* lib */,
+				78AEE3D5154FD5D000371B73 /* oauth */,
 				78742861150B531F002F7D9E /* common */,
 				78090CF914A47ABB00AB0D66 /* TableViewCell */,
 				788C421A133FA3D000AAA425 /* exfeAppDelegate.h */,
@@ -1014,6 +1026,10 @@
 				786E95AC152AFC850053A0D7 /* navbar_setting~ipad.png in Resources */,
 				78383109153C25150047F96B /* x_background.png in Resources */,
 				78AEE3DB154FD64400371B73 /* OAuthLoginViewController.xib in Resources */,
+				7813442A1558F9E50011447A /* twitter~iphone.png in Resources */,
+				7813442B1558F9E50011447A /* twitter~ipad.png in Resources */,
+				7813442C1558F9E50011447A /* twitter@2x~iphone.png in Resources */,
+				7813442D1558F9E50011447A /* twitter@2x~ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

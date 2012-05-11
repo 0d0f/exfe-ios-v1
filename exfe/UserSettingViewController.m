@@ -271,21 +271,26 @@
         if([userIdentity.avatar_file_name isEqualToString:@""])
         {
             UIImage *img = [UIImage imageNamed:@"default_avatar.png"];
-            [cell setAvartar:img];
+            if((NSNull*)img!=[NSNull null])
+                [cell setAvartar:img];
         }
         else
         {
             NSString* imgName = userIdentity.avatar_file_name;//[userIdentity.avatar_file_name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]; 
             NSString *imgurl = [ImgCache getImgUrl:imgName];
             UIImage *img = [[ImgCache sharedManager] getImgFrom:imgurl];
-            [cell setAvartar:img];
+            if((NSNull*)img!=[NSNull null])
+                [cell setAvartar:img];
         }
         if(![userIdentity.name isEqualToString:@""])
             [cell setLabelName:userIdentity.name];
         else
             [cell setLabelName:userIdentity.external_username];
-    
-        [cell setLabelIdentity:userIdentity.external_identity];
+        if([userIdentity.provider isEqualToString:@"email"])
+           [cell setLabelIdentity:userIdentity.external_identity];
+        else{
+           [cell setLabelIdentity:[NSString stringWithFormat:@"%@@%@",userIdentity.external_username,userIdentity.provider]];
+        }
         return cell;
     }
     else

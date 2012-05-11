@@ -118,6 +118,7 @@ const int INVITATION_MAYBE=3;
     dispatch_queue_t loaddata= dispatch_queue_create("loaddata", NULL);
     dispatch_async(loaddata, ^{
         NSString *html=[self GenerateHtmlWithEvent];
+//        NSLog(@"html:%@",html);
         dispatch_async(dispatch_get_main_queue(), ^{
             [webview loadHTMLString:html baseURL:baseURL];
             conversionViewController=[[ConversionTableViewController alloc]initWithNibName:@"ConversionTableViewController" bundle:nil];
@@ -315,7 +316,7 @@ const int INVITATION_MAYBE=3;
                 {
                     html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_btn_show#}" withString:@"style='display:none'"];
                     if(invitation.state ==INVITATION_YES)
-                        html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_opt_text#}" withString:@"Accept"];
+                        html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_opt_text#}" withString:@"Accepted"];
                     else if(invitation.state ==INVITATION_NO)
                         html=[html stringByReplacingOccurrencesOfString:@"{#rsvp_opt_text#}" withString:@"Declined"];
                     else if(invitation.state ==INVITATION_MAYBE)
@@ -401,7 +402,7 @@ const int INVITATION_MAYBE=3;
             NSString *stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@&z=%d", q,zoom] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
             if(abs([eventobj.place_lat intValue])>0 && abs([eventobj.place_lng intValue])>0)
                 stringURL = [[NSString stringWithFormat:@"http://maps.google.com/maps?q=%@@%@,%@&z=%d",q,eventobj.place_lat,eventobj.place_lng,zoom] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-            NSLog(@"url:%@",stringURL);
+//            NSLog(@"url:%@",stringURL);
             NSURL *url = [NSURL URLWithString:stringURL];
             
             [[UIApplication sharedApplication] openURL:url];

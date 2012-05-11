@@ -281,29 +281,31 @@ static sqlite3 *database;
         for(int i=0;i<[to_identities count];i++)
         {
             NSDictionary *to_identity=[to_identities objectAtIndex:i];
-            if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+            if(![to_identity isEqual:[NSNull null]])
             {
+                if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+                {
                 
-                if([rsvp isEqualToString:@"confirmed"] )
-                    sqlite3_bind_int(stm, 1,1); 
-                else if([rsvp isEqualToString:@"declined"] )
-                    sqlite3_bind_int(stm, 1,2); 
-                else if([rsvp isEqualToString:@"interested"] )
-                    sqlite3_bind_int(stm, 1,3); 
+                    if([rsvp isEqualToString:@"confirmed"] )
+                        sqlite3_bind_int(stm, 1,1); 
+                    else if([rsvp isEqualToString:@"declined"] )
+                        sqlite3_bind_int(stm, 1,2); 
+                    else if([rsvp isEqualToString:@"interested"] )
+                        sqlite3_bind_int(stm, 1,3); 
                 
-                sqlite3_bind_int(stm, 2, cross_id); 
-                sqlite3_bind_int(stm, 3, [[to_identity objectForKey:@"id"] intValue]); 
+                    sqlite3_bind_int(stm, 2, cross_id); 
+                    sqlite3_bind_int(stm, 3, [[to_identity objectForKey:@"id"] intValue]); 
                 
-                if(sqlite3_step(stm)== SQLITE_DONE) {
+                    if(sqlite3_step(stm)== SQLITE_DONE) {
+                    }
+                    else {
+                        NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
+                    }            
                 }
                 else {
                     NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
                 }            
             }
-            else {
-                NSAssert1(0, @"Error while inserting data. '%s'", sqlite3_errmsg(database));
-            }            
-            
         }
         sqlite3_finalize(stm);   
     }    
@@ -368,8 +370,10 @@ static sqlite3 *database;
         while(sqlite3_step(stm)== SQLITE_ROW)
         {   Cross *eventobj=[[[Cross alloc]init] autorelease];
             eventobj.id=sqlite3_column_int(stm, 0);
-            eventobj.title=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 1)];
-            eventobj.description=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 2)];
+            if((char*)sqlite3_column_text(stm, 1)!=nil)
+                eventobj.title=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 1)];
+            if((char*)sqlite3_column_text(stm, 2)!=nil)
+                eventobj.description=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 2)];
             if((char*)sqlite3_column_text(stm, 3)!=nil)
                 eventobj.code=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 3)];
             eventobj.begin_at=[NSString stringWithUTF8String:(char*)sqlite3_column_text(stm, 4)];
@@ -509,7 +513,33 @@ static sqlite3 *database;
 
     }
     }
-    
+}
+- (void) clearAllCrossStatus
+{
+    @synchronized(self) {
+        NSString *dbpath=[DBUtil DBPath];
+        NSFileManager *fileManager=[NSFileManager defaultManager];
+        BOOL success=[fileManager fileExistsAtPath:dbpath];
+        [fileManager release];
+        if(!success)
+        {
+            return;
+        } 
+        sqlite3_stmt *stm=nil;
+        const char *sql = "update crosses set flag=0;";
+        if(sqlite3_prepare_v2(database, sql, -1, &stm, NULL)==SQLITE_OK)
+        {
+            if(sqlite3_step(stm)== SQLITE_DONE)
+            {
+                
+            }
+            else 
+            {
+                NSAssert1(0, @"Error while set cross status. '%s'", sqlite3_errmsg(database));
+            }            
+            
+        }
+    }
     
 }
 - (void) updateConversationWithid:(int)cross_id cross:(NSDictionary*)conversationobj

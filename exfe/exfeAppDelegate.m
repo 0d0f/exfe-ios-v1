@@ -20,6 +20,7 @@
 @synthesize registered;
 @synthesize username;
 @synthesize api_key;
+@synthesize external_id;
 @synthesize tabBarController;
 @synthesize meViewReload;
 @synthesize userid;
@@ -34,6 +35,11 @@
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
     NSString *apikey=[[NSUserDefaults standardUserDefaults] stringForKey:@"api_key"]; 
     NSString *uidstr=[[NSUserDefaults standardUserDefaults] stringForKey:@"userid"]; 
+    if([[NSUserDefaults standardUserDefaults] stringForKey:@"external_id"]==nil && uname!=nil)
+    {
+        //for upgrade
+        [[NSUserDefaults standardUserDefaults] setObject:uname  forKey:@"external_id"];   
+    }
     
     [DBUtil sharedManager];
     [DBUtil upgradeDB];
@@ -43,7 +49,7 @@
         self.api_key=apikey;
         self.userid=[uidstr intValue];
         NSString *devicetokenreg=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetokenreg"]; 
-        NSString *devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"]; 
+//        NSString *devicetoken=[[NSUserDefaults standardUserDefaults] stringForKey:@"devicetoken"]; 
 
 //        NSLog(@"%@",devicetoken);
         
@@ -56,7 +62,10 @@
         LoginViewController *loginview = [[LoginViewController alloc]
                                           initWithNibName:@"LoginViewController" bundle:nil];
         loginview.delegate=self;
-        [self.navigationController presentModalViewController:loginview animated:YES];
+        exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];  
+        
+        [app.navigationController presentModalViewController:loginview animated:YES];
+
 
     }
     
@@ -190,14 +199,15 @@
 
     DBUtil *dbu=[DBUtil sharedManager];
     [dbu emptyDBCache];
+    [dbu emptyDBData];
+
     NSArray *viewControllers = self.navigationController.viewControllers;
     RootViewController *rootViewController = [viewControllers objectAtIndex:0];
     [rootViewController performSelector:@selector(initUI) withObject:NO];
     [self.navigationController dismissModalViewControllerAnimated:YES];
-    
     [rootViewController refreshWithprogress:YES];
-
 }
+
 -(void)logoutViewControllerDidFinish:(UserSettingViewController *)UserSettingViewController
 {
     [self.navigationController dismissModalViewControllerAnimated:YES];
@@ -208,7 +218,6 @@
                                       initWithNibName:@"LoginViewController" bundle:nil];
     loginview.delegate=self;
     [self.navigationController presentModalViewController :loginview animated:YES];    
-    
 }
 
 - (void)copyResource

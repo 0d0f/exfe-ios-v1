@@ -12,12 +12,14 @@
     //NSMutableData *responseData;
     NSString *api_key;
     NSString *username;
-    NSString *password;    
+    NSString *password;
+    NSString *external_id;
 }
 
 @property (retain,nonatomic) NSString *api_key;
 @property (retain,nonatomic) NSString *username;
 @property (retain,nonatomic) NSString *password;
+@property (retain,nonatomic) NSString *external_id;
 + (NSString*)URL_API_ROOT;
 + (NSString*)URL_API_DOMAIN;
 - (NSString*)checkUserLoginByUsername:(NSString*)email withPassword:(NSString*)passwd;

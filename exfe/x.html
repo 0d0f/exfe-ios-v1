@@ -352,7 +352,7 @@
                   if (!callback) return;
                   
                   callback.call(null,resultArray);
-              } catch(e) {alert(e)}
+              } catch(e) {alert(e);}
           },
           call : function call(functionName, args, callback) {
               var hasCallback = callback && typeof callback == "function";

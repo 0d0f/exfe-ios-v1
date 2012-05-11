@@ -11,7 +11,7 @@
 
 @protocol LoginViewControllerDelegate;
 @interface LoginViewController : UIViewController <OAuthLoginViewControllerDelegate> {
-     id<LoginViewControllerDelegate> delegate;
+    id<LoginViewControllerDelegate> delegate;
     IBOutlet UITextField *textUsername;
     IBOutlet UITextField *textPassword;    
     IBOutlet UILabel *hint;
@@ -23,7 +23,7 @@
 - (IBAction) LoginButtonPress:(id) sender;
 - (IBAction) TwitterLoginButtonPress:(id) sender;
 - (void) reloadUI;
-- (void) loginSuccessWithUserId:(NSString*)userid username:(NSString*)username token:(NSString*)token;
+- (void) loginSuccessWithUserId:(NSString*)userid username:(NSString*)username external_id:(NSString*)external_id token:(NSString*)token;
 
 @end
 

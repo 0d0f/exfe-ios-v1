@@ -21,6 +21,7 @@
     BOOL registered;
     NSString *username;
     NSString *api_key;
+    NSString *external_id;
     int userid;
 }
 
@@ -29,6 +30,7 @@
 @property (nonatomic, retain) IBOutlet UITabBarController *tabBarController;
 @property (nonatomic, retain) NSString *username;
 @property (nonatomic, retain) NSString *api_key;
+@property (nonatomic, retain) NSString *external_id;
 @property int userid;
 @property BOOL registered;
 

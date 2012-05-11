@@ -165,10 +165,14 @@
             for(int i=count-1;i>=0;i--) {
                 BOOL isSelf=NO;
                 NSDictionary *updateobj=[updatelist objectAtIndex:i];
-                int by_user_id=[[[updateobj objectForKey:@"by_identity"] objectForKey:@"user_id"] intValue];
-                if(by_user_id==app.userid) 
-                    if([[updateobj objectForKey:@"action"] isEqualToString:@"conversation"] || [[updateobj objectForKey:@"action"] isEqualToString:@"gather"])
-                            isSelf=YES;
+                
+                if(![[updateobj objectForKey:@"by_identity"] isEqual:[NSNull null]])
+                {
+                    int by_user_id=[[[updateobj objectForKey:@"by_identity"] objectForKey:@"user_id"] intValue];
+                    if(by_user_id==app.userid) 
+                        if([[updateobj objectForKey:@"action"] isEqualToString:@"conversation"] || [[updateobj objectForKey:@"action"] isEqualToString:@"gather"])
+                                isSelf=YES;
+                }
                 if([[updateobj objectForKey:@"action"] isEqualToString:@"conversation"]) {
                     id meta=[[updateobj objectForKey:@"meta"] JSONValue];
                     if([meta isKindOfClass: [NSDictionary class]]) {
@@ -230,23 +234,29 @@
                     [dict release];
                     vaildobjnum=vaildobjnum+1;
                     [updateCrossIDList addObject:[NSNumber numberWithInt:[[updateobj objectForKey:@"x_id"] intValue]]];
-                }
+                } 
                 else if([[updateobj objectForKey:@"action"] isEqualToString:@"confirmed"] || [[updateobj objectForKey:@"action"] isEqualToString:@"declined"] || [[updateobj objectForKey:@"action"] isEqualToString:@"interested"])
                 {
                     NSMutableDictionary *dict=[[NSMutableDictionary alloc] initWithCapacity:50];
                     id to_identity=[updateobj objectForKey:@"to_identity"];
-                    if([to_identity isKindOfClass:[NSArray class]])
-                        [dict setObject:[[updateobj objectForKey:@"to_identity"]  JSONRepresentation] forKey:@"to_identities"];
-
-                    [dict setObject:[updateobj objectForKey:@"by_identity"] forKey:@"by_identity"];
-                    [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
-                    [dict setObject:[updateobj objectForKey:@"time"] forKey:@"time"];
-                    [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
-                    [dbu updateInvitationobjWithCrossid:[[updateobj objectForKey:@"x_id"] intValue] identity_id:to_identity rsvp:[updateobj objectForKey:@"action"]];
-                    if(isSelf==NO)
-                        [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                    
+                    if(![[updateobj objectForKey:@"to_identity"] isEqual:[NSNull null]]&& ![[updateobj objectForKey:@"by_identity"] isEqual:[NSNull null]])
+                    {
+                        if([to_identity isKindOfClass:[NSArray class]])
+                        {
+                            [dict setObject:[[updateobj objectForKey:@"to_identity"]  JSONRepresentation] forKey:@"to_identities"];
+                            [dict setObject:[updateobj objectForKey:@"by_identity"] forKey:@"by_identity"];
+                            [dict setObject:[updateobj objectForKey:@"x_title"] forKey:@"title"];
+                            [dict setObject:[updateobj objectForKey:@"time"] forKey:@"time"];
+                            [dict setObject:[updateobj objectForKey:@"log_id"] forKey:@"log_id"];
+                            [dbu updateInvitationobjWithCrossid:[[updateobj objectForKey:@"x_id"] intValue] identity_id:to_identity rsvp:[updateobj objectForKey:@"action"]];
+                            if(isSelf==NO)
+                                [dbu updateActivityWithobj:dict action:[updateobj objectForKey:@"action"] cross_id:[[updateobj objectForKey:@"x_id"] intValue]];
+                            vaildobjnum=vaildobjnum+1;
+                        }
+                    }
                     [dict release];
-                    vaildobjnum=vaildobjnum+1;
+
                 }
                 else if([[updateobj objectForKey:@"action"] isEqualToString:@"title"] || [[updateobj objectForKey:@"action"] isEqualToString:@"begin_at"]|| [[updateobj objectForKey:@"action"] isEqualToString:@"place"]|| [[updateobj objectForKey:@"action"] isEqualToString:@"description"])
                 {
@@ -641,7 +651,10 @@
         {
             ((Cross*)[events objectAtIndex:i]).flag=0;
             redraw=YES;
+            
         }
+    DBUtil *dbu=[DBUtil sharedManager];
+    [dbu clearAllCrossStatus];
     if(redraw==YES)
         [tableview reloadData];
 }

@@ -19,4 +19,5 @@
 + (NSString *) formattedDateRelativeToNow:(NSString*)datestr withTimeType:(NSString*)time_type;
 + (UIColor*) getHighlightColor;
 + (NSString*) getBackgroundLink:(NSString*)imgname;
++ (NSString*) decodeFromPercentEscapeString:(NSString*)string;
 @end

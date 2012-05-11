@@ -231,9 +231,12 @@
         if([activity.to_identities isKindOfClass:[NSArray class]]) {
             for (int i=0;i<[activity.to_identities count];i++) {
                 NSDictionary *exfee=(NSDictionary*)[activity.to_identities objectAtIndex:i];
-                NSString *user_id=[exfee objectForKey:@"user_id"];
-                if([user_id intValue]==activity.by_id)
-                    ismyaction=YES;
+                if(![exfee isEqual:[NSNull null]])
+                {
+                    NSString *user_id=[exfee objectForKey:@"user_id"];
+                    if([user_id intValue]==activity.by_id)
+                        ismyaction=YES;
+                }
             }
         }
         
@@ -292,16 +295,18 @@
         if([exfees count]>0) {
             for (int i=0;i<[exfees count];i++) {
                 NSDictionary *exfee=(NSDictionary*)[exfees objectAtIndex:i];
-                NSString *to_name=[exfee objectForKey:@"name"];
-                if(i==0)
+                if(![exfee isEqual:[NSNull null]])
                 {
-                    [rangearray addObject:[NSValue valueWithRange:NSMakeRange([msg length], [to_name length])]];
-
-                    msg = [msg stringByAppendingFormat:@"%@",to_name];
-                }
-                else{
-                    [rangearray addObject:[NSValue valueWithRange:NSMakeRange([msg length]+1, [to_name length])]];
-                    msg = [msg stringByAppendingFormat:@",%@",to_name];
+                    NSString *to_name=[exfee objectForKey:@"name"];
+                    if(i==0)
+                    {
+                        [rangearray addObject:[NSValue valueWithRange:NSMakeRange([msg length], [to_name length])]];
+                        msg = [msg stringByAppendingFormat:@"%@",to_name];
+                    }
+                    else{
+                        [rangearray addObject:[NSValue valueWithRange:NSMakeRange([msg length]+1, [to_name length])]];
+                        msg = [msg stringByAppendingFormat:@",%@",to_name];
+                    }
                 }
             }
             if([exfees count]==1)
@@ -321,16 +326,19 @@
         if([exfees count]>0) {
             for (int i=0;i<[exfees count];i++) {
                 NSDictionary *exfee=(NSDictionary*)[exfees objectAtIndex:i];
-                NSString *to_name=[exfee objectForKey:@"name"];
-                if(i==0)
+                if(![exfee isEqual:[NSNull null]])
                 {
+                    NSString *to_name=[exfee objectForKey:@"name"];
+                    if(i==0)
+                    {
                     [rangearray addObject:[NSValue valueWithRange:NSMakeRange([msg length], [to_name length])]];
                     msg = [msg stringByAppendingFormat:@"%@",to_name];
-                }
-                else
-                {
+                    }
+                    else
+                    {
                     [rangearray addObject:[NSValue valueWithRange:NSMakeRange([msg length]+1, [to_name length])]];
                     msg = [msg stringByAppendingFormat:@",%@",to_name];
+                    }
                 }
             }
             if([activity.action isEqualToString:@"addexfee"])

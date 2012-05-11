@@ -151,7 +151,10 @@
 
     APIHandler *api=[[APIHandler alloc]init];
     NSString *uname=[[NSUserDefaults standardUserDefaults] stringForKey:@"username"]; 
-    NSString *commentjson=[api AddCommentById:eventid comment:inputtext external_identity:uname];
+    NSString *external_id=[[NSUserDefaults standardUserDefaults] stringForKey:@"external_id"]; 
+    if(external_id==nil)
+        external_id=uname;
+    NSString *commentjson=[api AddCommentById:eventid comment:inputtext external_identity:external_id];
     BOOL success=FALSE;
     if([[[commentjson JSONValue] objectForKey:@"response"] objectForKey:@"conversation"]!=nil)
     {

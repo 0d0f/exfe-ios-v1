@@ -44,5 +44,6 @@
 - (NSString*) getLastEventUpdateTime;
 - (NSString*) getLastCommentUpdateTimeWith:(int)eventid;
 - (void) setCrossStatusWithCrossId:(int)cross_id status:(int)status;
+- (void) clearAllCrossStatus;
 - (Cross*)getCrossById:(int)cross_id;
 @end

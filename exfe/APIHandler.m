@@ -16,6 +16,7 @@
 @synthesize username;
 @synthesize password;
 @synthesize api_key;
+@synthesize external_id;
 
 - (id)init
 {
@@ -28,6 +29,7 @@
     self.username=app.username;
 //    self.password=app.password;
     self.api_key=app.api_key;// @"YsXM_E26Sq8rznxf_CeO";
+    self.external_id=app.external_id;
     //NSLog(@"username globe:%@",app.username);
 
     return self;
@@ -35,14 +37,14 @@
 
 + (NSString*)URL_API_ROOT {
 //	return @"http://exfeapi.dlol.us/v1";    
-//	return @"https://www.exfe.com/v1";        
-    return @"http://api.local.exfe.com/v1";        
+	return @"https://www.exfe.com/v1";        
+//    return @"http://api.local.exfe.com/v1";        
 }
 
 + (NSString*)URL_API_DOMAIN {
 //	return @"http://exfeapi.dlol.us";    
-//    return @"https://www.exfe.com";
-    return @"http://api.local.exfe.com";    
+    return @"https://www.exfe.com";
+//    return @"http://api.local.exfe.com";    
 }
 
 - (NSString*)sentRSVPWith:(int)eventid rsvp:(NSString*)rsvp
@@ -82,6 +84,7 @@
     exfeAppDelegate* app=(exfeAppDelegate*)[[UIApplication sharedApplication] delegate];
 
     NSString *url=[NSString stringWithFormat:@"%@/users/%i/getprofile?token=%@",[APIHandler URL_API_ROOT],app.userid,api_key];
+//    NSLog(@"%@",url);
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
     [request setHTTPShouldHandleCookies:NO];
@@ -141,7 +144,7 @@
         apiurl=[NSString stringWithFormat:@"%@/users/%i/x?updated_since=%@&token=%@",[APIHandler URL_API_ROOT],app.userid,datestr,api_key];
         CFRelease(dateurlString);
     }
-    NSLog(@"api:%@",apiurl);
+//    NSLog(@"api:%@",apiurl);
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:apiurl]];
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 
@@ -223,7 +226,7 @@
     
     NSString *datestr = [NSString stringWithString: (NSString *)dateurlString];
     NSString *url=[NSString stringWithFormat:@"%@/users/%i/getupdate?updated_since=%@&token=%@&ddid=%@",[APIHandler URL_API_ROOT],app.userid,datestr,api_key,identity_id];
-    NSLog(@"url:%@",url);
+//    NSLog(@"url:%@",url);
     CFRelease(dateurlString);
 	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
@@ -264,11 +267,12 @@
     
     NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
     NSString *responseString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
+//    NSLog(@"%@",responseString);
     return responseString;    
 }
 - (NSString*) getCrossesByIdList:(NSString*)idlist
 {
-	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/x/list?ids=%@?token=%@",[APIHandler URL_API_ROOT],idlist,api_key]]];
+	NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/x/list?ids=%@&token=%@",[APIHandler URL_API_ROOT],idlist,api_key]]];
     [request setValue:@"gzip" forHTTPHeaderField:@"Accept-Encoding"];
 
     [request setHTTPShouldHandleCookies:NO];

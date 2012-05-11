@@ -253,4 +253,12 @@
 {
     return [NSString stringWithFormat:@"http://img.exfe.com/xbgimage/%@_ios.jpg",imgname];
 }
+
++ (NSString*) decodeFromPercentEscapeString:(NSString*)string{
+    return (NSString *)
+    CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,
+                                                            (CFStringRef) string,
+                                                            CFSTR(""),
+                                                            kCFStringEncodingUTF8);
+}
 @end
